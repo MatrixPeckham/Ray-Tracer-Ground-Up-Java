@@ -21,7 +21,7 @@ package com.matrixpeckham.raytracer.util;
  *
  * @author William Matrix Peckham
  */
-public class Point3D {
+public class Normal {
     public double x;
     public double y;
     public double z;
