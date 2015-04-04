@@ -26,17 +26,31 @@ public class Vector3D {
     public double y;
     public double z;
     // default constructor
-    public Vector3D(){}
+    public Vector3D(){
+        this(0);
+    }
     // constructor
-    public Vector3D(double a){}
+    public Vector3D(double a){
+        this(a,a,a);
+    }
     // constructor
-    public Vector3D(double _x, double _y, double _z){}
+    public Vector3D(double _x, double _y, double _z){
+        x=_x;
+        y=_y;
+        z=_z;
+    }
     // copy constructor
-    public Vector3D(Vector3D v){}
+    public Vector3D(Vector3D v){
+        this(v.x,v.y,v.z);
+    }
     // constructs a vector from a Normal
-    public Vector3D(Normal n){}
+    public Vector3D(Normal n){
+        this(n.x,n.y,n.z);
+    }
     // constructs a vector from a point
-    public Vector3D(Point3D p){}
+    public Vector3D(Point3D p){
+        this(p.x,p.y,p.z);
+    }
 
 
     //assignment operator java substitute
@@ -129,4 +143,16 @@ public class Vector3D {
         normalize();
         return this;
     }
+    
+    public static Vector3D mul(double a, Vector3D v){
+        return new Vector3D(a*v.x,a*v.y,a*v.z);
+    }
+    
+    public static Point3D mul(Matrix mat, Vector3D v){
+        return new Point3D(
+                mat.m[0][0] * v.x + mat.m[0][1] * v.y + mat.m[0][2] * v.z,
+                mat.m[1][0] * v.x + mat.m[1][1] * v.y + mat.m[1][2] * v.z,
+		mat.m[2][0] * v.x + mat.m[2][1] * v.y + mat.m[2][2] * v.z        );
+    }
+    
 }
