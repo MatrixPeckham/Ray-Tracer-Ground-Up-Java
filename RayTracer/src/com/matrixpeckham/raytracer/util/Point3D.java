@@ -43,6 +43,11 @@ public class Point3D {
         y = b;
         z = c;
     }
+    public void setTo(double x, double y, double z){
+        this.x=x;
+        this.y=y;
+        this.z=z;
+    }
 
     // copy ructor
     public Point3D(Point3D p) {

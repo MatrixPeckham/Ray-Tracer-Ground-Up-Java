@@ -61,6 +61,12 @@ public class Vector3D {
         return this;
     }
     
+    public void setTo(double x, double y, double z){
+        this.x=x;
+        this.y=y;
+        this.z=z;
+    }
+    
     // assign a Normal to a vector
     public Vector3D setTo(Normal other){
         x=other.x;
