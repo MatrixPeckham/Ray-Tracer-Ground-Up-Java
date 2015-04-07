@@ -61,20 +61,20 @@ public class ViewPlane {
         return this;
     }
 
-    void setHres(int h_res){hRes=h_res;}
+    public void setHres(int h_res){hRes=h_res;}
 
-    void setVres(int v_res){vRes=v_res;}
+    public void setVres(int v_res){vRes=v_res;}
 
-    void setPixelSize(float size){
+    public void setPixelSize(float size){
         s=size;
     }
 
-    void setGamma(float g){
+    public void setGamma(float g){
         gamma=g;
         invGamma=1.0f/gamma;
     }
 
-    void setGamutDisplay(boolean show){
+    public void setGamutDisplay(boolean show){
         showOutOfGamut=show;
     }
 }

@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.world;
 
+import com.matrixpeckham.raytracer.RenderPixel;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.geometricobjects.Sphere;
 import com.matrixpeckham.raytracer.tracers.Tracer;
@@ -25,6 +26,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
 
 /**
  *
@@ -32,18 +34,23 @@ import java.util.ArrayList;
  */
 public class World {
 
-    public ViewPlane vp;
+    public ViewPlane vp=new ViewPlane();
     public RGBColor backgroundColor;
     public Tracer tracer;
-    public Sphere sphere;
-    public ArrayList<GeometricObject> objects;
-    public RenderThread paintArea = null;
+    public Sphere sphere=new Sphere();
+    public ArrayList<GeometricObject> objects=new ArrayList<>();
+    private BlockingQueue<RenderPixel> paintArea = null;
+    
 
     public World() {
         backgroundColor = Constants.BLACK;
         tracer = null;
     }
-
+    
+    public void setQueue(BlockingQueue paintArea){
+        this.paintArea=paintArea;
+    }
+    
     public void renderScene() {
         RGBColor pixelColor = new RGBColor();
         Ray ray = new Ray();
@@ -51,9 +58,9 @@ public class World {
         int vres = vp.vRes;
         float s = vp.s;
         float zw = 100.0f;
-        ray.d.setTo(0.0, 0.0, 1.0);
+        ray.d.setTo(0.0, 0.0, -1.0);
         for (int r = 0; r < vres; r++) {
-            for (int c = 0; c <= hres; c++) {
+            for (int c = 0; c < hres; c++) {
                 ray.o.setTo(s * (c - hres / 2.0 + 0.5), s * (r - vres / 2.0
                         + 0.5), zw);
                 pixelColor.setTo(tracer.traceRay(ray));
@@ -95,10 +102,9 @@ public class World {
         int x = column;
         int y = vp.vRes - row - 1;
 
-        paintArea.setPixel(x, y, 
-                (int) (mappedColor.r * 255),
-                (int) (mappedColor.g * 255), 
-                (int) (mappedColor.b * 255));
+        if(paintArea!=null){
+            paintArea.offer(new RenderPixel(x, y, (int)(mappedColor.r*255), (int)(mappedColor.g*255), (int)(mappedColor.b*255)));
+        }
     }
     
     public ShadeRec hitBareBonesObjects(Ray ray){

@@ -67,14 +67,14 @@ public class Sphere extends GeometricObject {
         } else {
             double e = Math.sqrt(disc);
             double denom = 2.0*a;
-            t=(-b-a)/denom;
+            t=(-b-e)/denom;
             if(t>EPSILON){
                 sr.lastT=t;
                 sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                 return true;
             }
-            t=(-b+a)/denom;
+            t=(-b+e)/denom;
             if(t>EPSILON){
                 sr.lastT=t;
                 sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));

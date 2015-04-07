@@ -26,7 +26,7 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
  * @author William Matrix Peckham
  */
 public abstract class GeometricObject {
-    protected RGBColor color;
+    protected RGBColor color=new RGBColor();
     
 		// default ructor
 		public GeometricObject(){}
