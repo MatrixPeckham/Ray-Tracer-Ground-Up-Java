@@ -37,7 +37,7 @@ public class MultipleObjects extends Tracer{
 
     @Override
     public RGBColor traceRay(Ray ray) {
-        ShadeRec sr = world.hitBareBonesObjects(ray);
+        ShadeRec sr = world.hitObjects(ray);
         if(sr.hitAnObject){
             return sr.color;
         }

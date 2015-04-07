@@ -15,24 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer;
+package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.world.World;
+import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.ShadeRec;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class RayTraceThread extends Thread {
-    World w;
-    public RayTraceThread(World w){
-        this.w=w;
+public abstract class Material {
+    public Material(){}
+    public Material(Material mat){}
+    public abstract Material clone();
+    public RGBColor shade(ShadeRec sr){
+        return Constants.BLACK;
     }
-    @Override
-    public void run() {
-        w.camera.renderScene(w);
-    }
-    
-    
-    
 }

@@ -15,24 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer;
+package com.matrixpeckham.raytracer.lights;
 
-import com.matrixpeckham.raytracer.world.World;
+import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class RayTraceThread extends Thread {
-    World w;
-    public RayTraceThread(World w){
-        this.w=w;
+public abstract class Light {
+    public Light(){}
+    public Light(Light ls){}
+    public Light setTo(Light l){
+        return this;
     }
-    @Override
-    public void run() {
-        w.camera.renderScene(w);
+    public abstract Light clone();
+    public abstract Vector3D getDirection(ShadeRec sr);
+    public RGBColor L(ShadeRec sr){
+        return Constants.BLACK;
     }
-    
-    
-    
 }

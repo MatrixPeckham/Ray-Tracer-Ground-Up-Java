@@ -23,9 +23,9 @@ package com.matrixpeckham.raytracer.util;
  */
 public class RGBColor {
 
-    public float r;
-    public float g;
-    public float b;
+    public double r;
+    public double g;
+    public double b;
 
     // default ructor
     public RGBColor() {
@@ -33,17 +33,17 @@ public class RGBColor {
     }
 
     // ructor
-    public RGBColor(float c) {
+    public RGBColor(double c) {
         this(c, c, c);
     }
-    public void setTo(float x, float y, float z){
+    public void setTo(double x, double y, double z){
         this.r=x;
         this.g=y;
         this.b=z;
     }
 
     // ructor
-    public RGBColor(float _r, float _g, float _b) {
+    public RGBColor(double _r, double _g, double _b) {
         r = _r;
         g = _g;
         b = _b;
@@ -78,26 +78,26 @@ public class RGBColor {
         return this;
     }
 
-    // multiplication by a float on the right
-    public RGBColor mul(float a) {
+    // multiplication by a double on the right
+    public RGBColor mul(double a) {
         return new RGBColor(a * r, a * g, a * b);
     }
 
-    // compound multiplication by a float on the right
-    public RGBColor mulLocal(float a) {
+    // compound multiplication by a double on the right
+    public RGBColor mulLocal(double a) {
         r *= a;
         g *= a;
         b *= a;
         return this;
     }
 
-    // division by a float
-    public RGBColor div(float a) {
+    // division by a double
+    public RGBColor div(double a) {
         return new RGBColor(r / a, g / a, b / a);
     }
 
-    // compound division by a float
-    public RGBColor divLocal(float a) {
+    // compound division by a double
+    public RGBColor divLocal(double a) {
         r /= a;
         g /= a;
         b /= a;
@@ -120,19 +120,30 @@ public class RGBColor {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 59 * hash + Float.floatToIntBits(this.r);
-        hash = 59 * hash + Float.floatToIntBits(this.g);
-        hash = 59 * hash + Float.floatToIntBits(this.b);
+        hash
+                = 83 * hash +
+                (int) (Double.doubleToLongBits(this.r) ^
+                (Double.doubleToLongBits(this.r) >>> 32));
+        hash
+                = 83 * hash +
+                (int) (Double.doubleToLongBits(this.g) ^
+                (Double.doubleToLongBits(this.g) >>> 32));
+        hash
+                = 83 * hash +
+                (int) (Double.doubleToLongBits(this.b) ^
+                (Double.doubleToLongBits(this.b) >>> 32));
         return hash;
     }
 
+    
+
     // raise components to a power
-    public RGBColor powc(float p){
-        return new RGBColor((float)Math.pow(r, p),(float)Math.pow(g, p),(float)Math.pow(b, p));
+    public RGBColor powc(double p){
+        return new RGBColor(Math.pow(r, p), Math.pow(g, p), Math.pow(b, p));
     }
 
     // the average of the components
-    public float average(){
+    public double average(){
         return 0.33333333333333333333333333333333f *(r+g+b);
     }
 

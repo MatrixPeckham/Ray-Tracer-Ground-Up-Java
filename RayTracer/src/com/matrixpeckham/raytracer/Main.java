@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer;
 
 import com.matrixpeckham.raytracer.build.BuildBBCoverPic;
 import com.matrixpeckham.raytracer.build.BuildMultipleObjects;
+import com.matrixpeckham.raytracer.build.BuildShadedObjects;
 import com.matrixpeckham.raytracer.build.BuildSingleSphere;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
@@ -76,7 +77,7 @@ public class Main extends JFrame implements ActionListener{
     
     public RayTraceThread thread = null;
     
-    BuildWorldFunction builder = new BuildBBCoverPic();
+    BuildWorldFunction builder = new BuildShadedObjects();
     
     int pixelsRendered = 0;
     int pixelsToRender = 0;

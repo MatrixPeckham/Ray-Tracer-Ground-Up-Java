@@ -15,54 +15,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.geometricobjects;
+package com.matrixpeckham.raytracer.tracers;
 
-import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.world.World;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public abstract class GeometricObject {
-
-    protected RGBColor color = new RGBColor();
-    
-    protected Material material = null;
-    
-    // default ructor
-    public GeometricObject() {
+public class RayCast extends Tracer {
+    public RayCast(){
+        super();
+    }
+    public RayCast(World world){
+        super(world);
     }
 
-    // copy ructor
-    public GeometricObject(GeometricObject object) {
+    @Override
+    public RGBColor traceRay(Ray ray) {
+        ShadeRec sr = new ShadeRec(world.hitObjects(ray));
+        if(sr.hitAnObject){
+            sr.ray=ray;
+            return sr.material.shade(sr);
+        } else {
+            return world.backgroundColor;
+        }
     }
 
-    // virtual copy ructor
-    public abstract GeometricObject clone();
-
-    public abstract boolean hit(Ray ray, ShadeRec s);
-
-		// the following three functions are only required for Chapter 3
-    public void setColor(RGBColor c) {
-        color.setTo(c);
-    }
-
-    public void setColor(double r, double g, double b) {
-        color.setTo(r, g, b);
-    }
-
-    public Material getMaterial(){
-        return material;
+    @Override
+    public RGBColor traceRay(Ray ray, int depth) {
+        return traceRay(ray);
     }
     
-    public void setMaterial(Material mat){
-        material=mat;
-    }
     
-    public RGBColor getColor() {
-        return color;
-    }
 }

@@ -25,9 +25,10 @@ public class ViewPlane {
 
     public int hRes;
     public int vRes;
-    public float s;
-    public float gamma;
-    public float invGamma;
+    public double s;
+    public int numSamples;
+    public double gamma;
+    public double invGamma;
     public boolean showOutOfGamut;
 
     // default Constructor
@@ -35,6 +36,7 @@ public class ViewPlane {
         hRes=400;
         vRes=400;
         s=1;
+        numSamples=1;
         gamma=1;
         invGamma=1;
         showOutOfGamut=false;
@@ -45,6 +47,7 @@ public class ViewPlane {
         hRes=vp.hRes;
         vRes=vp.vRes;
         s=vp.s;
+        numSamples=vp.numSamples;
         gamma=vp.gamma;
         invGamma=vp.invGamma;
         showOutOfGamut=vp.showOutOfGamut;
@@ -55,6 +58,7 @@ public class ViewPlane {
         hRes=vp.hRes;
         vRes=vp.vRes;
         s=vp.s;
+        numSamples=vp.numSamples;
         gamma=vp.gamma;
         invGamma=vp.invGamma;
         showOutOfGamut=vp.showOutOfGamut;
@@ -65,16 +69,20 @@ public class ViewPlane {
 
     public void setVres(int v_res){vRes=v_res;}
 
-    public void setPixelSize(float size){
+    public void setPixelSize(double size){
         s=size;
     }
 
-    public void setGamma(float g){
+    public void setGamma(double g){
         gamma=g;
         invGamma=1.0f/gamma;
     }
 
     public void setGamutDisplay(boolean show){
         showOutOfGamut=show;
+    }
+    
+    public void setSamples(int n){
+        numSamples=n;
     }
 }

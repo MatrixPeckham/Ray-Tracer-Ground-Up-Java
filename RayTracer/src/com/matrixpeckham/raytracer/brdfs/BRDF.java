@@ -15,24 +15,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer;
+package com.matrixpeckham.raytracer.brdfs;
 
-import com.matrixpeckham.raytracer.world.World;
+import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class RayTraceThread extends Thread {
-    World w;
-    public RayTraceThread(World w){
-        this.w=w;
+public class BRDF {
+    public BRDF(){}
+    public BRDF(BRDF brdf){}
+    public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi){
+        return Constants.BLACK;
     }
-    @Override
-    public void run() {
-        w.camera.renderScene(w);
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi){
+        return Constants.BLACK;
     }
-    
-    
-    
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, double pdf){
+        return Constants.BLACK;
+    }
+    public RGBColor rho(ShadeRec sr, Vector3D wo){
+        return Constants.BLACK;
+    }
 }

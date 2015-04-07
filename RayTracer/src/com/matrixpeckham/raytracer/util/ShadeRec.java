@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
@@ -25,11 +26,16 @@ import com.matrixpeckham.raytracer.world.World;
  */
 public class ShadeRec {
     public boolean hitAnObject=false;
+    public Point3D hitPoint = new Point3D();
     public Point3D localHitPosition=new Point3D();
     public Normal normal=new Normal();
     public RGBColor color=new RGBColor(Constants.BLACK);
     public World w;
     public double lastT = Double.POSITIVE_INFINITY;
+    public double t=0;
+    public int depth=0;
+    public Ray ray = new Ray();
+    public Material material = null;
     public ShadeRec(World w){
         this.w=w;
     }
@@ -38,6 +44,11 @@ public class ShadeRec {
         localHitPosition.setTo(r.localHitPosition);
         color.setTo(r.color);
         w=r.w;
+        ray.setTo(r.ray);
+        t=r.t;
+        depth=r.depth;
+        material=r.material.clone();
+        normal.setTo(r.normal);
     }
     
 }

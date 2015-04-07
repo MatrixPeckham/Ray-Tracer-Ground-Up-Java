@@ -15,24 +15,40 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer;
-
-import com.matrixpeckham.raytracer.world.World;
+package com.matrixpeckham.raytracer.util;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class RayTraceThread extends Thread {
-    World w;
-    public RayTraceThread(World w){
-        this.w=w;
+public class Point2D {
+    public double x;
+    public double y;
+    public Point2D(){
+        this(0);
     }
-    @Override
-    public void run() {
-        w.camera.renderScene(w);
+    public Point2D(double a){
+        this(a,a);
     }
-    
-    
-    
+    public Point2D(double x, double y){
+        this.x=x;
+        this.y=y;
+    }
+    public Point2D(Point2D p){
+        x=p.x;
+        y=p.y;
+    }
+    public Point2D setTo(Point2D p){
+        x=p.x;
+        y=p.y;
+        return this;
+    }
+    public Point2D setTo(double x, double y){
+        this.x=x;
+        this.y=y;
+        return this;
+    }
+    public Point2D mul(double a){
+        return new Point2D(a*x,a*y);
+    }
 }

@@ -15,54 +15,67 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.geometricobjects;
+package com.matrixpeckham.raytracer.lights;
 
-import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public abstract class GeometricObject {
+public class Ambient extends Light {
 
-    protected RGBColor color = new RGBColor();
+    private double ls;
+    private RGBColor color;
     
-    protected Material material = null;
+    public Ambient(){
+        super();
+        ls=1;
+        color=new RGBColor(1);
+    }
     
-    // default ructor
-    public GeometricObject() {
+    public Ambient(Ambient a){
+        super(a);
+        ls=a.ls;
+        color.setTo(a.color);
     }
-
-    // copy ructor
-    public GeometricObject(GeometricObject object) {
+    
+    
+    public void scaleRadiance(double b){
+        ls=b;
     }
-
-    // virtual copy ructor
-    public abstract GeometricObject clone();
-
-    public abstract boolean hit(Ray ray, ShadeRec s);
-
-		// the following three functions are only required for Chapter 3
-    public void setColor(RGBColor c) {
+    
+    public void setColor(double c){
+        color.setTo(c, c, c);
+    }
+    
+    public void setColor(RGBColor c){
         color.setTo(c);
     }
-
-    public void setColor(double r, double g, double b) {
-        color.setTo(r, g, b);
-    }
-
-    public Material getMaterial(){
-        return material;
+    
+    public void setColor(double r, double g, double b){
+        color.r=r;
+        color.g=g;
+        color.b=b;
     }
     
-    public void setMaterial(Material mat){
-        material=mat;
+    @Override
+    public Light clone() {
+        return new Ambient(this);
+    }
+
+    @Override
+    public Vector3D getDirection(ShadeRec sr) {
+        return new Vector3D(0);
+    }
+
+    @Override
+    public RGBColor L(ShadeRec sr) {
+        return color.mul(ls);
     }
     
-    public RGBColor getColor() {
-        return color;
-    }
+    
+    
 }
