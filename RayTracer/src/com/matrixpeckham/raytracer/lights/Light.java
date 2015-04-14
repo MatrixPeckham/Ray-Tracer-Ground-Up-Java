@@ -17,8 +17,9 @@
  */
 package com.matrixpeckham.raytracer.lights;
 
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
@@ -27,6 +28,8 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  * @author William Matrix Peckham
  */
 public abstract class Light {
+    protected boolean shadows = true;
+
     public Light(){}
     public Light(Light ls){}
     public Light setTo(Light l){
@@ -35,6 +38,14 @@ public abstract class Light {
     public abstract Light clone();
     public abstract Vector3D getDirection(ShadeRec sr);
     public RGBColor L(ShadeRec sr){
-        return Constants.BLACK;
+        return Utility.BLACK;
     }
+    public void setShadows(boolean b) {
+        shadows=b;
+    }
+    public boolean castsShadows() {
+        return shadows;
+    }
+
+    public abstract boolean inShadow(Ray shadowRay, ShadeRec sr);
 }

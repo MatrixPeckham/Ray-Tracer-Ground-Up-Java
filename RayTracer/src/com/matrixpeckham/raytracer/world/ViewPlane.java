@@ -17,6 +17,10 @@
  */
 package com.matrixpeckham.raytracer.world;
 
+import com.matrixpeckham.raytracer.samplers.MultiJittered;
+import com.matrixpeckham.raytracer.samplers.Regular;
+import com.matrixpeckham.raytracer.samplers.Sampler;
+
 /**
  *
  * @author William Matrix Peckham
@@ -27,9 +31,11 @@ public class ViewPlane {
     public int vRes;
     public double s;
     public int numSamples;
+    public Sampler sampler = null;
     public double gamma;
     public double invGamma;
     public boolean showOutOfGamut;
+    public int maxDepth=1;
 
     // default Constructor
     public ViewPlane() {
@@ -48,6 +54,7 @@ public class ViewPlane {
         vRes=vp.vRes;
         s=vp.s;
         numSamples=vp.numSamples;
+        sampler = vp.sampler.clone();
         gamma=vp.gamma;
         invGamma=vp.invGamma;
         showOutOfGamut=vp.showOutOfGamut;
@@ -84,5 +91,18 @@ public class ViewPlane {
     
     public void setSamples(int n){
         numSamples=n;
+        if(numSamples>1){
+            sampler=new MultiJittered(numSamples);
+        } else {
+            sampler=new Regular(1);
+        }
+    }
+    public void setSampler(Sampler s){
+        sampler = s;
+        numSamples=sampler.getNumsamples();
+    }
+
+    public void setMaxDepth(int i) {
+        maxDepth=1;
     }
 }

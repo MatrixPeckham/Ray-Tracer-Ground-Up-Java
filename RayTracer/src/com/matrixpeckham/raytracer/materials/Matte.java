@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.materials;
 
 import com.matrixpeckham.raytracer.brdfs.Lambertian;
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
@@ -60,7 +61,14 @@ public class Matte extends Material {
             Vector3D wi=sr.w.lights.get(j).getDirection(sr);
             double ndotwi = sr.normal.dot(wi);
             if(ndotwi>0.0){
-                L.addLocal(diffuseBRDF.f(sr,wo,wi).mul(sr.w.lights.get(j).L(sr)).mul(ndotwi));
+                boolean inShadow = false;
+                if(sr.w.lights.get(j).castsShadows()){
+                    Ray shadowRay=new Ray(sr.hitPoint,wi);
+                    inShadow = sr.w.lights.get(j).inShadow(shadowRay,sr);
+                }
+                if(!inShadow){
+                    L.addLocal(diffuseBRDF.f(sr,wo,wi).mul(sr.w.lights.get(j).L(sr)).mul(ndotwi));
+                }
             }
         }
         return L;

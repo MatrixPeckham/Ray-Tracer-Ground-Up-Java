@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.lights;
 
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
@@ -74,6 +75,11 @@ public class Ambient extends Light {
     @Override
     public RGBColor L(ShadeRec sr) {
         return color.mul(ls);
+    }
+
+    @Override
+    public boolean inShadow(Ray shadowRay, ShadeRec sr) {
+        return false;
     }
     
     

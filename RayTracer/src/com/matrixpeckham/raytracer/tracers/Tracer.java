@@ -17,7 +17,7 @@
  */
 package com.matrixpeckham.raytracer.tracers;
 
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.world.World;
@@ -30,6 +30,6 @@ public class Tracer {
     protected World world=null;
     public Tracer(){}
     public Tracer(World w){world=w;}
-    public RGBColor traceRay(Ray ray){return Constants.BLACK;}
-    public RGBColor traceRay(Ray ray, int depth){return Constants.BLACK;}
+    public RGBColor traceRay(Ray ray){return Utility.BLACK;}
+    public RGBColor traceRay(Ray ray, int depth){return Utility.BLACK;}
 }

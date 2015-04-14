@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.geometricobjects;
+package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
+import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
@@ -69,5 +71,15 @@ public class Plane extends GeometricObject {
         }
         return false;
     }
-    
+
+    @Override
+    public boolean shadowHit(Ray ray, DoubleRef t) {
+        if(!shadows) return false;
+        t.d = a.sub(ray.o).dot(new Vector3D(n))/(ray.d.dot(new Vector3D(n)));
+        if(t.d>EPSILON){
+            return true;
+        }
+        return false;
+    }
+
 }

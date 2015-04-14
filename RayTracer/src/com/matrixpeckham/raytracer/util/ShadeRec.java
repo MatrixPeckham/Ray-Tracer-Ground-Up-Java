@@ -29,10 +29,12 @@ public class ShadeRec {
     public Point3D hitPoint = new Point3D();
     public Point3D localHitPosition=new Point3D();
     public Normal normal=new Normal();
-    public RGBColor color=new RGBColor(Constants.BLACK);
+    public RGBColor color=new RGBColor(Utility.BLACK);
     public World w;
     public double lastT = Double.POSITIVE_INFINITY;
     public double t=0;
+    public double u = 0;
+    public double v = 0;
     public int depth=0;
     public Ray ray = new Ray();
     public Material material = null;
@@ -42,12 +44,14 @@ public class ShadeRec {
     public ShadeRec(ShadeRec r){
         hitAnObject=r.hitAnObject;
         localHitPosition.setTo(r.localHitPosition);
+        hitPoint.setTo(r.hitPoint);
         color.setTo(r.color);
         w=r.w;
         ray.setTo(r.ray);
         t=r.t;
         depth=r.depth;
-        material=r.material.clone();
+        if(r.material!=null)
+            material=r.material.clone();
         normal.setTo(r.normal);
     }
     

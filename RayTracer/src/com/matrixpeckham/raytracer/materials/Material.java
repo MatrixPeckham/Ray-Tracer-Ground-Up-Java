@@ -17,7 +17,7 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 
@@ -30,6 +30,6 @@ public abstract class Material {
     public Material(Material mat){}
     public abstract Material clone();
     public RGBColor shade(ShadeRec sr){
-        return Constants.BLACK;
+        return Utility.BLACK;
     }
 }

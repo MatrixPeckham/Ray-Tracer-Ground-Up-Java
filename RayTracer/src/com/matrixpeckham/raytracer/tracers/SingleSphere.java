@@ -17,7 +17,7 @@
  */
 package com.matrixpeckham.raytracer.tracers;
 
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -40,9 +40,9 @@ public class SingleSphere extends Tracer{
     public RGBColor traceRay(Ray ray) {
         ShadeRec sr = new ShadeRec(world);
         if(world.sphere.hit(ray,sr)){
-            return Constants.RED;
+            return Utility.RED;
         }
-        return Constants.BLACK;
+        return Utility.BLACK;
     }
     
     

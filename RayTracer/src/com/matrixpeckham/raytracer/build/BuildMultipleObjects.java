@@ -17,10 +17,10 @@
  */
 package com.matrixpeckham.raytracer.build;
 
-import com.matrixpeckham.raytracer.geometricobjects.Plane;
-import com.matrixpeckham.raytracer.geometricobjects.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primatives.Plane;
+import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
 import com.matrixpeckham.raytracer.tracers.MultipleObjects;
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -41,7 +41,7 @@ public class BuildMultipleObjects implements BuildWorldFunction {
         
         w.tracer = new MultipleObjects(w); 
 	
-	w.backgroundColor = new RGBColor(Constants.BLACK);
+	w.backgroundColor = new RGBColor(Utility.BLACK);
 	
 	// use access functions to set centre and radius
 	

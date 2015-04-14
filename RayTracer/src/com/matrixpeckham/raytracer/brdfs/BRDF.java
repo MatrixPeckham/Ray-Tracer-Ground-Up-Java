@@ -17,7 +17,8 @@
  */
 package com.matrixpeckham.raytracer.brdfs;
 
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
@@ -30,15 +31,15 @@ public class BRDF {
     public BRDF(){}
     public BRDF(BRDF brdf){}
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi){
-        return Constants.BLACK;
+        return Utility.BLACK;
     }
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi){
-        return Constants.BLACK;
+        return Utility.BLACK;
     }
-    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, double pdf){
-        return Constants.BLACK;
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf){
+        return Utility.BLACK;
     }
     public RGBColor rho(ShadeRec sr, Vector3D wo){
-        return Constants.BLACK;
+        return Utility.BLACK;
     }
 }

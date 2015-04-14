@@ -25,6 +25,12 @@ public class Vector3D {
     public double x;
     public double y;
     public double z;
+    
+    @Override
+    public String toString(){
+        return "("+x+","+y+","+z+")Vector3D";
+    }
+    
     // default constructor
     public Vector3D(){
         this(0);
@@ -154,11 +160,15 @@ public class Vector3D {
         return new Vector3D(a*v.x,a*v.y,a*v.z);
     }
     
-    public static Point3D mul(Matrix mat, Vector3D v){
-        return new Point3D(
+    public static Vector3D mul(Matrix mat, Vector3D v){
+        return new Vector3D(
                 mat.m[0][0] * v.x + mat.m[0][1] * v.y + mat.m[0][2] * v.z,
                 mat.m[1][0] * v.x + mat.m[1][1] * v.y + mat.m[1][2] * v.z,
 		mat.m[2][0] * v.x + mat.m[2][1] * v.y + mat.m[2][2] * v.z        );
+    }
+
+    public double dot(Normal v) {
+        return (x * v.x + y * v.y + z * v.z);
     }
     
 }

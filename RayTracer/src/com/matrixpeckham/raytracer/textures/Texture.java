@@ -15,22 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.util;
+package com.matrixpeckham.raytracer.textures;
+
+import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.ShadeRec;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class Constants {
-    public static final double PI = Math.PI;
-    public static final double TWO_PI = 2*PI;
-    public static final double PI_ON_180 = PI/180.0;
-    public static final double INV_PI = 1.0/PI;
-    public static final double INV_2_PI = 1.0/TWO_PI;
-    public static final double EPSILON = 0.0001;
-    public static final double HUGE_VALUE = 1.0e10;
-    public static final RGBColor BLACK = new RGBColor(0);
-    public static final RGBColor WHITE = new RGBColor(1);
-    public static final RGBColor RED = new RGBColor(1,0,0);
-    
+public interface Texture {
+    public Texture clone();
+    public RGBColor getColor(ShadeRec sr);
 }

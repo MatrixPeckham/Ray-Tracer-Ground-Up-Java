@@ -17,7 +17,9 @@
  */
 package com.matrixpeckham.raytracer.lights;
 
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
@@ -85,6 +87,18 @@ public class Directional extends Light{
     @Override
     public RGBColor L(ShadeRec sr) {
         return color.mul(ls);
+    }
+
+    @Override
+    public boolean inShadow(Ray ray, ShadeRec sr) {
+        DoubleRef t = new DoubleRef(0); 
+        int numObjects = sr.w.objects.size();
+        for(int j=0;j<numObjects;j++){
+            if(sr.w.objects.get(j).shadowHit(ray,t)){
+                return true;
+            }
+        }
+        return false;
     }
     
     

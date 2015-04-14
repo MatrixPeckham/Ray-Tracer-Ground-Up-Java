@@ -26,7 +26,10 @@ public class Point3D {
     public double x;
     public double y;
     public double z;
-
+    @Override
+    public String toString(){
+        return "("+x+","+y+","+z+")Point3D";
+    }
     // default ructor
     public Point3D() {
         this(0);
@@ -90,7 +93,7 @@ public class Point3D {
 
     // square of distance bertween two points
     public double distSquared(Point3D p) {
-        return x - p.x * x - p.x + y - p.y * y - p.y + z - p.z * z - p.z;
+        return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) + (z - p.z) * (z - p.z);
     }
 
     // distance bewteen two points

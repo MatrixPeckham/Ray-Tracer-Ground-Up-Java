@@ -15,8 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.geometricobjects;
+package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
+import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -99,6 +101,34 @@ public class Sphere extends GeometricObject {
 
     public void setRadius(double radius) {
         this.radius = radius;
+    }
+
+    @Override
+    public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows)return false;
+        double t;
+        Vector3D temp = ray.o.sub(center);
+        double a = ray.d.dot(ray.d);
+        double b = 2.0 * temp.dot(ray.d);
+        double c = temp.dot(temp)-radius*radius;
+        double disc = b*b-4.0*a*c;
+        if(disc<0){
+            return false;
+        } else {
+            double e = Math.sqrt(disc);
+            double denom = 2.0*a;
+            t=(-b-e)/denom;
+            if(t>EPSILON){
+                tr.d=t;
+                return true;
+            }
+            t=(-b+e)/denom;
+            if(t>EPSILON){
+                tr.d=t;
+                return true;
+            }
+        }
+        return false;
     }
     
 }

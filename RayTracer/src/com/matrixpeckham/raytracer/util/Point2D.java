@@ -24,6 +24,10 @@ package com.matrixpeckham.raytracer.util;
 public class Point2D {
     public double x;
     public double y;
+    @Override
+    public String toString(){
+        return "("+x+","+y+")Vector2D";
+    }
     public Point2D(){
         this(0);
     }

@@ -18,13 +18,13 @@
 package com.matrixpeckham.raytracer.build;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.Plane;
-import com.matrixpeckham.raytracer.geometricobjects.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primatives.Plane;
+import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.tracers.RayCast;
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -53,7 +53,7 @@ public class BuildShadedObjects implements BuildWorldFunction {
         ambient.scaleRadiance(1.0);
         w.setAmbient(ambient);
 
-        w.backgroundColor = Constants.BLACK;			// default color - this can be left out
+        w.backgroundColor = Utility.BLACK;			// default color - this can be left out
 
         w.tracer = new RayCast(w);
 

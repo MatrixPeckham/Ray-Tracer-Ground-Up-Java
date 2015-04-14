@@ -26,7 +26,10 @@ public class Ray {
     public Point3D o;
     //direction
     public Vector3D d;
-    
+    @Override
+    public String toString(){
+        return "("+o+","+d+")Ray";
+    }
     public Ray(){
         o=new Point3D(0);
         d=new Vector3D(0,0,1);

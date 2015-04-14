@@ -18,6 +18,10 @@
 package com.matrixpeckham.raytracer.geometricobjects;
 
 import com.matrixpeckham.raytracer.materials.Material;
+import com.matrixpeckham.raytracer.util.BBox;
+import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Normal;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -31,6 +35,8 @@ public abstract class GeometricObject {
     protected RGBColor color = new RGBColor();
     
     protected Material material = null;
+    
+    protected boolean shadows = true;
     
     // default ructor
     public GeometricObject() {
@@ -65,4 +71,39 @@ public abstract class GeometricObject {
     public RGBColor getColor() {
         return color;
     }
+    
+    public Normal getNormal(){
+        return new Normal();
+    }
+    
+    public Normal getNormal(Point3D p){
+        return new Normal();
+    }
+    
+    public double pdf(ShadeRec sr){
+        return 0;
+    }
+    
+    public Point3D sample(){
+        return new Point3D(0);
+    }
+    
+    public void addObject(GeometricObject obj){}
+    
+    public BBox getBoundingBox(){
+        return new BBox();
+    }
+    
+    public void setBouningBox(){}
+
+    public abstract boolean shadowHit(Ray ray, DoubleRef t);
+    
+    public void setShadows(boolean b){
+        shadows=b;
+    }
+    
+    public boolean castsShadows(){
+        return shadows;
+    }
+    
 }

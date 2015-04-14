@@ -20,11 +20,11 @@ package com.matrixpeckham.raytracer.world;
 import com.matrixpeckham.raytracer.RenderPixel;
 import com.matrixpeckham.raytracer.cameras.Camera;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.geometricobjects.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Light;
 import com.matrixpeckham.raytracer.tracers.Tracer;
-import com.matrixpeckham.raytracer.util.Constants;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -51,12 +51,12 @@ public class World {
     
 
     public World() {
-        backgroundColor = Constants.BLACK;
+        backgroundColor = Utility.BLACK;
         tracer = null;
         ambient=new Ambient();
     }
     
-    public void setQueue(BlockingQueue paintArea){
+    public void setQueue(BlockingQueue<RenderPixel> paintArea){
         this.paintArea=paintArea;
     }
     
@@ -65,7 +65,7 @@ public class World {
     }
     
     public void setAmbient(Light light){
-        ambient.setTo(light);
+        ambient=light;
     }
     
     public void setCamera(Camera cam){
@@ -132,7 +132,7 @@ public class World {
         ShadeRec sr=new ShadeRec(this);
         Normal normal = new Normal();
         Point3D localHitPoint = new Point3D();
-        double tmin = Constants.HUGE_VALUE;
+        double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
         
         for(int j = 0; j<numObjects; j++){
@@ -140,7 +140,7 @@ public class World {
                 sr.hitAnObject=true;
                 tmin=sr.lastT;
                 sr.material = objects.get(j).getMaterial();
-                sr.hitPoint = ray.o.add(ray.d.mul(sr.lastT));
+                sr.hitPoint.setTo(ray.o.add(ray.d.mul(sr.lastT)));
                 normal.setTo(sr.normal);
                 localHitPoint=sr.localHitPosition;
             }
@@ -156,7 +156,7 @@ public class World {
     
     public ShadeRec hitBareBonesObjects(Ray ray){
         ShadeRec sr = new ShadeRec(this);
-        double tmin = Constants.HUGE_VALUE;
+        double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
         
         for(int j=0; j<numObjects; j++){

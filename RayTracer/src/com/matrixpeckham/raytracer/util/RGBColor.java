@@ -26,6 +26,10 @@ public class RGBColor {
     public double r;
     public double g;
     public double b;
+    @Override
+    public String toString(){
+        return "("+r+","+g+","+b+")RGBColor";
+    }
 
     // default ructor
     public RGBColor() {

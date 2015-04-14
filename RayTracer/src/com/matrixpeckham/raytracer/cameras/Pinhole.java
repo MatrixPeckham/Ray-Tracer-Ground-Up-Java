@@ -62,20 +62,18 @@ public class Pinhole extends Camera {
         Ray ray = new Ray();
         int depth=0;
         Point2D pp = new Point2D();
-        int n = (int)Math.sqrt(vp.numSamples);
         vp.s/=zoom;
         ray.o.setTo(eye);
         
         for(int r = 0; r<vp.vRes; r++){
             for(int c = 0; c<vp.hRes; c++){
                 L.setTo(0, 0, 0);
-                for(int p = 0; p<n; p++){
-                    for(int q = 0; q<n; q++){
-                        pp.x=vp.s*(c-0.5f*vp.hRes +(q+0.5f)/n);
-                        pp.y=vp.s*(r-0.5f*vp.vRes +(p+0.5f)/n);
-                        ray.d=getDirection(pp);
-                        L.addLocal(w.tracer.traceRay(ray,depth));
-                    }
+                for(int p = 0; p<vp.numSamples; p++){
+                    Point2D sp = vp.sampler.sampleUnitSquare();
+                    pp.x=vp.s*(c-0.5f*vp.hRes + sp.x);
+                    pp.y=vp.s*(r-0.5f*vp.vRes + sp.y);
+                    ray.d=getDirection(pp);
+                    L.addLocal(w.tracer.traceRay(ray,depth));
                 }
                 L.divLocal(vp.numSamples);
                 L.mulLocal(exposureTime);
