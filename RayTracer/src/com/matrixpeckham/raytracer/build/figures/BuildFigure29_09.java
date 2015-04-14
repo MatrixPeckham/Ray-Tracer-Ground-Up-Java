@@ -52,8 +52,8 @@ public class BuildFigure29_09 implements BuildWorldFunction{
 	w.tracer = new RayCast(w);
 	
 	Pinhole camera = new Pinhole();
-//	camera.setEye(40, 20, 40); 			// for Figure29.9(a)
-	camera.setEye(0, 65, 0); 				// for Figure29.9(b)			
+	camera.setEye(40, 20, 40); 			// for Figure29.9(a)
+//	camera.setEye(0, 65, 0); 				// for Figure29.9(b)			
 	camera.setLookat(new Point3D()); 
 	camera.setViewDistance(17000.0);
 	camera.computeUVW();

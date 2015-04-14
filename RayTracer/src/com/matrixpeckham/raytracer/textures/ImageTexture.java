@@ -42,7 +42,7 @@ public class ImageTexture implements Texture{
         hRes=i.hRes;
         vRes=i.vRes;
         if(i.image!=null){
-            image=i.image.clone();
+            image=i.image;
         }
         if(i.mapping!=null){
             mapping=i.mapping.clone();
