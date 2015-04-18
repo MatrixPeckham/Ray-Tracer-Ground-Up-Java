@@ -139,6 +139,7 @@ public class Torus extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows)return false;
         if (!bbox.hit(ray)) {
             return (false);
         }

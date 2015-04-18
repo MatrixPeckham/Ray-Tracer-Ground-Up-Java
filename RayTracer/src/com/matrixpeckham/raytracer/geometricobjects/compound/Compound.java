@@ -88,6 +88,7 @@ public class Compound extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
+        if(!shadows)return false;
         boolean hit = false;
         double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();

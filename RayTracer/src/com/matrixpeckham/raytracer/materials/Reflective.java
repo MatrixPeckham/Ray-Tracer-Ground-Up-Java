@@ -15,9 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.lights;
+package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.brdfs.PerfectSpecular;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -27,33 +27,41 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  *
  * @author William Matrix Peckham
  */
-public abstract class Light {
-    protected boolean shadows = true;
+public class Reflective extends Phong {
+    private PerfectSpecular perfectBRDF;
 
-    public Light(){}
-    public Light(Light ls){}
-    public Light setTo(Light l){
-        return this;
+    public Reflective() {
+        super();
+        perfectBRDF=new PerfectSpecular();
     }
-    public abstract Light clone();
-    public abstract Vector3D getDirection(ShadeRec sr);
-    public RGBColor L(ShadeRec sr){
-        return Utility.BLACK;
-    }
-    
-    public double G(ShadeRec sr){
-        return 1;
-    }
-    
-    public double pdf(ShadeRec sr){
-        return 1;
-    }
-    public void setShadows(boolean b) {
-        shadows=b;
-    }
-    public boolean castsShadows() {
-        return shadows;
+    public Reflective(Reflective r){
+        super(r);
+        perfectBRDF=r.perfectBRDF.clone();
     }
 
-    public abstract boolean inShadow(Ray shadowRay, ShadeRec sr);
+    @Override
+    public Material clone() {
+        return new Reflective(this);
+    }
+    public void setCr(RGBColor c){
+        perfectBRDF.setCr(c);
+    }
+    public void setKr(double k){
+        perfectBRDF.setKr(k);
+    }
+
+    @Override
+    public RGBColor shade(ShadeRec sr) {
+        RGBColor L = super.shade(sr);
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        
+        RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
+        Ray reflectedRay = new Ray(sr.hitPoint,wi);
+        
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
+        
+        return L;
+    }
+    
 }

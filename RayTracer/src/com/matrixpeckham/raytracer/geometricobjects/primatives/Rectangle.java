@@ -133,6 +133,7 @@ public class Rectangle extends GeometricObject{
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows)return false;
         double t = p0.sub(ray.o).dot(normal) / ray.d.dot(normal);
         if(t<=Utility.EPSILON){
             return false;
@@ -165,6 +166,13 @@ public class Rectangle extends GeometricObject{
         Point2D samplePoint = sampler.sampleUnitSquare();
         return p0.add(a.mul(samplePoint.x).add(b.mul(samplePoint.y)));
     }
+
+    @Override
+    public Normal getNormal(Point3D p) {
+        return normal;
+    }
+    
+    
     
     @Override
     public double pdf(ShadeRec s){

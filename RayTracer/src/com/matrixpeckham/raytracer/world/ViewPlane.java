@@ -103,6 +103,6 @@ public class ViewPlane {
     }
 
     public void setMaxDepth(int i) {
-        maxDepth=1;
+        maxDepth=i;
     }
 }

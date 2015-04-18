@@ -21,15 +21,22 @@ import com.matrixpeckham.raytracer.build.BuildBBCoverPic;
 import com.matrixpeckham.raytracer.build.BuildMultipleObjects;
 import com.matrixpeckham.raytracer.build.BuildShadedObjects;
 import com.matrixpeckham.raytracer.build.BuildSingleSphere;
+import com.matrixpeckham.raytracer.build.ReflectiveWithArea;
 import com.matrixpeckham.raytracer.build.TEST;
 import com.matrixpeckham.raytracer.build.figures.BuildCh06PageOneImage;
 import com.matrixpeckham.raytracer.build.figures.BuildCh15PageOneImage;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure0404;
+import com.matrixpeckham.raytracer.build.figures.BuildFigure04_04;
+import com.matrixpeckham.raytracer.build.figures.BuildFigure10_09;
+import com.matrixpeckham.raytracer.build.figures.BuildFigure10_10;
+import com.matrixpeckham.raytracer.build.figures.BuildFigure10_11;
 import com.matrixpeckham.raytracer.build.figures.BuildFigure16_10A;
 import com.matrixpeckham.raytracer.build.figures.BuildFigure16_11B;
 import com.matrixpeckham.raytracer.build.figures.BuildFigure17_04;
+import com.matrixpeckham.raytracer.build.figures.BuildFigure18_04;
 import com.matrixpeckham.raytracer.build.figures.BuildFigure19_07;
+import com.matrixpeckham.raytracer.build.figures.BuildFigure24_06;
 import com.matrixpeckham.raytracer.build.figures.BuildFigure29_09;
+import com.matrixpeckham.raytracer.textures.procedural.Checker3D;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.BorderLayout;
@@ -86,7 +93,7 @@ public class Main extends JFrame implements ActionListener{
     
     public RayTraceThread thread = null;
     
-    BuildWorldFunction builder = new BuildFigure29_09();
+    BuildWorldFunction builder = new ReflectiveWithArea();
     
     int pixelsRendered = 0;
     int pixelsToRender = 0;
@@ -270,7 +277,7 @@ public class Main extends JFrame implements ActionListener{
         if(completed==1){
             updateTimer.stop();
         }
-        String str = "Rendering... "+((int)completed*100)+"%";
+        String str = "Rendering... "+((int)(completed*100))+"%";
         long time = System.currentTimeMillis();
         long diff = time-startTime;
         double remaining = 1-completed;

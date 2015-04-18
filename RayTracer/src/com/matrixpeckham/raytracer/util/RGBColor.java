@@ -151,4 +151,8 @@ public class RGBColor {
         return 0.33333333333333333333333333333333f *(r+g+b);
     }
 
+    public void setTo(double d) {
+        setTo(d, d, d);
+    }
+
 }

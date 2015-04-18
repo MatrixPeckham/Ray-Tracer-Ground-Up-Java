@@ -76,6 +76,7 @@ public class BeveledBox extends Compound {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
+        if(!shadows) return false;
         if(bBox.hit(ray))
             return super.shadowHit(ray, t);
         else

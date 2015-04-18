@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.tracers;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
@@ -36,18 +37,22 @@ public class RayCast extends Tracer {
 
     @Override
     public RGBColor traceRay(Ray ray) {
-        ShadeRec sr = new ShadeRec(world.hitObjects(ray));
-        if(sr.hitAnObject){
-            sr.ray=ray;
-            return sr.material.shade(sr);
-        } else {
-            return world.backgroundColor;
-        }
+        return traceRay(ray,0);
     }
 
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
-        return traceRay(ray);
+        if(depth>world.vp.maxDepth){
+            return Utility.BLACK;
+        }
+        ShadeRec sr = new ShadeRec(world.hitObjects(ray));
+        if(sr.hitAnObject){
+            sr.ray=ray;
+            sr.depth=depth;
+            return sr.material.shade(sr);
+        } else {
+            return world.backgroundColor;
+        }
     }
     
     

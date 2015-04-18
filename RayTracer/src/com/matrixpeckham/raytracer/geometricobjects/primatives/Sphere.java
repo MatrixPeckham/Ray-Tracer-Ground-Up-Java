@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
@@ -32,6 +33,8 @@ public class Sphere extends GeometricObject {
     private Point3D center;
     private double radius;
     private static final double EPSILON=0.001;
+
+    private Sampler sampler = null;
     
     public Sphere(){
         super();
@@ -130,5 +133,17 @@ public class Sphere extends GeometricObject {
         }
         return false;
     }
+
+    public void setSampler(Sampler sampler) {
+        this.sampler = sampler;
+        sampler.mapSamplesToSphere();
+    }
+
+    @Override
+    public Point3D sample() {
+        return sampler.sampleSphere().mul(radius).add(new Vector3D(center));
+    }
+    
+    
     
 }

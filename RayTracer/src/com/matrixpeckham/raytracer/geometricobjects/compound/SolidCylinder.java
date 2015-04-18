@@ -15,15 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.textures;
+package com.matrixpeckham.raytracer.geometricobjects.compound;
 
+import com.matrixpeckham.raytracer.geometricobjects.primatives.Disk;
+import com.matrixpeckham.raytracer.geometricobjects.primatives.OpenCylinder;
+import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public interface Mapping {
-    public Mapping clone();
-    public TexelCoord getTexelCoordinate(Point3D hitPoint,int xRes, int yRes);
+public class SolidCylinder extends Compound {
+    
+    public SolidCylinder(){
+        this(-1,1,1);
+    }
+    
+    public SolidCylinder(double bottom, double top, double cylinderRadius) {
+        Disk topd = new Disk(new Point3D(0, top, 0), new Normal(0, 1,
+                0), cylinderRadius);
+        Disk bottomd = new Disk(new Point3D(0, bottom, 0), new Normal(0, -1,
+                0), cylinderRadius);
+        OpenCylinder cyl = new OpenCylinder(bottom, top, cylinderRadius);
+        addObject(topd);
+        addObject(bottomd);
+        addObject(cyl);
+    }
+    
 }

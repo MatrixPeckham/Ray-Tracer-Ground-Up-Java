@@ -15,25 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.materials;
-
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.ShadeRec;
+package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public abstract class Material {
-    public Material(){}
-    public Material(Material mat){}
-    public abstract Material clone();
-    public RGBColor shade(ShadeRec sr){
-        return Utility.BLACK;
-    }
-
-    public RGBColor getLe(ShadeRec sr) {
-        return Utility.BLACK;
-    }
+public class TriangleMesh {
+    
 }

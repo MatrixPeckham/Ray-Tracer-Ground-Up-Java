@@ -17,23 +17,58 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public abstract class Material {
-    public Material(){}
-    public Material(Material mat){}
-    public abstract Material clone();
-    public RGBColor shade(ShadeRec sr){
-        return Utility.BLACK;
+public class Emissive extends Material{
+
+    private double ls = 1;
+    private RGBColor ce = new RGBColor(1);
+    public Emissive(){}
+    public Emissive(Emissive e){
+        ls=e.ls;
+        ce.setTo(e.ce);
+    }
+    
+    public void scaleRadiance(double ls){
+        this.ls=ls;
+    }
+    
+    public void setCe(double r, double g, double b){
+        ce.setTo(r,g,b);
+    }
+    public void setCe(RGBColor c){
+        ce.setTo(c);
     }
 
-    public RGBColor getLe(ShadeRec sr) {
-        return Utility.BLACK;
+    @Override
+    public RGBColor shade(ShadeRec sr) {
+        if(sr.normal.neg().dot(sr.ray.d)>0){
+            return ce.mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
     }
+
+    @Override
+    public RGBColor getLe(ShadeRec sr) {
+        if(sr.normal.neg().dot(sr.ray.d)>0){
+            return ce.mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
+    }
+    
+    
+    
+    @Override
+    public Material clone() {
+        return new Emissive(this);
+    }
+    
 }

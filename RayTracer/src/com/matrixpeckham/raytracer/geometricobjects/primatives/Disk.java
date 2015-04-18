@@ -98,6 +98,7 @@ public class Disk extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows)return false;
         double t = (center.sub(ray.o).dot(normal)/(ray.d.dot(normal)));
         if(t<Utility.EPSILON){
             return false;

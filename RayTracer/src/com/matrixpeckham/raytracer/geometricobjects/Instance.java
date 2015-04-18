@@ -211,6 +211,7 @@ public class Instance extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows) return false;
         Ray invRay = new Ray(ray);
         invRay.o.setTo(Point3D.mul(invMatrix, invRay.o));
         invRay.d.setTo(Vector3D.mul(invMatrix, invRay.d));

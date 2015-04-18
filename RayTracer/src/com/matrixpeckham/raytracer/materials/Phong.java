@@ -69,7 +69,7 @@ public class Phong extends Material {
                 if (!inShadow) {
                     L.addLocal(diffuseBRDF.f(sr, wo, wi).add(specularBRDF.f(sr, wo,
                             wi)).mul(sr.w.lights.get(j).
-                                    L(sr)).mul(ndotwi));
+                                    L(sr)).mul(sr.w.lights.get(j).G(sr)*ndotwi/sr.w.lights.get(j).pdf(sr)));
                 }
             }
         }
@@ -92,6 +92,10 @@ public class Phong extends Material {
         specularBRDF.setExp(exp);
     }
 
+    public void setCd(double r, double g, double b){
+        setCd(new RGBColor(r,g,b));
+    }
+    
     public void setCd(RGBColor brown) {
         ambientBRDF.setCd(brown);
         diffuseBRDF.setCd(brown);

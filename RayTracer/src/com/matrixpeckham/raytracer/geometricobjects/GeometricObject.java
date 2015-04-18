@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects;
 
 import com.matrixpeckham.raytracer.materials.Material;
+import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
@@ -81,14 +82,13 @@ public abstract class GeometricObject {
     }
     
     public double pdf(ShadeRec sr){
-        return 0;
+        return 1;
     }
     
     public Point3D sample(){
         return new Point3D(0);
     }
     
-    public void addObject(GeometricObject obj){}
     
     public BBox getBoundingBox(){
         return new BBox();

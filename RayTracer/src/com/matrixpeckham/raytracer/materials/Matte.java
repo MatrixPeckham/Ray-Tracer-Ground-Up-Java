@@ -67,7 +67,7 @@ public class Matte extends Material {
                     inShadow = sr.w.lights.get(j).inShadow(shadowRay,sr);
                 }
                 if(!inShadow){
-                    L.addLocal(diffuseBRDF.f(sr,wo,wi).mul(sr.w.lights.get(j).L(sr)).mul(ndotwi));
+                    L.addLocal(diffuseBRDF.f(sr,wo,wi).mul(sr.w.lights.get(j).L(sr)).mul(sr.w.lights.get(j).G(sr)*ndotwi/sr.w.lights.get(j).pdf(sr)));
                 }
             }
         }
