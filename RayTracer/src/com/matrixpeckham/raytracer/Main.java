@@ -17,26 +17,20 @@
  */
 package com.matrixpeckham.raytracer;
 
-import com.matrixpeckham.raytracer.build.BuildBBCoverPic;
-import com.matrixpeckham.raytracer.build.BuildMultipleObjects;
-import com.matrixpeckham.raytracer.build.BuildShadedObjects;
-import com.matrixpeckham.raytracer.build.BuildSingleSphere;
-import com.matrixpeckham.raytracer.build.ReflectiveWithArea;
-import com.matrixpeckham.raytracer.build.TEST;
-import com.matrixpeckham.raytracer.build.figures.BuildCh06PageOneImage;
-import com.matrixpeckham.raytracer.build.figures.BuildCh15PageOneImage;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure04_04;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure10_09;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure10_10;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure10_11;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure16_10A;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure16_11B;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure17_04;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure18_04;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure19_07;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure24_06;
-import com.matrixpeckham.raytracer.build.figures.BuildFigure29_09;
-import com.matrixpeckham.raytracer.textures.procedural.Checker3D;
+import com.matrixpeckham.raytracer.build.figures.ch23.BuildFigure07;
+import com.matrixpeckham.raytracer.build.*;
+import com.matrixpeckham.raytracer.build.figures.*;
+import com.matrixpeckham.raytracer.build.figures.ch05.BuildFigure13;
+import com.matrixpeckham.raytracer.build.figures.ch08.BuildFigure16;
+import com.matrixpeckham.raytracer.build.figures.ch08.BuildFigure19;
+import com.matrixpeckham.raytracer.build.figures.ch08.BuildFigure21;
+import com.matrixpeckham.raytracer.build.figures.ch08.BuildFigure22;
+import com.matrixpeckham.raytracer.build.figures.ch08.BuildPageOneImage;
+import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure09;
+import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure10;
+import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure11;
+import com.matrixpeckham.raytracer.build.figures.ch10.BuildFigure12;
+import com.matrixpeckham.raytracer.build.figures.ch23.BuildFigure09B;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.BorderLayout;
@@ -93,8 +87,8 @@ public class Main extends JFrame implements ActionListener{
     
     public RayTraceThread thread = null;
     
-    BuildWorldFunction builder = new ReflectiveWithArea();
-    
+//    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
+    BuildWorldFunction builder = new TestTori();
     int pixelsRendered = 0;
     int pixelsToRender = 0;
     private long startTime;

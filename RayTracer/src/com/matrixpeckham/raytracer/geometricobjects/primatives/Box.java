@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -39,6 +40,13 @@ public class Box extends GeometricObject {
     public double y1 = 1;
     public double z1 = 1;
 
+    @Override
+    public BBox getBoundingBox() {
+        return new BBox(x0, x1, y0, y1, z0, z1); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
     public Box() {
     }
 

@@ -89,10 +89,10 @@ public class SphereChecker implements Texture{
         double x = sr.localHitPosition.x;
         double y = sr.localHitPosition.y;
         double z = sr.localHitPosition.z;
-        double len = Math.sqrt(x*x+y*y+z*z);
-        x/=len;
-        y/=len;
-        z/=len;
+        //double len = Math.sqrt(x*x+y*y+z*z);
+        //x/=len;
+        //y/=len;
+        //z/=len;
         double theta = Math.acos(y);
         double phi = Math.atan2(x,z);
         if(phi<0)

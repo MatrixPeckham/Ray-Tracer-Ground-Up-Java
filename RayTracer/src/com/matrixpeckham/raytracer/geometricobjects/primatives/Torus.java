@@ -22,8 +22,10 @@ import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
+import com.matrixpeckham.raytracer.util.QuarticAnswer;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Solvers;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
@@ -81,51 +83,98 @@ public class Torus extends GeometricObject {
         if (!bbox.hit(ray)) {
             return (false);
         }
+        double ri = b;
+        double ro = a;
 
-        double x1 = ray.o.x;
-        double y1 = ray.o.y;
-        double z1 = ray.o.z;
-        double d1 = ray.d.x;
-        double d2 = ray.d.y;
-        double d3 = ray.d.z;
+        double ri2 = ri * ri;
+        double ro2 = ro * ro;
 
-        double[] coeffs = new double[5];	// coefficient array for the quartic equation
-        double[] roots = new double[4];	// solution array for the quartic equation
+        double dx = ray.d.x;
+        double dy = ray.d.y;
+        double dz = ray.d.z;
+        double ox = ray.o.x;
+        double oy = ray.o.y;
+        double oz = ray.o.z;
 
-        // define the coefficients of the quartic equation
-        double sum_d_sqrd = d1 * d1 + d2 * d2 + d3 * d3;
-        double e = x1 * x1 + y1 * y1 + z1 * z1 - a * a - b * b;
-        double f = x1 * d1 + y1 * d2 + z1 * d3;
-        double four_a_sqrd = 4.0 * a * a;
+        double rd2x = dx * dx;
+        double rd2y = dy * dy;
+        double rd2z = dz * dz;
+        double ro2x = ox * ox;
+        double ro2y = oy * oy;
+        double ro2z = oz * oz;
+// compute some common factors
+        double alpha = rd2x + rd2y + rd2z;
+        double beta = 2 * (ox * dx + oy * dy + oz * dz);
+        double gamma = (ro2x + ro2y + ro2z) - ri2 - ro2;
+// setup quartic coefficients
+        double A = alpha * alpha;
+        double B = 2 * alpha * beta;
+        double C = beta * beta + 2 * alpha * gamma + 4 * ro2 * rd2z;
+        double D = 2 * beta * gamma + 8 * ro2 * oz * dz;
+        double E = gamma * gamma + 4 * ro2 * ro2z - 4 * ro2 * ri2;
+        /*
+         double x1 = ray.o.x;
+         double y1 = ray.o.y;
+         double z1 = ray.o.z;
+         double d1 = ray.d.x;
+         double d2 = ray.d.y;
+         double d3 = ray.d.z;
 
-        coeffs[0] = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
-        coeffs[1] = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
-        coeffs[2] = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
-        coeffs[3] = 4.0 * sum_d_sqrd * f;
-        coeffs[4] = sum_d_sqrd * sum_d_sqrd;  					// coefficient of t^4
+         double[] coeffs = new double[5];	// coefficient array for the quartic equation
+         //double[] roots = new double[4];	// solution array for the quartic equation
+        
+         // define the coefficients of the quartic equation
+         double sum_d_sqrd = d1 * d1 + d2 * d2 + d3 * d3;
+         double e = x1 * x1 + y1 * y1 + z1 * z1 - a * a - b * b;
+         double f = x1 * d1 + y1 * d2 + z1 * d3;
+         double four_a_sqrd = 4.0 * a * a;
 
-        // find roots of the quartic equation
-        int num_real_roots = Utility.solveQuartic(coeffs, roots);
-
+         double E = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
+         double D = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
+         double C = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
+         double B = 4.0 * sum_d_sqrd * f;
+         double A = sum_d_sqrd * sum_d_sqrd; // coefficient of t^4
+         coeffs[0]=E;
+         coeffs[1]=D;
+         coeffs[2]=C;
+         coeffs[3]=B;
+         coeffs[4]=A;
+         */
         boolean intersected = false;
+        double[] roots = Solvers.solveQuartic(A, B, C, D, E);
         double t = Utility.HUGE_VALUE;
-
-        if (num_real_roots == 0) // ray misses the torus
-        {
-            return (false);
-        }
-
-        // find the smallest root greater than kEpsilon, if any
-        // the roots array is not sorted
-        for (int j = 0; j < num_real_roots; j++) {
-            if (roots[j] > Utility.EPSILON) {
+        for (int i = 0; i < roots.length; i++) {
+            if (roots[i] > 0 && roots[i] < t) {
+                t = roots[i];
                 intersected = true;
-                if (roots[j] < t) {
-                    t = roots[j];
-                }
             }
         }
 
+        /*
+         // find roots of the quartic equation
+         int num_real_roots = Utility.solveQuartic(coeffs, roots);
+         //QuarticAnswer qa = Utility.solveQuartic(A, B,C,D,E);
+        
+         double t = Utility.HUGE_VALUE;
+
+         //        if (qa.numRealRoots == 0) // ray misses the torus
+         if(num_real_roots==0)
+         {
+         return (false);
+         }
+
+         // find the smallest root greater than kEpsilon, if any
+         // the roots array is not sorted
+         //        for (int j = 0; j < qa.numRealRoots; j++) {
+         for (int j = 0; j < num_real_roots; j++) {
+         if (roots[j] > Utility.EPSILON) {
+         intersected = true;
+         if (roots[j] < t) {
+         t = roots[j];
+         }
+         }
+         }
+         */
         if (!intersected) {
             return (false);
         }
@@ -139,7 +188,9 @@ public class Torus extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        if (!shadows) {
+            return false;
+        }
         if (!bbox.hit(ray)) {
             return (false);
         }
@@ -152,9 +203,9 @@ public class Torus extends GeometricObject {
         double d3 = ray.d.z;
 
         double[] coeffs = new double[5];	// coefficient array for the quartic equation
-        double[] roots = new double[4];	// solution array for the quartic equation
+        //double[] roots = new double[4];	// solution array for the quartic equation
 
-	// define the coefficients of the quartic equation
+        // define the coefficients of the quartic equation
         double sum_d_sqrd = d1 * d1 + d2 * d2 + d3 * d3;
         double e = x1 * x1 + y1 * y1 + z1 * z1 - a * a - b * b;
         double f = x1 * d1 + y1 * d2 + z1 * d3;
@@ -165,34 +216,45 @@ public class Torus extends GeometricObject {
         coeffs[2] = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
         coeffs[3] = 4.0 * sum_d_sqrd * f;
         coeffs[4] = sum_d_sqrd * sum_d_sqrd;  					// coefficient of t^4
+        double E = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
+        double D = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
+        double C = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
+        double B = 4.0 * sum_d_sqrd * f;
+        double A = sum_d_sqrd * sum_d_sqrd;  					// coefficient of t^4
 
 	// find roots of the quartic equation
-        int num_real_roots = Utility.solveQuartic(coeffs, roots);
-
+//        int num_real_roots = Utility.solveQuartic(coeffs, roots);
         boolean intersected = false;
         double t = Utility.HUGE_VALUE;
-
-        if (num_real_roots == 0) // ray misses the torus
-        {
-            return (false);
-        }
-
-	// find the smallest root greater than kEpsilon, if any
-        // the roots array is not sorted
-        for (int j = 0; j < num_real_roots; j++) {
-            if (roots[j] > Utility.EPSILON) {
+        double[] roots = Solvers.solveQuartic(A, B, C, D, E);
+        for (int i = 0; i < roots.length; i++) {
+            if (roots[i] > 0 & roots[i] < t) {
+                t = roots[i];
                 intersected = true;
-                if (roots[j] < t) {
-                    t = roots[j];
-                }
             }
         }
+        /*
+         if (num_real_roots == 0) // ray misses the torus
+         {
+         return (false);
+         }
 
+         // find the smallest root greater than kEpsilon, if any
+         // the roots array is not sorted
+         for (int j = 0; j < num_real_roots; j++) {
+         if (roots[j] > Utility.EPSILON) {
+         intersected = true;
+         if (roots[j] < t) {
+         t = roots[j];
+         }
+         }
+         }
+         */
         if (!intersected) {
             return (false);
         }
 
-        tr.d=t;
+        tr.d = t;
 
         return (true);
     }

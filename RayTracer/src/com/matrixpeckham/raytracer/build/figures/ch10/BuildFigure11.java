@@ -15,7 +15,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch10;
 
 import com.matrixpeckham.raytracer.cameras.ThinLens;
 import com.matrixpeckham.raytracer.geometricobjects.primatives.Box;
@@ -36,7 +36,7 @@ import com.matrixpeckham.raytracer.world.World;
  
   @author William Matrix Peckham
  */
-public class BuildFigure10_10 implements BuildWorldFunction{
+public class BuildFigure11 implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
@@ -60,11 +60,14 @@ public class BuildFigure10_10 implements BuildWorldFunction{
 	thinLensPtr.setEye(0, 6, 50);  
 	thinLensPtr.setLookat(0, 6, 0);
 	thinLensPtr.setViewDistance(40.0);
-//	thinLensPtr.setFocalDistance(50.0); 
-//	thinLensPtr.setFocalDistance(74.0); 
-	thinLensPtr.setFocalDistance(98.0); 
-	thinLensPtr.setLensRadius(1.0);	  // for Figure 10.9(b)
-	thinLensPtr.computeUVW();
+
+//        thinLensPtr.setFocalDistance(98.0); 
+//	thinLensPtr.setLensRadius(3.0);	  // for Figure 10.9(b)
+
+        thinLensPtr.setFocalDistance(100000); 
+	thinLensPtr.setLensRadius(0.25);	  // for Figure 10.9(b)
+        
+        thinLensPtr.computeUVW();
 	w.setCamera(thinLensPtr);
 	
 	

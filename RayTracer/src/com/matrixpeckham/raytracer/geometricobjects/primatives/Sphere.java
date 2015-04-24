@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.samplers.Sampler;
+import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
@@ -142,6 +143,11 @@ public class Sphere extends GeometricObject {
     @Override
     public Point3D sample() {
         return sampler.sampleSphere().mul(radius).add(new Vector3D(center));
+    }
+
+    @Override
+    public BBox getBoundingBox() {
+        return new BBox(center.add(new Vector3D(-radius)), center.add(new Vector3D(radius)));
     }
     
     

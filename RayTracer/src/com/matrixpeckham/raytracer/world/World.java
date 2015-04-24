@@ -142,11 +142,12 @@ public class World {
                 sr.material = objects.get(j).getMaterial();
                 sr.hitPoint.setTo(ray.o.add(ray.d.mul(sr.lastT)));
                 normal.setTo(sr.normal);
-                localHitPoint=sr.localHitPosition;
+                localHitPoint.setTo(sr.localHitPosition);
             }
         }
         if(sr.hitAnObject){
             sr.t=tmin;
+            sr.lastT=tmin;
             sr.normal.setTo(normal);
             sr.localHitPosition.setTo(localHitPoint);
         }

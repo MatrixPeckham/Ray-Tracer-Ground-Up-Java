@@ -74,7 +74,7 @@ public class Image {
         StringBuilder s = new StringBuilder();
         char c =(char)in.read();
         while(c=='#'){
-            while("\r\n".indexOf(c)!=-1){
+            while("\r\n".indexOf(c)==-1){
                 c=(char)in.read();
 //                s.append(c);
             }
@@ -169,5 +169,6 @@ public class Image {
     public int getVres() {
         return vres;
     }
+
 
 }

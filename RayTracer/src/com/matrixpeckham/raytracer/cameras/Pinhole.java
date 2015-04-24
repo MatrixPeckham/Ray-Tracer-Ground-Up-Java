@@ -90,4 +90,8 @@ public class Pinhole extends Camera {
     public void setZoom(double zoom){
         this.zoom=zoom;
     }
+
+    public void setUpVector(int i, int i0, int i1) {
+        up.setTo(i, i0, i1);
+    }
 }

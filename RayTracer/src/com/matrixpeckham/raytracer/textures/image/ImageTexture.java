@@ -35,9 +35,9 @@ public class ImageTexture implements Texture{
     }
     
     public ImageTexture(Image i){
+        image=i;
         hRes=image.getHres();
         vRes=image.getVres();
-        image=i;
     }
     public ImageTexture(ImageTexture i){
         hRes=i.hRes;

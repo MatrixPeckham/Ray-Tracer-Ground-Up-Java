@@ -118,5 +118,14 @@ public class BBox {
     public boolean inside(Point3D p){
 	return ((p.x > x0 && p.x < x1) && (p.y > y0 && p.y < y1) && (p.z > z0 && p.z < z1));
     }
+
+    public void setTo(BBox b) {
+        this.x0=b.x0;
+        this.x1=b.x1;
+        this.y0=b.y0;
+        this.y1=b.y1;
+        this.z0=b.z0;
+        this.z1=b.z1;
+    }
     
 }

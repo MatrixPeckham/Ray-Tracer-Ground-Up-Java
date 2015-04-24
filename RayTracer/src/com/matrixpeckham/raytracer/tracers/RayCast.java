@@ -47,7 +47,7 @@ public class RayCast extends Tracer {
         }
         ShadeRec sr = new ShadeRec(world.hitObjects(ray));
         if(sr.hitAnObject){
-            sr.ray=ray;
+            sr.ray.setTo(ray);
             sr.depth=depth;
             return sr.material.shade(sr);
         } else {

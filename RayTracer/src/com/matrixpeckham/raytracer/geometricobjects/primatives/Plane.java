@@ -66,7 +66,7 @@ public class Plane extends GeometricObject {
         if(t>EPSILON){
             s.lastT=t;
             s.normal.setTo(n);
-            s.localHitPosition=ray.o.add(ray.d.mul(t));
+            s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
             return true;
         }
         return false;

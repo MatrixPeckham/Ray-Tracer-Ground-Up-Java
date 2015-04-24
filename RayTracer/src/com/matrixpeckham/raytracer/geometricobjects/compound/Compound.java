@@ -18,7 +18,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothTriangle;
 import com.matrixpeckham.raytracer.materials.Material;
+import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -128,5 +130,10 @@ public class Compound extends GeometricObject {
     public int getNumObjects(){
         return objects.size();
     }
+
+    public BBox getBoundingBox() {
+        return new BBox();
+    }
+
     
 }
