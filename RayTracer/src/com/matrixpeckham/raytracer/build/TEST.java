@@ -68,13 +68,13 @@ public class TEST implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
-        int num_samples = 1;
+        int num_samples = 16;
         
         Sampler uniform_ptr = new MultiJittered(num_samples);
 
         w.vp.setHres(300);
         w.vp.setVres(300);
-        w.vp.setPixelSize(0.05);
+        w.vp.setPixelSize(0.01);
         w.vp.setSampler(uniform_ptr);
 
         w.backgroundColor = new RGBColor(1,1,0);
@@ -140,8 +140,8 @@ public class TEST implements BuildWorldFunction{
         Torus torus = new Torus(1, 0.5);
         torus.setMaterial(matte_ptr);
         Instance inst = new Instance(torus);
-        inst.translate(0, 2, 0);
-        w.addObject(inst);
+        //inst.translate(0, 2, 0);
+        w.addObject(torus);
         
         Disk disk = new Disk(new Point3D(0, 2, 0), new Normal(0,0,1), 1);
         disk.setMaterial(matte_ptr);
@@ -176,7 +176,7 @@ public class TEST implements BuildWorldFunction{
                 1, 0.1);
         cyl.setMaterial(matte_ptr);
         cyl.setShadows(false);
-        w.addObject(cyl);
+        //w.addObject(cyl);
         
 	// skydome with clouds
         Image image = new Image();

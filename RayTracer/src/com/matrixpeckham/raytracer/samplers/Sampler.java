@@ -77,7 +77,7 @@ public abstract class Sampler {
         numSets = s;
     }
 
-    public int getNumsamples() {
+    public int getNumSamples() {
         return numSamples;
     }
 

@@ -30,7 +30,9 @@ import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure09;
 import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure10;
 import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure11;
 import com.matrixpeckham.raytracer.build.figures.ch10.BuildFigure12;
+import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15;
 import com.matrixpeckham.raytracer.build.figures.ch23.BuildFigure09B;
+import com.matrixpeckham.raytracer.util.BruteForceSolver;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.BorderLayout;
@@ -58,56 +60,118 @@ import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
 /**
- * functions:
- * start
- * pause 
- * resume
- * open
- * save
- * quit
+ * Main class for the ray tracer program, contains the swing code for the GUI.
  * @author William Matrix Peckham
  */
 public class Main extends JFrame implements ActionListener{
+    /**
+     * Menu bar.
+     */
     JMenuBar bar;
+    /**
+     * Start button for starting render.
+     */
     JMenuItem startButton;
+    /**
+     * Open button, for opening an image file.
+     */
     JMenuItem openButton;
+    /**
+     * Save button for saving a rendered image to PNG file.
+     */
     JMenuItem saveButton;
+    /**
+     * Exit Button.
+     */
     JMenuItem quitButton;
+    /**
+     * Zoom 1x button.
+     */
     JMenuItem z1Button;
+    /**
+     * Zoom 2x button.
+     */
     JMenuItem z2Button;
+    /**
+     * Zoom 4x button.
+     */
     JMenuItem z4Button;
+    /**
+     * Zoom 8x button.
+     */
     JMenuItem z8Button;
+    /**
+     * Zoom 16x button.
+     */
     JMenuItem z16Button;
+    /**
+     * Status bar for the bottom of the pane.
+     */
     JLabel statusBar;
+    /**
+     * Image to show.
+     */
     BufferedImage image;
+    /**
+     * Component to show.
+     */
     ImageViewComponent imageComponent;
+    /**
+     * Thread synch queue for rendering. Holds the pixels.
+     */
     private BlockingQueue<RenderPixel> queue = new LinkedBlockingQueue<RenderPixel>();
-    
+    /**
+     * Swing timer for updating the image often. 
+     */
     public Timer updateTimer;
-    
+    /**
+     * Thread for rendering. 
+     */
     public RayTraceThread thread = null;
-    
+    /**
+     * The builder that will create the scene we render.
+     */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = new TestTori();
+    BuildWorldFunction builder = new BuildFigure15();
+    /**
+     * Number of pixels that have been rendered.
+     */
     int pixelsRendered = 0;
+    /**
+     * Number of pixels that we need to render in total.
+     */
     int pixelsToRender = 0;
+    /**
+     * Time we started rendering. 
+     */
     private long startTime;
     
+    /**
+     * Default constructor.  
+     */
     public Main(){
+        //make the menu bar
         menuBar();
+        
         statusBar=new JLabel();
+        
         updateTimer=new Timer(40, this);
+        
         updateTimer.setRepeats(true);
+        
         imageComponent = new ImageViewComponent();
         
+        //standard swing layout and frame stuff
         this.setJMenuBar(bar);
         this.add(statusBar,BorderLayout.SOUTH);
+        //put the image viewing component in a scroll pane for scrolling.
         this.add(new JScrollPane(imageComponent));
         this.pack();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private void menuBar() {
+        //standard swing menu bar generation.
         bar = new JMenuBar();
         JMenu file = new JMenu("File");
         JMenu render = new JMenu("Render");
@@ -121,6 +185,8 @@ public class Main extends JFrame implements ActionListener{
         z4Button=new JMenuItem("4x");
         z8Button=new JMenuItem("8x");
         z16Button=new JMenuItem("16x");
+        
+        //standard action listeners simply call appropriate methods
         startButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -175,6 +241,8 @@ public class Main extends JFrame implements ActionListener{
                 imageComponent.setZoomLevel(16);
             }
         });
+        
+        //standard menu bar creation.
         file.add(openButton);
         file.add(saveButton);
         file.add(quitButton);
@@ -189,15 +257,27 @@ public class Main extends JFrame implements ActionListener{
         bar.add(zoom);
     }
     
+    /**
+     * called from the start menu button.
+     */
     public void start(){
+        //create a new world
         World w = new World();
         statusBar.setText("Building World...");
+        //generate the world
         builder.build(w);
+        //world needs a reference to the render queue
         w.setQueue(queue);
         statusBar.setText("Rendering...");
+        
+        //sets up the pixel counts for this image
         pixelsRendered=0;
+        //this is after we build the world so hRes and vRes will be set already.
         pixelsToRender=w.vp.hRes*w.vp.vRes;
+        
+        //creates the image and fills it with a grey checkerboard pattern.
         image = new BufferedImage(w.vp.hRes, w.vp.vRes, BufferedImage.TYPE_INT_ARGB);
+        //image for a 16x16 image of 2x2, 8x8px checkers drawn with standard Graphics
         BufferedImage check = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D)check.getGraphics();
         g.setColor(new Color(0x666666));
@@ -206,21 +286,28 @@ public class Main extends JFrame implements ActionListener{
         g.fillRect(8, 0, 8, 8);
         g.fillRect(0, 8, 8, 8);
         g=(Graphics2D)image.getGraphics();
+        //use the checker image as a repeated texture on the traced image.
         Rectangle r = new Rectangle(0,0,16,16);
         g.setPaint(new TexturePaint(check, r));
         g.fill(new Rectangle(0,0,w.vp.hRes,w.vp.vRes));
+        
+        //pass the image component the image.
         imageComponent.setImage(image);
         
+        //save start time
         startTime = System.currentTimeMillis();
         
-        
+        //create and start thread and timer
         thread = new RayTraceThread(w);
         
         updateTimer.start();
         
         thread.start();
     }
-        
+
+    /**
+     * open function, opens an image file and sets the component to render it.
+     */
     public void open(){
         JFileChooser chooser = new JFileChooser();
         int b = chooser.showOpenDialog(this);
@@ -233,6 +320,9 @@ public class Main extends JFrame implements ActionListener{
         }
     }
 
+    /**
+     * simply saves the image to a file. 
+     */
     public void save(){
         JFileChooser chooser = new JFileChooser();
         int b = chooser.showSaveDialog(this);
@@ -243,7 +333,9 @@ public class Main extends JFrame implements ActionListener{
             } catch(IOException ex){}
         }
     }
-    
+    /**
+     * quit
+     */
     public void quit(){
         System.exit(0);
     }
@@ -251,15 +343,27 @@ public class Main extends JFrame implements ActionListener{
     
     
     /**
+     * Main Method for the program, creates and displays the window.
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         Main m = new Main();
         m.setVisible(true);
+        //BruteForceSolver solver = new BruteForceSolver(0.999999999, -24.591812430, 226.372338960,
+        //        -924.44347730, 1412.89015972);
+        BruteForceSolver solver = new BruteForceSolver(1, -399.98945581744084, 59996.5311948078,
+                -3999622.5653444515, 9.998640035999998E7);
+        double[] d = {0,0,0,0};
+        int roots = solver.solveQuartic(d);
     }
 
+    /**
+     * Action Performed method for the timer. updates the image. 
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
+        //if we have new pixels to render, set the proper pixels in the image.
         while(!queue.isEmpty()){
             try{
                 RenderPixel pix = queue.take();
@@ -267,22 +371,32 @@ public class Main extends JFrame implements ActionListener{
                 pixelsRendered++;
             } catch(InterruptedException ex){}
         }
+        //compute the completed ratio.
         double completed = (double)pixelsRendered/(double)pixelsToRender;
         if(completed==1){
             updateTimer.stop();
         }
+        
+        //update the status bar for the percent complete and timing. 
         String str = "Rendering... "+((int)(completed*100))+"%";
+        
         long time = System.currentTimeMillis();
+        //elapsed time
         long diff = time-startTime;
+        //percent left
         double remaining = 1-completed;
+        //approximate time left
         long msRemain = (long)((diff/(completed*100))*100*remaining);
         String timeremStr = msRemain/1000f + " seconds remain ";
         String timeStr = diff/1000f + " seconds done ";
+        
+        //set the status. 
         if(msRemain>=0){
             statusBar.setText(str+timeStr + timeremStr);
         } else {
             statusBar.setText(str+timeStr);
         }
+        //fire repaint of the component.
         imageComponent.repaint();
     }
     

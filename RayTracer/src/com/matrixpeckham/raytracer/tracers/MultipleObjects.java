@@ -23,21 +23,31 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Tracer for multiple objects that only have color and no lighting. 
+ * Second simplest implementation available.
  * @author William Matrix Peckham
  */
 public class MultipleObjects extends Tracer{
-
+    /**
+     * default constructor
+     */
     public MultipleObjects() {
     }
-
+    /**
+     * World setting constructor
+     * @param w 
+     */
     public MultipleObjects(World w) {
         super(w);
     }
-
+    /**
+     * Second simplest implementation of traceRay.
+     * @param ray
+     * @return 
+     */
     @Override
     public RGBColor traceRay(Ray ray) {
-        ShadeRec sr = world.hitObjects(ray);
+        ShadeRec sr = world.hitBareBonesObjects(ray);
         if(sr.hitAnObject){
             return sr.color;
         }

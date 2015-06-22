@@ -24,22 +24,39 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Tracer for casting rays into the world taking depth into account. Basically
+ * the same as the whitted.
  * @author William Matrix Peckham
  */
 public class RayCast extends Tracer {
+    /**
+     * default constructor.
+     */
     public RayCast(){
         super();
     }
+    /**
+     * World setting constructor.
+     * @param world 
+     */
     public RayCast(World world){
         super(world);
     }
-
+    /**
+     * Trace a ray, without depth.
+     * @param ray
+     * @return 
+     */
     @Override
     public RGBColor traceRay(Ray ray) {
         return traceRay(ray,0);
     }
-
+    /**
+     * Trace a ray, stopping at world.vp.maxDepth.
+     * @param ray
+     * @param depth
+     * @return 
+     */
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
         if(depth>world.vp.maxDepth){

@@ -25,56 +25,96 @@ import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
+ * Orthographic camera.
  *
  * @author William Matrix Peckham
  */
 public class Orthographic extends Camera {
-    
-    public Orthographic(){
+
+    /**
+     * Default.
+     */
+    public Orthographic() {
         super();
     }
-    
-    public Orthographic(Orthographic c){
+
+    /**
+     * Clone
+     *
+     * @param c
+     */
+    public Orthographic(Orthographic c) {
         super(c);
     }
-    
+
+    /**
+     * Clone
+     *
+     * @return
+     */
     @Override
-    public Camera clone(){
+    public Camera clone() {
         return new Orthographic(this);
     }
-    
-    public Vector3D getDirection(Point2D p){
+
+    /**
+     * Gets the direction vector for traced rays, always the same for ortho.
+     *
+     * @param p point on the 2d plane
+     * @return
+     */
+    public Vector3D getDirection(Point2D p) {
         Vector3D dir = (lookat.sub(eye));
         dir.normalize();
         return dir;
     }
-    
+
+    /**
+     * Render scene.
+     *
+     * @param w
+     */
     @Override
-    public void renderScene(World w){
+    public void renderScene(World w) {
+        //color
         RGBColor L = new RGBColor();
-        ViewPlane vp=new ViewPlane(w.vp);
+        //copy of view plane.
+        ViewPlane vp = new ViewPlane(w.vp);
+        //ray
         Ray ray = new Ray();
-        int depth=0;
+        //depth
+        int depth = 0;
+        //pixel point
         Point2D pp = new Point2D();
+        //normalized sample point
         Point2D sp = new Point2D();
-        
-        for(int r = 0; r<vp.vRes; r++){
-            for(int c = 0; c<vp.hRes; c++){
+        //loop through all pixels
+        for (int r = 0; r < vp.vRes; r++) {
+            for (int c = 0; c < vp.hRes; c++) {
+                //initialize color
                 L.setTo(0, 0, 0);
-                for(int p = 0; p<vp.sampler.getNumsamples(); p++){
-                        sp.setTo(vp.sampler.sampleUnitSquare());
-                        pp.x=vp.s*(c-0.5f*vp.hRes + sp.x);
-                        pp.y=vp.s*(r-0.5f*vp.vRes + sp.y);
-                        ray.d=getDirection(pp);
-                        ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
-                        L.addLocal(w.tracer.traceRay(ray,depth));
-                    }
+                //for all samples in point
+                for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
+                    //sample point
+                    sp.setTo(vp.sampler.sampleUnitSquare());
+                    //convert normalized sample point to a point somewhere in the pixel
+                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
+                    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+                    //get ray direction
+                    ray.d = getDirection(pp);
+                    //set ray origin, eyepoint + pixel location
+                    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
+                    //sum up samples. 
+                    L.addLocal(w.tracer.traceRay(ray, depth));
+                }
+                //normalize and expose pixel
                 L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime);
+                L.mulLocal(exposureTime); 
+                //display
                 w.displayPixel(r, c, L);
             }
         }
-        
+
     }
-    
+
 }

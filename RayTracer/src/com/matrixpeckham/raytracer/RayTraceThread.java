@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Simple thread, simply holds a World reference and calls World.camera.renderScene() when started.  
  * @author William Matrix Peckham
  */
 public class RayTraceThread extends Thread {

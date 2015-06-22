@@ -53,6 +53,7 @@ public class Compound extends GeometricObject {
         objects.add(obj);
     }
     
+    @Override
     public void setMaterial(Material mat){
         for(GeometricObject obj : objects){
             obj.setMaterial(mat);
@@ -98,6 +99,7 @@ public class Compound extends GeometricObject {
         for(int j = 0; j<numObjects; j++){
             if(objects.get(j).shadowHit(ray, t)&&t.d<tmin){
                 hit=true;
+                tmin=t.d;
             }
         }
         

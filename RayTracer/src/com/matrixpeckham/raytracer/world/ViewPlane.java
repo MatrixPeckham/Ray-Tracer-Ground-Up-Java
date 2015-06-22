@@ -22,22 +22,52 @@ import com.matrixpeckham.raytracer.samplers.Regular;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 
 /**
- *
+ * Class that represents the viewport for the image. 
  * @author William Matrix Peckham
  */
 public class ViewPlane {
-
+    /**
+     * Horizontal resolution.
+     */
     public int hRes;
+    /**
+     * Vertical resolution. 
+     */
     public int vRes;
+    /**
+     * Pixel size.
+     */
     public double s;
+    /**
+     * samples per pixel
+     */
     public int numSamples;
+    /**
+     * Sampler for pixel location.
+     */
     public Sampler sampler = null;
+    /**
+     * Gamma correction.
+     */
     public double gamma;
+    /**
+     * Inverse of gamma correction, computed once to avoid many divisions. 
+     */
     public double invGamma;
-    public boolean showOutOfGamut;
+    /**
+     * Flag to show out of gamut colors as a solid known color. If true shows as red
+     * otherwise normalizes color, third option of clamping color is not implemented,
+     * but would be trivial to add. 
+     */
+    public boolean showOutOfGamut;//TODO: implement color clamping as well.
+    /**
+     * Maximum recursion depth for rays.
+     */
     public int maxDepth=1;
 
-    // default Constructor
+    /**
+     * Default constructor. 
+     */
     public ViewPlane() {
         hRes=400;
         vRes=400;
@@ -48,7 +78,10 @@ public class ViewPlane {
         showOutOfGamut=false;
     }
 
-    // copy ructor
+    /**
+     * Copy constructor.
+     * @param vp 
+     */
     public ViewPlane(ViewPlane vp) {
         hRes=vp.hRes;
         vRes=vp.vRes;
@@ -60,7 +93,11 @@ public class ViewPlane {
         showOutOfGamut=vp.showOutOfGamut;
     }
 
-    // assignment operator
+    /**
+     * Java replacement for overridden = operator. 
+     * @param vp
+     * @return this reference
+     */
     public ViewPlane setTo(ViewPlane vp) {
         hRes=vp.hRes;
         vRes=vp.vRes;
@@ -72,23 +109,45 @@ public class ViewPlane {
         return this;
     }
 
+    /**
+     * Setter
+     * @param h_res 
+     */
     public void setHres(int h_res){hRes=h_res;}
-
+    /**
+     * Setter
+     * @param v_res 
+     */
     public void setVres(int v_res){vRes=v_res;}
-
+    /**
+     * Setter
+     * @param size 
+     */
     public void setPixelSize(double size){
         s=size;
     }
-
+    /**
+     * Sets gamma and computes invGamma
+     * @param g 
+     */
     public void setGamma(double g){
         gamma=g;
         invGamma=1.0f/gamma;
     }
-
+    /**
+     * Setter
+     * @param show 
+     */
     public void setGamutDisplay(boolean show){
         showOutOfGamut=show;
     }
     
+    /**
+     * Sets the number of samples, if n>1 creates a new multi-jittered sampler
+     * with that number of samples. Otherwise creates a regular sampler with one 
+     * sample.  
+     * @param n 
+     */
     public void setSamples(int n){
         numSamples=n;
         if(numSamples>1){
@@ -97,11 +156,19 @@ public class ViewPlane {
             sampler=new Regular(1);
         }
     }
+    /**
+     * Sets the sampler for the viewport, also sets the number of samples as 
+     * the number of samples in the sampler
+     * @param s 
+     */
     public void setSampler(Sampler s){
         sampler = s;
-        numSamples=sampler.getNumsamples();
+        numSamples=sampler.getNumSamples();
     }
-
+    /**
+     * Setter.
+     * @param i 
+     */
     public void setMaxDepth(int i) {
         maxDepth=i;
     }

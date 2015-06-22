@@ -39,7 +39,7 @@ public class BeveledCylinder extends Compound{
         this.bevelRadius=bevelRadius;
         addObject(new Disk(new Point3D(0,bottom,0), new Normal(0,-1,0), radius-bevelRadius));
         addObject(new Disk(new Point3D(0,top,0), new Normal(0,1,0), radius-bevelRadius));
-        //addObject(new OpenCylinder(bottom+bevelRadius, top-bevelRadius, radius));
+        addObject(new OpenCylinder(bottom+bevelRadius, top-bevelRadius, radius));
         
         Instance botTorus = new Instance(new Torus(radius-bevelRadius, bevelRadius));
         botTorus.translate(0,bottom+bevelRadius,0);

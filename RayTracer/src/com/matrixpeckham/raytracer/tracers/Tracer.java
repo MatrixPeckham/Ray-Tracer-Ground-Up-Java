@@ -23,13 +23,36 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Do nothing tracer, returns defaults. 
  * @author William Matrix Peckham
  */
 public class Tracer {
+    /**
+     * World reference.
+     */
     protected World world=null;
+    /**
+     * default constructor. 
+     */
     public Tracer(){}
+    /**
+     * constructor that sets the world. 
+     * @param w 
+     */
     public Tracer(World w){world=w;}
+    /**
+     * Trace a ray from start point to final color. 
+     * does not incorporate depth.
+     * @param ray
+     * @return 
+     */
     public RGBColor traceRay(Ray ray){return Utility.BLACK;}
+    /**
+     * Trace a ray to a color taking into account the current depth.
+     * should bail out if depth is over the world.vp.maxDepth.
+     * @param ray
+     * @param depth
+     * @return 
+     */
     public RGBColor traceRay(Ray ray, int depth){return Utility.BLACK;}
 }

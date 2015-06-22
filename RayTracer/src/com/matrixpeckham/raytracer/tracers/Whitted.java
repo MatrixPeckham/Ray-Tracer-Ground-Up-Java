@@ -24,7 +24,7 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Whitted tracer, pretty much the same as raycast tracer.
  * @author William Matrix Peckham
  */
 public class Whitted extends Tracer{

@@ -35,7 +35,7 @@ public class BuildFigure15 implements BuildWorldFunction{
     @Override
     public void build(World w) {
 
-	int numSamples = 16;
+	int numSamples = 1;
 	
 	w.vp.setHres(650);	  		
 	w.vp.setVres(300);

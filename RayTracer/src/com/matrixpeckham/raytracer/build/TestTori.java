@@ -34,6 +34,7 @@ import com.matrixpeckham.raytracer.geometricobjects.primatives.Torus;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.lights.Directional;
+import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.materials.Reflective;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
@@ -65,29 +66,31 @@ public class TestTori implements BuildWorldFunction
 
     @Override
     public void build(World w) {
-        int num_samples = 1;
+        int num_samples = 100;
         
         Sampler uniform_ptr = new MultiJittered(num_samples);
 
         w.vp.setHres(300);
-        w.vp.setVres(1200);
-        w.vp.setPixelSize(0.025);
+        w.vp.setVres(300);
+//        w.vp.setVres(300);
+        //w.vp.setPixelSize(0.025);
         w.vp.setSampler(uniform_ptr);
 
         w.backgroundColor = new RGBColor(1,1,0);
         w.tracer = new RayCast(w);
 
         Orthographic orthographic_ptr = new Orthographic();
-        orthographic_ptr.setEye(0, 15, 5);
-        orthographic_ptr.setLookat(new Point3D(0,15,0));
-        w.setCamera(orthographic_ptr);
+        orthographic_ptr.setEye(0, 5, 0);
+        orthographic_ptr.setLookat(new Point3D(0,0,0));
+        orthographic_ptr.computeUVW();
+        //w.setCamera(orthographic_ptr);
 
-        Pinhole pinhole = new Pinhole();
-        pinhole.setEye(2.5, 2.5, 5);
-        pinhole.setZoom(1);
-        pinhole.setViewDistance(1);
-        pinhole.setLookat(new Point3D(0));
-        //w.setCamera(pinhole);
+	Pinhole pinhole = new Pinhole();
+	pinhole.setEye(0, 0, 100);
+	pinhole.setLookat(0, 0, 0);
+	pinhole.setViewDistance(6000); 
+	pinhole.computeUVW();
+	w.setCamera(pinhole);
 
 // thin lens camera	
         ThinLens thin_lens_ptr = new ThinLens();
@@ -116,10 +119,12 @@ public class TestTori implements BuildWorldFunction
         //light_ptr.setExp(2);
         w.addLight(light_ptr);
 
-        SV_Matte matte_ptr = new SV_Matte();
+        //SV_Matte matte_ptr = new SV_Matte();
+        Matte matte_ptr = new Matte();
         matte_ptr.setKa(0.2);
         matte_ptr.setKd(0.8);
-        matte_ptr.setCd(new Checker3D());				// yellow	
+        //matte_ptr.setCd(new Checker3D());				// yellow	
+        matte_ptr.setCd(new RGBColor(1,0,0));
 
 /*        Torus torus = new Torus(1, 0.5);
         torus.setMaterial(matte_ptr);
@@ -129,13 +134,17 @@ public class TestTori implements BuildWorldFunction
         double size = 0.1;
         for(double y = 0.1; y<30; y+=size*2){
             Torus t = new Torus(1, size);
+            t.setShadows(false);
             t.setMaterial(matte_ptr);
             Instance inst = new Instance(t);
             inst.translate(0,y,0);
-            w.addObject(inst);
+            //w.addObject(inst);
             size+=0.1;
         }
-        
+        Torus one = new Torus(0.8,0.2);
+        one.setMaterial(matte_ptr);
+        one.setShadows(false);
+        w.addObject(one);
         
 
     }

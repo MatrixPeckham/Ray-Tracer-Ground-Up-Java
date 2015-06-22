@@ -24,18 +24,30 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Simplest tracer, hit tests the single sphere and returns red if it hits.
  * @author William Matrix Peckham
  */
 public class SingleSphere extends Tracer{
-
+    /**
+     * default constructor
+     */
     public SingleSphere() {
     }
 
+    /**
+     * World setting constructor
+     * @param w 
+     */
     public SingleSphere(World w) {
         super(w);
     }
 
+    /**
+     * Simplest possible implementation of traceRay function.
+     * returns one color if ray hits the only object and the other color if it doesn't.
+     * @param ray
+     * @return 
+     */
     @Override
     public RGBColor traceRay(Ray ray) {
         ShadeRec sr = new ShadeRec(world);

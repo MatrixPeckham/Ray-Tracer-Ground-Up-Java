@@ -25,58 +25,89 @@ import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Pinhole perspective camera.
  * @author William Matrix Peckham
  */
 public class Pinhole extends Camera {
     private double d;//view plane dist
     private double zoom;//zoom factor
-    
+    /**
+     * Default constructor.
+     */
     public Pinhole(){
         super();
         d=500;
         zoom=1.0f;
     }
-    
+    /**
+     * Copy constructor.
+     * @param c 
+     */
     public Pinhole(Pinhole c){
         super(c);
         d=c.d;
         zoom=c.zoom;
     }
-    
+    /**
+     * clone
+     * @return 
+     */
     @Override
     public Camera clone(){
         return new Pinhole(this);
     }
-    
+    /**
+     * Get ray direction for point.  simply unit direction from eye point
+     * to the point on the view plane.
+     * @param p
+     * @return 
+     */
     public Vector3D getDirection(Point2D p){
         Vector3D dir = (u.mul(p.x)).add(v.mul(p.y)).sub(w.mul(d));
         dir.normalize();
         return dir;
     }
-    
+    /**
+     * Render scene.
+     * @param w 
+     */
     @Override
     public void renderScene(World w){
+        //color
         RGBColor L = new RGBColor();
+        //clone the viewport, we'll manipulate it later
         ViewPlane vp=new ViewPlane(w.vp);
+        //ray
         Ray ray = new Ray();
+        //depth
         int depth=0;
+        //pixel point
         Point2D pp = new Point2D();
+        //change the pixel size for the zoom
         vp.s/=zoom;
+        //the origin of the ray will always be the eye point.
         ray.o.setTo(eye);
         
+        //loop through all pixels
         for(int r = 0; r<vp.vRes; r++){
             for(int c = 0; c<vp.hRes; c++){
+                //reset color
                 L.setTo(0, 0, 0);
+                //for all samples
                 for(int p = 0; p<vp.numSamples; p++){
+                    //get sample point on pixel.
                     Point2D sp = vp.sampler.sampleUnitSquare();
                     pp.x=vp.s*(c-0.5f*vp.hRes + sp.x);
                     pp.y=vp.s*(r-0.5f*vp.vRes + sp.y);
+                    //compute direction
                     ray.d=getDirection(pp);
+                    //add color
                     L.addLocal(w.tracer.traceRay(ray,depth));
                 }
+                //normalize color and expose
                 L.divLocal(vp.numSamples);
                 L.mulLocal(exposureTime);
+                //display
                 w.displayPixel(r, c, L);
             }
         }

@@ -34,62 +34,123 @@ import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
 /**
- *
+ * Class that represents the world to render.
  * @author William Matrix Peckham
  */
 public class World {
-
+    /**
+     * View Plane for the world. Starts as default. 
+     */
     public ViewPlane vp=new ViewPlane();
+    /**
+     * Color to render when nothing has been hit. Default: Black.
+     */
     public RGBColor backgroundColor;
+    /**
+     * Tracer for the rays, determines what happens when rays hit things.
+     */
     public Tracer tracer;
+    /**
+     * Ambient lighting for the scene.  
+     */
     public Light ambient;
+    /**
+     * Camera for the scene. 
+     */
     public Camera camera;
+    /**
+     * Lights for the scene. 
+     */
     public ArrayList<Light> lights = new ArrayList<>();
+    /**
+     * Single sphere for the initial test image from the first working example from the book. 
+     * used only in the first figure, and SingleSphereTracer.
+     */
     public Sphere sphere=new Sphere();
+    /**
+     * List of objects in the scene.
+     */
     public ArrayList<GeometricObject> objects=new ArrayList<>();
+    /**
+     * Queue for thread synchronization.  Set before starting render, and used
+     * to push finished pixels to the GUI.
+     */
     private BlockingQueue<RenderPixel> paintArea = null;
     
-
+    /**
+     * Default constructor. 
+     */
     public World() {
         backgroundColor = Utility.BLACK;
         tracer = null;
         ambient=new Ambient();
     }
     
+    /**
+     * Setter for the render queue.
+     * @param paintArea 
+     */
     public void setQueue(BlockingQueue<RenderPixel> paintArea){
         this.paintArea=paintArea;
     }
     
+    /**
+     * Adds a light to the scene.
+     * @param light 
+     */
     public void addLight(Light light){
         lights.add(light);
     }
     
+    /**
+     * set ambient light
+     * @param light 
+     */
     public void setAmbient(Light light){
         ambient=light;
     }
-    
+    /**
+     * set camera
+     * @param cam 
+     */
     public void setCamera(Camera cam){
         camera = cam;
     }
     
+    /**
+     * Render scene function. For use without cameras, orthographic projection,
+     * down the z axis.
+     */
     public void renderScene() {
+        //re-useabe color variable.
         RGBColor pixelColor = new RGBColor();
+        //re-usable ray variable.
         Ray ray = new Ray();
+        //resolutions and size
         int hres = vp.hRes;
         int vres = vp.vRes;
         double s = vp.s;
         double zw = 100.0f;
+        //direction is always down z
         ray.d.setTo(0.0, 0.0, -1.0);
+        //loop through every pixel
         for (int r = 0; r < vres; r++) {
             for (int c = 0; c < hres; c++) {
+                //ray location is the center of each pixel.
                 ray.o.setTo(s * (c - hres / 2.0 + 0.5), s * (r - vres / 2.0
                         + 0.5), zw);
+                //set the temp color to the traced color
                 pixelColor.setTo(tracer.traceRay(ray));
+                //display pixel
                 displayPixel(r, c, pixelColor);
             }
         }
     }
-
+    /**
+     * Normalizes color based on the largest component. 
+     * @param c
+     * @return 
+     */
     public RGBColor maxToOne(RGBColor c) {
         double maxVal = Math.max(c.r, Math.max(c.g, c.b));
         if (maxVal > 1) {
@@ -97,7 +158,11 @@ public class World {
         }
         return c;
     }
-
+    /**
+     * Changes a color to red if it is out of gamut
+     * @param rawColor
+     * @return 
+     */
     public RGBColor clampToColor(RGBColor rawColor) {
         RGBColor c = new RGBColor(rawColor);
         if (c.r > 1 || c.g > 1 || c.b > 1) {
@@ -108,43 +173,65 @@ public class World {
         return c;
     }
 
+    /**
+     * Sends a pixel to the GUI through the threading queue.
+     * @param row pixel x component
+     * @param column pixel y component
+     * @param rawColor color to send, may be changed if out of gamut
+     */
     public void displayPixel(int row, int column, RGBColor rawColor) {
         RGBColor mappedColor;
+        //fix out of gamut colors
         if (vp.showOutOfGamut) {
             mappedColor = clampToColor(rawColor);
         } else {
             mappedColor = maxToOne(rawColor);
         }
 
+        //gamma correction
         if (vp.gamma != 1.0) {
             mappedColor = mappedColor.powc(vp.invGamma);
         }
 
+        //converts row/column to x,y image coordinates, flip y coordinate because
+        //image has top left origin, and row/col is bottom left origin. 
         int x = column;
         int y = vp.vRes - row - 1;
 
+        //make sure we have a valid queue and send pixel.
         if(paintArea!=null){
             paintArea.offer(new RenderPixel(x, y, (int)(mappedColor.r*255), (int)(mappedColor.g*255), (int)(mappedColor.b*255)));
         }
     }
     
+    /**
+     * Intersects a ray with the objects in the scene, and gets the nearest one hit.
+     * @param ray ray to trace
+     * @return ShadeRec of the nearest hit.
+     */
     public ShadeRec hitObjects(Ray ray){
+        //creates a new shaderec.
         ShadeRec sr=new ShadeRec(this);
+        //these hold some things temporarily for the 
+        //normal reference
         Normal normal = new Normal();
+        //local hit position.
         Point3D localHitPoint = new Point3D();
         double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
-        
+        //test the ray with all objects store values in temporary variables when they
+        //are the lowest
         for(int j = 0; j<numObjects; j++){
             if(objects.get(j).hit(ray, sr)&&sr.lastT<tmin){
                 sr.hitAnObject=true;
-                tmin=sr.lastT;
+                tmin=sr.lastT;//changes at call to hit, so we must preserve lowest
                 sr.material = objects.get(j).getMaterial();
-                sr.hitPoint.setTo(ray.o.add(ray.d.mul(sr.lastT)));
-                normal.setTo(sr.normal);
-                localHitPoint.setTo(sr.localHitPosition);
+                sr.hitPoint.setTo(ray.o.add(ray.d.mul(sr.lastT)));//only calculated at this point
+                normal.setTo(sr.normal);//ditto
+                localHitPoint.setTo(sr.localHitPosition);//ditto
             }
         }
+        //restore the saved lowest values
         if(sr.hitAnObject){
             sr.t=tmin;
             sr.lastT=tmin;
@@ -154,12 +241,16 @@ public class World {
         
         return sr;
     }
-    
+    /**
+     * Simplistic hit function, no normals no local position, pretty much just color. 
+     * @param ray
+     * @return 
+     */
     public ShadeRec hitBareBonesObjects(Ray ray){
         ShadeRec sr = new ShadeRec(this);
         double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
-        
+        //intersect each object with ray, and keep the color from the closest.
         for(int j=0; j<numObjects; j++){
             GeometricObject ob = objects.get(j);
             if(ob.hit(ray,sr)&&(sr.lastT<tmin)){
@@ -171,7 +262,10 @@ public class World {
         
         return sr;
     }
-
+    /**
+     * add an object to the scene.
+     * @param obj 
+     */
     public void addObject(GeometricObject obj) {
         objects.add(obj);
     }
