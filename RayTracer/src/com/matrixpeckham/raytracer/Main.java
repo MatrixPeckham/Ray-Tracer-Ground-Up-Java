@@ -17,23 +17,10 @@
  */
 package com.matrixpeckham.raytracer;
 
-import com.matrixpeckham.raytracer.build.figures.ch23.BuildFigure07;
-import com.matrixpeckham.raytracer.build.*;
-import com.matrixpeckham.raytracer.build.figures.*;
-import com.matrixpeckham.raytracer.build.figures.ch05.BuildFigure13;
-import com.matrixpeckham.raytracer.build.figures.ch08.BuildFigure16;
-import com.matrixpeckham.raytracer.build.figures.ch08.BuildFigure19;
-import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure21;
-import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure22;
-import com.matrixpeckham.raytracer.build.figures.ch08.BuildPageOneImage;
-import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure09;
-import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure10;
-import com.matrixpeckham.raytracer.build.figures.ch09.BuildFigure11;
-import com.matrixpeckham.raytracer.build.figures.ch10.BuildFigure12;
-import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15;
-import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure24;
-import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure26;
-import com.matrixpeckham.raytracer.build.figures.ch23.BuildFigure09B;
+import com.matrixpeckham.raytracer.build.figures.ch16.BuildFigure01_09A;
+import com.matrixpeckham.raytracer.build.figures.ch16.BuildFigure05;
+import com.matrixpeckham.raytracer.build.figures.ch17.BuildFigure04;
+import com.matrixpeckham.raytracer.build.figures.ch17.BuildFigure08;
 import com.matrixpeckham.raytracer.util.BruteForceSolver;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
@@ -134,7 +121,7 @@ public class Main extends JFrame implements ActionListener{
      * The builder that will create the scene we render.
      */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = new BuildFigure26();
+    BuildWorldFunction builder = new BuildFigure08();
     /**
      * Number of pixels that have been rendered.
      */

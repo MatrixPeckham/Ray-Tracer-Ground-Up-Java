@@ -15,15 +15,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch16;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
-import com.matrixpeckham.raytracer.lights.Directional;
+import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Phong;
 import com.matrixpeckham.raytracer.tracers.RayCast;
-import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Point3D;
+import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 
@@ -31,11 +31,11 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildCh15PageOneImage implements BuildWorldFunction{
+public class BuildPageOneImage implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
-	int numSamples = 1;
+int numSamples = 16;
 	  
 	w.vp.setHres(600);
 	w.vp.setVres(600);
@@ -46,15 +46,16 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	
 	Pinhole pinholePtr = new Pinhole();
 	pinholePtr.setEye(0, 0, 10000);
-	pinholePtr.setLookat(new Point3D(0));   
+	pinholePtr.setLookat(new Point3D());   
 	pinholePtr.setViewDistance(15000);	
-	pinholePtr.computeUVW();
+	pinholePtr.computeUVW(); 
 	w.setCamera(pinholePtr);
 	
 	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(100, 100, 200);
-	lightPtr.scaleRadiance(3.0); 			
+	PointLight lightPtr = new PointLight();
+	lightPtr.setLocation(100, 100, 200);
+	lightPtr.scaleRadiance(3.0);
+	lightPtr.setShadows(true); 			
 	w.addLight(lightPtr);
 	
 		
@@ -62,24 +63,25 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 
 	double a = 0.75;  // scaling factor for yellow, orange, and light green
 	
-	RGBColor yellow=new RGBColor(a * 1, a * 1, 0);								// yellow
-	RGBColor brown=new RGBColor(0.71, 0.40, 0.16);								// brown
-	RGBColor dark_green=new RGBColor(0.0, 0.41, 0.41);							// dark_green
-	RGBColor orange=new RGBColor(a * 1, a * 0.75, 0);							// orange
-	RGBColor green=new RGBColor(0, 0.6, 0.3);									// green
-	RGBColor light_green=new RGBColor(a * 0.65, a * 1, a * 0.30);				// light green
-	RGBColor dark_yellow=new RGBColor(0.61, 0.61, 0);							// dark yellow
-	RGBColor lightPurple=new RGBColor(0.65, 0.3, 1);							// light purple
-	RGBColor darkPurple=new RGBColor(0.5, 0, 1);								// dark purple
+	RGBColor yellow = new RGBColor(a * 1, a * 1, 0);								// yellow
+	RGBColor brown = new RGBColor(0.71, 0.40, 0.16);								// brown
+	RGBColor darkGreen = new RGBColor(0.0, 0.41, 0.41);							// darkGreen
+	RGBColor orange = new RGBColor(a * 1, a * 0.75, 0);							// orange
+	RGBColor green = new RGBColor(0, 0.6, 0.3);									// green
+	RGBColor lightGreen = new RGBColor(a * 0.65, a * 1, a * 0.30);				// light green
+	RGBColor darkYellow = new RGBColor(0.61, 0.61, 0);							// dark yellow
+	RGBColor lightPurple = new RGBColor(0.65, 0.3, 1);							// light purple
+	RGBColor darkPurple = new RGBColor(0.5, 0, 1);								// dark purple
 	
 	
 	// Phong materials' reflection coefficients
 	
 	double ka 	= 0.25;
 	double kd 	= 0.75;
-	double ks 	= 0.1;
-	double exp 	= 10;
-		
+	double ks 	= 0.12;
+	double exp 	= 20;
+	
+	
 	// spheres
 	
 	Phong phongPtr1 = new Phong();
@@ -88,6 +90,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr1.setKs(ks);
 	phongPtr1.setExp(exp);
 	phongPtr1.setCd(yellow);
+					
 	Sphere	spherePtr1 = new Sphere(new Point3D(5, 3, 0), 30); 
 	spherePtr1.setMaterial(phongPtr1);	   							// yellow
 	w.addObject(spherePtr1);
@@ -100,7 +103,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr2.setExp(exp);
 	phongPtr2.setCd(brown);
 	
-	Sphere	spherePtr2 = new Sphere( new Point3D(45, -7, -60), 20); 
+	Sphere	spherePtr2 = new Sphere(new Point3D(45, -7, -60), 20); 
 	spherePtr2.setMaterial(phongPtr2);								// brown
 	w.addObject(spherePtr2);
 	
@@ -110,7 +113,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr3.setKd(kd);
 	phongPtr3.setKs(ks);
 	phongPtr3.setExp(exp);
-	phongPtr3.setCd(dark_green);
+	phongPtr3.setCd(darkGreen);
 		
 	Sphere	spherePtr3 = new Sphere(new Point3D(40, 43, -100), 17); 
 	spherePtr3.setMaterial(phongPtr3);								// dark green
@@ -146,7 +149,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr6.setKd(kd);
 	phongPtr6.setKs(ks);
 	phongPtr6.setExp(exp);
-	phongPtr6.setCd(light_green);
+	phongPtr6.setCd(lightGreen);
 	
 	Sphere	spherePtr6 = new Sphere(new Point3D(20, -27, -35), 25); 
 	spherePtr6.setMaterial(phongPtr6);								// light green
@@ -182,7 +185,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr9.setKd(kd);
 	phongPtr9.setKs(ks);
 	phongPtr9.setExp(exp);
-	phongPtr9.setCd(light_green);
+	phongPtr9.setCd(lightGreen);
 	
 	Sphere	spherePtr9 = new Sphere(new Point3D(-47, 16, -80), 23); 
 	spherePtr9.setMaterial(phongPtr9);								// light green
@@ -194,7 +197,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr10.setKd(kd);
 	phongPtr10.setKs(ks);
 	phongPtr10.setExp(exp);
-	phongPtr10.setCd(dark_green);
+	phongPtr10.setCd(darkGreen);
 			
 	Sphere	spherePtr10 = new Sphere(new Point3D(-15, -32, -60), 22); 
 	spherePtr10.setMaterial(phongPtr10);     						// dark green
@@ -206,7 +209,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr11.setKd(kd);
 	phongPtr11.setKs(ks);
 	phongPtr11.setExp(exp);
-	phongPtr11.setCd(dark_yellow);
+	phongPtr11.setCd(darkYellow);
 	
 	Sphere	spherePtr11 = new Sphere(new Point3D(-35, -37, -80), 22); 
 	spherePtr11.setMaterial(phongPtr11);							// dark yellow
@@ -218,7 +221,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr12.setKd(kd);
 	phongPtr12.setKs(ks);
 	phongPtr12.setExp(exp);
-	phongPtr12.setCd(dark_yellow);
+	phongPtr12.setCd(darkYellow);
 	
 	Sphere	spherePtr12 = new Sphere(new Point3D(10, 43, -80), 22); 
 	spherePtr12.setMaterial(phongPtr12);							// dark yellow
@@ -230,7 +233,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr13.setKd(kd);
 	phongPtr13.setKs(ks);
 	phongPtr13.setExp(exp);
-	phongPtr13.setCd(dark_yellow);
+	phongPtr13.setCd(darkYellow);
 			
 	Sphere	spherePtr13 = new Sphere(new Point3D(30, -7, -80), 10); 
 	spherePtr13.setMaterial(phongPtr13);
@@ -242,7 +245,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr14.setKd(kd);
 	phongPtr14.setKs(ks);
 	phongPtr14.setExp(exp);
-	phongPtr14.setCd(dark_green);
+	phongPtr14.setCd(darkGreen);
 		
 	Sphere	spherePtr14 = new Sphere(new Point3D(-40, 48, -110), 18); 
 	spherePtr14.setMaterial(phongPtr14); 							// dark green
@@ -302,7 +305,7 @@ public class BuildCh15PageOneImage implements BuildWorldFunction{
 	phongPtr19.setKd(kd);
 	phongPtr19.setKs(ks);
 	phongPtr19.setExp(exp);
-	phongPtr19.setCd(dark_green);
+	phongPtr19.setCd(darkGreen);
 	
 	Sphere	spherePtr19 = new Sphere(new Point3D(55, -27, -100), 17); 
 	spherePtr19.setMaterial(phongPtr19);							// dark green
