@@ -25,6 +25,8 @@ import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledBox;
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.compound.WireframeBox;
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartSphere;
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.OpenPartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primatives.Box;
 import com.matrixpeckham.raytracer.geometricobjects.primatives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primatives.Plane;
@@ -81,7 +83,7 @@ public class TEST implements BuildWorldFunction{
         w.tracer = new RayCast(w);
 
         Orthographic orthographic_ptr = new Orthographic();
-        orthographic_ptr.setEye(0, 0, 5);
+        orthographic_ptr.setEye(5, 5, 5);
         orthographic_ptr.setLookat(new Point3D(0));
         w.setCamera(orthographic_ptr);
 
@@ -122,85 +124,23 @@ public class TEST implements BuildWorldFunction{
         SV_Matte matte_ptr = new SV_Matte();
         matte_ptr.setKa(0.2);
         matte_ptr.setKd(0.8);
-        matte_ptr.setCd(new Checker3D());				// yellow	
+        matte_ptr.setCd(new SphereChecker());				// yellow	
 
-        Sphere sphere_ptr = new Sphere(new Point3D(0,5,0), 5.0);
-        sphere_ptr.setMaterial(matte_ptr);
-	//w.addObject(sphere_ptr);    
 	
-	Reflective reflectivePtr1 = new Reflective();			
-	reflectivePtr1.setKa(0); 
-	reflectivePtr1.setKd(0.5);
-	reflectivePtr1.setCd(0.75, 0.75, 0);    	// yellow
-	reflectivePtr1.setKs(0.15);
-	reflectivePtr1.setExp(100.0);
-	reflectivePtr1.setKr(0.75);
-	reflectivePtr1.setCr(Utility.WHITE); 			// default color
 
         Torus torus = new Torus(1, 0.5);
         torus.setMaterial(matte_ptr);
-        Instance inst = new Instance(torus);
-        //inst.translate(0, 2, 0);
-        w.addObject(torus);
+//        w.addObject(torus);
         
-        Disk disk = new Disk(new Point3D(0, 2, 0), new Normal(0,0,1), 1);
-        disk.setMaterial(matte_ptr);
-        //w.addObject(disk);
+/*        ConvexPartSphere cps = new ConvexPartSphere(new Point3D(), 1,
+                90, 180, 90, 180);
+        cps.setMaterial(matte_ptr);
+        w.addObject(cps);*/
+        OpenPartCylinder pc = new OpenPartCylinder(-1, 1, 1,
+                        90, 180);
+        pc.setMaterial(matte_ptr);
+        w.addObject(pc);
         
-        Rectangle rect = new Rectangle(new Point3D(-1,0,-1), new Vector3D(2,0,0), new Vector3D(0,2,0), new Normal(0,0,-1));
-        rect.setMaterial(matte_ptr);
-        //w.addObject(rect);
-        
-        Box box = new Box(-2.5,2.5, -2.5,2.5,-2.5,2.5);
-        box.setMaterial(matte_ptr);
-        //w.addObject(box);
-        
-        BeveledBox bevl = new BeveledBox(new Point3D(-2.5,-2.5,-2.5), new Point3D(2.5, 2.5, 2.5), 0.25);
-        bevl.setMaterial(matte_ptr);
-        //w.addObject(bevl);
-        PlaneChecker pcheck = new PlaneChecker();
-        SV_Matte pmat = new SV_Matte();
-        pmat.setKa(0.2);
-        pmat.setKd(0.8);
-        pmat.setCd(pcheck);
-        
-        Plane plane = new Plane();
-        plane.setMaterial(pmat);
-        //w.addObject(plane);
-        
-        WireframeBox wireframe = new WireframeBox(new Point3D(-1,-1,-1), new Point3D(1,1,1), 0.1);
-        wireframe.setMaterial(matte_ptr);
-        //w.addObject(wireframe);
-        
-        BeveledCylinder cyl = new BeveledCylinder(-1, 1,
-                1, 0.1);
-        cyl.setMaterial(matte_ptr);
-        cyl.setShadows(false);
-        //w.addObject(cyl);
-        
-	// skydome with clouds
-        Image image = new Image();
-        try {
-            image.loadPPMFile(new File(
-                    "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\CloudsLowRes.ppm"));
-        } catch (IOException ex) {
-            Logger.getLogger(BuildFigure07.class.getName()).
-                    log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        }
-
-        SphericalMap sphericalMap = new SphericalMap();
-
-        ImageTexture imageTexture = new ImageTexture(image);
-        imageTexture.setMapping(sphericalMap);
-
-        SV_Matte svMatte2 = new SV_Matte();
-        svMatte2.setKa(1);
-        svMatte2.setKd(0.85);
-        svMatte2.setCd(imageTexture);
-        Sphere s = new Sphere(new Point3D(0), 1);
-        s.setMaterial(svMatte2);
-//        w.addObject(s);
     }
     
 }

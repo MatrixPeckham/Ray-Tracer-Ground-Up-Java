@@ -56,7 +56,15 @@ class ElementType {
                         littleEndian));
             }
         }
+        if(!binary) readToNewline(in);
         return element;
+    }
+
+    private void readToNewline(BufferedInputStream in) throws IOException {
+        char c = (char)in.read();
+        while(c!='\n'&&c!='\r'){
+            c=(char)in.read();
+        }
     }
 
     public enum Type {
@@ -155,7 +163,8 @@ class ElementType {
                     } else {
                         String s = PLYFile.readWord(in);
                         return Integer.parseInt(s);
-                    }            }
+                    }
+            }
         }
 
         private double getAsDouble(BufferedInputStream in, boolean binary,
@@ -164,8 +173,7 @@ class ElementType {
                 return Double.parseDouble(PLYFile.readWord(in));
             }
             switch (this) {
-                case FLOAT:
-                {
+                case FLOAT: {
                     int ret = 0;
                     byte[] ba = new byte[4];
                     int n = in.read(ba);

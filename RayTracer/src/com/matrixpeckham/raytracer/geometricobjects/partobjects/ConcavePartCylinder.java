@@ -15,8 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.geometricobjects.primatives;
+package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
+import com.matrixpeckham.raytracer.geometricobjects.primatives.*;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Ray;
@@ -29,14 +30,16 @@ import com.matrixpeckham.raytracer.util.Normal;
  *
  * @author William Matrix Peckham
  */
-public class OpenCylinder extends GeometricObject {
+public class ConcavePartCylinder extends GeometricObject {
 
     protected double y0;
     protected double y1;
+    double phiMin = 0;
+    double phiMax = Utility.TWO_PI;
     protected double radius;
     protected double invRadius;
 
-    public OpenCylinder() {
+    public ConcavePartCylinder() {
         super();
         y0 = -1;
         y1 = 1;
@@ -44,25 +47,31 @@ public class OpenCylinder extends GeometricObject {
         invRadius = 1;
     }
 
-    public OpenCylinder(double y0, double y1, double radius) {
+    public ConcavePartCylinder(double y0, double y1, double radius,
+            double azimuthmin,
+            double azimuthmax) {
         super();
         this.y0 = y0;
         this.y1 = y1;
+        phiMin = azimuthmin * Utility.PI_ON_180;
+        phiMax = azimuthmax * Utility.PI_ON_180;
         this.radius = radius;
         this.invRadius = 1.0 / radius;
     }
 
-    public OpenCylinder(OpenCylinder cy) {
+    public ConcavePartCylinder(ConcavePartCylinder cy) {
         super(cy);
         y0 = cy.y0;
         y1 = cy.y1;
+        phiMax = cy.phiMax;
+        phiMin = cy.phiMin;
         radius = cy.radius;
         invRadius = cy.invRadius;
     }
 
     @Override
     public GeometricObject clone() {
-        return new OpenCylinder(this);
+        return new ConcavePartCylinder(this);
     }
 
     @Override
@@ -89,17 +98,18 @@ public class OpenCylinder extends GeometricObject {
 
             if (t > Utility.EPSILON) {
                 double yhit = oy + t * dy;
+                Vector3D hit = new Vector3D(ray.o.add(ray.d.mul(t)));
+                double phi = Math.atan2(hit.x, hit.z);
+                if (phi < 0) {
+                    phi += Utility.TWO_PI;
+                }
 
-                if (yhit > y0 && yhit < y1) {
+                if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     sr.lastT = t;
                     sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
-                            (oz + t * dz) * invRadius));
+                            (oz + t * dz) * invRadius).neg());
 
 				// test for hitting from inside
-                    if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal = sr.normal.neg();
-                    }
-
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
                             ray.d)));
 
@@ -111,17 +121,19 @@ public class OpenCylinder extends GeometricObject {
 
             if (t > Utility.EPSILON) {
                 double yhit = oy + t * dy;
+                Vector3D hit = new Vector3D(ray.o.add(ray.d.mul(t)));
+                double phi = Math.atan2(hit.x, hit.z);
+                if (phi < 0) {
+                    phi += Utility.TWO_PI;
+                }
 
-                if (yhit > y0 && yhit < y1) {
+                if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     sr.lastT = t;
-                    sr.normal = new Normal((ox + t * dx) * invRadius, 0.0, (oz
-                            + t * dz) * invRadius);
+                    sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                            (oz
+                            + t * dz) * invRadius).neg());
 
 				// test for hitting inside surface
-                    if (ray.d.neg().dot(sr.normal) < 0.0) {
-                        sr.normal = sr.normal.neg();
-                    }
-
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
                             ray.d)));
 
@@ -160,8 +172,13 @@ public class OpenCylinder extends GeometricObject {
 
             if (t > Utility.EPSILON) {
                 double yhit = oy + t * dy;
+                Vector3D hit = new Vector3D(ray.o.add(ray.d.mul(t)));
+                double phi = Math.atan2(hit.x, hit.z);
+                if (phi < 0) {
+                    phi += Utility.TWO_PI;
+                }
 
-                if (yhit > y0 && yhit < y1) {
+                if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     tr.d = t;
                     return (true);
                 }
@@ -171,8 +188,13 @@ public class OpenCylinder extends GeometricObject {
 
             if (t > Utility.EPSILON) {
                 double yhit = oy + t * dy;
+                Vector3D hit = new Vector3D(ray.o.add(ray.d.mul(t)));
+                double phi = Math.atan2(hit.x, hit.z);
+                if (phi < 0) {
+                    phi += Utility.TWO_PI;
+                }
 
-                if (yhit > y0 && yhit < y1) {
+                if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     tr.d = t;
                     return (true);
                 }

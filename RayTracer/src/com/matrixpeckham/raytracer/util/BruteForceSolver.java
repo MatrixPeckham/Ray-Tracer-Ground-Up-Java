@@ -25,35 +25,16 @@ import java.math.BigDecimal;
  */
 public class BruteForceSolver {
 
-    final ComplexNumber a4;
-    final ComplexNumber a3;
-    final ComplexNumber a2;
-    final ComplexNumber a1;
-    final ComplexNumber a0;
-
     final ComplexNumber a, b, c, d, e;
 
     public BruteForceSolver(double a, double b, double c, double d, double e) {
-        this.a4 = this.a = new ComplexNumber(a, 0);
-        this.a3 = this.b = new ComplexNumber(b, 0);
-        this.a2 = this.c = new ComplexNumber(c, 0);
-        this.a1 = this.d = new ComplexNumber(d, 0);
-        this.a0 = this.e = new ComplexNumber(e, 0);
+        this.a = new ComplexNumber(a, 0);
+        this.b = new ComplexNumber(b, 0);
+        this.c = new ComplexNumber(c, 0);
+        this.d = new ComplexNumber(d, 0);
+        this.e = new ComplexNumber(e, 0);
     }
 
-    /*
-     public int solve(ComplexNumber[] roots){
-     ComplexNumber a=a3/a4;
-     ComplexNumber b=a2/a4;
-     ComplexNumber c=a1/a4;
-     ComplexNumber d=a0/a4;
-        
-     ComplexNumber p= (8*b-3*a*a)/8;
-     ComplexNumber q= (a*a*a-4*a*b+8*c)/8;
-     ComplexNumber r= (-3*a*a*a*a+256*d-64*c*a+16*a*a*b)/256;
-     ComplexNumber[] depressedRoots = new ComplexNumber[0];
-     }
-     */
     public int solveQuartic(double[] ret) {
         int roots = 0;
         if (delt().real.doubleValue() > 0) {
@@ -91,21 +72,14 @@ public class BruteForceSolver {
 
         return roots;
     }
+    ComplexNumber S = null;
 
     ComplexNumber S() {
+        if (S != null) {
+            return S;
+        }
         ComplexNumber p = p();
         ComplexNumber n2o3p = p.mult((-2.0 / 3.0));
-        /* if (delt() > 0) {
-         ComplexNumber d0 = delt0();
-         ComplexNumber denom = 2 * Math.sqrt(d0 * d0 * d0);
-         ComplexNumber phi = Math.acos(delt1() / denom);
-         ComplexNumber cosphio3 = Math.cos(phi / 3);
-         ComplexNumber sqrtd0 = Math.sqrt(d0);
-         ComplexNumber twoo3a = 2 / (3 * a);
-         ComplexNumber second = twoo3a * sqrtd0 * cosphio3;
-         ComplexNumber sqrtInner = n2o3p + second;
-         return 0.5 * Math.sqrt(sqrtInner);
-         }*/
         ComplexNumber Q = Q();
         ComplexNumber delt0 = delt0();
         ComplexNumber d0oq = delt0.div(Q);
@@ -124,37 +98,54 @@ public class BruteForceSolver {
             sqrtInner = n2o3p.add(second);
             sqrt = sqrtInner.sqrt();
         }
-        return sqrt.mult(0.5);
+        S = sqrt.mult(0.5);
+        return S;
     }
+    ComplexNumber D = null;
 
     ComplexNumber D() {
+        if (D != null) {
+            return D;
+        }
         ComplexNumber a3 = a.mult(a).mult(a);
         ComplexNumber a2 = a.mult(a);
         ComplexNumber c2 = c.mult(c);
         ComplexNumber b2 = b.mult(b);
         ComplexNumber b4 = b.mult(b).mult(b).mult(b);
-        return a3.mult(64).mult(e).sub(a2.mult(16).mult(c2)).add(a.mult(16).
+        D = a3.mult(64).mult(e).sub(a2.mult(16).mult(c2)).add(a.mult(16).
                 mult(b2).mult(c)).sub(a2.mult(16).mult(b).mult(d)).sub(b4.
                         mult(3));
+        return D;
     }
+    ComplexNumber P = null;
 
     ComplexNumber P() {
-        return a.mult(c).mult(8).sub(b.mult(b).mult(3));
+        if (P != null) {
+            return P;
+        }
+        P = a.mult(c).mult(8).sub(b.mult(b).mult(3));
+        return P;
     }
+    ComplexNumber Delt0 = null;
 
     ComplexNumber delt0() {
-        return c.mult(c).sub(b.mult(d).mult(3)).add(a.mult(e).mult(12));
+        if (Delt0 == null) {
+            Delt0 = c.mult(c).sub(b.mult(d).mult(3)).add(a.mult(e).mult(12));
+        }
+        return Delt0;
     }
+    ComplexNumber Q = null;
 
     ComplexNumber Q() {
-        return Q(0);
+        if (Q == null) {
+            Q = Q(0);
+        }
+        return Q;
     }
 
     ComplexNumber Q(int n) {
         ComplexNumber delt1 = delt1();
         ComplexNumber delt0 = delt0();
-//        ComplexNumber delt = delt();
-//        ComplexNumber innersqrt = -27 * delt;
         ComplexNumber innersqrt = delt1.mult(delt1).sub(delt0.mult(delt0).mult(
                 delt0).mult(4));
         ComplexNumber sqrtD = innersqrt.sqrt();
@@ -164,70 +155,46 @@ public class BruteForceSolver {
         return frac.cbrt(n);
     }
 
+    ComplexNumber Delt = null;
+
     ComplexNumber delt() {
-        /*
-         ComplexNumber a2 = a * a;
-         ComplexNumber a3 = a * a * a;
-         ComplexNumber b2 = b * b;
-         ComplexNumber b3 = b * b * b;
-         ComplexNumber b4 = b * b * b * b;
-         ComplexNumber c2 = c * c;
-         ComplexNumber c3 = c * c * c;
-         ComplexNumber c4 = c * c * c * c;
-         ComplexNumber d2 = d * d;
-         ComplexNumber d3 = d * d * d;
-         ComplexNumber d4 = d * d * d * d;
-         ComplexNumber e2 = e * e;
-         ComplexNumber e3 = e * e * e;
-
-         ComplexNumber t1 = 256 * a3 * e3;
-         ComplexNumber t2 = 192 * a2 * b * d * e2;
-         ComplexNumber t3 = 128 * a2 * c2 * e2;
-         ComplexNumber t4 = 144 * a2 * c * d2 * e;
-         ComplexNumber t5 = 27 * a2 * d4;
-
-         ComplexNumber t6 = 144 * a * b2 * c * e2;
-         ComplexNumber t7 = 6 * a * b2 * d2 * e;
-         ComplexNumber t8 = 80 * a * b * c2 * d * e;
-         ComplexNumber t9 = 18 * a * b * c * d3;
-         ComplexNumber t10 = 16 * a * c4 * e;
-
-         ComplexNumber t11 = 4 * a * c3 * d2;
-         ComplexNumber t12 = 27 * b4 * e2;
-         ComplexNumber t13 = 18 * b3 * c * d * e;
-         ComplexNumber t14 = 4 * b3 * d3;
-         ComplexNumber t15 = 4 * b2 * c3 * e;
-         ComplexNumber t16 = b2 * c2 * d2;
-         */
-        ComplexNumber de0 = delt0();
-        ComplexNumber de1 = delt1();
-        ComplexNumber de12 = de1.mult(de1);
-        ComplexNumber de03 = de0.mult(de0).mult(de0);
-        ComplexNumber det = de12.sub(de03.mult(4));
-        det = det.div(-27);
-        return det;
+        if (Delt == null) {
+            ComplexNumber de0 = delt0();
+            ComplexNumber de1 = delt1();
+            ComplexNumber de12 = de1.mult(de1);
+            ComplexNumber de03 = de0.mult(de0).mult(de0);
+            ComplexNumber det = de12.sub(de03.mult(4));
+            det = det.div(-27);
+            Delt = det;
+        }
+        return Delt;
 //        return t1 - t2 - t3 + t4 - t5
         //              + t6 - t7 - t8 + t9 + t10
         //            - t11 - t12 + t13 - t14 - t15 + t16;
     }
+    ComplexNumber Delt1 = null;
 
     ComplexNumber delt1() {
-
-        ComplexNumber t1 = c.mult(c.mult(c)).mult(2);;
-        ComplexNumber t2 = b.mult(c.mult(d)).mult(9);
-        ComplexNumber t3 = b.mult(b.mult(e)).mult(27);
-        ComplexNumber t4 = a.mult(d.mult(d)).mult(27);
-        ComplexNumber t5 = a.mult(c.mult(e)).mult(72);
-        return t1.sub(t2).add(t3).add(t4).sub(t5);
+        if (Delt1 == null) {
+            ComplexNumber t1 = c.mult(c.mult(c)).mult(2);;
+            ComplexNumber t2 = b.mult(c.mult(d)).mult(9);
+            ComplexNumber t3 = b.mult(b.mult(e)).mult(27);
+            ComplexNumber t4 = a.mult(d.mult(d)).mult(27);
+            ComplexNumber t5 = a.mult(c.mult(e)).mult(72);
+            Delt1 = t1.sub(t2).add(t3).add(t4).sub(t5);
+        }
+        return Delt1;
     }
-
+    ComplexNumber p=null;
     ComplexNumber p() {
+        if(p==null){
         ComplexNumber b2 = b.mult(b);
         ComplexNumber a2 = a.mult(a);
         ComplexNumber numer = a.mult(c).mult(8).sub(b2.mult(3));
         ComplexNumber denom = a2.mult(8);
-        ComplexNumber ret = numer.div(denom);
-        return ret;
+        p = numer.div(denom);
+        }
+        return p;
     }
 
     ComplexNumber q() {

@@ -27,10 +27,12 @@ public class ComplexNumber {
 
     public static final int DIV_PRECISION = 50;
     public static final BigDecimal ROOT_PRECISION = new BigDecimal(
-            "0.0000000001");
+            "0.0000001");
+    public static final int MAX_ROOT_ITERS = 100;
     public final BigDecimal real;
     public final BigDecimal imaginary;
     private BigDecimal abs = null;
+    
 
     public ComplexNumber(double r, double i) {
         real = new BigDecimal(r + "");
@@ -104,9 +106,9 @@ public class ComplexNumber {
         return takeRoot(root, n, ROOT_PRECISION);
     }
 
-    public static BigDecimal takeRoot(int root, BigDecimal n,
+/*    public static BigDecimal takeRoot(int root, BigDecimal n,
             BigDecimal maxError) {
-        int MAXITER = 5000;
+        int MAXITER = MAX_ROOT_ITERS;
 
         // Specify the starting value in the search for the cube root.
         BigDecimal x;
@@ -116,7 +118,8 @@ public class ComplexNumber {
 
         BigDecimal rootBD = new BigDecimal(root);
         // Search for the cube root via the Newton-Raphson loop. Output each successive iteration's value.
-        for (int i = 0; i < MAXITER; ++i) {
+        int i=0;
+        for (i = 0; i < MAXITER; ++i) {
             x = x.subtract(x.pow(root)
                     .subtract(n)
                     .divide(rootBD.multiply(x.pow(root - 1)), DIV_PRECISION,
@@ -129,6 +132,23 @@ public class ComplexNumber {
 
         return x;
     }
+*/
+    public static BigDecimal takeRoot(int root, BigDecimal a, BigDecimal eps){
+        BigDecimal nth = BigDecimal.ONE.divide(new BigDecimal(root+""),DIV_PRECISION,
+                BigDecimal.ROUND_HALF_UP);
+        BigDecimal x = BigDecimal.ONE;
+        int i =0;
+        for( i = 0; i<MAX_ROOT_ITERS; i++){
+            BigDecimal err = nth.multiply(a.divide(x.pow(root-1),DIV_PRECISION,BigDecimal.ROUND_HALF_UP).subtract(x));
+            if(err.abs().compareTo(eps)<0){
+                return x;
+            }
+            x=x.add(err);
+        }
+        return x;
+        
+    }
+    
     
     private ComplexNumber sqrt = null;
     
@@ -209,7 +229,7 @@ public class ComplexNumber {
         return ret.setScale(bd1.scale() > bd2.scale() ? bd1.scale() : bd2
                 .scale(), BigDecimal.ROUND_HALF_EVEN);
     }
-
+    
     public ComplexNumber cbrt(int inum) {
         BigDecimal num = new BigDecimal(inum);
         BigDecimal pi = new BigDecimal(Math.PI + "");

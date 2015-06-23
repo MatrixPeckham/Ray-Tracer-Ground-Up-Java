@@ -17,10 +17,7 @@
  */
 package com.matrixpeckham.raytracer;
 
-import com.matrixpeckham.raytracer.build.figures.ch16.BuildFigure01_09A;
-import com.matrixpeckham.raytracer.build.figures.ch16.BuildFigure05;
-import com.matrixpeckham.raytracer.build.figures.ch17.BuildFigure04;
-import com.matrixpeckham.raytracer.build.figures.ch17.BuildFigure08;
+import com.matrixpeckham.raytracer.build.figures.ch18.BuildFigure04;
 import com.matrixpeckham.raytracer.util.BruteForceSolver;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
@@ -43,8 +40,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
@@ -121,7 +116,7 @@ public class Main extends JFrame implements ActionListener{
      * The builder that will create the scene we render.
      */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = new BuildFigure08();
+    BuildWorldFunction builder = new BuildFigure04();
     /**
      * Number of pixels that have been rendered.
      */
