@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch24;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.compound.SolidCylinder;
@@ -40,17 +40,17 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure24_06 implements BuildWorldFunction{
+public class BuildFigure07 implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
         int numSamples = 16;
 	
-	w.vp.setHres(6000); 
-	w.vp.setVres(4000);
+	w.vp.setHres(600); 
+	w.vp.setVres(400);
 	w.vp.setSamples(numSamples);
 //	w.vp.setMaxDepth(0);			// for Figure 24.6(a)
-	w.vp.setMaxDepth(100);			// for Figure 24.6(b)
+	w.vp.setMaxDepth(10);			// for Figure 24.6(b)
 	
 	w.tracer = new RayCast(w);	
 	w.backgroundColor = new RGBColor(0.15); 
@@ -61,10 +61,12 @@ public class BuildFigure24_06 implements BuildWorldFunction{
 	
 			
 	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(75, 40, 100); 
-	pinholePtr.setLookat(-10, 39, 0);  
-	pinholePtr.setViewDistance(360);
-        pinholePtr.setZoom(10);
+	//pinholePtr.setEye(75, 40, 100); //a
+	//pinholePtr.setLookat(-10, 39, 0);//a  
+	//pinholePtr.setViewDistance(360);//a
+	pinholePtr.setEye(2000, 4000, -1000); //a
+	pinholePtr.setLookat(38, 75, -20);//a  
+	pinholePtr.setViewDistance(45000);//a
 	pinholePtr.computeUVW();
 	w.setCamera(pinholePtr);
 	

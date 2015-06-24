@@ -198,24 +198,28 @@ public abstract class Sampler {
     public Point2D sampleUnitSquare(){
         if(count%numSamples==0)
             jump=(Utility.randInt()%numSets)*numSamples;
+        if(count<0)count=0;//overflow possible on very large images with large sample counts
         return (samples.get(jump+shuffledIndices.get(jump + count++ %numSamples)));
     }
     
     public Point2D sampleUnitDisk(){
         if(count%numSamples==0)
             jump=(Utility.randInt()%numSets)*numSamples;
+        if(count<0)count=0;//overflow possible on very large images with large sample counts
         return (diskSamples.get(jump+shuffledIndices.get(jump + count++ %numSamples)));
     }
     
     public Point3D sampleHemisphere(){
         if(count%numSamples==0)
             jump=(Utility.randInt()%numSets)*numSamples;
+        if(count<0)count=0;//overflow possible on very large images with large sample counts
         return (hemisphereSamples.get(jump+shuffledIndices.get(jump + count++ %numSamples)));
     }
     
     public Point3D sampleSphere(){
         if(count%numSamples==0)
             jump=(Utility.randInt()%numSets)*numSamples;
+        if(count<0)count=0;//overflow possible on very large images with large sample counts
         return (sphereSamples.get(jump+shuffledIndices.get(jump + count++ %numSamples)));
     }
     public abstract Sampler clone();
