@@ -125,4 +125,47 @@ public class Pinhole extends Camera {
     public void setUpVector(int i, int i0, int i1) {
         up.setTo(i, i0, i1);
     }
+
+    @Override
+    public void renderStereo(World w, double x, int i) {
+        //color
+        RGBColor L = new RGBColor();
+        //clone the viewport, we'll manipulate it later
+        ViewPlane vp=new ViewPlane(w.vp);
+        //ray
+        Ray ray = new Ray();
+        //depth
+        int depth=0;
+        //pixel point
+        Point2D pp = new Point2D();
+        //change the pixel size for the zoom
+        vp.s/=zoom;
+        //the origin of the ray will always be the eye point.
+        ray.o.setTo(eye);
+        
+        //loop through all pixels
+        for(int r = 0; r<vp.vRes; r++){
+            for(int c = 0; c<vp.hRes; c++){
+                //reset color
+                L.setTo(0, 0, 0);
+                //for all samples
+                for(int p = 0; p<vp.numSamples; p++){
+                    //get sample point on pixel.
+                    Point2D sp = vp.sampler.sampleUnitSquare();
+                    pp.x=vp.s*(c-0.5f*vp.hRes + sp.x)+x;
+                    pp.y=vp.s*(r-0.5f*vp.vRes + sp.y);
+                    //compute direction
+                    ray.d=getDirection(pp);
+                    //add color
+                    L.addLocal(w.tracer.traceRay(ray,depth));
+                }
+                //normalize color and expose
+                L.divLocal(vp.numSamples);
+                L.mulLocal(exposureTime);
+                //display
+                w.displayPixel(r, c+i, L);
+            }
+        }
+        
+    }
 }

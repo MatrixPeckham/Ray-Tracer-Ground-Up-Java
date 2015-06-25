@@ -64,6 +64,8 @@ public class ViewPlane {
      * Maximum recursion depth for rays.
      */
     public int maxDepth=1;
+    public Integer imageHeight=null;
+    public Integer imageWidth=null;
 
     /**
      * Default constructor. 

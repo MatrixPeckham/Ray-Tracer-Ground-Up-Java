@@ -36,9 +36,20 @@ public class StereoCamera extends Camera{
     double beta = 30;
     Camera leftCamera;
     Camera rightCamera;
-    ViewPlane eachVP;
     
-    public void setupCameras(){
+    public StereoCamera(){};
+    
+    public StereoCamera(StereoCamera o){
+        viewingType=o.viewingType;
+        pixelGap=o.pixelGap;
+        beta=o.beta;
+        leftCamera=o.leftCamera.clone();
+        rightCamera=o.rightCamera.clone();
+    }
+    
+    public void setupCameras(ViewPlane vp){
+        vp.imageHeight=vp.vRes;
+        vp.imageWidth=vp.hRes*2+pixelGap;
         double r = eye.distance(lookat);
         double x = r*Math.tan(0.5*beta*Utility.PI_ON_180);
         leftCamera.setEye(eye.sub(u.mul(x)));
@@ -52,10 +63,31 @@ public class StereoCamera extends Camera{
     
     @Override
     public void renderScene(World w) {
-        ViewPlane vp = w.vp;
+        ViewPlane vp = new ViewPlane(w.vp);
+        int hres=vp.hRes;
+        int vres=vp.vRes;
+        
+        double r = eye.distance(lookat);
+        double x = r*Math.tan(0.5*beta*Utility.PI_ON_180);
+        
+        if(viewingType==ViewingType.PARALLEL){
+            leftCamera.renderStereo(w,x,0);
+            rightCamera.renderStereo(w,-x,hres+pixelGap);
+        }
+        if(viewingType==ViewingType.TRANSVERSE){
+            leftCamera.renderStereo(w,-x,0);
+            rightCamera.renderStereo(w,x,hres+pixelGap);
+        }
         
     }
 
+    @Override
+    public void renderStereo(World w, double x, int i) {
+        throw new RuntimeException("Stereo Camera should not have renderStereo call.");
+    }
+    
+    
+    
     @Override
     public Camera clone() {
         return new StereoCamera(this);

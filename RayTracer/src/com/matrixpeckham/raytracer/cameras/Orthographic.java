@@ -117,4 +117,47 @@ public class Orthographic extends Camera {
 
     }
 
+    @Override
+    public void renderStereo(World w, double x, int i) {
+        //color
+        RGBColor L = new RGBColor();
+        //copy of view plane.
+        ViewPlane vp = new ViewPlane(w.vp);
+        //ray
+        Ray ray = new Ray();
+        //depth
+        int depth = 0;
+        //pixel point
+        Point2D pp = new Point2D();
+        //normalized sample point
+        Point2D sp = new Point2D();
+        //loop through all pixels
+        for (int r = 0; r < vp.vRes; r++) {
+            for (int c = 0; c < vp.hRes; c++) {
+                //initialize color
+                L.setTo(0, 0, 0);
+                //for all samples in point
+                for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
+                    //sample point
+                    sp.setTo(vp.sampler.sampleUnitSquare());
+                    //convert normalized sample point to a point somewhere in the pixel
+                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x)+x;
+                    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+                    //get ray direction
+                    ray.d = getDirection(pp);
+                    //set ray origin, eyepoint + pixel location
+                    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
+                    //sum up samples. 
+                    L.addLocal(w.tracer.traceRay(ray, depth));
+                }
+                //normalize and expose pixel
+                L.divLocal(vp.numSamples);
+                L.mulLocal(exposureTime); 
+                //display
+                w.displayPixel(r, c+i, L);
+            }
+        }
+
+    }
+
 }

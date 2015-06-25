@@ -115,4 +115,41 @@ public class Spherical extends Camera {
         lambdaMax = d / 2;
     }
 
+    @Override
+    public void renderStereo(World w, double x, int i) {
+        RGBColor L = new RGBColor();
+        ViewPlane vp = new ViewPlane(w.vp);
+        int hres = vp.hRes;
+        int vres = vp.vRes;
+        double s = vp.s;
+        Ray ray = new Ray();
+        int depth = 0;
+        Point2D sp = new Point2D(); 					// sample point in [0, 1] X [0, 1]
+        Point2D pp = new Point2D();						// sample point on the pixel
+        DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
+
+        ray.o.setTo(eye);
+
+        for (int r = 0; r < vres; r++) // up
+        {
+            for (int c = 0; c < hres; c++) {	// across 					
+                L.setTo(Utility.BLACK);
+
+                for (int j = 0; j < vp.numSamples; j++) {
+                    sp.setTo(vp.sampler.sampleUnitSquare());
+                    pp.x = s * (c - 0.5 * hres + sp.x)+x;
+                    pp.y = s * (r - 0.5 * vres + sp.y);
+                    ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
+
+                    //if (r_squared.d <= 1.0)
+                    L.addLocal(w.tracer.traceRay(ray, depth));
+                }
+
+                L.divLocal(vp.numSamples);
+                L.mulLocal(exposureTime);
+                w.displayPixel(r, c+i, L);
+            }
+        }
+    }
+
 }

@@ -260,11 +260,16 @@ public class Main extends JFrame implements ActionListener{
         
         //sets up the pixel counts for this image
         pixelsRendered=0;
+        
+        //image size may be different than resolutions, but only stereo causes that
+        
+        int iwidth=w.vp.imageWidth!=null?w.vp.imageWidth:w.vp.hRes;
+        int iheight=w.vp.imageHeight!=null?w.vp.imageHeight:w.vp.vRes;
         //this is after we build the world so hRes and vRes will be set already.
-        pixelsToRender=w.vp.hRes*w.vp.vRes;
+        pixelsToRender=iwidth*iheight;
         
         //creates the image and fills it with a grey checkerboard pattern.
-        image = new BufferedImage(w.vp.hRes, w.vp.vRes, BufferedImage.TYPE_INT_ARGB);
+        image = new BufferedImage(iwidth, iheight, BufferedImage.TYPE_INT_ARGB);
         //image for a 16x16 image of 2x2, 8x8px checkers drawn with standard Graphics
         BufferedImage check = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D)check.getGraphics();

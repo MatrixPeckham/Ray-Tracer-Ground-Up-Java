@@ -152,6 +152,8 @@ public abstract class Camera {
      * @return 
      */
     public abstract Camera clone();
+
+    public abstract void renderStereo(World w, double x, int i);
     
     
     
