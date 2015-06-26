@@ -137,7 +137,7 @@ public class Spherical extends Camera {
 
                 for (int j = 0; j < vp.numSamples; j++) {
                     sp.setTo(vp.sampler.sampleUnitSquare());
-                    pp.x = s * (c - 0.5 * hres + sp.x)+x;
+                    pp.x = s * (c - 0.5 * hres + sp.x);
                     pp.y = s * (r - 0.5 * vres + sp.y);
                     ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
 

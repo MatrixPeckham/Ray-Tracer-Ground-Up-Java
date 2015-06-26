@@ -134,7 +134,11 @@ public class Compound extends GeometricObject {
     }
 
     public BBox getBoundingBox() {
-        return new BBox();
+        BBox box = new BBox(0, 0, 0, 0, 0, 0);
+        for(GeometricObject obj : objects){
+            box.expandToFit(obj.getBoundingBox());
+        }
+        return box;
     }
 
     

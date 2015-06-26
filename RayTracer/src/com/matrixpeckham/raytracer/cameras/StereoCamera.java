@@ -27,6 +27,30 @@ import com.matrixpeckham.raytracer.world.World;
  */
 public class StereoCamera extends Camera{
 
+    public void setLeftCamera(Camera leftCameraPtr) {
+        leftCamera=leftCameraPtr;
+    }
+
+    public void setRightCamera(Camera rightCameraPtr) {
+        rightCamera=rightCameraPtr;
+    }
+
+    public void useTransverseViewing() {
+        viewingType=ViewingType.TRANSVERSE;
+    }
+
+    public void useParallelViewing() {
+        viewingType=ViewingType.PARALLEL;
+    }
+
+    public void setPixelGap(int i) {
+        pixelGap=i;
+    }
+
+    public void setStereoAngle(double d) {
+        beta=d;
+    }
+
     public static enum ViewingType{
         PARALLEL,
         TRANSVERSE
@@ -37,7 +61,12 @@ public class StereoCamera extends Camera{
     Camera leftCamera;
     Camera rightCamera;
     
-    public StereoCamera(){};
+    public StereoCamera(){}
+    public StereoCamera(Camera left, Camera right){
+        this();
+        setLeftCamera(left);
+        setRightCamera(right);
+    }
     
     public StereoCamera(StereoCamera o){
         viewingType=o.viewingType;

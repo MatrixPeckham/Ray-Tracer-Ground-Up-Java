@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -182,4 +183,9 @@ public class OpenCylinder extends GeometricObject {
         return (false);
     }
 
+    @Override
+    public BBox getBoundingBox() {
+        return new BBox(-radius, radius, y0, y1, -radius, radius);
+    }
+    
 }

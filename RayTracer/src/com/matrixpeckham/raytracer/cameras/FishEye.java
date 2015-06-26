@@ -30,84 +30,93 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class FishEye extends Camera{
+public class FishEye extends Camera {
+
     private double psiMax = 90;
-    
-    public FishEye(){
-        
+
+    public FishEye() {
+
     }
-    
+
     public FishEye(FishEye aThis) {
         super(aThis);
-        psiMax=aThis.psiMax;
+        psiMax = aThis.psiMax;
     }
+
     @Override
     public void renderScene(World w) {
-        RGBColor	L=new RGBColor();
-	ViewPlane	vp=new ViewPlane(w.vp);					
-	int 		hres		= vp.hRes;
-	int 		vres 		= vp.vRes;
-	double s 			= vp.s;
-	Ray			ray=new Ray();
-	int 		depth 		= 0;
-	Point2D 	sp=new Point2D(); 					// sample point in [0, 1] X [0, 1]
-	Point2D 	pp=new Point2D();						// sample point on the pixel
-	DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
-	
-	ray.o .setTo(eye);
-		
-	for (int r = 0; r < vres; r++)		// up
-		for (int c = 0; c < hres; c++) {	// across 					
-			L .setTo(Utility.BLACK); 
-						
-			for (int j = 0; j < vp.numSamples; j++) {	
-				sp .setTo(vp.sampler.sampleUnitSquare());
-				pp.x = s * (c - 0.5 * hres + sp.x);
-				pp.y = s * (r - 0.5 * vres + sp.y);
-				ray.d .setTo(rayDirection(pp, hres, vres, s, r_squared));
-				
-				if (r_squared.d <= 1.0)
-					L .addLocal(w.tracer.traceRay(ray, depth));
-			}
-										
-			L.divLocal(vp.numSamples);	
-			L .mulLocal( exposureTime );	
-			w.displayPixel(r, c, L);
-		}
+        RGBColor L = new RGBColor();
+        ViewPlane vp = new ViewPlane(w.vp);
+        int hres = vp.hRes;
+        int vres = vp.vRes;
+        double s = vp.s;
+        Ray ray = new Ray();
+        int depth = 0;
+        Point2D sp = new Point2D(); 					// sample point in [0, 1] X [0, 1]
+        Point2D pp = new Point2D();						// sample point on the pixel
+        DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
+
+        ray.o.setTo(eye);
+
+        for (int r = 0; r < vres; r++) // up
+        {
+            for (int c = 0; c < hres; c++) {	// across 					
+                L.setTo(Utility.BLACK);
+
+                for (int j = 0; j < vp.numSamples; j++) {
+                    sp.setTo(vp.sampler.sampleUnitSquare());
+                    pp.x = s * (c - 0.5 * hres + sp.x);
+                    pp.y = s * (r - 0.5 * vres + sp.y);
+                    ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
+
+                    if (r_squared.d <= 1.0) {
+                        L.addLocal(w.tracer.traceRay(ray, depth));
+                    }
+                }
+
+                L.divLocal(vp.numSamples);
+                L.mulLocal(exposureTime);
+                w.displayPixel(r, c, L);
+            }
+        }
     }
+
     @Override
     public void renderStereo(World w, double x, int i) {
-        RGBColor	L=new RGBColor();
-	ViewPlane	vp=new ViewPlane(w.vp);					
-	int 		hres		= vp.hRes;
-	int 		vres 		= vp.vRes;
-	double s 			= vp.s;
-	Ray			ray=new Ray();
-	int 		depth 		= 0;
-	Point2D 	sp=new Point2D(); 					// sample point in [0, 1] X [0, 1]
-	Point2D 	pp=new Point2D();						// sample point on the pixel
-	DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
-	
-	ray.o .setTo(eye);
-		
-	for (int r = 0; r < vres; r++)		// up
-		for (int c = 0; c < hres; c++) {	// across 					
-			L .setTo(Utility.BLACK); 
-						
-			for (int j = 0; j < vp.numSamples; j++) {	
-				sp .setTo(vp.sampler.sampleUnitSquare());
-				pp.x = s * (c - 0.5 * hres + sp.x)+x;
-				pp.y = s * (r - 0.5 * vres + sp.y);
-				ray.d .setTo(rayDirection(pp, hres, vres, s, r_squared));
-				
-				if (r_squared.d <= 1.0)
-					L .addLocal(w.tracer.traceRay(ray, depth));
-			}
-										
-			L.divLocal(vp.numSamples);	
-			L .mulLocal( exposureTime );	
-			w.displayPixel(r, c+i, L);
-		}
+        RGBColor L = new RGBColor();
+        ViewPlane vp = new ViewPlane(w.vp);
+        int hres = vp.hRes;
+        int vres = vp.vRes;
+        double s = vp.s;
+        Ray ray = new Ray();
+        int depth = 0;
+        Point2D sp = new Point2D(); 					// sample point in [0, 1] X [0, 1]
+        Point2D pp = new Point2D();						// sample point on the pixel
+        DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
+
+        ray.o.setTo(eye);
+
+        for (int r = 0; r < vres; r++) // up
+        {
+            for (int c = 0; c < hres; c++) {	// across 					
+                L.setTo(Utility.BLACK);
+
+                for (int j = 0; j < vp.numSamples; j++) {
+                    sp.setTo(vp.sampler.sampleUnitSquare());
+                    pp.x = s * (c - 0.5 * hres + sp.x);
+                    pp.y = s * (r - 0.5 * vres + sp.y);
+                    ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
+
+                    if (r_squared.d <= 1.0) {
+                        L.addLocal(w.tracer.traceRay(ray, depth));
+                    }
+                }
+
+                L.divLocal(vp.numSamples);
+                L.mulLocal(exposureTime);
+                w.displayPixel(r, c + i, L);
+            }
+        }
     }
 
     @Override
@@ -117,26 +126,27 @@ public class FishEye extends Camera{
 
     private Vector3D rayDirection(Point2D pp, int hres, int vres, double s,
             DoubleRef r_squared) {
-        Point2D pn = new Point2D(2.0/(s*hres)*pp.x,2.0/(s*vres)*pp.y);
-        r_squared.d=pn.x*pn.x+pn.y*pn.y;
-        if(r_squared.d<=1.0){
+        Point2D pn = new Point2D(2.0 / (s * hres) * pp.x, 2.0 / (s * vres)
+                * pp.y);
+        r_squared.d = pn.x * pn.x + pn.y * pn.y;
+        if (r_squared.d <= 1.0) {
             double r = Math.sqrt(r_squared.d);
-            double psi = r*psiMax*Utility.PI_ON_180;
+            double psi = r * psiMax * Utility.PI_ON_180;
             double sinPsi = Math.sin(psi);
             double cosPsi = Math.cos(psi);
-            double sinAlpha = pn.y/r;
-            double cosAlpha = pn.x/r;
-            Vector3D dir = (u.mul(sinPsi*cosAlpha)
-                    .add(v.mul(sinPsi*sinAlpha)))
+            double sinAlpha = pn.y / r;
+            double cosAlpha = pn.x / r;
+            Vector3D dir = (u.mul(sinPsi * cosAlpha)
+                    .add(v.mul(sinPsi * sinAlpha)))
                     .sub(w.mul(cosPsi));
             return dir;
-        }
-        else
+        } else {
             return new Vector3D(0);
+        }
     }
 
     public void setFov(double d) {
-        psiMax=d/2;
+        psiMax = d / 2;
     }
-    
+
 }

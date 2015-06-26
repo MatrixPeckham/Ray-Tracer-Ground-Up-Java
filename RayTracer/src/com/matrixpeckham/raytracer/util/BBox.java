@@ -127,5 +127,14 @@ public class BBox {
         this.z0=b.z0;
         this.z1=b.z1;
     }
+
+    public void expandToFit(BBox bb) {
+        if(bb.x0<x0)x0=bb.x0;
+        if(bb.y0<y0)y0=bb.y0;
+        if(bb.z0<z0)z0=bb.z0;
+        if(bb.x1>x1)x1=bb.x1;
+        if(bb.y1>y1)y1=bb.y1;
+        if(bb.z1>z1)z1=bb.z1;
+    }
     
 }

@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects.primatives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -110,6 +111,11 @@ public class Disk extends GeometricObject {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public BBox getBoundingBox() {
+        return new BBox(center.x-radius, center.x+radius, center.y-radius, center.y+radius, center.z-radius, center.z+radius);
     }
     
 }
