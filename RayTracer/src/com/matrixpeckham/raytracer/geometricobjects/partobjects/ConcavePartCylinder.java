@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
-import com.matrixpeckham.raytracer.geometricobjects.primatives.*;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Ray;

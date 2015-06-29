@@ -18,7 +18,7 @@
 package com.matrixpeckham.raytracer.build.figures.ch16;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Phong;
 import com.matrixpeckham.raytracer.tracers.RayCast;

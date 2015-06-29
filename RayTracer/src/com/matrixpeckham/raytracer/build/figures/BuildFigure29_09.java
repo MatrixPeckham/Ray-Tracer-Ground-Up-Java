@@ -18,7 +18,7 @@
 package com.matrixpeckham.raytracer.build.figures;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.image.Image;
 import com.matrixpeckham.raytracer.textures.image.ImageTexture;

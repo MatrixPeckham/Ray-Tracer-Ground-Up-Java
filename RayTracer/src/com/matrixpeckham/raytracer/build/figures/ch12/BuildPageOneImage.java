@@ -22,7 +22,7 @@ import com.matrixpeckham.raytracer.cameras.StereoCamera;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
 import com.matrixpeckham.raytracer.geometricobjects.compound.SolidCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Plane;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.materials.SV_Matte;

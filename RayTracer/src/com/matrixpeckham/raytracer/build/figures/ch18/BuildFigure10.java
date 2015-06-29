@@ -18,8 +18,8 @@
 package com.matrixpeckham.raytracer.build.figures.ch18;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.ConcaveSphere;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.ConcaveSphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.lights.EnvironmentLight;
 import com.matrixpeckham.raytracer.materials.Emissive;

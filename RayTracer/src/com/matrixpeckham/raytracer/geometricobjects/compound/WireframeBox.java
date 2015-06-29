@@ -18,8 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.OpenCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**

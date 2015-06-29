@@ -19,8 +19,8 @@ package com.matrixpeckham.raytracer.build.figures.ch12;
 
 import com.matrixpeckham.raytracer.cameras.StereoCamera;
 import com.matrixpeckham.raytracer.cameras.ThinLens;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Box;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Plane;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.SV_Matte;

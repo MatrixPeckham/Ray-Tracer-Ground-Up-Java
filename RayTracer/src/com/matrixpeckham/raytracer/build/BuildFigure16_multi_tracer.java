@@ -19,8 +19,8 @@ package com.matrixpeckham.raytracer.build;
 
 import com.matrixpeckham.raytracer.build.figures.ch08.*;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Box;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.Triangle;
 import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Matte;

@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer.world;
 import com.matrixpeckham.raytracer.RenderPixel;
 import com.matrixpeckham.raytracer.cameras.Camera;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Light;
 import com.matrixpeckham.raytracer.tracers.Tracer;

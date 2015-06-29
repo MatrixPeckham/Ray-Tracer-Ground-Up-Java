@@ -19,7 +19,7 @@ package com.matrixpeckham.raytracer.build.figures.ch22;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.tracers.RayCast;

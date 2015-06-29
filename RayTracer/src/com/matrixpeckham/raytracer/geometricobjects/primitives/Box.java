@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.geometricobjects.primatives;
+package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.BBox;

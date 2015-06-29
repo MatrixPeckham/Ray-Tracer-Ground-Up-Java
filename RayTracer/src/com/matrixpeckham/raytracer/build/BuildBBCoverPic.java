@@ -17,7 +17,7 @@
  */
 package com.matrixpeckham.raytracer.build;
 
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Sphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.tracers.MultipleObjects;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;

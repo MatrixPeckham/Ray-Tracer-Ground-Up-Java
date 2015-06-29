@@ -19,9 +19,9 @@ package com.matrixpeckham.raytracer.geometricobjects.beveledobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Disk;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.OpenCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.primatives.Torus;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
