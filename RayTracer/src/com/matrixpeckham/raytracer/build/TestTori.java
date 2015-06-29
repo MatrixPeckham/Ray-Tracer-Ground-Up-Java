@@ -66,7 +66,7 @@ public class TestTori implements BuildWorldFunction
 
     @Override
     public void build(World w) {
-        int num_samples = 100;
+        int num_samples = 1;
         
         Sampler uniform_ptr = new MultiJittered(num_samples);
 

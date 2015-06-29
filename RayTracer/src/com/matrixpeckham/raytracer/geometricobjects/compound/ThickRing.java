@@ -17,8 +17,11 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConcavePartCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Ring;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -27,21 +30,23 @@ import com.matrixpeckham.raytracer.util.Point3D;
  *
  * @author William Matrix Peckham
  */
-public class SolidCylinder extends Compound {
+public class ThickRing extends Compound {
     
-    public SolidCylinder(){
-        this(-1,1,1);
+    public ThickRing(){
+        this(-1,1,0.5,1);
     }
     
-    public SolidCylinder(double bottom, double top, double cylinderRadius) {
-        Disk topd = new Disk(new Point3D(0, top, 0), new Normal(0, 1,
-                0), cylinderRadius);
-        Disk bottomd = new Disk(new Point3D(0, bottom, 0), new Normal(0, -1,
-                0), cylinderRadius);
-        OpenCylinder cyl = new OpenCylinder(bottom, top, cylinderRadius);
+    public ThickRing(double bottom, double top, double innerRadius, double outerRadius) {
+        Ring topd = new Ring(new Point3D(0, top, 0), new Normal(0, 1,
+                0), innerRadius,outerRadius);
+        Ring bottomd = new Ring(new Point3D(0, bottom, 0), new Normal(0, -1,
+                0), innerRadius,outerRadius);
+        ConcavePartCylinder innercyl = new ConcavePartCylinder(bottom, top, innerRadius,0,360);
+        ConvexPartCylinder outercyl = new ConvexPartCylinder(bottom, top, outerRadius,0,360);
         addObject(topd);
         addObject(bottomd);
-        addObject(cyl);
+        addObject(innercyl);
+        addObject(outercyl);
     }
 
     public void setBottomMaterial(Matte mattePtr1) {
@@ -54,6 +59,15 @@ public class SolidCylinder extends Compound {
 
     public void setWallMaterial(Matte mattePtr2) {
         objects.get(2).setMaterial(mattePtr2);
+        objects.get(3).setMaterial(mattePtr2);
+    }
+
+    public void setInnerWallMaterial(Matte mattePtr2) {
+        objects.get(2).setMaterial(mattePtr2);
+    }
+
+    public void setOuterWallMaterial(Matte mattePtr3) {
+        objects.get(3).setMaterial(mattePtr3);
     }
     
 }

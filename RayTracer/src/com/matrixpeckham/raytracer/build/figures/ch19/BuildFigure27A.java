@@ -18,9 +18,9 @@
 package com.matrixpeckham.raytracer.build.figures.ch19;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
+import com.matrixpeckham.raytracer.geometricobjects.compound.FlatRimmedBowl;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
-import com.matrixpeckham.raytracer.lights.Directional;
+import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Phong;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.Checker3D;
@@ -35,64 +35,57 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure16 implements BuildWorldFunction{
+public class BuildFigure27A implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
 	int numSamples = 16;
 	
-	w.vp.setHres(400);
+	w.vp.setHres(400);	  		
 	w.vp.setVres(400);
-	w.vp.setSamples(numSamples);	
+	w.vp.setSamples(numSamples);
 	
 	w.tracer = new RayCast(w);
 	
-	Pinhole camera = new Pinhole();
-	camera.setEye(5, 25, 20); 
-	camera.setLookat(0, 0, 0); 
-	camera.setViewDistance(1500); 
-	camera.computeUVW();     
-	w.setCamera(camera); 
-
-	w.backgroundColor = Utility.BLACK;
+	Pinhole pinholePtr = new Pinhole();
+	pinholePtr.setEye(1, 2, 5);
+	pinholePtr.setLookat(0, -0.35, 0);
+	pinholePtr.setViewDistance(900); 
+	pinholePtr.computeUVW();
+	w.setCamera(pinholePtr);
 		
-	Directional lightPtr2 = new Directional();
-	lightPtr2.setDirection(200, 75, 100);
-	lightPtr2.scaleRadiance(4.0);
-	lightPtr2.setShadows(true);
-	w.addLight(lightPtr2);
+	PointLight lightPtr1 = new PointLight();
+	lightPtr1.setLocation(20, 15, 15);
+	lightPtr1.scaleRadiance(3.0);
+	lightPtr1.setShadows(true);
+	w.addLight(lightPtr1);
+			
+	Phong phongPtr = new Phong();						
+	phongPtr.setKa(0.3);    
+	phongPtr.setKd(0.5);
+	phongPtr.setCd(0.15, 0.75, 0.90);
+	phongPtr.setKs(0.1);
+	phongPtr.setExp(20.0);
 	
-	Phong phongPtr2 = new Phong();
-	phongPtr2.setKa(0.25);
-	phongPtr2.setKd(0.5);
-	phongPtr2.setCd(1, 1, 0.45);  // lemon
-	phongPtr2.setKs(0.05);
-	phongPtr2.setExp(5);
-	
-	double a = 2.0;	 	// for all parts
-	double b = 0.15;		// for Figure 19.16(a)
-//	double b = 0.5;	   	// for Figure 19.16(b)  default torus
-//	double b = 2;      	// for Figure 19.16(c)
-																
-	Torus torusPtr = new Torus(a, b);												
-	torusPtr.setMaterial(phongPtr2);
-	w.addObject(torusPtr);
-	
-	
-	// ground plane with checker:
-	
+	double innerRadius = 0.9;
+	double outerRadius = 1.0;
+
+	FlatRimmedBowl bowlPtr = new FlatRimmedBowl(innerRadius, outerRadius);
+	bowlPtr.setMaterial(phongPtr);
+	w.addObject(bowlPtr);
+			
 	Checker3D checkerPtr = new Checker3D();
-	checkerPtr.setSize(1.0); 
-	checkerPtr.setColor1(0.8);  
-	checkerPtr.setColor2(1);
+	checkerPtr.setSize(1.0);		
+	checkerPtr.setColor1(Utility.WHITE);   
+	checkerPtr.setColor2(0.75);
 	
 	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.30);
-	svMattePtr.setKd(0.6);  
+	svMattePtr.setKa(0.35);
+	svMattePtr.setKd(0.85);
 	svMattePtr.setCd(checkerPtr);
-	
-	Plane planePtr = new Plane(new Point3D(0, -2, 0), new Normal(0, 1, 0));
-	planePtr.setMaterial(svMattePtr);
-	w.addObject(planePtr);    }
+
+	Plane planePtr1 = new Plane(new Point3D(0, -1, 0), new Normal(0, 1, 0)); 
+	planePtr1.setMaterial(svMattePtr);
+	w.addObject(planePtr1);    }
     
 }
