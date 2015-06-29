@@ -15,7 +15,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch19;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
@@ -31,7 +31,7 @@ import com.matrixpeckham.raytracer.world.World;
  
   @author William Matrix Peckham
  */
-public class BuildFigure19_07 implements BuildWorldFunction{
+public class BuildFigure07 implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
