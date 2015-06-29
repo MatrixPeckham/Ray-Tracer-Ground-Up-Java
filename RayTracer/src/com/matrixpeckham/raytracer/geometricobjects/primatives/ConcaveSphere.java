@@ -32,28 +32,28 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  *
  * @author William Matrix Peckham
  */
-public class Sphere extends GeometricObject {
+public class ConcaveSphere extends GeometricObject {
     private Point3D center;
     private double radius;
     private static final double EPSILON=0.001;
     double invSurfaceArea;
     private Sampler sampler = null;
     
-    public Sphere(){
+    public ConcaveSphere(){
         super();
         center=new Point3D(0);
         radius=1;
         invSurfaceArea=1/(4*Utility.PI*radius*radius);
     }
     
-    public Sphere(Point3D c, double r){
+    public ConcaveSphere(Point3D c, double r){
         super();
         center=new Point3D(c);
         radius=r;
         invSurfaceArea=1/(4*Utility.PI*radius*radius);
     }
     
-    public Sphere(Sphere sphere){
+    public ConcaveSphere(ConcaveSphere sphere){
         super(sphere);
         center=new Point3D(sphere.center);
         radius=sphere.radius;
@@ -62,7 +62,7 @@ public class Sphere extends GeometricObject {
     
     @Override
     public GeometricObject clone() {
-        return new Sphere(this);
+        return new ConcaveSphere(this);
     }
 
     @Override
@@ -81,14 +81,14 @@ public class Sphere extends GeometricObject {
             t=(-b-e)/denom;
             if(t>EPSILON){
                 sr.lastT=t;
-                sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
+                sr.normal.setTo(temp.add(ray.d.mul(t)).div(-radius));
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                 return true;
             }
             t=(-b+e)/denom;
             if(t>EPSILON){
                 sr.lastT=t;
-                sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
+                sr.normal.setTo(temp.add(ray.d.mul(t)).div(-radius));
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                 return true;
             }
@@ -108,7 +108,7 @@ public class Sphere extends GeometricObject {
     public Normal getNormal(Point3D p) {
         Vector3D n = center.sub(p);
         n.normalize();
-        return new Normal(n);
+        return new Normal(n.neg());
     }
     
     

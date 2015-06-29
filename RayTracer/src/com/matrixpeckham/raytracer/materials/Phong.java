@@ -87,6 +87,9 @@ public class Phong extends Material {
     public void setKs(double ks) {
         specularBRDF.setKs(ks);
     }
+    public void setCs(RGBColor cs) {
+        specularBRDF.setCs(cs);
+    }
 
     public void setExp(double exp) {
         specularBRDF.setExp(exp);
