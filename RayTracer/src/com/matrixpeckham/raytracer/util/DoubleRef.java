@@ -18,11 +18,14 @@
 package com.matrixpeckham.raytracer.util;
 
 /**
- *
+ * Class for passing a double by reference, used in shadow hit functions.
  * @author William Matrix Peckham
  */
 public class DoubleRef {
+    /**payload*/
     public double d=0;
-    public DoubleRef(){};
+    /**zero default*/
+    public DoubleRef(){}
+    /**simple setting constructor*/
     public DoubleRef(double d){this.d=d;}
 }

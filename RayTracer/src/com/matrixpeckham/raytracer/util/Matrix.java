@@ -18,7 +18,7 @@
 package com.matrixpeckham.raytracer.util;
 
 /**
- *
+ * class to represent a 4x4 matrix
  * @author William Matrix Peckham
  */
 public class Matrix {

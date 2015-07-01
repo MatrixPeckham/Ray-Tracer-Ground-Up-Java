@@ -29,5 +29,11 @@ package com.matrixpeckham.raytracer.world;
  * @author William Matrix Peckham
  */
 public interface BuildWorldFunction {
+    /**
+     * This function will build the scene by adding objects to the passed in world.
+     * It should throw runtime exceptions when things fail, but this may change,
+     * if we make it more interactive. 
+     * @param w world to build. 
+     */
     public void build(World w);
 }

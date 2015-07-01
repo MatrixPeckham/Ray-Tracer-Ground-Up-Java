@@ -37,7 +37,8 @@ public class RenderPixel {
      */
     public final int color;
     /**
-     * Constructor converts r,g,b from integers (0-255) to the integer color 
+     * Constructor converts r,g,b from integers (0-255) to the integer color.
+     * Also clamps values.
      * @param x pixel x
      * @param y pixel y
      * @param r pixel red (0-255)

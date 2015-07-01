@@ -20,7 +20,10 @@ package com.matrixpeckham.raytracer.util;
 import java.math.BigDecimal;
 
 /**
- *
+ * Class slolves the quartic equation with brute force equations from the quartic
+ * wiki page. SLOW AS MOLASSES need a better way to do torus hit function.
+ * uses complex numbers which use bigdecimal, any other way causes overflow, or
+ * precision errors. 
  * @author William Matrix Peckham
  */
 public class BruteForceSolver {

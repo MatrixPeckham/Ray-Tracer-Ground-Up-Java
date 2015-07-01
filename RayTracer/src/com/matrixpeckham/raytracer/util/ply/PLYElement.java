@@ -20,13 +20,26 @@ package com.matrixpeckham.raytracer.util.ply;
 import java.util.TreeMap;
 
 /**
- *
+ * Element for ply file reading. Contains the data and and methods for reading the data.
  * @author William Matrix Peckham
  */
 public class PLYElement {
+    /**
+     * Data for the element.
+     */
     double data[][];
+    /**
+     * Reference to the full description of the element. Used for initialization.
+     */
     ElementType t;
+    /**
+     * Map from property name to array index.
+     */
     TreeMap<String, Integer> props;
+    /**
+     * Initializes the element to hold the right amount of properties as the type.
+     * @param t type that this element will hold
+     */
     public PLYElement(ElementType t){
         this.t=t;
         props=t.props;
@@ -36,45 +49,105 @@ public class PLYElement {
         }
     }
     
+    /**
+     * sets the property to a double.
+     * @param name
+     * @param d 
+     */
     public void setDouble(String name, double d){
         data[props.get(name)][0]=d;
     }
+    /**
+     * sets the property to the clone of the list.
+     * @param name
+     * @param d 
+     */
     public void setDoubleList(String name, double d[]){
         data[props.get(name)]=d.clone();
     }
+    /**
+     * set property as double
+     * @param i
+     * @param d 
+     */
     public void setDouble(int i, double d){
         data[i][0]=d;
     }
+    /**
+     * sets property as clone of list
+     * @param i
+     * @param d 
+     */
     public void setDoubleList(int i, double d[]){
         data[i]=d.clone();
     }
+    /**
+     * gets a double
+     * @param name
+     * @return 
+     */
     public double getDouble(String name){
         return data[props.get(name)][0];
     }
+    /**
+     * gets a list
+     * @param name
+     * @return 
+     */
     public double[] getDoubleList(String name){
         return data[props.get(name)].clone();
     }
+    /**
+     * sets an integer
+     * @param name
+     * @param d 
+     */
     public void setInt(String name, int d){
         data[props.get(name)][0]=d;
     }
+    /**
+     * sets an integer list
+     * @param name
+     * @param d 
+     */
     public void setIntList(String name, int d[]){
         data[props.get(name)]=new double[d.length];
         for(int i =0; i<d.length; i++){
             data[props.get(name)][i]=d[i];
         }
     }
+    /**
+     * sets an int
+     * @param i
+     * @param d 
+     */
     public void setInt(int i, int d){
         data[i][0]=d;
     }
+    /**
+     * sets an integer list
+     * @param ind
+     * @param d 
+     */
     public void setIntList(int ind, int d[]){
         data[ind]=new double[d.length];
         for(int i =0; i<d.length; i++){
             data[ind][i]=d[i];
         }
     }
+    /**
+     * gets an integer
+     * @param name
+     * @return 
+     */
     public int getInt(String name){
         return(int) data[props.get(name)][0];
     }
+    /**
+     * gets an integer list
+     * @param name
+     * @return 
+     */
     public int[] getIntList(String name){
         int[] a=new int[data[props.get(name)].length];
         for(int i =0; i<a.length; i++){

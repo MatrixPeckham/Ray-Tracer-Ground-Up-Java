@@ -26,40 +26,75 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 /**
+ * Class to load a ply file.
  *
  * @author William Matrix Peckham
  */
 public class PLYFile {
+
+    /**
+     * is the file binary
+     */
     boolean binary = false;
+    /**
+     * if the file is binary which endian-ness is it
+     */
     boolean littleEndian = false;
-    
+    /**
+     * Element names to types
+     */
     TreeMap<String, ElementType> types = new TreeMap<>();
+    /**
+     * Names for indices. 
+     */
     ArrayList<String> names = new ArrayList<>();
+    /**
+     * Element names to list of elements.
+     */
     TreeMap<String, ArrayList<PLYElement>> elms = new TreeMap<>();
+    /**
+     * Element counts for indices. 
+     */
     ArrayList<Integer> elementCounts = new ArrayList<>();
-    
-    public PLYFile(){}
-    
-    public PLYFile(File f) throws FileNotFoundException, IOException{
+    /**
+     * default constructor
+     */
+    public PLYFile() {
+    }
+    /**
+     * Constructor to directly read file.
+     * @param f file to read.
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
+    public PLYFile(File f) throws FileNotFoundException, IOException {
         readPLYFile(f);
     }
-    
-    
-    
-    
-    protected static String readWord(BufferedInputStream in) throws IOException{
+
+    /**
+     * Reads a word from an ascii file, a word is non-whitespace characters 
+     * surrounded by whitespace characters.
+     * @param in
+     * @return
+     * @throws IOException 
+     */
+    protected static String readWord(BufferedInputStream in) throws IOException {
+        //builds a string
         StringBuilder s = new StringBuilder();
-        char c =(char)in.read();
-        while(" \t\r\n".indexOf(c)!=-1){
-            c=(char)in.read();
+        char c = (char) in.read();
+        //skip whitespace
+        while (" \t\r\n".indexOf(c) != -1) {
+            c = (char) in.read();
         }
-        while(" \t\r\n".indexOf(c)==-1){
+        //append to the string
+        while (" \t\r\n".indexOf(c) == -1) {
             s.append(c);
-            c=(char)in.read();
+            c = (char) in.read();
         }
-        if(s.toString().equals("comment")){
-            while("\r\n".indexOf(c)==-1){
-                c=(char)in.read();
+        //if the word is comment we need to skip the rest of the line and re-call
+        if (s.toString().equals("comment")) {
+            while ("\r\n".indexOf(c) == -1) {
+                c = (char) in.read();
 //              s.append(c);
             }
             //c=(char)in.read();
@@ -68,95 +103,121 @@ public class PLYFile {
             return s.toString().trim();
         }
     }
-
+    /**
+     * Reads a file.
+     * @param f
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private void readPLYFile(File f) throws FileNotFoundException, IOException {
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(f));
         readHeader(in);
-        for(int i = 0; i<names.size(); i++){
+        //for all the names of elements
+        for (int i = 0; i < names.size(); i++) {
+            //get the type of element for this name
             ElementType t = types.get(names.get(i));
-            for(int j = 0; j<elementCounts.get(i); j++){
+            //for all expected elements in this type
+            for (int j = 0; j < elementCounts.get(i); j++) {
+                //get the list for this element name or make it if we haven't yet
                 ArrayList<PLYElement> es = elms.get(names.get(i));
-                if(es==null){
-                    es=new ArrayList<>();
+                if (es == null) {
+                    es = new ArrayList<>();
                     elms.put(names.get(i), es);
                 }
-                es.add(t.readFrom(in,binary,littleEndian));
+                es.add(t.readFrom(in, binary, littleEndian));
             }
         }
     }
-
+    /**
+     * Reads the header of a file.
+     * @param in
+     * @throws IOException 
+     */
     private void readHeader(BufferedInputStream in) throws IOException {
+        //reads the magic number
         String ply = readWord(in);
-        if(!ply.equals("ply")){
+        if (!ply.equals("ply")) {
             throw new IOException("File is not PLY or is corrupted");
         }
+        //read format string
         String format = readWord(in);
-        if(!format.equals("format")){
+        if (!format.equals("format")) {
             throw new IOException("Ply formating error");
         }
         String endian = readWord(in);
         switch (endian) {
             case "ascii":
-                binary=false;
+                binary = false;
                 break;
             case "binary_little_endian":
-                binary=true;
-                littleEndian=true;
+                binary = true;
+                littleEndian = true;
                 break;
             case "binary_big_endian":
-                binary=true;
-                littleEndian=false;
+                binary = true;
+                littleEndian = false;
                 break;
             default:
                 throw new IOException("UNKNOWN PLY TYPE " + endian);
         }
+        //skip
         readWord(in);
+        
         String first = readWord(in);
         //until we reach the end of the header
         int elementsEncountered = 0;
-        while(!first.equals("end_header")){
+        while (!first.equals("end_header")) {
             //first should be element
-            if(!first.equals("element")){
+            if (!first.equals("element")) {
                 throw new IOException("Poorly formatted PLY");
             }
+            //build element type
             String elementName = readWord(in);
             ElementType t = new ElementType(elementName);
+            //number of expected elements
             int count = Integer.parseInt(readWord(in));
             elementCounts.add(count);
-            first=readWord(in);
+            first = readWord(in);
             int props = 0;
-            while(first.equals("property")){
+            //read each property of this element
+            while (first.equals("property")) {
                 String propType = readWord(in);
                 ElementType.Type propT = null;
-                if(!propType.equals("list")){
-                    propT=ElementType.Type.valueOf(propType.toUpperCase());
+                if (!propType.equals("list")) {
+                    propT = ElementType.Type.valueOf(propType.toUpperCase());
                 }
-                if(propT == null){
-                    if(propType.equals("list")){
+                if (propT == null) {
+                    if (propType.equals("list")) {
                         t.isList.add(true);
-                        t.listCountType.add(ElementType.Type.valueOf(readWord(in).toUpperCase()));
-                        t.propType.add(ElementType.Type.valueOf(readWord(in).toUpperCase()));
+                        t.listCountType.add(ElementType.Type.valueOf(
+                                readWord(in).toUpperCase()));
+                        t.propType.add(ElementType.Type.valueOf(readWord(in).
+                                toUpperCase()));
                         t.props.put(readWord(in), props);
                         props++;
                     } else {
                         throw new IOException("Unknown property type");
                     }
                 } else {
-                        t.isList.add(false);
-                        t.listCountType.add(null);
-                        t.propType.add(propT);
-                        t.props.put(readWord(in), props);
-                        props++;
+                    t.isList.add(false);
+                    t.listCountType.add(null);
+                    t.propType.add(propT);
+                    t.props.put(readWord(in), props);
+                    props++;
                 }
-                first=readWord(in);
+                first = readWord(in);
             }
             types.put(elementName, t);
             names.add(elementName);
             elementsEncountered++;
-            
+
         }
     }
-
+    /**
+     * get elements by name.
+     * @param name
+     * @return 
+     */
     public ArrayList<PLYElement> getElements(String name) {
         return elms.get(name);
     }
