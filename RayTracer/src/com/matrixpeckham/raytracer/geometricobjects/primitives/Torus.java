@@ -23,10 +23,8 @@ import com.matrixpeckham.raytracer.util.BruteForceSolver;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.QuarticAnswer;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Solvers;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
@@ -192,13 +190,6 @@ public class Torus extends GeometricObject {
         int num_real_roots = solver.solveQuartic(roots);
         boolean intersected = false;
         double t = Utility.HUGE_VALUE;
-        /*double[] roots = Solvers.solveQuartic(A, B, C, D, E);
-         for (int i = 0; i < roots.length; i++) {
-         if (roots[i] > 0 & roots[i] < t) {
-         t = roots[i];
-         intersected = true;
-         }
-         }*/
         if (num_real_roots == 0) // ray misses the torus
         {
             return (false);
