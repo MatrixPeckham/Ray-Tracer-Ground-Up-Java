@@ -18,29 +18,54 @@
 package com.matrixpeckham.raytracer.util;
 
 /**
- *
+ * Ray class.
  * @author William Matrix Peckham
  */
 public class Ray {
-    //origin
-    public Point3D o;
-    //direction
-    public Vector3D d;
+    /**
+     * origin
+     */
+    public final Point3D o;
+    /**
+     * direction
+     */ 
+    public final Vector3D d;
+    /**
+     * for debugging
+     * @return 
+     */
     @Override
     public String toString(){
         return "("+o+","+d+")Ray";
     }
+    /**
+     * Defualt constructor, ray at origin pointing in positive z direction.
+     */
     public Ray(){
         o=new Point3D(0);
         d=new Vector3D(0,0,1);
     }
+    /**
+     * initialize ray
+     * @param p origin
+     * @param v direction
+     */
     public Ray(Point3D p, Vector3D v){
         o=new Point3D(p);
         d=new Vector3D(v);
     }
+    /**
+     * copy constructor
+     * @param r 
+     */
     public Ray(Ray r){
         this(r.o,r.d);
     }
+    /**
+     * equals replacement
+     * @param r
+     * @return 
+     */
     public Ray setTo(Ray r){
         o.setTo(r.o);
         d.setTo(r.d);

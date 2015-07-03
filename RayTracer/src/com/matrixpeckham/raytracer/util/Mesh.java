@@ -20,18 +20,46 @@ package com.matrixpeckham.raytracer.util;
 import java.util.ArrayList;
 
 /**
- *
+ * Mesh class for holding data for rendering a mesh.
  * @author William Matrix Peckham
  */
 public class Mesh {
-    public ArrayList<Point3D> vertices = new ArrayList<>();
-    public ArrayList<Normal> normals = new ArrayList<>();
-    public ArrayList<Double> u = new ArrayList<>();
-    public ArrayList<Double> v = new ArrayList<>();
-    public ArrayList<ArrayList<Integer>> vertexFaces = new ArrayList<>();
+    /**
+     * Vertices that make up this mesh
+     */
+    public final ArrayList<Point3D> vertices = new ArrayList<>();
+    /**
+     * normals at the vertices.
+     */
+    public final ArrayList<Normal> normals = new ArrayList<>();
+    /**
+     * u texture coordinates at the vertices. 
+     */
+    public final ArrayList<Double> u = new ArrayList<>();
+    /**
+     * v texture coordinates at the vertices. 
+     */
+    public final ArrayList<Double> v = new ArrayList<>();
+    /**
+     * index lists
+     */
+    public final ArrayList<ArrayList<Integer>> vertexFaces = new ArrayList<>();
+    /**
+     * number of vertices.
+     */
     public int numVertices = 0;
+    /**
+     * number of faces.
+     */
     public int numTriangles = 0;
+    /**
+     * default constructor
+     */
     public Mesh(){}
+    /**
+     * copy constructor. 
+     * @param m 
+     */
     public Mesh(Mesh m){
         vertices.addAll(m.vertices);
         normals.addAll(m.normals);

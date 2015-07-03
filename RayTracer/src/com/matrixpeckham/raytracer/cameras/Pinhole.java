@@ -100,7 +100,7 @@ public class Pinhole extends Camera {
                     pp.x=vp.s*(c-0.5f*vp.hRes + sp.x);
                     pp.y=vp.s*(r-0.5f*vp.vRes + sp.y);
                     //compute direction
-                    ray.d=getDirection(pp);
+                    ray.d.setTo(getDirection(pp));
                     //add color
                     L.addLocal(w.tracer.traceRay(ray,depth));
                 }
@@ -155,7 +155,7 @@ public class Pinhole extends Camera {
                     pp.x=vp.s*(c-0.5f*vp.hRes + sp.x)+x;
                     pp.y=vp.s*(r-0.5f*vp.vRes + sp.y);
                     //compute direction
-                    ray.d=getDirection(pp);
+                    ray.d.setTo(getDirection(pp));
                     //add color
                     L.addLocal(w.tracer.traceRay(ray,depth));
                 }

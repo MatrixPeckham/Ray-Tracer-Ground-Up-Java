@@ -101,7 +101,7 @@ public class Orthographic extends Camera {
                     pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
                     pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
                     //get ray direction
-                    ray.d = getDirection(pp);
+                    ray.d.setTo(getDirection(pp));
                     //set ray origin, eyepoint + pixel location
                     ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
                     //sum up samples. 
@@ -144,7 +144,7 @@ public class Orthographic extends Camera {
                     pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x)+x;
                     pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
                     //get ray direction
-                    ray.d = getDirection(pp);
+                    ray.d.setTo(getDirection(pp));
                     //set ray origin, eyepoint + pixel location
                     ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
                     //sum up samples. 
