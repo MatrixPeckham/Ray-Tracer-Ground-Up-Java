@@ -18,6 +18,8 @@
 package com.matrixpeckham.raytracer;
 
 import com.matrixpeckham.raytracer.build.TestTori;
+import com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15;
+import com.matrixpeckham.raytracer.build.figures.ch15.BuildFigure07;
 import com.matrixpeckham.raytracer.build.figures.ch18.BuildFigure11;
 import com.matrixpeckham.raytracer.build.figures.ch18.BuildFigure12;
 import com.matrixpeckham.raytracer.build.figures.ch18.BuildPageOneImage;
@@ -126,7 +128,7 @@ public class Main extends JFrame implements ActionListener{
      * The builder that will create the scene we render.
      */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = new BuildFigure29B();
+    BuildWorldFunction builder = new BuildFigure07();
     /**
      * Number of pixels that have been rendered.
      */

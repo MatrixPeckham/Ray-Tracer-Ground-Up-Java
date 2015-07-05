@@ -21,7 +21,7 @@ import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
+import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 

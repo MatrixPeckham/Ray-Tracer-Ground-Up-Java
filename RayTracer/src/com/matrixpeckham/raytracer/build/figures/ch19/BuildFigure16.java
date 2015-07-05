@@ -19,7 +19,7 @@ package com.matrixpeckham.raytracer.build.figures.ch19;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
+import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.Phong;
 import com.matrixpeckham.raytracer.materials.SV_Matte;

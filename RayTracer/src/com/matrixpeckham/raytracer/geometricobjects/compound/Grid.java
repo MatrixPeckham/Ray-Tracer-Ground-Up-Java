@@ -389,7 +389,13 @@ public class Grid extends Compound{
             }
         } // end of for (int j = 0; j < numObjects; j++)
         // erase the Compound::vector that stores the object pointers, but don't delete the objects
-        objects.clear();
+        
+//IF WE DON'T DO THIS WE CAN CALL setMaterial() AFTER setupCells()
+//this allows us to sub-class grid and call setupCells within a constructor after 
+//generating a mesh, but still allow the user of the class to setup a material.
+//objects.clear();
+
+        
         // display some statistics on counts
         // this is useful for finding out how many cells have no objects, one object, etc
         // comment this out if you don't want to use it

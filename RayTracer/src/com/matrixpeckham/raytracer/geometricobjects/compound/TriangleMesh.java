@@ -47,8 +47,8 @@ public class TriangleMesh extends Grid {
 
         FLAT, SMOOTH
     }
-    private Mesh mesh;
-    private boolean reverseNomral = false;
+    protected Mesh mesh;
+    protected boolean reverseNomral = false;
 
     public TriangleMesh() {
         super();

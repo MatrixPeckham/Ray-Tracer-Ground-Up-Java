@@ -28,10 +28,10 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
- *
+ * NOT PUBLIC UNTIL I CAN SPEED UP HIT FUNCTION
  * @author William Matrix Peckham
  */
-public class Torus extends GeometricObject {
+class Torus extends GeometricObject {
 
     private double a;
     private double b;

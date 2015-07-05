@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer.geometricobjects.compound;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConcavePartSphere;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartSphere;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Ring;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
+import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 

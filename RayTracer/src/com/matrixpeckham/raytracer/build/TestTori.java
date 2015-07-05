@@ -22,15 +22,7 @@ import com.matrixpeckham.raytracer.cameras.Orthographic;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.cameras.ThinLens;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledBox;
-import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.compound.WireframeBox;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
+import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.lights.Directional;
@@ -131,7 +123,7 @@ public class TestTori implements BuildWorldFunction
         Instance inst = new Instance(torus);
         inst.translate(0, 2, 0);
         w.addObject(inst);*/
-        double size = 0.1;
+/*        double size = 0.1;
         for(double y = 0.1; y<30; y+=size*2){
             Torus t = new Torus(1, size);
             t.setShadows(false);
@@ -140,10 +132,11 @@ public class TestTori implements BuildWorldFunction
             inst.translate(0,y,0);
             //w.addObject(inst);
             size+=0.1;
-        }
+        }*/
         Torus one = new Torus(0.8,0.2);
         one.setMaterial(matte_ptr);
         one.setShadows(false);
+//        one.setupCells();
         w.addObject(one);
         
 

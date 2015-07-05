@@ -32,7 +32,7 @@ import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Torus;
+import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.lights.Directional;
