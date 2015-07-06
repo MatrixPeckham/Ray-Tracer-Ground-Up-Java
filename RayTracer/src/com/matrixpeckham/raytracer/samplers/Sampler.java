@@ -224,7 +224,7 @@ public abstract class Sampler {
     }
     public abstract Sampler clone();
     public abstract void generateSamples();
-    Point2D sampleOneSet(){
+    public Point2D sampleOneSet(){
         return samples.get(count++%numSamples);
     }
 }

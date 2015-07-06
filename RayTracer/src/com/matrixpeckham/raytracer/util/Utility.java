@@ -341,4 +341,41 @@ public class Utility {
         return num;
     }
 
+    public static double mod(double a, double b){
+        int n = (int) (a / b);
+	
+	a -= n * b;
+	if (a < 0.0)
+		a += b;
+	
+	return (a);
+    }
+    
+    public static double smoothPulse(double e0, double e1, double e2, double e3, double x) {
+        return (smoothStep (e0, e1, x) - smoothStep (e2, e3, x));
+    }
+    
+    public static double smoothPulseTrain(double e0, double e1, double e2, double e3, double period, double x){
+        return (smoothPulse(e0, e1, e2, e3, mod(x, period)));
+    }
+    
+    public static double smoothStep(double a, double b, double x){
+        if (x < a)
+		return (0.0);
+	
+	if (x >= b)
+		return (1.0);
+		
+	double y = (x - a) / ( b - a);  // normalise to [0, 1]
+	
+	return (y * y * (3.0 - 2.0 * y));
+    }
+    
+    public static RGBColor mixColor(RGBColor c0, RGBColor c1, double f){
+        return c0.mul(1-f).add(c1.mul(f));
+    }
+    
+    public static double mixDouble(double a, double b, double f){
+        return ((1.0 - f) * a + f * b);
+    }
 }
