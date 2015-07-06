@@ -31,29 +31,36 @@ public class Torus extends ParametricObject {
         this(1,0.5);
     }
     public Torus(double a, double b){
-        this(a,b,0,Utility.TWO_PI,0,Utility.TWO_PI);
+        super(new TorusParametric(a,b));
     }
-    public Torus(double a, double b, double minPhi, double maxPhi, double minTheta, double maxTheta){
-        super(new ParametricEquation() {
-
+    protected Torus(TorusParametric par){
+        super(par);
+    }
+    protected static class TorusParametric implements ParametricEquation {
+        double a=0;
+        double b=0;
+        public TorusParametric(double a, double b){
+            this.a=a;
+            this.b=b;
+        }
             @Override
             public double getMinU() {
-                return minPhi;
+                return 0;
             }
 
             @Override
             public double getMaxU() {
-                return maxPhi;
+                return Utility.TWO_PI;
             }
 
             @Override
             public double getMinV() {
-                return minTheta;
+                return 0;
             }
 
             @Override
             public double getMaxV() {
-                return maxTheta;
+                return Utility.TWO_PI;
             }
 
             @Override
@@ -73,9 +80,9 @@ public class Torus extends ParametricObject {
                 double sinu=Math.sin(u);
                 double cosv=Math.cos(v);
                 double sinv=Math.sin(v);
-                p.x=cosu*(b*cosv+a);
+                p.x=sinu*(b*cosv+a);
                 p.y=b*sinv;
-                p.z=sinu*(b*cosv+a);
+                p.z=cosu*(b*cosv+a);
                 
                 return p;
             }
@@ -87,13 +94,13 @@ public class Torus extends ParametricObject {
                 double cosv=Math.cos(v);
                 double sinv=Math.sin(v);
                 Vector3D dv = new Vector3D();
-                dv.x=cosu*b*-sinv;
+                dv.z=cosu*b*-sinv;
                 dv.y=b*cosv;
-                dv.z=sinu*b*-sinv;
+                dv.x=sinu*b*-sinv;
                 Vector3D du = new Vector3D();
-                du.x=-sinu*(b*cosv+a);
+                du.z=-sinu*(b*cosv+a);
                 du.y=0;
-                du.z=cosu*(b*cosv+a);
+                du.x=cosu*(b*cosv+a);
                 
                 
                 Normal n = new Normal(dv.cross(du));
@@ -113,8 +120,7 @@ public class Torus extends ParametricObject {
 
             @Override
             public ParametricEquation.NormalType getNormalType() {
-                return NormalType.REGULAR;
+                return ParametricEquation.NormalType.REGULAR;
             }
-        });
-    }
+        }    
 }

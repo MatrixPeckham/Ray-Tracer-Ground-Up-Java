@@ -61,12 +61,33 @@ public class ParametricObject extends TriangleMesh {
         normType = p.getNormalType();
         int numU = 0;
         int numV = 0;
-        for(double u = uMin; u<=uMax; u+=uStep){
+        double u;
+        for(u = uMin; u<=uMax; u+=uStep){
             numV=0;
-            for(double v=vMin; v<=vMax; v+=vStep){
+            double v;
+            for(v=vMin; v<=vMax; v+=vStep){
                 mesh.vertices.add(p.getPointAt(u, v));
                 mesh.normals.add(p.getNormalAt(u, v));
                 numV++;
+            }
+            if(v!=vMax && v>vMax){
+                mesh.vertices.add(p.getPointAt(u, vMax));
+                mesh.normals.add(p.getNormalAt(u, vMax));
+                numV++;
+            }
+            numU++;
+        }
+        if(u!=uMax && u>uMax){
+            double v;
+            for(v=vMin; v<=vMax; v+=vStep){
+                mesh.vertices.add(p.getPointAt(uMax, v));
+                mesh.normals.add(p.getNormalAt(uMax, v));
+                //numV++;
+            }
+            if(v!=vMax && v>vMax){
+                mesh.vertices.add(p.getPointAt(uMax, vMax));
+                mesh.normals.add(p.getNormalAt(uMax, vMax));
+//                numV++;
             }
             numU++;
         }
