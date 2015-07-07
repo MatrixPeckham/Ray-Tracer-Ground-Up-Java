@@ -103,7 +103,7 @@ public class Torus extends ParametricObject {
                 du.x=cosu*(b*cosv+a);
                 
                 
-                Normal n = new Normal(dv.cross(du));
+                Normal n = new Normal(dv.cross(du)).neg();
                 n.normalize();
                 return n;
             }

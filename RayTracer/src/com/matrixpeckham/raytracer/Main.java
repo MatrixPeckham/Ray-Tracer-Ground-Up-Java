@@ -115,7 +115,7 @@ public class Main extends JFrame implements ActionListener{
      * The builder that will create the scene we render.
      */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch21.BuildFigure09A();
+    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch21.BuildFigure07();
     /**
      * Number of pixels that have been rendered.
      */
