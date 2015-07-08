@@ -55,7 +55,7 @@ public class RampFBmTexture implements Texture {
     public RGBColor getColor(ShadeRec sr) {
         double n = noise.valueFBM(sr.localHitPosition);
         double y = sr.localHitPosition.y + perturbation*n;
-        double u = (1.0-Math.sin(y))/2.0;
+        double u = (1.0+Math.sin(y))/2.0;
         int row=0;
         int col = (int)(u*hres-1);
         return ramp.getColor(row, col);

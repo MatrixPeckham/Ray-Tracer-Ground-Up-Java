@@ -33,11 +33,11 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  */
 public class Instance extends GeometricObject {
 
-    private GeometricObject object;
-    private Matrix invMatrix;
-    private Matrix forwardMatrix;
-    private BBox bbox;
-    private boolean transformTexture;
+    private GeometricObject object=null;
+    private Matrix invMatrix=new Matrix();
+    private Matrix forwardMatrix=new Matrix();
+    private BBox bbox=new BBox();
+    private boolean transformTexture=false;
 
     public Instance() {
         super();
@@ -56,7 +56,7 @@ public class Instance extends GeometricObject {
         bbox = new BBox();
         transformTexture = true;
     }
-
+    /*
     public Instance(Instance i) {
         super(i);
         invMatrix.setTo(i.invMatrix);
@@ -67,7 +67,7 @@ public class Instance extends GeometricObject {
         forwardMatrix.setTo(i.forwardMatrix);
         bbox = new BBox(i.bbox);
     }
-
+*/
     public void setObject(GeometricObject obj) {
         object = obj;
     }

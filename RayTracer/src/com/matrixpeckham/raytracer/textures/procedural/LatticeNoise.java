@@ -204,7 +204,7 @@ public abstract class LatticeNoise {
         double frequency=1;
         Vector3D sum = new Vector3D(0, 0, 0);
         for(int j=0; j<numOctaves; j++){
-            sum.addLocal(vectorNoise(p.mul(frequency)));
+            sum.addLocal(vectorNoise(p.mul(frequency)).mul(amplitude));
             amplitude*=gain;
             frequency*=lacunarity;
         }

@@ -68,8 +68,10 @@ public class Ring extends GeometricObject {
         outerRadius = d.outerRadius;
         area = d.area;
         invArea = d.invArea;
-        sampler = d.sampler.clone();
-        sampler.mapSamplesToUnitDisk();
+        if(d.sampler!=null){
+            sampler = d.sampler.clone();
+            sampler.mapSamplesToUnitDisk();
+        }
         u.setTo(d.u);
         v.setTo(d.v);
         w.setTo(d.w);
