@@ -123,5 +123,18 @@ public class SphereChecker implements Texture{
         }
         return lineColor;
     }
+
+    public void setLineWidth(double d) {
+        setHorizontalLineWidth(d);
+        setVerticleLineWidth(d);
+    }
+
+    public void setNumlat(int i) {
+        setNumHorizontalCheckers(i);
+    }
+
+    public void setNumlong(int i) {
+        setNumVerticleCheckers(i);
+    }
     
 }
