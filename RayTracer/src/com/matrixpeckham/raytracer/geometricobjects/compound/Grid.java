@@ -110,7 +110,7 @@ public class Grid extends Compound{
     
     @Override
     public BBox getBoundingBox() {
-        return new BBox();
+        return bbox;
     }
 
     // ---------------------------------------------------------------- hit

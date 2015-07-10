@@ -32,6 +32,20 @@ import java.util.TreeMap;
  */
 public class PLYFile {
 
+    static String readLine(BufferedInputStream in) throws IOException {
+        //builds a string
+        StringBuilder s = new StringBuilder();
+        char c = (char) in.read();
+        //append to the string
+        while ("\r\n\uFFFF".indexOf(c) == -1) {
+            s.append(c);
+            int temp = in.read();
+            if(temp==-1) break;
+            c = (char) temp;
+        }
+        return s.toString();
+    }
+
     /**
      * is the file binary
      */
@@ -83,18 +97,24 @@ public class PLYFile {
         StringBuilder s = new StringBuilder();
         char c = (char) in.read();
         //skip whitespace
-        while (" \t\r\n".indexOf(c) != -1) {
-            c = (char) in.read();
+        while (" \t\r\n\uFFFF".indexOf(c) != -1) {
+            int temp = in.read();
+            if(temp==-1) break;
+            c = (char) temp;
         }
         //append to the string
-        while (" \t\r\n".indexOf(c) == -1) {
+        while (" \t\r\n\uFFFF".indexOf(c) == -1) {
             s.append(c);
-            c = (char) in.read();
+            int temp = in.read();
+            if(temp==-1) break;
+            c = (char) temp;
         }
         //if the word is comment we need to skip the rest of the line and re-call
         if (s.toString().equals("comment")) {
-            while ("\r\n".indexOf(c) == -1) {
-                c = (char) in.read();
+            while ("\r\n\uFFFF".indexOf(c) == -1) {
+            int temp = in.read();
+            if(temp==-1) break;
+            c = (char) temp;
 //              s.append(c);
             }
             //c=(char)in.read();

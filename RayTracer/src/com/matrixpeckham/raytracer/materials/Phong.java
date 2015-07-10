@@ -103,4 +103,8 @@ public class Phong extends Material {
         ambientBRDF.setCd(brown);
         diffuseBRDF.setCd(brown);
     }
+
+    public void setCs(double d, double d0, double d1) {
+        setCs(new RGBColor(d,d0,d1));
+    }
 }

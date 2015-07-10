@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.util.ply;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -65,9 +66,11 @@ class ElementType {
      * @return element 
      * @throws IOException required for reading from stream
      */
-    PLYElement readFrom(BufferedInputStream in, boolean binary,
+    PLYElement readFrom(BufferedInputStream inl, boolean binary,
             boolean littleEndian) throws IOException {
         PLYElement element = new PLYElement(this);
+        String line = PLYFile.readLine(inl);
+        BufferedInputStream in = new BufferedInputStream(new ByteArrayInputStream(line.getBytes()));
         //for every property
         for (int i = 0; i < propType.size(); i++) {
             //if it's a list, read list count
@@ -88,7 +91,6 @@ class ElementType {
             }
         }
         //alleviates the problem of undeclared properties in elements.
-        if(!binary) readToNewline(in);
         return element;
     }
     /**
@@ -98,7 +100,7 @@ class ElementType {
      */
     private void readToNewline(BufferedInputStream in) throws IOException {
         char c = (char)in.read();
-        while(c!='\n'&&c!='\r'){
+        while(c!='\n'&&c!='\r'&&c!='\uFFFF'){
             c=(char)in.read();
         }
     }
