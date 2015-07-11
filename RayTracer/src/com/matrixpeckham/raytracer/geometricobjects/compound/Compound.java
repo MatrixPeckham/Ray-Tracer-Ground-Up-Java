@@ -59,6 +59,9 @@ public class Compound extends GeometricObject {
             obj.setMaterial(mat);
         }
     }
+    public void setMaterial(Material mat, int i){
+        objects.get(i).setMaterial(mat);
+    }
 
     @Override
     public boolean hit(Ray ray, ShadeRec s) {

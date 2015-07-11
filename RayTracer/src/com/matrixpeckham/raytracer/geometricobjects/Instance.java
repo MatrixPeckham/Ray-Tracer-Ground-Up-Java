@@ -218,7 +218,10 @@ public class Instance extends GeometricObject {
 
         return object.shadowHit(invRay, tr);
     }
-
+    
+    public void scale(double d){
+        scale(new Vector3D(d,d,d));
+    }
     public void scale(Vector3D s) {
 
         Matrix invScalingMatrix = new Matrix();			// temporary inverse scaling matrix

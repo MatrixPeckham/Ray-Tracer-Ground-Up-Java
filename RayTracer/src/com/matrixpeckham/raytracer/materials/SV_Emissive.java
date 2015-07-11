@@ -17,55 +17,64 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.brdfs.PerfectSpecular;
+import com.matrixpeckham.raytracer.brdfs.Lambertian;
+import com.matrixpeckham.raytracer.brdfs.SV_Lambertian;
+import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class Reflective extends Phong {
-    private PerfectSpecular perfectBRDF;
-
-    public Reflective() {
+public class SV_Emissive extends Material {
+    private Texture ce=null;
+    private double ls=1;
+    
+    public SV_Emissive(){
         super();
-        perfectBRDF=new PerfectSpecular();
     }
-    public Reflective(Reflective r){
-        super(r);
-        perfectBRDF=r.perfectBRDF.clone();
+    
+    public SV_Emissive(SV_Emissive m){
+        super(m);
+        if(m.ce!=null){
+            ce=m.ce.clone();
+        }
+        ls=m.ls;
     }
-
-    @Override
-    public Material clone() {
-        return new Reflective(this);
+    public void scaleRadiance(double ls){
+        this.ls=ls;
     }
-    public void setCr(RGBColor c){
-        perfectBRDF.setCr(c);
-    }
-    public void setKr(double k){
-        perfectBRDF.setKr(k);
-    }
-
     @Override
     public RGBColor shade(ShadeRec sr) {
-        RGBColor L = super.shade(sr);
-        Vector3D wo = sr.ray.d.neg();
-        Vector3D wi = new Vector3D();
-        
-        RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
-        Ray reflectedRay = new Ray(sr.hitPoint,wi);
-        
-        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
-        
-        return L;
+        if(sr.normal.neg().dot(sr.ray.d)>0){
+            return ce.getColor(sr).mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
+    }
+    
+    
+    
+    @Override
+    public Material clone() {
+        return new SV_Emissive(this);
+    }
+    
+    public void setCe(Texture c){
+        ce=c.clone();
     }
 
-    public void setCr(double d, double d0, double d1) {
-        setCr(new RGBColor(d,d0,d1));
+    @Override
+    public RGBColor getLe(ShadeRec sr) {
+        if(sr.normal.neg().dot(sr.ray.d)>0){
+            return ce.getColor(sr).mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
     }
     
 }

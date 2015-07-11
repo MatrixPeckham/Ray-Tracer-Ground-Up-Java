@@ -38,7 +38,7 @@ public class OpenCone extends GeometricObject {
 
     @Override
     public GeometricObject clone() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new OpenCone();
     }
 
     @Override

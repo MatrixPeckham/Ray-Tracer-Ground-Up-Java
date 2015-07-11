@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.textures.procedural;
+package com.matrixpeckham.raytracer.materials;
 
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -26,26 +26,36 @@ import com.matrixpeckham.raytracer.util.Utility;
  *
  * @author William Matrix Peckham
  */
-public class SphereChecker implements Texture{
+public class SphereMaterials extends Material {
     private int numHorizontalCheckers=20;
     private int numVerticleCheckers=10;
     private double horizontalLineWidth=0;
     private double verticleLineWidth=0;
-    private RGBColor color1=new RGBColor(1);
-    private RGBColor color2=new RGBColor(0.5);
-    private RGBColor lineColor=new RGBColor(0);
+    private Material color1;
+    private Material color2;
+    private Material lineColor;
 
-    public SphereChecker() {
+    public SphereMaterials() {
+        Matte c1=new Matte();
+        c1.setCd(1);
+        Matte c2=new Matte();
+        c2.setCd(0.5);
+        Matte cl=new Matte();
+        cl.setCd(0);
+        color1=c1;
+        color2=c2;
+        lineColor=cl;
+
     }
 
-    public SphereChecker(SphereChecker c) {
+    public SphereMaterials(SphereMaterials c) {
         numHorizontalCheckers=c.numHorizontalCheckers;
         numVerticleCheckers=c.numVerticleCheckers;
         horizontalLineWidth=c.horizontalLineWidth;
         verticleLineWidth=c.verticleLineWidth;
-        color1.setTo(c.color1);
-        color2.setTo(c.color2);
-        lineColor.setTo(c.lineColor);
+        if(c.color1!=null)color1=c.color1.clone();
+        if(c.color2!=null)color2=c.color2.clone();
+        if(c.lineColor!=null)lineColor=c.lineColor.clone();
     }
 
     public void setNumHorizontalCheckers(int numHorizontalCheckers) {
@@ -64,28 +74,28 @@ public class SphereChecker implements Texture{
         this.verticleLineWidth = verticleLineWidth;
     }
 
-    public void setColor1(RGBColor color1) {
-        this.color1 = color1;
+    public void setColor1(Material color1) {
+        this.color1 = color1.clone();
     }
 
-    public void setColor2(RGBColor color2) {
-        this.color2 = color2;
+    public void setColor2(Material color2) {
+        this.color2 = color2.clone();
     }
 
-    public void setLineColor(RGBColor lineColor) {
-        this.lineColor = lineColor;
+    public void setLineColor(Material lineColor) {
+        this.lineColor = lineColor.clone();
     }
     
     
     
     
     @Override
-    public Texture clone() {
-        return new SphereChecker(this);
+    public Material clone() {
+        return new SphereMaterials(this);
     }
 
     @Override
-    public RGBColor getColor(ShadeRec sr) {
+    public RGBColor shade(ShadeRec sr) {
         double x = sr.localHitPosition.x;
         double y = sr.localHitPosition.y;
         double z = sr.localHitPosition.z;
@@ -114,14 +124,14 @@ public class SphereChecker implements Texture{
         
         if((iphi+itheta)%2==0){
             if(!inOutline){
-                return color1;
+                return color1.shade(sr);
             }
         }else{
             if(!inOutline){
-                return color2;
+                return color2.shade(sr);
             }
         }
-        return lineColor;
+        return lineColor.shade(sr);
     }
 
     public void setLineWidth(double d) {
@@ -149,12 +159,18 @@ public class SphereChecker implements Texture{
         setVerticleLineWidth(d);
     }
 
-    public void setColor1(double d, double d0, double d1) {
-        setColor1(new RGBColor(d, d0, d1));
+    public void setChecker1Material(Material ref) {
+        setColor1(ref);
     }
 
-    public void setColor2(double d, double d0, double d1) {
-        setColor2(new RGBColor(d, d0, d1));
+    public void setChecker2Material(Material ref) {
+        setColor2(ref);
     }
+
+    public void setLineMaterial(Material ref) {
+        setLineColor(ref);
+    }
+
+
     
 }
