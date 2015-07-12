@@ -100,5 +100,9 @@ public class PlaneChecker implements Texture {
         }
         return outlineColor;
     }
+
+    public void setColor1(double d, double d0, double d1) {
+        color1.setTo(d, d0, d1);
+    }
     
 }

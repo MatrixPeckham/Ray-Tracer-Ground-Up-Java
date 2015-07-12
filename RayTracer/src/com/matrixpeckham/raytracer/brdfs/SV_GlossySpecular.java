@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.brdfs;
 
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
+import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -31,27 +32,29 @@ import com.matrixpeckham.raytracer.util.Utility;
  *
  * @author William Matrix Peckham
  */
-public class GlossySpecular extends BRDF {
+public class SV_GlossySpecular extends BRDF {
     private double ks=0;
-    private RGBColor cs=new RGBColor(1);
+    private Texture cs=null;
     private double exp=2;
     private Sampler sampler=null;
     
-    public GlossySpecular(){
+    public SV_GlossySpecular(){
         super();
     }
     
-    public GlossySpecular(GlossySpecular gs){
+    public SV_GlossySpecular(SV_GlossySpecular gs){
         super(gs);
         ks=gs.ks;
-        cs.setTo(gs.cs);
+        if(gs.cs!=null){
+            cs=gs.cs.clone();
+        }
         exp=gs.exp;
         if(gs.sampler!=null)
             sampler=gs.sampler.clone();
     }
     
-    public GlossySpecular clone(){
-        return new GlossySpecular(this);
+    public SV_GlossySpecular clone(){
+        return new SV_GlossySpecular(this);
     }
     
     public void setSampler(Sampler s, double exp){
@@ -71,7 +74,7 @@ public class GlossySpecular extends BRDF {
         Vector3D r = wi.neg().add(new Vector3D(sr.normal.mul(2*ndotwi)));
         double rdotwo = r.dot(wo);
         if(rdotwo>0){
-            l.setTo(cs.mul(ks*Math.pow(rdotwo, exp)));
+            l.setTo(cs.getColor(sr).mul(ks*Math.pow(rdotwo, exp)));
         }
         return l;
     }
@@ -92,7 +95,7 @@ public class GlossySpecular extends BRDF {
         }
         double phong_lobe = Math.pow(r.dot(w), exp);
         pdf.d=phong_lobe*sr.normal.dot(wi);
-        return cs.mul(ks*phong_lobe);
+        return cs.getColor(sr).mul(ks*phong_lobe);
     }
 
     @Override
@@ -109,17 +112,9 @@ public class GlossySpecular extends BRDF {
     public void setExp(double e){
         exp=e;
     }
-    
-    public void setCs(RGBColor c){
-        cs.setTo(c);
-    }
-    
-    public void setCs(double r, double g, double b){
-        cs.setTo(r, g, b);
-    }
-    
-    public void setCs(double c){
-        cs.setTo(c,c,c);
+        
+    public void setCs(Texture c){
+        cs=c.clone();
     }
     
 }

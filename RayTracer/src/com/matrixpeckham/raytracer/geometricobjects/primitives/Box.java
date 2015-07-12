@@ -269,4 +269,16 @@ public class Box extends GeometricObject {
         }
     }
 
+    public void setP0(double d, double i, double d0) {
+        x0 = d;
+        y0 = i;
+        z0 = d0;
+    }
+
+    public void setP1(double d, double d0, double d1) {
+        x1 = d;
+        y1 = d0;
+        z1 = d1;
+    }
+
 }
