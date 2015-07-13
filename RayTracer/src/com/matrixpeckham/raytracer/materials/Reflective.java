@@ -64,6 +64,39 @@ public class Reflective extends Phong {
         return L;
     }
 
+    @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        RGBColor L = new RGBColor();
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        
+        RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
+        Ray reflectedRay = new Ray(sr.hitPoint,wi);
+        
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
+        
+        return L;
+    }
+
+    @Override
+    public RGBColor globalShade(ShadeRec sr) {
+        RGBColor L = new RGBColor();
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        
+        RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
+        Ray reflectedRay = new Ray(sr.hitPoint,wi);
+        if(sr.depth==0){
+            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+2).mul(sr.normal.dot(wi))));
+        } else {
+            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
+        }
+        
+        return L;
+    }
+    
+    
+
     public void setCr(double d, double d0, double d1) {
         setCr(new RGBColor(d,d0,d1));
     }

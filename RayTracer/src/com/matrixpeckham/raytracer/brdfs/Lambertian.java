@@ -17,6 +17,9 @@
  */
 package com.matrixpeckham.raytracer.brdfs;
 
+import com.matrixpeckham.raytracer.samplers.Sampler;
+import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -29,6 +32,7 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 public class Lambertian extends BRDF{
     private double kd;
     private RGBColor cd;
+    private Sampler sampler;
 
     public Lambertian(){
         super();
@@ -40,6 +44,9 @@ public class Lambertian extends BRDF{
         super(lamb);
         kd=lamb.kd;
         cd=new RGBColor(lamb.cd);
+        if(lamb.sampler!=null){
+            sampler=lamb.sampler.clone();
+        }
     }
     
     public Lambertian clone(){
@@ -72,5 +79,30 @@ public class Lambertian extends BRDF{
     public void setCd(double c) {
         this.cd.setTo(c, c, c);
     }
+
+    public void setSampler(Sampler clone) {
+        this.sampler=clone.clone();
+        this.sampler.mapSamplesToHemisphere(1);
+        
+    }
+
+    @Override
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
+        Vector3D w = new Vector3D(sr.normal);
+	Vector3D v =new Vector3D(0.0034, 1, 0.0071) .cross( w);
+	v.normalize();
+	Vector3D u = v .cross( w);
+	
+	Point3D sp = sampler.sampleHemisphere();  
+	//wi = sp.x * u + sp.y * v + sp.z * w;
+        wi.setTo(u.mul(sp.x).add(v.mul(sp.y).add(w.mul(sp.z))));
+	wi.normalize(); 	
+	
+	pdf.d = sr.normal .dot( wi) * Utility.INV_PI;
+	
+	return (cd .mul( kd ).mul( Utility.INV_PI));     
+    }
+    
+    
     
 }

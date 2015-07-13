@@ -15,24 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.materials;
+package com.matrixpeckham.raytracer.tracers;
 
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.world.World;
 
 /**
- *
+ * Whitted tracer, pretty much the same as raycast tracer.
  * @author William Matrix Peckham
  */
-public abstract class Material {
-    public Material(){}
-    public Material(Material mat){}
-    public abstract Material clone();
-    public abstract RGBColor shade(ShadeRec sr);
-    public abstract RGBColor pathShade(ShadeRec sr);
-    public abstract RGBColor globalShade(ShadeRec sr);
-    public RGBColor getLe(ShadeRec sr) {
-        return Utility.BLACK;
+public class PathTrace extends Tracer{
+
+    public PathTrace() {
+        super();
     }
+
+    public PathTrace(World w) {
+        super(w);
+    }
+
+    @Override
+    public RGBColor traceRay(Ray ray, int depth) {
+        if(depth>world.vp.maxDepth){
+            return Utility.BLACK;
+        } else {
+            ShadeRec sr = new ShadeRec(world.hitObjects(ray));
+            if(sr.hitAnObject){
+                sr.depth=depth;
+                sr.ray=ray;
+                return sr.material.pathShade(sr);
+            } else {
+                return world.backgroundColor;
+            }
+        }
+    }
+    
+    
 }

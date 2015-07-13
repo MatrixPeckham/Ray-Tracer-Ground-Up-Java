@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.materials;
 
 import com.matrixpeckham.raytracer.brdfs.GlossySpecular;
 import com.matrixpeckham.raytracer.brdfs.Lambertian;
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -109,5 +110,54 @@ public class Phong extends Material {
 
     public void setCs(double d, double d0, double d1) {
         setCs(new RGBColor(d,d0,d1));
+    }
+
+    @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        Vector3D wo = sr.ray.d.neg();
+        RGBColor L = new RGBColor();
+        Vector3D wiDiff = new Vector3D();
+        Vector3D wiSpec = new Vector3D();
+        DoubleRef pdfDiff = new DoubleRef();
+        DoubleRef pdfSpec = new DoubleRef();
+        
+        RGBColor Ldiff = diffuseBRDF.sampleF(sr, wo, wiDiff, pdfDiff);
+        RGBColor Lspec = specularBRDF.sampleF(sr, wo, wiSpec, pdfSpec);
+        double ndotwiSpec = sr.normal.dot(wiSpec);
+        double ndotwiDiff = sr.normal.dot(wiDiff);
+        
+        Ray diffRay = new Ray(sr.hitPoint,wiDiff);
+        Ray specRay = new Ray(sr.hitPoint,wiSpec);
+        
+        Ldiff.setTo(Ldiff.mul(sr.w.tracer.traceRay(diffRay, sr.depth+1).mul(ndotwiDiff/pdfDiff.d)));
+        Lspec.setTo(Lspec.mul(sr.w.tracer.traceRay(specRay, sr.depth+1).mul(ndotwiSpec/pdfDiff.d)));
+        L.addLocal(Ldiff);
+        L.addLocal(Lspec);
+        return L;
+    }
+
+    @Override
+    public RGBColor globalShade(ShadeRec sr) {
+        Vector3D wo = sr.ray.d.neg();
+        RGBColor L = new RGBColor();
+        if(sr.depth==0)L.setTo(shade(sr));
+        Vector3D wiDiff = new Vector3D();
+        Vector3D wiSpec = new Vector3D();
+        DoubleRef pdfDiff = new DoubleRef();
+        DoubleRef pdfSpec = new DoubleRef();
+        
+        RGBColor Ldiff = diffuseBRDF.sampleF(sr, wo, wiDiff, pdfDiff);
+        RGBColor Lspec = specularBRDF.sampleF(sr, wo, wiSpec, pdfSpec);
+        double ndotwiSpec = sr.normal.dot(wiSpec);
+        double ndotwiDiff = sr.normal.dot(wiDiff);
+        
+        Ray diffRay = new Ray(sr.hitPoint,wiDiff);
+        Ray specRay = new Ray(sr.hitPoint,wiSpec);
+        
+        Ldiff.setTo(Ldiff.mul(sr.w.tracer.traceRay(diffRay, sr.depth+1).mul(ndotwiDiff/pdfDiff.d)));
+        Lspec.setTo(Lspec.mul(sr.w.tracer.traceRay(specRay, sr.depth+1).mul(ndotwiSpec/pdfDiff.d)));
+        L.addLocal(Ldiff);
+        L.addLocal(Lspec);
+        return L;
     }
 }

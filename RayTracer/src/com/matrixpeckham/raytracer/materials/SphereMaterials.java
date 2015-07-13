@@ -171,6 +171,86 @@ public class SphereMaterials extends Material {
         setLineColor(ref);
     }
 
+    @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        double x = sr.localHitPosition.x;
+        double y = sr.localHitPosition.y;
+        double z = sr.localHitPosition.z;
+        //double len = Math.sqrt(x*x+y*y+z*z);
+        //x/=len;
+        //y/=len;
+        //z/=len;
+        double theta = Math.acos(y);
+        double phi = Math.atan2(x,z);
+        if(phi<0)
+            phi+=Utility.TWO_PI;
+        double phiSize = Utility.TWO_PI / numHorizontalCheckers;
+        double thetaSize= Utility.PI / numVerticleCheckers;
+        
+        int iphi=(int)Math.floor(phi/phiSize);
+        int itheta=(int)Math.floor(theta/thetaSize);
+        
+        double fphi = phi/phiSize-iphi;
+        double ftheta=theta/thetaSize-itheta;
+        
+        double phiLineWidth = 0.5*verticleLineWidth;
+        double thetaLineWidth = 0.5*horizontalLineWidth;
+        
+        boolean inOutline = (fphi<phiLineWidth ||fphi>1.0-phiLineWidth)||
+                (ftheta<thetaLineWidth||ftheta>1.0-thetaLineWidth);
+        
+        if((iphi+itheta)%2==0){
+            if(!inOutline){
+                return color1.pathShade(sr);
+            }
+        }else{
+            if(!inOutline){
+                return color2.pathShade(sr);
+            }
+        }
+        return lineColor.pathShade(sr);
+    }
+
+    @Override
+    public RGBColor globalShade(ShadeRec sr) {
+        double x = sr.localHitPosition.x;
+        double y = sr.localHitPosition.y;
+        double z = sr.localHitPosition.z;
+        //double len = Math.sqrt(x*x+y*y+z*z);
+        //x/=len;
+        //y/=len;
+        //z/=len;
+        double theta = Math.acos(y);
+        double phi = Math.atan2(x,z);
+        if(phi<0)
+            phi+=Utility.TWO_PI;
+        double phiSize = Utility.TWO_PI / numHorizontalCheckers;
+        double thetaSize= Utility.PI / numVerticleCheckers;
+        
+        int iphi=(int)Math.floor(phi/phiSize);
+        int itheta=(int)Math.floor(theta/thetaSize);
+        
+        double fphi = phi/phiSize-iphi;
+        double ftheta=theta/thetaSize-itheta;
+        
+        double phiLineWidth = 0.5*verticleLineWidth;
+        double thetaLineWidth = 0.5*horizontalLineWidth;
+        
+        boolean inOutline = (fphi<phiLineWidth ||fphi>1.0-phiLineWidth)||
+                (ftheta<thetaLineWidth||ftheta>1.0-thetaLineWidth);
+        
+        if((iphi+itheta)%2==0){
+            if(!inOutline){
+                return color1.globalShade(sr);
+            }
+        }else{
+            if(!inOutline){
+                return color2.globalShade(sr);
+            }
+        }
+        return lineColor.globalShade(sr);
+    }
+
 
     
 }

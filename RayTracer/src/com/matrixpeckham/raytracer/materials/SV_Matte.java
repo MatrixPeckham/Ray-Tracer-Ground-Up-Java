@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.materials;
 import com.matrixpeckham.raytracer.brdfs.Lambertian;
 import com.matrixpeckham.raytracer.brdfs.SV_Lambertian;
 import com.matrixpeckham.raytracer.textures.Texture;
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -79,7 +80,31 @@ public class SV_Matte extends Material {
     }
     
     
-    
+        @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        DoubleRef pdf = new DoubleRef();
+        RGBColor f = diffuseBRDF.sampleF(sr, wo, wi, pdf);
+        double ndotwi=sr.normal.dot(wi);
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+        return f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(ndotwi/pdf.d));
+    }
+
+    @Override
+    public RGBColor globalShade(ShadeRec sr) {
+        RGBColor L = new RGBColor();
+        if(sr.depth==0)L.setTo(shade(sr));
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        DoubleRef pdf = new DoubleRef();
+        RGBColor f = diffuseBRDF.sampleF(sr, wo, wi, pdf);
+        double ndotwi=sr.normal.dot(wi);
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+        L.addLocal(f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(ndotwi/pdf.d)));
+        return L;
+    }
+
     @Override
     public Material clone() {
         return new SV_Matte(this);

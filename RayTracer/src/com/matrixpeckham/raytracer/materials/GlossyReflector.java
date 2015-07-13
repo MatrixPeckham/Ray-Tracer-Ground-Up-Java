@@ -67,6 +67,32 @@ public class GlossyReflector extends Phong {
         
         return L; //To change body of generated methods, choose Tools | Templates.
     }
+    @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        RGBColor L = super.pathShade(sr);
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        DoubleRef pdf=new DoubleRef();
+        RGBColor fr = glossySpecularBrdf.sampleF(sr, wo, wi, pdf);
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(
+                sr.normal.dot(wi)/pdf.d));
+        
+        return L; //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    public RGBColor globalShade(ShadeRec sr) {
+        RGBColor L = super.globalShade(sr);
+        Vector3D wo = sr.ray.d.neg();
+        Vector3D wi = new Vector3D();
+        DoubleRef pdf=new DoubleRef();
+        RGBColor fr = glossySpecularBrdf.sampleF(sr, wo, wi, pdf);
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(
+                sr.normal.dot(wi)/pdf.d));
+        
+        return L; //To change body of generated methods, choose Tools | Templates.
+    }
 
     public void setCr(RGBColor c) {
         glossySpecularBrdf.setCs(c);

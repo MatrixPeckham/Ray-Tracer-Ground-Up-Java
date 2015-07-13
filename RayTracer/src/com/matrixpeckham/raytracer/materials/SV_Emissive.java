@@ -56,7 +56,27 @@ public class SV_Emissive extends Material {
             return Utility.BLACK;
         }
     }
-    
+        @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        if(sr.normal.neg().dot(sr.ray.d)>0){
+            return ce.getColor(sr).mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
+    }
+
+    @Override
+    public RGBColor globalShade(ShadeRec sr) {
+        if(sr.depth==1){
+            return Utility.BLACK;
+        }
+        if(sr.normal.neg().dot(sr.ray.d)>0){
+            return ce.getColor(sr).mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
+    }
+
     
     
     @Override
