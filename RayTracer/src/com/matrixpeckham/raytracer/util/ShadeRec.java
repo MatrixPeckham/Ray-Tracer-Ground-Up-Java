@@ -26,17 +26,17 @@ import com.matrixpeckham.raytracer.world.World;
  */
 public class ShadeRec {
     public boolean hitAnObject=false;
-    public Point3D hitPoint = new Point3D();
-    public Point3D localHitPosition=new Point3D();
-    public Normal normal=new Normal();
-    public RGBColor color=new RGBColor(Utility.BLACK);
-    public World w;
+    public final Point3D hitPoint = new Point3D();
+    public final Point3D localHitPosition=new Point3D();
+    public final Normal normal=new Normal();
+    public final RGBColor color=new RGBColor(Utility.BLACK);
+    public final World w;
     public double lastT = Double.POSITIVE_INFINITY;
     public double t=0;
     public double u = 0;
     public double v = 0;
     public int depth=0;
-    public Ray ray = new Ray();
+    public final Ray ray = new Ray();
     public Material material = null;
     public ShadeRec(World w){
         this.w=w;
@@ -51,7 +51,7 @@ public class ShadeRec {
         t=r.t;
         depth=r.depth;
         if(r.material!=null)
-            material=r.material.clone();
+            material=r.material;
         normal.setTo(r.normal);
     }
     

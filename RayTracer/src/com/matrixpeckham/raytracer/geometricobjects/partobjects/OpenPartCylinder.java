@@ -109,7 +109,7 @@ public class OpenPartCylinder extends GeometricObject {
 
                     // test for hitting from inside
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal = sr.normal.neg();
+                        sr.normal .setTo( sr.normal.neg());
                     }
 
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
@@ -131,12 +131,12 @@ public class OpenPartCylinder extends GeometricObject {
 
                 if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     sr.lastT = t;
-                    sr.normal = new Normal((ox + t * dx) * invRadius, 0.0, (oz
-                            + t * dz) * invRadius);
+                    sr.normal .setTo( new Normal((ox + t * dx) * invRadius, 0.0, (oz
+                            + t * dz) * invRadius));
 
                     // test for hitting inside surface
                     if (ray.d.neg().dot(sr.normal) < 0.0) {
-                        sr.normal = sr.normal.neg();
+                        sr.normal .setTo( sr.normal.neg());
                     }
 
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,

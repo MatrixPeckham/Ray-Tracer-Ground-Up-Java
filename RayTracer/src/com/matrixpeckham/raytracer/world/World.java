@@ -256,7 +256,7 @@ public class World {
             if(ob.hit(ray,sr)&&(sr.lastT<tmin)){
                 sr.hitAnObject=true;
                 tmin=sr.lastT;
-                sr.color=ob.getColor();
+                sr.color.setTo(ob.getColor());
             }
         }
         

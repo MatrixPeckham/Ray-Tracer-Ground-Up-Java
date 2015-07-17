@@ -85,7 +85,7 @@ public class Matte extends Material {
         RGBColor f = diffuseBRDF.sampleF(sr, wo, wi, pdf);
         double ndotwi=sr.normal.dot(wi);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        return f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(ndotwi/pdf.d));
+        return f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(ndotwi/pdf.d);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class Matte extends Material {
     }
 
     public void setSampler(Sampler sampler) {
-        diffuseBRDF.setSampler(sampler.clone());
+        diffuseBRDF.setSampler(sampler);
         
     }
 }

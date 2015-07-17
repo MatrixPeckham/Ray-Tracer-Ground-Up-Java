@@ -151,13 +151,13 @@ public class Box extends GeometricObject {
         if (t0 < t1 && t1 > Utility.EPSILON) {  // condition for a hit
             if (t0 > Utility.EPSILON) {
                 sr.lastT = t0;  			// ray hits outside surface
-                sr.normal = getNormal(face_in);
+                sr.normal .setTo( getNormal(face_in));
             } else {
                 sr.lastT = t1;				// ray hits inside surface
-                sr.normal = getNormal(face_out);
+                sr.normal .setTo( getNormal(face_out));
             }
 
-            sr.localHitPosition = ray.o.add(Vector3D.mul(sr.lastT, ray.d));
+            sr.localHitPosition .setTo( ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
             return (true);
         } else {
             return (false);

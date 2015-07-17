@@ -48,7 +48,8 @@ public class BuildFigure07 implements BuildWorldFunction {
 // This builds the scene for Figure 26.7
 
 //	int numSamples = 1;		// for Figure 26.7(a)
-	int numSamples = 100;		// for Figure 26.7(b)
+        int numSamples = 1024; //test
+//	int numSamples = 100;		// for Figure 26.7(b)
 //	int numSamples = 1024;		// for Figure 26.7(c)
 //	int numSamples = 10000;	// for Figure 26.7(d)
 		
@@ -59,7 +60,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 	
 	w.backgroundColor = Utility.BLACK;
 	
-	w.tracer = new Whitted(w);
+	w.tracer = new PathTrace(w);
 	
 	Pinhole pinholePtr = new Pinhole();
 	pinholePtr.setEye(27.6, 27.4, -80.0);

@@ -75,7 +75,7 @@ public class OpenCone extends GeometricObject {
                     sr.lastT = t;
                     sr.normal.setTo(calcNormal(ray.o.add(ray.d.mul(t))));
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal = sr.normal.neg();
+                        sr.normal .setTo( sr.normal.neg());
                     }
                     sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                     return true;
@@ -88,7 +88,7 @@ public class OpenCone extends GeometricObject {
                     sr.lastT = t;
                     sr.normal.setTo(calcNormal(ray.o.add(ray.d.mul(t))));
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal = sr.normal.neg();
+                        sr.normal .setTo( sr.normal.neg());
                     }
                     sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                     return true;

@@ -45,7 +45,7 @@ public class GlobalTrace extends Tracer{
             ShadeRec sr = new ShadeRec(world.hitObjects(ray));
             if(sr.hitAnObject){
                 sr.depth=depth;
-                sr.ray=ray;
+                sr.ray.setTo(ray);
                 return sr.material.globalShade(sr);
             } else {
                 return world.backgroundColor;

@@ -45,7 +45,7 @@ public class Whitted extends Tracer{
             ShadeRec sr = new ShadeRec(world.hitObjects(ray));
             if(sr.hitAnObject){
                 sr.depth=depth;
-                sr.ray=ray;
+                sr.ray.setTo(ray);
                 return sr.material.shade(sr);
             } else {
                 return world.backgroundColor;

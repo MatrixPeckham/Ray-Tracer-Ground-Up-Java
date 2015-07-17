@@ -128,8 +128,8 @@ public class ConvexPartCylinder extends GeometricObject {
 
                 if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     sr.lastT = t;
-                    sr.normal = new Normal((ox + t * dx) * invRadius, 0.0, (oz
-                            + t * dz) * invRadius);
+                    sr.normal .setTo( new Normal((ox + t * dx) * invRadius, 0.0, (oz
+                            + t * dz) * invRadius));
 
 				// test for hitting inside surface
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,

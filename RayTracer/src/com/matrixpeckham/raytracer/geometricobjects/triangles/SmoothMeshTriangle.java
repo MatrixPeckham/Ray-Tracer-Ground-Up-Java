@@ -94,7 +94,7 @@ public class SmoothMeshTriangle extends MeshTriangle {
 					
 	sr.lastT 				= t;
 	sr.normal 			.setTo( interpolateNormal(beta, gamma)); // for smooth shading
-	sr.localHitPosition 	= ray.o .add(  ray.d.mul(t));	
+	sr.localHitPosition 	.setTo( ray.o .add(  ray.d.mul(t)));	
 	
 	return (true);	    }
     

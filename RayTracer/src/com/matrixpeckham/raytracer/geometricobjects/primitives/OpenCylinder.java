@@ -115,8 +115,8 @@ public class OpenCylinder extends GeometricObject {
 
                 if (yhit > y0 && yhit < y1) {
                     sr.lastT = t;
-                    sr.normal = new Normal((ox + t * dx) * invRadius, 0.0, (oz
-                            + t * dz) * invRadius);
+                    sr.normal .setTo( new Normal((ox + t * dx) * invRadius, 0.0, (oz
+                            + t * dz) * invRadius));
 
 				// test for hitting inside surface
                     if (ray.d.neg().dot(sr.normal) < 0.0) {

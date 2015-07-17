@@ -34,12 +34,12 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  * @author William Matrix Peckham
  */
 public class Rectangle extends GeometricObject{
-    private Point3D p0 = new Point3D(-1,0,-1);
-    private Vector3D a = new Vector3D(0,0,2);
-    private Vector3D b = new Vector3D(2,0,0);
+    private final Point3D p0 = new Point3D(-1,0,-1);
+    private final Vector3D a = new Vector3D(0,0,2);
+    private final Vector3D b = new Vector3D(2,0,0);
     private double aLenSquared = 4;
     private double bLenSquared = 4;
-    private Normal normal = new Normal(0,1,0);
+    private final Normal normal = new Normal(0,1,0);
     private double area = 4;
     private double invArea = 0.25;
     private Sampler sampler = null;
@@ -54,7 +54,7 @@ public class Rectangle extends GeometricObject{
         area=a.length()*b.length();
         invArea=1/area;
         sampler=null;
-        normal=new Normal(a.cross(b));
+        normal.setTo(a.cross(b));
         normal.normalize();
     }
     public Rectangle(Point3D p, Vector3D a, Vector3D b, Normal n){

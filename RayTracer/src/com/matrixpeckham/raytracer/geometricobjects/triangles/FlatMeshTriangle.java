@@ -84,8 +84,8 @@ public class FlatMeshTriangle extends MeshTriangle {
 		return (false);
 					
 	sr.lastT 				= t;
-	sr.normal 			= normal;  				// for flat shading
-	sr.localHitPosition 	= ray.o .add(  ray.d.mul(t));	
+	sr.normal 			.setTo(normal);  				// for flat shading
+	sr.localHitPosition 	.setTo( ray.o .add(  ray.d.mul(t)));	
 	
 	return (true);	    }
     
