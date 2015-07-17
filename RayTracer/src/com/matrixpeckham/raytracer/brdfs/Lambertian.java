@@ -81,7 +81,7 @@ public class Lambertian extends BRDF{
     }
 
     public void setSampler(Sampler clone) {
-        this.sampler=clone;
+        this.sampler=clone.clone();
         this.sampler.mapSamplesToHemisphere(1);
         
     }

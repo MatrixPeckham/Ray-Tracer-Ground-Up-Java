@@ -23,7 +23,6 @@ import com.matrixpeckham.raytracer.materials.Emissive;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.tracers.PathTrace;
-import com.matrixpeckham.raytracer.tracers.Whitted;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
@@ -35,7 +34,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure07 implements BuildWorldFunction {
+public class BuildFigure10A implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -45,13 +44,9 @@ public class BuildFigure07 implements BuildWorldFunction {
 //	See the file COPYING.txt for the full license.
 
 
-// This builds the scene for Figure 26.7
+// This builds the scene for Figure 26.10(a)
 
-//	int numSamples = 1;		// for Figure 26.7(a)
-//        int numSamples = 1024; //test
-	int numSamples = 100;		// for Figure 26.7(b)
-//	int numSamples = 1024;		// for Figure 26.7(c)
-//	int numSamples = 10000;	// for Figure 26.7(d)
+	int numSamples = 100;
 		
 	w.vp.setHres(300);	  		
 	w.vp.setVres(300);
@@ -135,7 +130,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 	Matte mattePtr3 = new Matte();
 	mattePtr3.setKa(0.0);
 	mattePtr3.setKd(0.6); 
-	mattePtr3.setCd(1.0);	 // Utility.WHITE
+	mattePtr3.setCd(Utility.WHITE);	
 	mattePtr3.setSampler(new MultiJittered(numSamples));
 	
 	p0 = new Point3D(0.0, 0.0, depth);
@@ -219,7 +214,6 @@ public class BuildFigure07 implements BuildWorldFunction {
 	Rectangle shortSidePtr4 = new Rectangle(p0, a, b);
 	shortSidePtr4.setMaterial(mattePtr3);
 	w.addObject(shortSidePtr4);
-	
 	
 	
 	

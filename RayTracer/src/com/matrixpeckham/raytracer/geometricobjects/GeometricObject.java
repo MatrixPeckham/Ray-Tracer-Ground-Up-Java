@@ -66,7 +66,7 @@ public abstract class GeometricObject {
     }
     
     public void setMaterial(Material mat){
-        material=mat;
+        material=mat.clone();
     }
     
     public RGBColor getColor() {

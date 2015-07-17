@@ -19,10 +19,11 @@ package com.matrixpeckham.raytracer.build.figures.ch26;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
+import com.matrixpeckham.raytracer.lights.Ambient;
+import com.matrixpeckham.raytracer.lights.AreaLight;
 import com.matrixpeckham.raytracer.materials.Emissive;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
-import com.matrixpeckham.raytracer.tracers.PathTrace;
 import com.matrixpeckham.raytracer.tracers.Whitted;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -35,7 +36,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure07 implements BuildWorldFunction {
+public class BuildFigure10B implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -45,23 +46,24 @@ public class BuildFigure07 implements BuildWorldFunction {
 //	See the file COPYING.txt for the full license.
 
 
-// This builds the scene for Figure 26.7
+// This builds the scene for Figure 26.10(b)
 
-//	int numSamples = 1;		// for Figure 26.7(a)
-//        int numSamples = 1024; //test
-	int numSamples = 100;		// for Figure 26.7(b)
-//	int numSamples = 1024;		// for Figure 26.7(c)
-//	int numSamples = 10000;	// for Figure 26.7(d)
+	int numSamples = 1;
 		
 	w.vp.setHres(300);	  		
 	w.vp.setVres(300);
 	w.vp.setSamples(numSamples); 
-	w.vp.setMaxDepth(10);
+	w.vp.setMaxDepth(0);
 	
 	w.backgroundColor = Utility.BLACK;
 	
-	w.tracer = new PathTrace(w);
+	w.tracer = new Whitted(w);
 	
+	Ambient ambientPtr = new Ambient();
+	ambientPtr.scaleRadiance(0.0);
+	w.setAmbient(ambientPtr);
+	
+		
 	Pinhole pinholePtr = new Pinhole();
 	pinholePtr.setEye(27.6, 27.4, -80.0);
 	pinholePtr.setLookat(27.6, 27.4, 0.0);
@@ -80,20 +82,26 @@ public class BuildFigure07 implements BuildWorldFunction {
 	double height 	= 54.88;  	// y direction
 	double depth 	= 55.92;	// z direction
 	
-	
-	// the ceiling light - doesn't need samples
-	
+		
 	Emissive emissivePtr = new Emissive();
 	emissivePtr.setCe(1.0, 0.73, 0.4);   
-	emissivePtr.scaleRadiance(100);
+	emissivePtr.scaleRadiance(100.0);
 	
 	p0 = new Point3D(21.3, height - 0.001, 22.7);
 	a = new Vector3D(0.0, 0.0, 10.5);
 	b = new Vector3D(13.0, 0.0, 0.0);
 	normal = new Normal(0.0, -1.0, 0.0);
+	
 	Rectangle lightPtr = new Rectangle(p0, a, b, normal);
 	lightPtr.setMaterial(emissivePtr);
+	lightPtr.setSampler(new MultiJittered(numSamples));
+	lightPtr.setShadows(false);
 	w.addObject(lightPtr);
+	
+	AreaLight ceilingLightPtr = new AreaLight();   
+	ceilingLightPtr.setObject(lightPtr);		
+	ceilingLightPtr.setShadows(true);
+	w.addLight(ceilingLightPtr);
 	
 		
 	// left wall
@@ -102,7 +110,6 @@ public class BuildFigure07 implements BuildWorldFunction {
 	mattePtr1.setKa(0.0);
 	mattePtr1.setKd(0.6); 
 	mattePtr1.setCd(0.57, 0.025, 0.025);	 // red
-	mattePtr1.setSampler(new MultiJittered(numSamples));
 	
 	p0 = new Point3D(width, 0.0, 0.0);
 	a = new Vector3D(0.0, 0.0, depth);
@@ -118,8 +125,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 	Matte mattePtr2 = new Matte();
 	mattePtr2.setKa(0.0);
 	mattePtr2.setKd(0.6); 
-	mattePtr2.setCd(0.37, 0.59, 0.2);	 // green   from Photoshop
-	mattePtr2.setSampler(new MultiJittered(numSamples));
+	mattePtr2.setCd(0.37, 0.59, 0.2);	 // green  
 	
 	p0 = new Point3D(0.0, 0.0, 0.0);
 	a = new Vector3D(0.0, 0.0, depth);
@@ -135,8 +141,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 	Matte mattePtr3 = new Matte();
 	mattePtr3.setKa(0.0);
 	mattePtr3.setKd(0.6); 
-	mattePtr3.setCd(1.0);	 // Utility.WHITE
-	mattePtr3.setSampler(new MultiJittered(numSamples));
+	mattePtr3.setCd(Utility.WHITE);
 	
 	p0 = new Point3D(0.0, 0.0, depth);
 	a = new Vector3D(width, 0.0, 0.0);
@@ -219,7 +224,6 @@ public class BuildFigure07 implements BuildWorldFunction {
 	Rectangle shortSidePtr4 = new Rectangle(p0, a, b);
 	shortSidePtr4.setMaterial(mattePtr3);
 	w.addObject(shortSidePtr4);
-	
 	
 	
 	
