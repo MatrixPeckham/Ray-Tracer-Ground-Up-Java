@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer;
 
-import com.matrixpeckham.raytracer.build.BuildFigure09B_Extra;
 import com.matrixpeckham.raytracer.util.BruteForceSolver;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
@@ -116,7 +115,7 @@ public class Main extends JFrame implements ActionListener{
      * The builder that will create the scene we render.
      */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch26.BuildFigure12A();
+    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch27.BuildFigure32();
     /**
      * Number of pixels that have been rendered.
      */

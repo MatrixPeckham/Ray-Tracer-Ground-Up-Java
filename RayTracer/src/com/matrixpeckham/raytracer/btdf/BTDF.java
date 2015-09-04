@@ -15,44 +15,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.tracers;
+package com.matrixpeckham.raytracer.btdf;
 
 import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.world.World;
+import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
- * Whitted tracer, pretty much the same as raycast tracer.
+ *
  * @author William Matrix Peckham
  */
-public class Whitted extends Tracer{
-
-    public Whitted() {
-        super();
+public abstract class BTDF {
+    public BTDF(){}
+    public BTDF(BTDF v){}
+    public BTDF setTo(BTDF o){
+        return this;
     }
-
-    public Whitted(World w) {
-        super(w);
+    public abstract BTDF clone();
+    public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi){
+        return Utility.BLACK;
     }
-
-    @Override
-    public RGBColor traceRay(Ray ray, int depth) {
-        if(depth>world.vp.maxDepth){
-            return Utility.BLACK;
-        } else {
-            ShadeRec sr = new ShadeRec(world.hitObjects(ray));
-            if(sr.hitAnObject){
-                sr.depth=depth;
-                sr.ray.setTo(ray);
-                sr.lastT=sr.t;
-                return sr.material.shade(sr);
-            } else {
-                return world.backgroundColor;
-            }
-        }
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi){
+        return Utility.BLACK;
     }
-    
-    
+    public RGBColor rho(ShadeRec sr, Vector3D wo){
+        return Utility.BLACK;
+    }
 }

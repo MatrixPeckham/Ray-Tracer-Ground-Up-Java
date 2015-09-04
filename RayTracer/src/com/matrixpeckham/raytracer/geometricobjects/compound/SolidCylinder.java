@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
 import com.matrixpeckham.raytracer.materials.Matte;
@@ -38,7 +39,7 @@ public class SolidCylinder extends Compound {
                 0), cylinderRadius);
         Disk bottomd = new Disk(new Point3D(0, bottom, 0), new Normal(0, -1,
                 0), cylinderRadius);
-        OpenCylinder cyl = new OpenCylinder(bottom, top, cylinderRadius);
+        ConvexPartCylinder cyl = new ConvexPartCylinder(bottom, top, cylinderRadius,0,360);
         addObject(topd);
         addObject(bottomd);
         addObject(cyl);

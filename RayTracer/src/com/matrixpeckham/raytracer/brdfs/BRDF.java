@@ -27,9 +27,10 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  *
  * @author William Matrix Peckham
  */
-public class BRDF {
+public abstract class BRDF {
     public BRDF(){}
     public BRDF(BRDF brdf){}
+    public abstract BRDF clone();
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi){
         return Utility.BLACK;
     }

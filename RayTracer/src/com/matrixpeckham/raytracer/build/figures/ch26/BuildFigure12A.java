@@ -47,7 +47,7 @@ public class BuildFigure12A implements BuildWorldFunction {
 
 
 // This builds the scene for Figure 26.12(a)
-	int numSamples = 1024;
+	int numSamples = 1;
 		
 	w.vp.setHres(300);	  		
 	w.vp.setVres(300);
