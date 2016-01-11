@@ -47,8 +47,10 @@ public class Whitted extends Tracer{
                 sr.depth=depth;
                 sr.ray.setTo(ray);
                 sr.lastT=sr.t;
+                
                 return sr.material.shade(sr);
             } else {
+                sr.lastT=Double.POSITIVE_INFINITY;
                 return world.backgroundColor;
             }
         }
