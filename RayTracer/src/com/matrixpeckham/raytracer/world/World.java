@@ -233,7 +233,7 @@ public class World {
         }
         //restore the saved lowest values
         if(sr.hitAnObject){
-            sr.t=tmin;
+            //sr.t=tmin;
             sr.lastT=tmin;
             sr.normal.setTo(normal);
             sr.localHitPosition.setTo(localHitPoint);

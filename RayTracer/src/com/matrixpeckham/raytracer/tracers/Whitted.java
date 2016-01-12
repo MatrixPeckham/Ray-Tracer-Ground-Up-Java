@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.tracers;
 
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -38,7 +39,7 @@ public class Whitted extends Tracer{
     }
 
     @Override
-    public RGBColor traceRay(Ray ray, int depth) {
+    public RGBColor traceRay(Ray ray,DoubleRef t, int depth) {
         if(depth>world.vp.maxDepth){
             return Utility.BLACK;
         } else {
@@ -46,14 +47,24 @@ public class Whitted extends Tracer{
             if(sr.hitAnObject){
                 sr.depth=depth;
                 sr.ray.setTo(ray);
-                sr.lastT=sr.t;
+                t.d=sr.lastT;
                 
                 return sr.material.shade(sr);
             } else {
-                sr.lastT=Double.POSITIVE_INFINITY;
+                t.d=Utility.HUGE_VALUE;
                 return world.backgroundColor;
             }
         }
+    }
+
+    @Override
+    public RGBColor traceRay(Ray ray, int depth) {
+        return traceRay(ray,new DoubleRef(), depth); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public RGBColor traceRay(Ray ray) {
+        return traceRay(ray,0); //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -148,7 +148,7 @@ public class RGBColor {
 
     // the average of the components
     public double average(){
-        return 0.33333333333333333333333333333333f *(r+g+b);
+        return 0.33333333333333333333333333333333d *(r+g+b);
     }
 
     public void setTo(double d) {

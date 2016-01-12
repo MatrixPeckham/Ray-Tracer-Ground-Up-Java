@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.tracers;
 
+import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
@@ -46,7 +47,9 @@ public class Tracer {
      * @param ray
      * @return 
      */
-    public RGBColor traceRay(Ray ray){return Utility.BLACK;}
+    public RGBColor traceRay(Ray ray){
+        return Utility.BLACK;
+    }
     /**
      * Trace a ray to a color taking into account the current depth.
      * should bail out if depth is over the world.vp.maxDepth.
@@ -55,4 +58,9 @@ public class Tracer {
      * @return 
      */
     public RGBColor traceRay(Ray ray, int depth){return Utility.BLACK;}
+    public RGBColor traceRay(Ray ray,DoubleRef t, int depth) {
+        t.d=0;
+        return traceRay(ray,depth);
+    }
+
 }

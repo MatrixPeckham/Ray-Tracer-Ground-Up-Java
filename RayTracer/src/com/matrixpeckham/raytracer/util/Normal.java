@@ -111,8 +111,8 @@ public class Normal {
     }
 
     // multiplication by a double on the right
-    public Normal mul(double a) {
-        return new Normal(x * a, y * a, z * a);
+    public Vector3D mul(double a) {
+        return new Vector3D(x * a, y * a, z * a);
     }
 
     // convert normal to a unit normal

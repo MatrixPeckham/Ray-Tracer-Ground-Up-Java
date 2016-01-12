@@ -82,7 +82,7 @@ public class Compound extends GeometricObject {
         }
         
         if(hit){
-            s.t=tmin;
+            //s.t=tmin;
             s.lastT=tmin;
             s.normal.setTo(n);
             s.localHitPosition.setTo(localHitPoint);

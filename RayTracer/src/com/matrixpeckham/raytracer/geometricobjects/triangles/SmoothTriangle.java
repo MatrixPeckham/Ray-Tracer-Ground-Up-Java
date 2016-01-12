@@ -66,8 +66,8 @@ public class SmoothTriangle extends GeometricObject {
     }
 
     private Normal interpolateNormal(double beta, double gamma) {
-        Normal normal = n0.mul(1 - beta - gamma).add(n1.mul(beta)).add(n2.mul(
-                gamma));
+        Normal normal = new Normal(n0.mul(1 - beta - gamma).add(n1.mul(beta)).add(n2.mul(
+                gamma)));
         normal.normalize();
         return normal;
     }

@@ -32,7 +32,7 @@ public class ShadeRec {
     public final RGBColor color=new RGBColor(Utility.BLACK);
     public final World w;
     public double lastT = Double.POSITIVE_INFINITY;
-    public double t=0;
+    //public double t=0;
     public double u = 0;
     public double v = 0;
     public int depth=0;
@@ -48,7 +48,8 @@ public class ShadeRec {
         color.setTo(r.color);
         w=r.w;
         ray.setTo(r.ray);
-        t=r.t;
+        //t=r.t;
+        lastT=r.lastT;
         depth=r.depth;
         if(r.material!=null)
             material=r.material;

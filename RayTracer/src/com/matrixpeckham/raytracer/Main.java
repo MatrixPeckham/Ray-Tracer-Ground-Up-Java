@@ -515,6 +515,15 @@ public class Main extends JFrame implements ActionListener {
                     }
                 });
                 menu.add(item);
+                try {
+                    builder=cls.newInstance();
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(Main.class.getName()).
+                            log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(Main.class.getName()).
+                            log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
