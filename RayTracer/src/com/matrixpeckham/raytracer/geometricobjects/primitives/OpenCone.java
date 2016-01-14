@@ -100,6 +100,7 @@ public class OpenCone extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows)return false;
         double t = Utility.HUGE_VALUE;
         double x = ray.o.x;
         double y = ray.o.y;

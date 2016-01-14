@@ -111,7 +111,7 @@ public class AmbientOccluder extends Light{
         int numObjects = sr.w.objects.size();
         DoubleRef t = new DoubleRef();
         for(int j=0; j<numObjects; j++){
-            if(sr.w.objects.get(j).shadowHit(shadowRay, t)){
+            if(sr.w.objects.get(j).shadowHit(shadowRay, t)&&sr.material.getShadows()){
                 return true;
             }
         }

@@ -87,7 +87,7 @@ public class AreaLight extends Light {
         int numObjects = sr.w.objects.size();
         double ts = (samplePoint.sub(ray.o).dot(ray.d));
         for(int j = 0; j<numObjects; j++){
-            if(sr.w.objects.get(j).shadowHit(ray, t)&&t.d<ts){
+            if(sr.w.objects.get(j).shadowHit(ray, t)&&t.d<ts&&sr.material.getShadows()){
                 return true;
             }
         }

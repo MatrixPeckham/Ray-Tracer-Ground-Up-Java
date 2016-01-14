@@ -67,7 +67,7 @@ public class Phong extends Material {
                     Ray shadowRay=new Ray(sr.hitPoint,wi);
                     inShadow = sr.w.lights.get(j).inShadow(shadowRay,sr);
                 }
-                if (!inShadow) {
+                if (!inShadow||!shadow) {
                     L.addLocal(diffuseBRDF.f(sr, wo, wi).add(specularBRDF.f(sr, wo,
                             wi)).mul(sr.w.lights.get(j).
                                     L(sr)).mul(sr.w.lights.get(j).G(sr)*ndotwi/sr.w.lights.get(j).pdf(sr)));
@@ -130,7 +130,7 @@ public class Phong extends Material {
         Ray specRay = new Ray(sr.hitPoint,wiSpec);
         
         Ldiff.setTo(Ldiff.mul(sr.w.tracer.traceRay(diffRay, sr.depth+1).mul(ndotwiDiff/pdfDiff.d)));
-        Lspec.setTo(Lspec.mul(sr.w.tracer.traceRay(specRay, sr.depth+1).mul(ndotwiSpec/pdfDiff.d)));
+        Lspec.setTo(Lspec.mul(sr.w.tracer.traceRay(specRay, sr.depth+1).mul(ndotwiSpec/pdfSpec.d)));
         L.addLocal(Ldiff);
         L.addLocal(Lspec);
         return L;
@@ -155,7 +155,7 @@ public class Phong extends Material {
         Ray specRay = new Ray(sr.hitPoint,wiSpec);
         
         Ldiff.setTo(Ldiff.mul(sr.w.tracer.traceRay(diffRay, sr.depth+1).mul(ndotwiDiff/pdfDiff.d)));
-        Lspec.setTo(Lspec.mul(sr.w.tracer.traceRay(specRay, sr.depth+1).mul(ndotwiSpec/pdfDiff.d)));
+        Lspec.setTo(Lspec.mul(sr.w.tracer.traceRay(specRay, sr.depth+1).mul(ndotwiSpec/pdfSpec.d)));
         L.addLocal(Ldiff);
         L.addLocal(Lspec);
         return L;

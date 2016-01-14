@@ -132,6 +132,7 @@ public class ConvexPartSphere extends GeometricObject {
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        if(!shadows)return false;
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);

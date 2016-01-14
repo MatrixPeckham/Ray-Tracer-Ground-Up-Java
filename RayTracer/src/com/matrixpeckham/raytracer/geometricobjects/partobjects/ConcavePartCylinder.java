@@ -46,6 +46,9 @@ public class ConcavePartCylinder extends GeometricObject {
         invRadius = 1;
     }
 
+    public ConcavePartCylinder(double y0, double y1, double radius){
+        this(y0, y1, radius, 0, 360);
+    }
     public ConcavePartCylinder(double y0, double y1, double radius,
             double azimuthmin,
             double azimuthmax) {

@@ -94,7 +94,7 @@ public class Directional extends Light{
         DoubleRef t = new DoubleRef(0); 
         int numObjects = sr.w.objects.size();
         for(int j=0;j<numObjects;j++){
-            if(sr.w.objects.get(j).shadowHit(ray,t)){
+            if(sr.w.objects.get(j).shadowHit(ray,t)&&sr.material.getShadows()){
                 return true;
             }
         }

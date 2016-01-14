@@ -70,7 +70,7 @@ public class SV_Phong extends Material {
                     Ray shadowRay=new Ray(sr.hitPoint,wi);
                     inShadow = sr.w.lights.get(j).inShadow(shadowRay,sr);
                 }
-                if (!inShadow) {
+                if (!inShadow||!shadow) {
                     L.addLocal(diffuseBRDF.f(sr, wo, wi).add(specularBRDF.f(sr, wo,
                             wi)).mul(sr.w.lights.get(j).
                                     L(sr)).mul(sr.w.lights.get(j).G(sr)*ndotwi/sr.w.lights.get(j).pdf(sr)));

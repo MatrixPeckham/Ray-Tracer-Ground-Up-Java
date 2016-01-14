@@ -31,8 +31,8 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  * @author William Matrix Peckham
  */
 public class Dielectric extends Phong {
-    private RGBColor cfIn=new RGBColor();
-    private RGBColor cfOut=new RGBColor();
+    private RGBColor cfIn=new RGBColor(1);
+    private RGBColor cfOut=new RGBColor(1);
     FresnelReflector fresnelBRDF;
     FresnelTransmitter fresnelBTDF;
     
@@ -93,10 +93,10 @@ public class Dielectric extends Phong {
                 L.addLocal(Lt.mul(cfOut.powc(t.d)));
             } else {
                 //reflect outside
-                Lr=(sr.w.tracer.traceRay(reflectedRay,t, sr.depth+1).mul(Math.abs(ndotwi)).mul(fr));
+                Lr=sr.w.tracer.traceRay(reflectedRay,t, sr.depth+1).mul(Math.abs(ndotwi)).mul(fr);
                 L.addLocal(Lr.mul(cfOut.powc(t.d)));
                 //transmit inside
-                Lt=(sr.w.tracer.traceRay(transmittedRay,t,sr.depth+1).mul(Math.abs(ndotwt)).mul(ft));
+                Lt=sr.w.tracer.traceRay(transmittedRay,t,sr.depth+1).mul(Math.abs(ndotwt)).mul(ft);
                 L.addLocal(Lt.mul(cfIn.powc(t.d)));
             }
             
@@ -123,9 +123,31 @@ public class Dielectric extends Phong {
         cfOut.setTo(c);
     }
 
-    public void setKt(double d) {
+    /*public void setKt(double d) {
         fresnelBTDF.setKt(d);
+    }*/
+
+    @Override
+    public void setCd(RGBColor brown) {
+        super.setCd(brown); //To change body of generated methods, choose Tools | Templates.
+        //cfIn.setTo(brown);
     }
+
+    public void setCfIn(double r, double g, double b) {
+        setCfIn(new RGBColor(r, g, b));
+    }
+    public void setCfIn(double r) {
+        setCfIn(new RGBColor(r, r, r));
+    }
+    public void setCfOut(double r, double g, double b) {
+        setCfOut(new RGBColor(r, g, b));
+    }
+    public void setCfOut(double r) {
+        setCfOut(new RGBColor(r, r, r));
+    }
+
+    
+    
     
     
 }

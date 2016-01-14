@@ -33,6 +33,7 @@ import com.matrixpeckham.raytracer.world.World;
 public class FishEye extends Camera {
 
     private double psiMax = 90;
+    private boolean rectangular=false;
 
     public FishEye() {
 
@@ -69,7 +70,7 @@ public class FishEye extends Camera {
                     pp.y = s * (r - 0.5 * vres + sp.y);
                     ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
 
-                    if (r_squared.d <= 1.0) {
+                    if (rectangular||r_squared.d <= 1.0) {
                         L.addLocal(w.tracer.traceRay(ray, depth));
                     }
                 }
@@ -107,7 +108,7 @@ public class FishEye extends Camera {
                     pp.y = s * (r - 0.5 * vres + sp.y);
                     ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
 
-                    if (r_squared.d <= 1.0) {
+                    if (rectangular||r_squared.d <= 1.0) {
                         L.addLocal(w.tracer.traceRay(ray, depth));
                     }
                 }
@@ -129,7 +130,7 @@ public class FishEye extends Camera {
         Point2D pn = new Point2D(2.0 / (s * hres) * pp.x, 2.0 / (s * vres)
                 * pp.y);
         r_squared.d = pn.x * pn.x + pn.y * pn.y;
-        if (r_squared.d <= 1.0) {
+        if (rectangular||r_squared.d <= 1.0) {
             double r = Math.sqrt(r_squared.d);
             double psi = r * psiMax * Utility.PI_ON_180;
             double sinPsi = Math.sin(psi);
@@ -147,6 +148,10 @@ public class FishEye extends Camera {
 
     public void setFov(double d) {
         psiMax = d / 2;
+    }
+
+    public void setRectangular(boolean b) {
+        rectangular=b;
     }
 
 }

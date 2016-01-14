@@ -105,7 +105,6 @@ public class BuildFigure05 implements BuildWorldFunction{
 	
 	Dielectric dielectic = new Dielectric();
 	dielectic.setKs(0.2);
-	dielectic.setKt(1);
 	dielectic.setExp(2000.0);
 //	dielectic.setIorIn(1.5);		// for Figure 28.5(a)
 	dielectic.setIorIn(0.75);	// for Figure 28.5(b)

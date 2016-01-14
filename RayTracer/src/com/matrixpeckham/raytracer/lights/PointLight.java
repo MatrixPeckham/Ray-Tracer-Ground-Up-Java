@@ -102,7 +102,7 @@ public class PointLight extends Light{
         int numObjects = sr.w.objects.size();
         double d = location.distance(ray.o);
         for(int j=0;j<numObjects;j++){
-            if(sr.w.objects.get(j).shadowHit(ray,t)&&t.d<d){
+            if(sr.w.objects.get(j).shadowHit(ray,t)&&t.d<d&&sr.material.getShadows()){
                 return true;
             }
         }

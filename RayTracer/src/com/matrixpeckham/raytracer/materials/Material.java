@@ -26,13 +26,23 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
  * @author William Matrix Peckham
  */
 public abstract class Material {
+    protected boolean shadow=true;
     public Material(){}
-    public Material(Material mat){}
+    public Material(Material mat){
+        shadow=mat.shadow;
+    }
     public abstract Material clone();
     public abstract RGBColor shade(ShadeRec sr);
     public abstract RGBColor pathShade(ShadeRec sr);
     public abstract RGBColor globalShade(ShadeRec sr);
     public RGBColor getLe(ShadeRec sr) {
         return Utility.BLACK;
+    }
+
+    public void setShadows(boolean s){
+        shadow=s;
+    }
+    public boolean getShadows() {
+        return shadow;
     }
 }

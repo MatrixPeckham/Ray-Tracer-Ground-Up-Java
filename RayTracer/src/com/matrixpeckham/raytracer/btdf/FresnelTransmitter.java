@@ -30,11 +30,11 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 public class FresnelTransmitter  extends BTDF{
     private double iorIn=1;
     private double iorOut=1;
-    private double kt=0;
+    //private double kt=0;
     
-    public void setKt(double k){
+    /*public void setKt(double k){
         this.kt=k;
-    }
+    }*/
 
     public FresnelTransmitter() {
     }
@@ -54,9 +54,9 @@ public class FresnelTransmitter  extends BTDF{
         wt.setTo(wo.neg().div(eta).sub(new Vector3D(n).mul(cosTheta2-cosThetaI/eta)));
         double abs = Math.abs(sr.normal.dot(wt));
         double eta2 = eta*eta;
-        double kte = kt/eta2;
+        double kte = fresnel(sr)/eta2;
         RGBColor mul = Utility.WHITE.mul(kte);
-        return mul.div(abs).mul(fresnel(sr));
+        return mul.div(abs);
     }
     public double fresnel(ShadeRec sr) {
         Normal normal = new Normal(sr.normal);
@@ -89,7 +89,7 @@ public class FresnelTransmitter  extends BTDF{
         super(fresnelBTDF);
         iorIn=fresnelBTDF.iorIn;
         iorOut=fresnelBTDF.iorOut;
-        kt=fresnelBTDF.kt;
+        //kt=fresnelBTDF.kt;
     }
     public boolean tir(ShadeRec sr) {
         Vector3D wo = sr.ray.d.neg();
