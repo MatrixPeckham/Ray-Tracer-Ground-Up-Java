@@ -31,8 +31,11 @@ public abstract class Light {
     protected boolean shadows = true;
 
     public Light(){}
-    public Light(Light ls){}
+    public Light(Light ls){
+        this.shadows=ls.shadows;
+    }
     public Light setTo(Light l){
+        this.shadows=l.shadows;
         return this;
     }
     public abstract Light clone();

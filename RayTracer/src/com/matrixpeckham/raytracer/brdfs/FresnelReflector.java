@@ -32,19 +32,20 @@ public class FresnelReflector extends BRDF {
     private double iorIn = 1;
     private double iorOut = 1;
 
-    public FresnelReflector(){}
-    
+    public FresnelReflector() {
+    }
+
     public FresnelReflector(FresnelReflector fresnelBRDF) {
         super(fresnelBRDF);
-        iorIn=fresnelBRDF.iorIn;
-        iorOut=fresnelBRDF.iorOut;
+        iorIn = fresnelBRDF.iorIn;
+        iorOut = fresnelBRDF.iorOut;
     }
 
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wr) {
         double ndotwo = sr.normal.dot(wo);
         wr.setTo(wo.neg().add(sr.normal.mul(ndotwo * 2)));
-        return Utility.WHITE.mul(fresnel(sr)/Math.abs(sr.normal.dot(wr)));
+        return Utility.WHITE.mul(fresnel(sr) / Math.abs(sr.normal.dot(wr)));
     }
 
     @Override
@@ -64,10 +65,10 @@ public class FresnelReflector extends BRDF {
             eta = iorIn / iorOut;
         }
 
-        double cos_thiori = normal.neg().dot( sr.ray.d);
+        double cos_thiori = normal.neg().dot(sr.ray.d);
         double temp = 1.0 - (1.0 - cos_thiori * cos_thiori) / (eta * eta);
-        double cos_thiort = Math.sqrt(1.0 - (1.0 - cos_thiori * cos_thiori) / (eta
-                * eta));
+        double cos_thiort = Math.sqrt(1.0 - (1.0 - cos_thiori * cos_thiori)
+                / (eta * eta));
         double r_parallel = (eta * cos_thiori - cos_thiort) / (eta * cos_thiori
                 + cos_thiort);
         double r_perpendicular = (cos_thiori - eta * cos_thiort) / (cos_thiori
@@ -79,11 +80,20 @@ public class FresnelReflector extends BRDF {
     }
 
     public void setIorIn(double d) {
-        iorIn=d;
+        iorIn = d;
     }
 
     public void setIorOut(double d) {
-        iorOut=d;
+        iorOut = d;
     }
 
 }
+
+
+
+
+
+
+
+
+

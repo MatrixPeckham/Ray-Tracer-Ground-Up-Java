@@ -18,11 +18,13 @@
 package com.matrixpeckham.raytracer.build.figures.ch28;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
-import com.matrixpeckham.raytracer.lights.Directional;
+import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Dielectric;
+import com.matrixpeckham.raytracer.materials.Reflective;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.Checker3D;
 import com.matrixpeckham.raytracer.tracers.Whitted;
@@ -37,7 +39,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure15A implements BuildWorldFunction {
+public class BuildFigure44 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -46,99 +48,75 @@ public class BuildFigure15A implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-// This builds the scene for Figure 28.15(a)
-// We only need maxDepth = 6 for rays to get through the spheres, but the center part
-// of the image changes with maxDepth = 7.
-// There is also the issue of rays that are reflected off the interior spheres.
-// The opical environment inside the spheres is quite complex.
-        int numSamples = 1;
+// This builds the scene for Figure 28.44
+        int numSamples = 25;
 
         w.vp.setHres(600);
         w.vp.setVres(600);
         w.vp.setSamples(numSamples);
-        w.vp.setMaxDepth(7);
+        w.vp.setMaxDepth(12);
 
-        w.backgroundColor =new RGBColor(0.0, 0.3, 0.25);  // blue green
+        w.backgroundColor = new RGBColor(0.9, 0.9, 1);  // pale blue
 
         w.tracer = new Whitted(w);
 
         Ambient ambientPtr = new Ambient();
-        ambientPtr.scaleRadiance(0.25);
+        ambientPtr.scaleRadiance(0.5);
         w.setAmbient(ambientPtr);
 
         Pinhole pinholePtr = new Pinhole();
-        pinholePtr.setEye(5, 3, 10);
+        pinholePtr.setEye(0, 0, 3);
         pinholePtr.setLookat(new Point3D(0.0));
-        pinholePtr.setViewDistance(700);
+        pinholePtr.setViewDistance(450.0);		// for Figure 28.44(a)
+//	pinholePtr.setViewDistance(1800.0);		// for Figure 28.44(b)
         pinholePtr.computeUVW();
         w.setCamera(pinholePtr);
 
-        Directional lightPtr = new Directional();
-        lightPtr.setDirection(0, 1, 0);    // straight down
-        lightPtr.scaleRadiance(7.5);
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(10, 20, 20);
+        lightPtr.scaleRadiance(15.0);
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// nested spheres
-        RGBColor glassColor=new RGBColor(0.95, 0.95, 1);  	// faint blue
-	RGBColor diamondColor=new RGBColor(1, 1, 0.8);  	// lemon
-	RGBColor waterColor=new RGBColor(1, 0.5, 1);  		// mauve
-	
-	Point3D center=new Point3D(0.5, 0, 0.5);  			// common centre
-	
-	
-	// outer sphere - glass
-	
-	Dielectric glassPtr = new Dielectric();
-        glassPtr.setKs(0.1);
-        glassPtr.setExp(2000.0);
-        glassPtr.setIorIn(1.5); 			// water
-        glassPtr.setIorOut(1.0);			// air
-        glassPtr.setCfIn(glassColor);
-        glassPtr.setCfOut(Utility.WHITE);
+	// reflective sphere inside cube
+        Reflective reflectivePtr = new Reflective();
+        reflectivePtr.setKa(0.3);
+        reflectivePtr.setKd(0.25);
+        reflectivePtr.setCd(0, 0.25, 1);
+        reflectivePtr.setKr(0.65);
 
-        Sphere spherePtr1 = new Sphere(center, 3.5);
-        spherePtr1.setMaterial(glassPtr);
+        Sphere spherePtr1 = new Sphere(new Point3D(0.0), 0.75);
+        spherePtr1.setMaterial(reflectivePtr);
         w.addObject(spherePtr1);
 
-	// middle sphere - diamond
-        Dielectric diamondPtr = new Dielectric();
-        diamondPtr.setKs(0.1);
-        diamondPtr.setExp(2000.0);
-        diamondPtr.setIorIn(2.42); 			// diamond
-        diamondPtr.setIorOut(1.5);			// glass
-        diamondPtr.setCfIn(diamondColor);
-        diamondPtr.setCfOut(glassColor);
+	// transparent cube
+        RGBColor glassColor = new RGBColor(0.64, 0.98, 0.88);	// light cyan
 
-        Sphere spherePtr2 = new Sphere(center, 2.0);
-        spherePtr2.setMaterial(diamondPtr);
-        w.addObject(spherePtr2);
+        Dielectric glassPtr = new Dielectric();
+        glassPtr.setExp(2000.0);
+        glassPtr.setIorIn(1.5);					// glass
+        glassPtr.setIorOut(1.0);				// air
+        glassPtr.setCfIn(glassColor);
+        glassPtr.setCfOut(Utility.WHITE);
+        glassPtr.setShadows(false);
 
-	// inner sphere - water
-        Dielectric waterPtr = new Dielectric();
-        waterPtr.setKs(0.1);
-        waterPtr.setExp(2000.0);
-        waterPtr.setIorIn(1.33); 			// water
-        waterPtr.setIorOut(2.42); 			// diamond
-        waterPtr.setCfIn(waterColor);
-        waterPtr.setCfOut(diamondColor);
+        Box boxPtr = new Box(new Point3D(-1.0), new Point3D(1.0));
+        boxPtr.setMaterial(glassPtr);
+        w.addObject(boxPtr);
 
-        Sphere spherePtr3 = new Sphere(center, 0.6);
-        spherePtr3.setMaterial(waterPtr);
-        w.addObject(spherePtr3);
-
-	// ground plane
+	// plane
         Checker3D checkerPtr = new Checker3D();
-        checkerPtr.setSize(2.0);
-        checkerPtr.setColor1(0.25);
-        checkerPtr.setColor2(Utility.WHITE);
+        checkerPtr.setSize(4.0);
+        checkerPtr.setColor1(1, 1, 0.4);    		// yellow
+        checkerPtr.setColor2(1, 0.5, 0);   		// orange
 
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.5);
-        svMattePtr.setKd(0.35);
+        svMattePtr.setKd(0.1);
         svMattePtr.setCd(checkerPtr);
 
-        Plane planePtr = new Plane(new Point3D(0, -6.5, 0), new Normal(0, 1, 0));
+        Plane planePtr
+                = new Plane(new Point3D(0, -10.1, 0), new Normal(0, 1, 0));
         planePtr.setMaterial(svMattePtr);
         w.addObject(planePtr);
     }

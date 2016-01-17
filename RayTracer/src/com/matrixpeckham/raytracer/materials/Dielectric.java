@@ -31,20 +31,21 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  * @author William Matrix Peckham
  */
 public class Dielectric extends Phong {
-    private RGBColor cfIn=new RGBColor(1);
-    private RGBColor cfOut=new RGBColor(1);
+
+    private RGBColor cfIn = new RGBColor(1);
+    private RGBColor cfOut = new RGBColor(1);
     FresnelReflector fresnelBRDF;
     FresnelTransmitter fresnelBTDF;
-    
-    public Dielectric(){
-        fresnelBRDF=new FresnelReflector();
-        fresnelBTDF=new FresnelTransmitter();
+
+    public Dielectric() {
+        fresnelBRDF = new FresnelReflector();
+        fresnelBTDF = new FresnelTransmitter();
     }
-    
-    public Dielectric(Dielectric cp){
+
+    public Dielectric(Dielectric cp) {
         super(cp);
-        fresnelBRDF=new FresnelReflector(cp.fresnelBRDF);
-        fresnelBTDF=new FresnelTransmitter(cp.fresnelBTDF);
+        fresnelBRDF = new FresnelReflector(cp.fresnelBRDF);
+        fresnelBTDF = new FresnelTransmitter(cp.fresnelBTDF);
         cfIn.setTo(cp.cfIn);
         cfOut.setTo(cp.cfOut);
     }
@@ -53,55 +54,57 @@ public class Dielectric extends Phong {
     public Material clone() {
         return new Dielectric(this); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    
+
     @Override
     public RGBColor shade(ShadeRec sr) {
         RGBColor L = super.shade(sr); //To change body of generated methods, choose Tools | Templates.
-        
-        Vector3D wi = new Vector3D();
+
+        final Vector3D wi = new Vector3D();
         Vector3D wo = new Vector3D(sr.ray.d.neg());
         RGBColor fr = fresnelBRDF.sampleF(sr, wo, wi);
-        Ray reflectedRay=new Ray(sr.hitPoint,wi);
-        RGBColor Lr;
-        RGBColor Lt;
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+        final RGBColor Lr = new RGBColor();
+        final RGBColor Lt = new RGBColor();
         double ndotwi = sr.normal.dot(wi);
         DoubleRef t = new DoubleRef(Utility.HUGE_VALUE);
-        if(fresnelBTDF.tir(sr)){//total internal reflection
-            if(ndotwi<0){
+        if (fresnelBTDF.tir(sr)) {//total internal reflection
+            if (ndotwi < 0) {
                 //inside
-                Lr = sr.w.tracer.traceRay(reflectedRay,t, sr.depth+1);
+                Lr.setTo(sr.w.tracer.traceRay(reflectedRay, t, sr.depth + 1));
                 L.addLocal(cfIn.powc(t.d).mul(Lr));
             } else {
                 //reflected outside
-                Lr = sr.w.tracer.traceRay(reflectedRay,t, sr.depth+1);
+                Lr.setTo(sr.w.tracer.traceRay(reflectedRay, t, sr.depth + 1));
                 L.addLocal(cfOut.powc(t.d).mul(Lr));
             }
         } else {
             Vector3D wt = new Vector3D();
             RGBColor ft = fresnelBTDF.sampleF(sr, wo, wt);
-            Ray transmittedRay = new Ray(sr.hitPoint,wt);
+            Ray transmittedRay = new Ray(sr.hitPoint, wt);
             double ndotwt = sr.normal.dot(wt);
-            
-            if(ndotwi<0){
+
+            if (ndotwi < 0) {
                 //reflect inside
-                Lr=sr.w.tracer.traceRay(reflectedRay,t, sr.depth+1).mul(Math.abs(ndotwi)).mul(fr);
+                Lr.setTo(sr.w.tracer.traceRay(reflectedRay, t, sr.depth + 1).
+                        mul(Math.abs(ndotwi)).mul(fr));
                 L.addLocal(Lr.mul(cfIn.powc(t.d)));
                 //transmit outside
-                Lt=sr.w.tracer.traceRay(transmittedRay,t,sr.depth+1).mul(Math.abs(ndotwt)).mul(ft);
+                Lt.setTo(sr.w.tracer.traceRay(transmittedRay, t, sr.depth + 1).
+                        mul(Math.abs(ndotwt)).mul(ft));
                 L.addLocal(Lt.mul(cfOut.powc(t.d)));
             } else {
                 //reflect outside
-                Lr=sr.w.tracer.traceRay(reflectedRay,t, sr.depth+1).mul(Math.abs(ndotwi)).mul(fr);
+                Lr.setTo(sr.w.tracer.traceRay(reflectedRay, t, sr.depth + 1).
+                        mul(Math.abs(ndotwi)).mul(fr));
                 L.addLocal(Lr.mul(cfOut.powc(t.d)));
                 //transmit inside
-                Lt=sr.w.tracer.traceRay(transmittedRay,t,sr.depth+1).mul(Math.abs(ndotwt)).mul(ft);
+                Lt.setTo(sr.w.tracer.traceRay(transmittedRay, t, sr.depth + 1).
+                        mul(Math.abs(ndotwt)).mul(ft));
                 L.addLocal(Lt.mul(cfIn.powc(t.d)));
             }
-            
+
         }
-        
+
         return L;
     }
 
@@ -124,9 +127,8 @@ public class Dielectric extends Phong {
     }
 
     /*public void setKt(double d) {
-        fresnelBTDF.setKt(d);
-    }*/
-
+     fresnelBTDF.setKt(d);
+     }*/
     @Override
     public void setCd(RGBColor brown) {
         super.setCd(brown); //To change body of generated methods, choose Tools | Templates.
@@ -136,18 +138,17 @@ public class Dielectric extends Phong {
     public void setCfIn(double r, double g, double b) {
         setCfIn(new RGBColor(r, g, b));
     }
+
     public void setCfIn(double r) {
         setCfIn(new RGBColor(r, r, r));
     }
+
     public void setCfOut(double r, double g, double b) {
         setCfOut(new RGBColor(r, g, b));
     }
+
     public void setCfOut(double r) {
         setCfOut(new RGBColor(r, r, r));
     }
 
-    
-    
-    
-    
 }

@@ -27,37 +27,35 @@ import com.matrixpeckham.raytracer.util.Vector3D;
  *
  * @author William Matrix Peckham
  */
-public class FresnelTransmitter  extends BTDF{
-    private double iorIn=1;
-    private double iorOut=1;
-    //private double kt=0;
-    
-    /*public void setKt(double k){
-        this.kt=k;
-    }*/
+public class FresnelTransmitter extends BTDF {
+
+    private double iorIn = 1;
+    private double iorOut = 1;
 
     public FresnelTransmitter() {
     }
-    
-        @Override
+
+    @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wt) {
         Normal n = new Normal(sr.normal);
         double cosThetaI = n.dot(wo);
-        double eta = iorIn/iorOut;
-        if(cosThetaI<0){
-            cosThetaI=-cosThetaI;
+        double eta = iorIn / iorOut;
+        if (cosThetaI < 0) {
+            cosThetaI = -cosThetaI;
             n.setTo(n.neg());
-            eta=1/eta;
+            eta = 1 / eta;
         }
-        double temp = 1-(1-cosThetaI*cosThetaI)/(eta*eta);
-        double cosTheta2=Math.sqrt(temp);
-        wt.setTo(wo.neg().div(eta).sub(new Vector3D(n).mul(cosTheta2-cosThetaI/eta)));
+        double temp = 1 - (1 - cosThetaI * cosThetaI) / (eta * eta);
+        double cosTheta2 = Math.sqrt(temp);
+        wt.setTo(wo.neg().div(eta).sub(new Vector3D(n).mul(cosTheta2 - cosThetaI
+                / eta)));
         double abs = Math.abs(sr.normal.dot(wt));
-        double eta2 = eta*eta;
-        double kte = fresnel(sr)/eta2;
+        double eta2 = eta * eta;
+        double kte = fresnel(sr) / eta2;
         RGBColor mul = Utility.WHITE.mul(kte);
         return mul.div(abs);
     }
+
     public double fresnel(ShadeRec sr) {
         Normal normal = new Normal(sr.normal);
         double ndotd = normal.neg().dot(sr.ray.d);
@@ -70,10 +68,10 @@ public class FresnelTransmitter  extends BTDF{
             eta = iorIn / iorOut;
         }
 
-        double cos_thiori = normal.neg().dot( sr.ray.d);
+        double cos_thiori = normal.neg().dot(sr.ray.d);
         double temp = 1.0 - (1.0 - cos_thiori * cos_thiori) / (eta * eta);
-        double cos_thiort = Math.sqrt(1.0 - (1.0 - cos_thiori * cos_thiori) / (eta
-                * eta));
+        double cos_thiort = Math.sqrt(1.0 - (1.0 - cos_thiori * cos_thiori)
+                / (eta * eta));
         double r_parallel = (eta * cos_thiori - cos_thiort) / (eta * cos_thiori
                 + cos_thiort);
         double r_perpendicular = (cos_thiori - eta * cos_thiort) / (cos_thiori
@@ -81,19 +79,18 @@ public class FresnelTransmitter  extends BTDF{
         double kr = 0.5 * (r_parallel * r_parallel + r_perpendicular
                 * r_perpendicular);
 
-        return (1-kr);
+        return (1 - kr);
     }
 
-    
     public FresnelTransmitter(FresnelTransmitter fresnelBTDF) {
         super(fresnelBTDF);
-        iorIn=fresnelBTDF.iorIn;
-        iorOut=fresnelBTDF.iorOut;
-        //kt=fresnelBTDF.kt;
+        iorIn = fresnelBTDF.iorIn;
+        iorOut = fresnelBTDF.iorOut;
     }
+
     public boolean tir(ShadeRec sr) {
         Vector3D wo = sr.ray.d.neg();
-        double cosThetaI=sr.normal.dot(wo);
+        double cosThetaI = sr.normal.dot(wo);
         double eta;
         double ndotd = sr.normal.neg().dot(sr.ray.d);
         if (ndotd < 0.0) {
@@ -101,10 +98,8 @@ public class FresnelTransmitter  extends BTDF{
         } else {
             eta = iorIn / iorOut;
         }
-        return (1-(1-cosThetaI*cosThetaI)/(eta*eta))<0;
+        return (1 - (1 - cosThetaI * cosThetaI) / (eta * eta)) < 0;
     }
-    
-    
 
     @Override
     public BTDF clone() {
@@ -112,11 +107,11 @@ public class FresnelTransmitter  extends BTDF{
     }
 
     public void setIorOut(double d) {
-        iorOut=d;
+        iorOut = d;
     }
 
     public void setIorIn(double d) {
-        iorIn=d;
+        iorIn = d;
     }
 
 }

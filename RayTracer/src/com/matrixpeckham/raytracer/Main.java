@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
@@ -481,7 +482,8 @@ public class Main extends JFrame implements ActionListener {
         fillMenu(fullList, menu);
     }
 
-    private void fillMenu(TreeMap<String, TreeOrClass> map, JMenuItem menu) {
+    private void fillMenu(TreeMap<String, TreeOrClass> map, JMenuItem jmenu) {
+        ArrayList<JMenuItem> menu = new ArrayList<>();
         for(Map.Entry<String,TreeOrClass> entry : map.entrySet()){
             String name = entry.getKey();
             TreeOrClass val = entry.getValue();
@@ -494,7 +496,7 @@ public class Main extends JFrame implements ActionListener {
                     menu.add(sub);
                     fillMenu(val.asTree,sub);
                 } else {
-                    fillMenu(val.asTree,menu);
+                    fillMenu(val.asTree,jmenu);
                 }
             } else if(val.asClass!=null){
                 JMenuItem item = new JMenuItem(name);
@@ -524,6 +526,25 @@ public class Main extends JFrame implements ActionListener {
                     Logger.getLogger(Main.class.getName()).
                             log(Level.SEVERE, null, ex);
                 }
+            }
+        }
+        if(menu.size()>20){
+            int numSubs = (int)Math.ceil(menu.size()/10.0);
+            int index = 0;
+            JMenuItem info = new JMenuItem("Too Many Items");
+            info.setEnabled(false);
+            jmenu.add(info);
+            for(int sub = 0; sub < numSubs && index < menu.size(); sub++){
+                JMenu subMenu = new JMenu("Options "+(sub*10+1)+"-"+Math.min(((sub+1)*10),menu.size()));
+                for(int i = 0; i<10 && index<menu.size(); i++){
+                    subMenu.add(menu.get(index));
+                    index++;
+                }
+                jmenu.add(subMenu);
+            }
+        } else {
+            for(JMenuItem item : menu){
+                jmenu.add(item);
             }
         }
     }
