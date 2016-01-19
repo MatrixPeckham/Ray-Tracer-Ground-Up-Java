@@ -18,51 +18,97 @@
 package com.matrixpeckham.raytracer.util;
 
 /**
+ * Class to represent normals
  * @author William Matrix Peckham
  */
 public class Normal {
 
+    /**
+     * x
+     */
     public double x;
+    
+    /**
+     * y
+     */
     public double y;
+    
+    /**
+     * z
+     */
     public double z;
+
+    /**
+     * string rep of normal useful for debugging
+     * @return 
+     */
     @Override
     public String toString(){
         return "("+x+","+y+","+z+")Normal";
     }
 
-    // default ructor
+    /**
+     * normal (0,0,0)
+     */
     public Normal() {
         this(0);
     }
 
-    // ructor
+    /**
+     * normal (a,a,a)
+     * @param a 
+     */
     public Normal(double a) {
         this(a, a, a);
     }
+
+    /**
+     * set normal to (x,y,z)
+     * @param x
+     * @param y
+     * @param z 
+     */
     public void setTo(double x, double y, double z){
         this.x=x;
         this.y=y;
         this.z=z;
     }
 
-    // ructor
+    /**
+     * new normal (x,y,z)
+     * @param _x
+     * @param _y
+     * @param _z 
+     */
     public Normal(double _x, double _y, double _z) {
         x = _x;
         y = _y;
         z = _z;
     }
 
-    // copy ructor
+
+    /**
+     * copy constructor
+     * @param n 
+     */
     public Normal(Normal n) {
         this(n.x, n.y, n.z);
     }
 
-    // ructs a normal from vector
+
+    /**
+     * construct normal from vector
+     * @param v 
+     */
     public Normal(Vector3D v) {
         this(v.x, v.y, v.z);
     }
 
-    // assignment operator
+    /**
+     * java equals operator
+     * @param rhs
+     * @return 
+     */
     public Normal setTo(Normal rhs) {
         x = rhs.x;
         y = rhs.y;
@@ -70,7 +116,11 @@ public class Normal {
         return this;
     }
 
-    // assignment of a vector to a normal
+    /**
+     * copys vector into this normal
+     * @param rhs
+     * @return 
+     */
     public Normal setTo(Vector3D rhs) {
         x = rhs.x;
         y = rhs.y;
@@ -78,7 +128,11 @@ public class Normal {
         return this;
     }
 
-    // assignment of a point to a normal
+    /**
+     * sets this normal to point
+     * @param rhs
+     * @return 
+     */
     public Normal setTo(
             Point3D rhs) {
         x = rhs.x;
@@ -87,17 +141,28 @@ public class Normal {
         return this;
     }
 
-    // unary minus
+    /**
+     * negation, returns new vector
+     * @return 
+     */
     public Normal neg() {
         return new Normal(-x, -y, -z);
     }
 
-    // addition
+    /**
+     * add two normals returns new vector
+     * @param n
+     * @return 
+     */
     public Normal add(Normal n) {
         return new Normal(x + n.x, y + n.y, z + n.z);
     }
 
-    // compound addition
+    /**
+     * add a vector to this one return this one
+     * @param n
+     * @return 
+     */
     public Normal addLocal(Normal n) {
         x += n.x;
         y += n.y;
@@ -105,17 +170,27 @@ public class Normal {
         return this;
     }
 
-    // dot product with a vector on the right
+    /**
+     * dot product
+     * @param v
+     * @return 
+     */
     public double dot(Vector3D v) {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    // multiplication by a double on the right
+    /**
+     * scale normal
+     * @param a
+     * @return 
+     */
     public Vector3D mul(double a) {
         return new Vector3D(x * a, y * a, z * a);
     }
 
-    // convert normal to a unit normal
+    /**
+     * normalizes this normal
+     */
     public void normalize() {
         double len = Math.sqrt(x * x + y * y + z * z);
         x /= len;
@@ -123,22 +198,52 @@ public class Normal {
         z /= len;
     }
 
+    /**
+     * static method to left multiply normal and scalar
+     * @param a
+     * @param n
+     * @return 
+     */
     public static Normal mul(double a, Normal n) {
         return new Normal(a * n.x, a * n.y, a * n.z);
     }
 
+    /**
+     * adds a vector to a normal.
+     * @param v
+     * @param n
+     * @return 
+     */
     public static Vector3D add(Vector3D v, Normal n) {
         return new Vector3D(v.x + n.x, v.y + n.y, v.z + n.z);
     }
-
+    
+    /**
+     * subtracts a normal from a vector.
+     * @param v
+     * @param n
+     * @return 
+     */
     public static Vector3D sub(Vector3D v, Normal n) {
         return new Vector3D(v.x - n.x, v.y - n.y, v.z - n.z);
     }
 
+    /**
+     * dot product of two normals.
+     * @param v
+     * @param n
+     * @return 
+     */
     public static double dot(Vector3D v, Normal n) {
         return v.x * n.x + v.y * n.y + v.z * n.z;
     }
-
+    
+    /**
+     * transforms a normal by a matrix.
+     * @param mat
+     * @param n
+     * @return 
+     */
     public static Normal mul(Matrix mat, Normal n) {
         return new Normal(
                 mat.m[0][0] * n.x + mat.m[1][0] * n.y + mat.m[2][0] * n.z,

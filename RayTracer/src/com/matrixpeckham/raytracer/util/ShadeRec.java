@@ -25,22 +25,79 @@ import com.matrixpeckham.raytracer.world.World;
  * @author William Matrix Peckham
  */
 public class ShadeRec {
+
+    /**
+     * did we hit something
+     */
     public boolean hitAnObject=false;
+    
+    /**
+     * world point hit
+     */
     public final Point3D hitPoint = new Point3D();
+    
+    /**
+     * local hit point
+     */
     public final Point3D localHitPosition=new Point3D();
+    
+    /**
+     * normal at hit point
+     */
     public final Normal normal=new Normal();
+    
+    /**
+     * color, used only in skeleton tracer
+     */
     public final RGBColor color=new RGBColor(Utility.BLACK);
+    
+    /**
+     * world reference
+     */
     public final World w;
+    
+    /**
+     * last hit point
+     */
     public double lastT = Double.POSITIVE_INFINITY;
-    //public double t=0;
+    
+    /**
+     * texture coordinate u
+     */
     public double u = 0;
+    
+    /**
+     * texture coordinate v
+     */
     public double v = 0;
+    
+    /**
+     * depth
+     */
     public int depth=0;
+    
+    /**
+     * ray
+     */
     public final Ray ray = new Ray();
+    
+    /**
+     * material at hit point
+     */
     public Material material = null;
+    
+    /**
+     * Usual constructor with world.
+     * @param w 
+     */
     public ShadeRec(World w){
         this.w=w;
     }
+    
+    /**
+     * Copy constructor.
+     * @param r 
+     */
     public ShadeRec(ShadeRec r){
         hitAnObject=r.hitAnObject;
         localHitPosition.setTo(r.localHitPosition);
@@ -54,6 +111,8 @@ public class ShadeRec {
         if(r.material!=null)
             material=r.material;
         normal.setTo(r.normal);
+        this.u=r.u;
+        this.v=r.v;
     }
     
 }

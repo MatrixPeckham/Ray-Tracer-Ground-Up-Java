@@ -20,16 +20,38 @@ package com.matrixpeckham.raytracer.util;
 import java.math.BigDecimal;
 
 /**
- * Class slolves the quartic equation with brute force equations from the quartic
- * wiki page. SLOW AS MOLASSES need a better way to do torus hit function.
- * uses complex numbers which use bigdecimal, any other way causes overflow, or
- * precision errors. 
+ * Class slolves the quartic equation with brute force equations from the
+ * quartic wiki page. SLOW AS MOLASSES need a better way to do torus hit
+ * function. uses complex numbers which use bigdecimal, any other way causes
+ * overflow, or precision errors.
+ *
  * @author William Matrix Peckham
  */
 public class BruteForceSolver {
 
-    final ComplexNumber a, b, c, d, e;
+    final ComplexNumber a;
+    final ComplexNumber b;
+    final ComplexNumber c;
+    final ComplexNumber d;
+    final ComplexNumber e;
+    ComplexNumber S = null;
+    ComplexNumber D = null;
+    ComplexNumber P = null;
+    ComplexNumber Delt0 = null;
+    ComplexNumber Q = null;
+    ComplexNumber Delt = null;
+    ComplexNumber Delt1 = null;
+    ComplexNumber p = null;
 
+    /**
+     * Solved a quartic with coefficients.
+     *
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     */
     public BruteForceSolver(double a, double b, double c, double d, double e) {
         this.a = new ComplexNumber(a, 0);
         this.b = new ComplexNumber(b, 0);
@@ -75,7 +97,6 @@ public class BruteForceSolver {
 
         return roots;
     }
-    ComplexNumber S = null;
 
     ComplexNumber S() {
         if (S != null) {
@@ -104,7 +125,6 @@ public class BruteForceSolver {
         S = sqrt.mult(0.5);
         return S;
     }
-    ComplexNumber D = null;
 
     ComplexNumber D() {
         if (D != null) {
@@ -120,7 +140,6 @@ public class BruteForceSolver {
                         mult(3));
         return D;
     }
-    ComplexNumber P = null;
 
     ComplexNumber P() {
         if (P != null) {
@@ -129,7 +148,6 @@ public class BruteForceSolver {
         P = a.mult(c).mult(8).sub(b.mult(b).mult(3));
         return P;
     }
-    ComplexNumber Delt0 = null;
 
     ComplexNumber delt0() {
         if (Delt0 == null) {
@@ -137,7 +155,6 @@ public class BruteForceSolver {
         }
         return Delt0;
     }
-    ComplexNumber Q = null;
 
     ComplexNumber Q() {
         if (Q == null) {
@@ -158,8 +175,6 @@ public class BruteForceSolver {
         return frac.cbrt(n);
     }
 
-    ComplexNumber Delt = null;
-
     ComplexNumber delt() {
         if (Delt == null) {
             ComplexNumber de0 = delt0();
@@ -175,7 +190,6 @@ public class BruteForceSolver {
         //              + t6 - t7 - t8 + t9 + t10
         //            - t11 - t12 + t13 - t14 - t15 + t16;
     }
-    ComplexNumber Delt1 = null;
 
     ComplexNumber delt1() {
         if (Delt1 == null) {
@@ -188,14 +202,14 @@ public class BruteForceSolver {
         }
         return Delt1;
     }
-    ComplexNumber p=null;
+
     ComplexNumber p() {
-        if(p==null){
-        ComplexNumber b2 = b.mult(b);
-        ComplexNumber a2 = a.mult(a);
-        ComplexNumber numer = a.mult(c).mult(8).sub(b2.mult(3));
-        ComplexNumber denom = a2.mult(8);
-        p = numer.div(denom);
+        if (p == null) {
+            ComplexNumber b2 = b.mult(b);
+            ComplexNumber a2 = a.mult(a);
+            ComplexNumber numer = a.mult(c).mult(8).sub(b2.mult(3));
+            ComplexNumber denom = a2.mult(8);
+            p = numer.div(denom);
         }
         return p;
     }

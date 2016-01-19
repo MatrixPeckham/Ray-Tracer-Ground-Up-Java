@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer;
 
 import com.matrixpeckham.raytracer.util.BruteForceSolver;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.BorderLayout;

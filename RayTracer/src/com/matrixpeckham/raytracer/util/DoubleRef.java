@@ -26,6 +26,7 @@ public class DoubleRef {
     public double d=0;
     /**zero default*/
     public DoubleRef(){}
-    /**simple setting constructor*/
+    /**simple setting constructor
+     * @param d init value*/
     public DoubleRef(double d){this.d=d;}
 }

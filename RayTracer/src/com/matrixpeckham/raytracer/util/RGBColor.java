@@ -18,42 +18,78 @@
 package com.matrixpeckham.raytracer.util;
 
 /**
- *
+ * Holds double values for RGB colors
  * @author William Matrix Peckham
  */
 public class RGBColor {
 
+    /**
+     * red
+     */
     public double r;
+    
+    /**
+     * green
+     */
     public double g;
+    
+    /**
+     * blue
+     */
     public double b;
+    
+    /**
+     * string rep of this color, useful for debugging
+     * @return 
+     */
     @Override
     public String toString(){
         return "("+r+","+g+","+b+")RGBColor";
     }
 
-    // default ructor
+    /**
+     * default constructor black.
+     */
     public RGBColor() {
         this(0);
     }
 
-    // ructor
+    /**
+     * constructor gray of c intensity
+     * @param c 
+     */
     public RGBColor(double c) {
         this(c, c, c);
     }
+    
+    /**
+     * sets the components
+     * @param x
+     * @param y
+     * @param z 
+     */
     public void setTo(double x, double y, double z){
         this.r=x;
         this.g=y;
         this.b=z;
     }
 
-    // ructor
+    /**
+     * initializes components
+     * @param _r
+     * @param _g
+     * @param _b 
+     */
     public RGBColor(double _r, double _g, double _b) {
         r = _r;
         g = _g;
         b = _b;
     }
 
-    // copy ructor
+    /**
+     * copy constructor
+     * @param c 
+     */
     public RGBColor(
             RGBColor c) {
         r = c.r;
@@ -61,7 +97,11 @@ public class RGBColor {
         b = c.b;
     }
 
-    // assignment operator
+    /**
+     * java equals operator
+     * @param rhs
+     * @return 
+     */
     public RGBColor setTo(RGBColor rhs) {
         r = rhs.r;
         g = rhs.g;
@@ -69,12 +109,20 @@ public class RGBColor {
         return this;
     }
 
-    // addition
+    /**
+     * adds colors and returns new
+     * @param c
+     * @return 
+     */
     public RGBColor add(RGBColor c) {
         return new RGBColor(r + c.r, g + c.g, b + c.b);
     }
 
-    // compound addition
+    /**
+     * in place addition.
+     * @param c
+     * @return 
+     */
     public RGBColor addLocal(RGBColor c) {
         r += c.r;
         g += c.g;
@@ -82,12 +130,20 @@ public class RGBColor {
         return this;
     }
 
-    // multiplication by a double on the right
+    /**
+     * scale color
+     * @param a
+     * @return 
+     */
     public RGBColor mul(double a) {
         return new RGBColor(a * r, a * g, a * b);
     }
 
-    // compound multiplication by a double on the right
+    /**
+     * scales this color in place
+     * @param a
+     * @return 
+     */
     public RGBColor mulLocal(double a) {
         r *= a;
         g *= a;
@@ -95,7 +151,11 @@ public class RGBColor {
         return this;
     }
 
-    // division by a double
+    /**
+     * divide color
+     * @param a
+     * @return 
+     */
     public RGBColor div(double a) {
         return new RGBColor(r / a, g / a, b / a);
     }
@@ -108,12 +168,20 @@ public class RGBColor {
         return this;
     }
 
-    // component-wise multiplication
+    /**
+     * component wise multiplication
+     * @param c
+     * @return 
+     */
     public RGBColor mul(RGBColor c) {
         return new RGBColor(r*c.r, g*c.g, b*c.b);
     }
 
-    // are two RGBColours the same?
+    /**
+     * equals override
+     * @param o
+     * @return 
+     */
     @Override
     public boolean equals( Object o ) {
         if(! (o instanceof RGBColor)) return false;
@@ -121,6 +189,10 @@ public class RGBColor {
         return r==c.r&&g==c.g&&b==c.b;
     }				
 
+    /**
+     * hashcode override, for equals contract
+     * @return 
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -141,16 +213,27 @@ public class RGBColor {
 
     
 
-    // raise components to a power
+    /**
+     * raises components to power
+     * @param p
+     * @return 
+     */
     public RGBColor powc(double p){
         return new RGBColor(Math.pow(r, p), Math.pow(g, p), Math.pow(b, p));
     }
 
-    // the average of the components
+    /**
+     * averages components
+     * @return 
+     */
     public double average(){
         return 0.33333333333333333333333333333333d *(r+g+b);
     }
 
+    /**
+     * sets color to gray of d intensity.
+     * @param d 
+     */
     public void setTo(double d) {
         setTo(d, d, d);
     }

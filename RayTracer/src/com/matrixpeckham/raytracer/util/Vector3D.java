@@ -163,7 +163,7 @@ public class Vector3D {
     /**
      * java substitute for unary minus
      *
-     * @return      *
+     * @return      new negated vector
      */
     public Vector3D neg() {
         return new Vector3D(-x, -y, -z);

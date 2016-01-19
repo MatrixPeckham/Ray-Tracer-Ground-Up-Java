@@ -145,10 +145,11 @@ public class Utility {
     }
 
     /**
-     * Solve quadratic equation 
+     * Solve quadratic equation
+     *
      * @param c
      * @param s
-     * @return 
+     * @return
      */
     public static final int SolveQuadric(double c[], double s[]) {
         double p, q, D;
@@ -175,9 +176,10 @@ public class Utility {
 
     /**
      * solve a cubic
+     *
      * @param c
      * @param s
-     * @return 
+     * @return
      */
     public static final int solveCubic(double c[], double s[]) {
         int i, num;
@@ -241,11 +243,13 @@ public class Utility {
 
         return num;
     }
+
     /**
      * solve a quartic
+     *
      * @param c
      * @param s
-     * @return 
+     * @return
      */
     public static final int solveQuartic(double c[], double s[]) {
         double[] coeffs = new double[4];
@@ -341,41 +345,93 @@ public class Utility {
         return num;
     }
 
-    public static double mod(double a, double b){
+    /**
+     * Modulus double operator. a%b
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static double mod(double a, double b) {
         int n = (int) (a / b);
-	
-	a -= n * b;
-	if (a < 0.0)
-		a += b;
-	
-	return (a);
+
+        a -= n * b;
+        if (a < 0.0) {
+            a += b;
+        }
+
+        return (a);
     }
-    
-    public static double smoothPulse(double e0, double e1, double e2, double e3, double x) {
-        return (smoothStep (e0, e1, x) - smoothStep (e2, e3, x));
+
+    /**
+     * Smooth pulse 0 x for 0-e1 and e3-1 one for e2-e3 lerped between.
+     * @param e0
+     * @param e1
+     * @param e2
+     * @param e3
+     * @param x
+     * @return 
+     */
+    public static double smoothPulse(double e0, double e1, double e2, double e3,
+            double x) {
+        return (smoothStep(e0, e1, x) - smoothStep(e2, e3, x));
     }
-    
-    public static double smoothPulseTrain(double e0, double e1, double e2, double e3, double period, double x){
+
+    /**
+     * same as pulse, but repeated for period
+     * @param e0
+     * @param e1
+     * @param e2
+     * @param e3
+     * @param period
+     * @param x
+     * @return 
+     */
+    public static double smoothPulseTrain(double e0, double e1, double e2,
+            double e3, double period, double x) {
         return (smoothPulse(e0, e1, e2, e3, mod(x, period)));
     }
     
-    public static double smoothStep(double a, double b, double x){
-        if (x < a)
-		return (0.0);
-	
-	if (x >= b)
-		return (1.0);
-		
-	double y = (x - a) / ( b - a);  // normalise to [0, 1]
-	
-	return (y * y * (3.0 - 2.0 * y));
+    /**
+     * Steps from as x ranges [0-1] returns 0 for x [0-a] 1 for x [b-inf] lerp from 0-1 for x [a-b].
+     * @param a
+     * @param b
+     * @param x
+     * @return 
+     */
+    public static double smoothStep(double a, double b, double x) {
+        if (x < a) {
+            return (0.0);
+        }
+
+        if (x >= b) {
+            return (1.0);
+        }
+
+        double y = (x - a) / (b - a);  // normalise to [0, 1]
+
+        return (y * y * (3.0 - 2.0 * y));
     }
-    
-    public static RGBColor mixColor(RGBColor c0, RGBColor c1, double f){
-        return c0.mul(1-f).add(c1.mul(f));
+
+    /**
+     * lerps color
+     * @param c0
+     * @param c1
+     * @param f
+     * @return 
+     */
+    public static RGBColor mixColor(RGBColor c0, RGBColor c1, double f) {
+        return c0.mul(1 - f).add(c1.mul(f));
     }
-    
-    public static double mixDouble(double a, double b, double f){
+
+    /**
+     * lerps double
+     * @param a
+     * @param b
+     * @param f
+     * @return 
+     */
+    public static double mixDouble(double a, double b, double f) {
         return ((1.0 - f) * a + f * b);
     }
 }
