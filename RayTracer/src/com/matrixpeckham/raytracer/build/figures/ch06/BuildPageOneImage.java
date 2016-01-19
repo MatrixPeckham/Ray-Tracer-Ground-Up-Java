@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch06;
 
 import com.matrixpeckham.raytracer.cameras.ThinLens;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
@@ -39,7 +39,7 @@ import static java.lang.Math.abs;
  *
  * @author William Matrix Peckham
  */
-public class BuildCh06PageOneImage implements BuildWorldFunction {
+public class BuildPageOneImage implements BuildWorldFunction {
 
     @Override
     public void build(World w) {

@@ -53,6 +53,19 @@ public class MultipleObjects extends Tracer{
         }
         return world.backgroundColor;
     }
+    /**
+     * Second simplest implementation of traceRay.
+     * @param ray
+     * @return 
+     */
+    @Override
+    public RGBColor traceRay(Ray ray, int d) {
+        ShadeRec sr = world.hitBareBonesObjects(ray);
+        if(sr.hitAnObject){
+            return sr.color;
+        }
+        return world.backgroundColor;
+    }
 
 
 }

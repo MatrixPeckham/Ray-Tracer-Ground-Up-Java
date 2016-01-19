@@ -32,13 +32,21 @@ import java.util.TreeMap;
  */
 public class PLYFile {
 
+    /**
+     * reads a line from a stream
+     * @param in
+     * @return
+     * @throws IOException 
+     */
     static String readLine(BufferedInputStream in) throws IOException {
         //builds a string
         StringBuilder s = new StringBuilder();
         char c = (char) in.read();
         //append to the string
+        //carriege return linefeed or NONChar (EOF)
         while ("\r\n\uFFFF".indexOf(c) == -1) {
             s.append(c);
+            //because (char)-1 doesn't work well.
             int temp = in.read();
             if(temp==-1) break;
             c = (char) temp;

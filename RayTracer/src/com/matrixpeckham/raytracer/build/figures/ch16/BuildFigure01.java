@@ -37,7 +37,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure01_09A implements BuildWorldFunction {
+public class BuildFigure01 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {

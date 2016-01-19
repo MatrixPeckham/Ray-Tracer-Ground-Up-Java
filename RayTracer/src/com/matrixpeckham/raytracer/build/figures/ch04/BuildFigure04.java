@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch04;
 
 import com.matrixpeckham.raytracer.cameras.Orthographic;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
@@ -41,11 +41,11 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure04_04 implements BuildWorldFunction {
+public class BuildFigure04 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-        int num_samples = 25;
+        int num_samples = 1;
         
         Sampler uniform_ptr = new MultiJittered(num_samples);
 

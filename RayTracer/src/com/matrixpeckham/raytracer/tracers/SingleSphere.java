@@ -56,6 +56,20 @@ public class SingleSphere extends Tracer{
         }
         return Utility.BLACK;
     }
+    /**
+     * Simplest possible implementation of traceRay function.
+     * returns one color if ray hits the only object and the other color if it doesn't.
+     * @param ray
+     * @return 
+     */
+    @Override
+    public RGBColor traceRay(Ray ray,int depth) {
+        ShadeRec sr = new ShadeRec(world);
+        if(world.sphere.hit(ray,sr)){
+            return Utility.RED;
+        }
+        return Utility.BLACK;
+    }
     
     
 }
