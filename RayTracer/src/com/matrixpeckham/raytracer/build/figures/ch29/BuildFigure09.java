@@ -15,7 +15,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.build.figures;
+package com.matrixpeckham.raytracer.build.figures.ch29;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
@@ -37,11 +37,11 @@ import java.util.logging.Logger;
  *
   @author William Matrix Peckham
  */
-public class BuildFigure29_09 implements BuildWorldFunction{
+public class BuildFigure09 implements BuildWorldFunction{
 
     @Override
     public void build(World w) {
-	int numSamples = 1;
+	int numSamples = 25;
 	
 	w.vp.setHres(700);      
 	w.vp.setVres(700);    
@@ -66,7 +66,7 @@ public class BuildFigure29_09 implements BuildWorldFunction{
         try {
             image.loadPPMFile(new File("C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\SphereGrid.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(BuildFigure29_09.class.getName()).
+            Logger.getLogger(BuildFigure09.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }

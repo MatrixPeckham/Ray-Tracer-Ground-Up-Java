@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.build;
 
-import com.matrixpeckham.raytracer.build.figures.*;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.compound.SolidCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;

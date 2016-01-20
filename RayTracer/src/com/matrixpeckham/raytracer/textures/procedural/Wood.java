@@ -78,7 +78,7 @@ public class Wood implements Texture {
 
 // ------------------------------------------------------------------------------------------ ructor
 // Specifies the two colors and uses default values for everything else
-    Wood(RGBColor light, RGBColor dark) {
+    public Wood(RGBColor light, RGBColor dark) {
         noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain 
         lightColor = light;
         darkColor = dark;
