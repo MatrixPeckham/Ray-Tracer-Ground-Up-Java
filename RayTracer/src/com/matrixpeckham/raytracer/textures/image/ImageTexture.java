@@ -72,7 +72,7 @@ public class ImageTexture implements Texture{
             point.setTo(mapping.getTexelCoordinate(sr.localHitPosition, hRes, vRes));
         } else {
             point.row=(int)(sr.v*(vRes-1));
-            point.row=(int)(sr.u*(hRes-1));
+            point.col=(int)(sr.u*(hRes-1));
         }
         return image.getColor(point.row, point.col);
     }

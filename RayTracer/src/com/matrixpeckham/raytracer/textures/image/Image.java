@@ -45,7 +45,7 @@ public class Image {
     public RGBColor getColor(int row, int col){
         int index = col+hres*(vres-row-1);
         int n = pixels.size();
-        if(index<n){
+        if(index<n && index>=0){
             return pixels.get(index);
         } else {
             return Utility.RED;

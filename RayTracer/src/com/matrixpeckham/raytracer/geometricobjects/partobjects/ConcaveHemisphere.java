@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 William Matrix Peckham
+ * Copyright (C) 2016 William Matrix Peckham
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,42 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.matrixpeckham.raytracer.textures;
+package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class ConstantColor implements Texture {
-    private RGBColor col = new RGBColor();
-    
-    public ConstantColor(){
-        this(Utility.WHITE);
-    }
-    public ConstantColor(RGBColor color){
-        col.setTo(color);
-    }
-    
-    
-    public void setColor(RGBColor col){
-        this.col.setTo(col);
-    }
-    public RGBColor getColor(){
-        return col;
-    }
+public class ConcaveHemisphere extends ConcavePartSphere {
 
-    @Override
-    public Texture clone() {
-        return new ConstantColor(col);
+    public ConcaveHemisphere() {
+        super(new Point3D(0,0,0), 1, 0, 360, 0, 90);
     }
-
-    @Override
-    public RGBColor getColor(ShadeRec sr) {
-        return col;
-    }
+    
     
 }

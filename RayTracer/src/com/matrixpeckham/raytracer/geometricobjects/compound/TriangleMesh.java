@@ -17,31 +17,36 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
-import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.FlatMeshTriangle;
+import com.matrixpeckham.raytracer.geometricobjects.triangles.FlatUVMeshTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothMeshTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothTriangle;
+import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothUVMeshTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.Triangle;
-import com.matrixpeckham.raytracer.materials.Material;
-import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.Mesh;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.ply.PLYElement;
 import com.matrixpeckham.raytracer.util.ply.PLYFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  *
  * @author William Matrix Peckham
  */
 public class TriangleMesh extends Grid {
+
+    public void readFlatUVTriangles(File fileName) throws IOException{
+        readPLYFileUV(fileName, TriangleType.FLAT);
+    }
+
+    public void readSmoothUvTriangles(File fileName)throws IOException {
+        readPLYFileUV(fileName, TriangleType.SMOOTH);
+        computeMeshNormals();
+    }
 
     enum TriangleType {
 
@@ -105,6 +110,43 @@ public class TriangleMesh extends Grid {
             } else {
                 SmoothMeshTriangle tri
                         = new SmoothMeshTriangle(mesh, faceLst[0], faceLst[1],
+                                faceLst[2]);
+                tri.computeNormal(reverseNomral);
+                objects.add(tri);
+                mesh.vertexFaces.get(faceLst[0]).add(count);
+                mesh.vertexFaces.get(faceLst[1]).add(count);
+                mesh.vertexFaces.get(faceLst[2]).add(count);
+                count++;
+            }
+        }
+    }
+    private void readPLYFileUV(File f, TriangleType t) throws IOException {
+        PLYFile ply = new PLYFile(f);
+        ArrayList<PLYElement> verts = ply.getElements("vertex");
+        mesh.numVertices = verts.size();
+        for (int i = 0; i < mesh.numVertices; i++) {
+            mesh.vertices.add(new Point3D(verts.get(i).getDouble("x"), verts.
+                    get(i).getDouble("y"), verts.get(i).getDouble("z")));
+            mesh.u.add(verts.get(i).getDouble("u"));
+            mesh.v.add(verts.get(i).getDouble("v"));
+        }
+        ArrayList<PLYElement> faces = ply.getElements("face");
+        mesh.numTriangles = faces.size();
+        for (int i = 0; i < mesh.numVertices; i++) {
+            mesh.vertexFaces.add(new ArrayList<>());
+        }
+        int count = 0;
+        for (int i = 0; i < mesh.numTriangles; i++) {
+            int[] faceLst = faces.get(i).getIntList("vertex_indices");
+            
+            if (t == TriangleType.FLAT) {
+                FlatUVMeshTriangle tri = new FlatUVMeshTriangle(mesh, faceLst[0],
+                        faceLst[1], faceLst[2]);
+                tri.computeNormal(reverseNomral);
+                objects.add(tri);
+            } else {
+                SmoothUVMeshTriangle tri
+                        = new SmoothUVMeshTriangle(mesh, faceLst[0], faceLst[1],
                                 faceLst[2]);
                 tri.computeNormal(reverseNomral);
                 objects.add(tri);
