@@ -36,6 +36,11 @@ public class WrappedFBmTexture implements Texture {
     public WrappedFBmTexture(){
         this(Utility.WHITE);
     }
+    
+    public WrappedFBmTexture(LatticeNoise noise){
+        this(Utility.WHITE,0,1,2,noise);
+    }
+    
     public WrappedFBmTexture(RGBColor col){
         this(col,0.0,1.0);
     }
@@ -55,6 +60,7 @@ public class WrappedFBmTexture implements Texture {
         this.maxValue=t.maxValue;
         this.minValue=t.minValue;
         this.noise=t.noise.clone();
+        this.expansionNumber=t.expansionNumber;
     }
 
     @Override
@@ -69,4 +75,21 @@ public class WrappedFBmTexture implements Texture {
         value=minValue+(maxValue-minValue)*value;
         return color.mul(value);
     }
+
+    public void setColor(double d, double d0, double d1) {
+        color.setTo(d, d0, d1);
+    }
+
+    public void setExpansionNumber(double d) {
+        expansionNumber=d;
+    }
+
+    public void setMinValue(double minValue) {
+        this.minValue = minValue;
+    }
+
+    public void setMaxValue(double maxValue) {
+        this.maxValue = maxValue;
+    }
+    
 }

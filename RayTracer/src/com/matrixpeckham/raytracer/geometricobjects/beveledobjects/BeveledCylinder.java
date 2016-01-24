@@ -44,11 +44,13 @@ public class BeveledCylinder extends Compound{
         Instance botTorus = new Instance(new Torus(radius-bevelRadius, bevelRadius));
         botTorus.translate(0,bottom+bevelRadius,0);
         botTorus.setTransformTexture(false);
+//        botTorus.setTransformTexture(true);
         addObject(botTorus);
 
         Instance topTorus = new Instance(new Torus(radius-bevelRadius, bevelRadius));
         topTorus.translate(0,top-bevelRadius,0);
         topTorus.setTransformTexture(false);
+//        topTorus.setTransformTexture(true);
         addObject(topTorus);
     }
 }

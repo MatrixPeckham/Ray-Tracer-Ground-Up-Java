@@ -39,6 +39,10 @@ public class RampFBmTexture implements Texture {
         this.perturbation = perturbation;
         this.hres = hres;
     }
+    
+    public RampFBmTexture(Image imagePtr,int octaves,double fbmamount){
+        this(imagePtr,new CubicNoise(octaves,2,0.5),fbmamount,imagePtr.getHres());
+    }
 
     public RampFBmTexture(Image imagePtr1) {
         this(imagePtr1, new CubicNoise(), 2, imagePtr1.getHres());
@@ -75,6 +79,10 @@ public class RampFBmTexture implements Texture {
 
     public void setPerturbation(double perturbation) {
         this.perturbation=perturbation;
+    }
+
+    public void setNoise(LatticeNoise noise) {
+        this.noise = noise;
     }
     
     

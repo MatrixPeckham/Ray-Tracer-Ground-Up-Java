@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.textures.procedural;
 
+import com.matrixpeckham.raytracer.textures.ConstantColor;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -26,55 +27,76 @@ import com.matrixpeckham.raytracer.util.Utility;
  *
  * @author William Matrix Peckham
  */
-public class FBmTexture implements Texture {
+public class NestedNoisesTexture implements Texture {
     private LatticeNoise noise=null;
-    private RGBColor color=new RGBColor();
+    private RGBColor color1=new RGBColor();
+    private Texture color2=null;
     private double minValue;
     private double maxValue;
+    private double expansionNumber;
     
-    public FBmTexture(){
-        this(Utility.WHITE);
+    public NestedNoisesTexture(){
+        this(Utility.WHITE,new ConstantColor(Utility.BLACK));
     }
-    public FBmTexture(RGBColor col){
-        this(col,0.0,1.0);
+    public NestedNoisesTexture(RGBColor col,Texture col2){
+        this(col,col2,0.0,1.0);
     }
-    public FBmTexture(RGBColor col, double min, double max){
-        this(col,min,max,new LinearNoise());
+    public NestedNoisesTexture(RGBColor col,Texture col2, double min, double max){
+        this(col,col2,min,max,2,new LinearNoise());
     }
-    public FBmTexture(LatticeNoise n){
-        this(Utility.WHITE,0,1,n);
-    }
-    public FBmTexture(RGBColor col, double min, double max, LatticeNoise n){
-        color.setTo(col);
+    public NestedNoisesTexture(RGBColor col,Texture col2, double min, double max, double num, LatticeNoise n){
+        color1.setTo(col);
+        color2=col2.clone();
         minValue=min;
         maxValue=max;
         noise=n;
+        expansionNumber=num;
     }
     
-    public FBmTexture(FBmTexture t){
-        this.color.setTo(t.color);
+    public NestedNoisesTexture(NestedNoisesTexture t){
+        this.color1.setTo(t.color1);
+        this.color2=t.color2.clone();
         this.maxValue=t.maxValue;
         this.minValue=t.minValue;
         this.noise=t.noise.clone();
+        this.expansionNumber=t.expansionNumber;
+    }
+
+    public NestedNoisesTexture(CubicNoise noisePtr) {
+        this(Utility.WHITE, new ConstantColor(Utility.BLACK), 0, 1, 2, noisePtr);
     }
 
     @Override
     public Texture clone() {
-        return new FBmTexture(this);
+        return new NestedNoisesTexture(this);
     }
 
     
     @Override
     public RGBColor getColor(ShadeRec sr){
-        double value = noise.valueFBM(sr.localHitPosition);
+        double n = expansionNumber * noise.valueFBM(sr.localHitPosition);
+        double value=n-Math.floor(n);
         value=minValue+(maxValue-minValue)*value;
-        return color.mul(value);
+        if(n<1){
+            return(color1.mul(value));
+        } else {
+            return color2.getColor(sr).mul(value);
+        }
     }
-    public void setColor(RGBColor color) {
-        this.color.setTo(color);
+
+    public void setColor(double d, double d0, double d1) {
+        color1.setTo(d, d0, d1);
     }
-    public void setColor(double r, double g, double b) {
-        this.color.setTo(r,g,b);
+
+    public void setTexture(Texture c2) {
+        color2=c2.clone();
+    }
+
+    public void setExpansionNumber(double d) {
+        expansionNumber=d;
+    }
+    public void setWrapFactor(double d) {
+        expansionNumber=d;
     }
 
     public void setMinValue(double minValue) {
@@ -84,4 +106,5 @@ public class FBmTexture implements Texture {
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
+    
 }

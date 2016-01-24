@@ -26,32 +26,32 @@ import com.matrixpeckham.raytracer.util.Utility;
  *
  * @author William Matrix Peckham
  */
-public class FBmTexture implements Texture {
+public class TurbulenceTexture implements Texture {
     private LatticeNoise noise=null;
     private RGBColor color=new RGBColor();
     private double minValue;
     private double maxValue;
     
-    public FBmTexture(){
+    public TurbulenceTexture(){
         this(Utility.WHITE);
     }
-    public FBmTexture(RGBColor col){
+    public TurbulenceTexture(RGBColor col){
         this(col,0.0,1.0);
     }
-    public FBmTexture(RGBColor col, double min, double max){
-        this(col,min,max,new LinearNoise());
-    }
-    public FBmTexture(LatticeNoise n){
+    public TurbulenceTexture(LatticeNoise n){
         this(Utility.WHITE,0,1,n);
     }
-    public FBmTexture(RGBColor col, double min, double max, LatticeNoise n){
+    public TurbulenceTexture(RGBColor col, double min, double max){
+        this(col,min,max,new LinearNoise());
+    }
+    public TurbulenceTexture(RGBColor col, double min, double max, LatticeNoise n){
         color.setTo(col);
         minValue=min;
         maxValue=max;
         noise=n;
     }
     
-    public FBmTexture(FBmTexture t){
+    public TurbulenceTexture(TurbulenceTexture t){
         this.color.setTo(t.color);
         this.maxValue=t.maxValue;
         this.minValue=t.minValue;
@@ -60,16 +60,17 @@ public class FBmTexture implements Texture {
 
     @Override
     public Texture clone() {
-        return new FBmTexture(this);
+        return new TurbulenceTexture(this);
     }
 
     
     @Override
     public RGBColor getColor(ShadeRec sr){
-        double value = noise.valueFBM(sr.localHitPosition);
+        double value = noise.valueTurbulence(sr.localHitPosition);
         value=minValue+(maxValue-minValue)*value;
         return color.mul(value);
     }
+
     public void setColor(RGBColor color) {
         this.color.setTo(color);
     }
@@ -84,4 +85,5 @@ public class FBmTexture implements Texture {
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
+    
 }

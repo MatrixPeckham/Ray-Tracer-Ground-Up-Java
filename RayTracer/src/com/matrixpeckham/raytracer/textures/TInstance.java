@@ -45,7 +45,7 @@ public class TInstance implements Texture {
             texture=i.texture.clone();
     }
 
-    public void setObject(Texture obj) {
+    public void setTexture(Texture obj) {
         texture = obj;
     }
 
@@ -55,7 +55,9 @@ public class TInstance implements Texture {
     }
 
 
-  
+    public void scale(double s){
+        scale(new Vector3D(s,s,s));
+    }
     public void scale(Vector3D s) {
 
         Matrix invScalingMatrix = new Matrix();			// temporary inverse scaling matrix

@@ -66,6 +66,18 @@ public class Utility {
      * red color
      */
     public static final RGBColor RED = new RGBColor(1, 0, 0);
+    /**
+     * green color
+     */
+    public static final RGBColor GREEN = new RGBColor(0, 1, 0);
+    /**
+     * blue color
+     */
+    public static final RGBColor BLUE = new RGBColor(0, 0, 1);
+    /**
+     * yellow color
+     */
+    public static final RGBColor YELLOW = new RGBColor(1, 1, 0);
 
     /**
      * random for random functions.

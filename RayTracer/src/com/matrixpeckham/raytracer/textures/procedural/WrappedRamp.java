@@ -18,63 +18,68 @@
 package com.matrixpeckham.raytracer.textures.procedural;
 
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.textures.image.Image;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
  *
  * @author William Matrix Peckham
  */
-public class FBmTexture implements Texture {
+public class WrappedRamp implements Texture {
     private LatticeNoise noise=null;
-    private RGBColor color=new RGBColor();
+    private Image ramp=null;
     private double minValue;
     private double maxValue;
+    private double perturbation=0;
+    private double expansionNumber;
     
-    public FBmTexture(){
-        this(Utility.WHITE);
+    public WrappedRamp(){
     }
-    public FBmTexture(RGBColor col){
+    
+    public WrappedRamp(LatticeNoise noise){
+    }
+    
+    public WrappedRamp(Image col){
         this(col,0.0,1.0);
     }
-    public FBmTexture(RGBColor col, double min, double max){
-        this(col,min,max,new LinearNoise());
+    public WrappedRamp(Image col, double min, double max){
+        this(col,min,max,2,new LinearNoise());
     }
-    public FBmTexture(LatticeNoise n){
-        this(Utility.WHITE,0,1,n);
-    }
-    public FBmTexture(RGBColor col, double min, double max, LatticeNoise n){
-        color.setTo(col);
+    public WrappedRamp(Image col, double min, double max, double num, LatticeNoise n){
+        ramp=col;
         minValue=min;
         maxValue=max;
         noise=n;
+        expansionNumber=num;
     }
     
-    public FBmTexture(FBmTexture t){
-        this.color.setTo(t.color);
+    public WrappedRamp(WrappedRamp t){
+        this.ramp=t.ramp;
         this.maxValue=t.maxValue;
         this.minValue=t.minValue;
         this.noise=t.noise.clone();
+        this.expansionNumber=t.expansionNumber;
     }
 
     @Override
     public Texture clone() {
-        return new FBmTexture(this);
+        return new WrappedRamp(this);
     }
 
     
     @Override
     public RGBColor getColor(ShadeRec sr){
-        double value = noise.valueFBM(sr.localHitPosition);
+        double value = expansionNumber * noise.valueFBM(sr.localHitPosition);
+        value=value-Math.floor(value);
         value=minValue+(maxValue-minValue)*value;
-        return color.mul(value);
+        return ramp.getColor(0, (int)(value*(ramp.getHres()-1)));
     }
-    public void setColor(RGBColor color) {
-        this.color.setTo(color);
-    }
-    public void setColor(double r, double g, double b) {
-        this.color.setTo(r,g,b);
+
+
+    public void setExpansionNumber(double d) {
+        expansionNumber=d;
     }
 
     public void setMinValue(double minValue) {
@@ -84,4 +89,17 @@ public class FBmTexture implements Texture {
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
+    
+    public void setNoise(LatticeNoise noise){
+        this.noise=noise.clone();
+    }
+
+    public void setPerturbation(double perturbation) {
+        this.perturbation = perturbation;
+    }
+
+    public void setWrapNumber(double d) {
+        expansionNumber=d;
+    }
+    
 }
