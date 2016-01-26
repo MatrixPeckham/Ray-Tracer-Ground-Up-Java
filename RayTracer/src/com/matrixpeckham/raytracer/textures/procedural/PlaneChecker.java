@@ -22,87 +22,176 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 
 /**
+ * Checker texture for planes.
  *
  * @author William Matrix Peckham
  */
 public class PlaneChecker implements Texture {
-    private double size=1;
-    private double outlineWidth=0;
-    private RGBColor color1=new RGBColor();
-    private RGBColor color2=new RGBColor(1);
-    private RGBColor outlineColor = new RGBColor(0.1, 0.1, 0.5);
 
+    /**
+     * size of checker
+     */
+    private double size = 1;
+
+    /**
+     * size of outline
+     */
+    private double outlineWidth = 0;
+
+    /**
+     * first color
+     */
+    private final RGBColor color1 = new RGBColor();
+
+    /**
+     * second color
+     */
+    private final RGBColor color2 = new RGBColor(1);
+
+    /**
+     * line color
+     */
+    private final RGBColor outlineColor = new RGBColor(0.1, 0.1, 0.5);
+
+    /**
+     * setter
+     *
+     * @param size
+     */
     public void setSize(double size) {
         this.size = size;
     }
 
+    /**
+     * setter
+     *
+     * @param outlineWidth
+     */
     public void setOutlineWidth(double outlineWidth) {
         this.outlineWidth = outlineWidth;
     }
 
+    /**
+     * setter
+     *
+     * @param color1
+     */
     public void setColor1(RGBColor color1) {
-        this.color1 .setTo( color1);
+        this.color1.setTo(color1);
     }
 
+    /**
+     * setter
+     *
+     * @param color2
+     */
     public void setColor2(RGBColor color2) {
-        this.color2 .setTo( color2);
+        this.color2.setTo(color2);
     }
 
+    /**
+     * setter
+     *
+     * @param outlineColor
+     */
     public void setOutlineColor(RGBColor outlineColor) {
-        this.outlineColor .setTo( outlineColor);
+        this.outlineColor.setTo(outlineColor);
     }
 
+    /**
+     * Constructor for setting all the fields.
+     *
+     * @param size
+     * @param outlineWidth
+     * @param color1
+     * @param color2
+     * @param outlineColor
+     */
     public PlaneChecker(double size, double outlineWidth, RGBColor color1,
             RGBColor color2, RGBColor outlineColor) {
         this.size = size;
         this.outlineWidth = outlineWidth;
-        this.color1 .setTo( color1 );
-        this.color2 .setTo( color2 );
-        this.outlineColor .setTo( outlineColor );
+        this.color1.setTo(color1);
+        this.color2.setTo(color2);
+        this.outlineColor.setTo(outlineColor);
     }
+
+    /**
+     * copy constructor
+     *
+     * @param c
+     */
     public PlaneChecker(PlaneChecker c) {
         this.size = c.size;
         this.outlineWidth = c.outlineWidth;
-        this.color1 .setTo( c.color1 );
-        this.color2 .setTo( c.color2 );
-        this.outlineColor .setTo( outlineColor );
+        this.color1.setTo(c.color1);
+        this.color2.setTo(c.color2);
+        this.outlineColor.setTo(outlineColor);
     }
 
+    /**
+     * default constructor black and white checkers no outline
+     */
     public PlaneChecker() {
     }
-    
 
-    
-    
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
         return new PlaneChecker(this);
     }
 
+    /**
+     * sample texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor getColor(ShadeRec sr) {
+        //hit point
         double x = sr.localHitPosition.x;
         double z = sr.localHitPosition.z;
-        int ix = (int)Math.floor(x/size);
-        int iz = (int)Math.floor(z/size);
-        double fx = x/size - ix;
-        double fz = z/size - iz;
+
+        //calculate checkers
+        int ix = (int) Math.floor(x / size);
+        int iz = (int) Math.floor(z / size);
+
+        //outline calculations
+        double fx = x / size - ix;
+        double fz = z / size - iz;
         double width = 0.5 * outlineWidth / size;
-        boolean inOutline = (fx<width||fx>1.0-width)||(fz<width||fz>1.0-width);
-        if((ix+iz)%2==0){
-            if(!inOutline){
+
+        //in outline
+        boolean inOutline = (fx < width || fx > 1.0 - width) || (fz < width
+                || fz > 1.0 - width);
+
+        //return proper color
+        if ((ix + iz) % 2 == 0) {
+            if (!inOutline) {
                 return color1;
             }
         } else {
-            if(!inOutline){
+            if (!inOutline) {
                 return color2;
             }
         }
         return outlineColor;
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setColor1(double d, double d0, double d1) {
         color1.setTo(d, d0, d1);
     }
-    
+
 }

@@ -88,7 +88,7 @@ public class BuildFigure04OutlineCheckers implements BuildWorldFunction {
 	
 	SphereChecker sphereCheckerPtr = new SphereChecker();
 	sphereCheckerPtr.setNumHorizontalCheckers(16);
-	sphereCheckerPtr.setNumVerticleCheckers(8);
+	sphereCheckerPtr.setNumVerticalCheckers(8);
 	sphereCheckerPtr.setHorizontalLineWidth(0.1);
 	sphereCheckerPtr.setVerticalLineWidth(0.25);
 	sphereCheckerPtr.setColor1(Utility.WHITE);
@@ -116,7 +116,7 @@ public class BuildFigure04OutlineCheckers implements BuildWorldFunction {
 		
 	CylinderChecker cylinderCheckerPtr = new CylinderChecker();
 	cylinderCheckerPtr.setNumHorizontalCheckers(12);
-	cylinderCheckerPtr.setNumVerticleCheckers(6);
+	cylinderCheckerPtr.setNumVerticalCheckers(6);
 	cylinderCheckerPtr.setHorizontalLineWidth(0.1);
 	cylinderCheckerPtr.setVerticalLineWidth(0.2);
 	cylinderCheckerPtr.setColor1(Utility.WHITE);
@@ -168,9 +168,9 @@ public class BuildFigure04OutlineCheckers implements BuildWorldFunction {
 	
 	ConeChecker coneCheckerPtr = new ConeChecker();
 	coneCheckerPtr.setNumHorizontalCheckers(12);
-	coneCheckerPtr.setNumVerticleCheckers(8);
+	coneCheckerPtr.setNumVerticalCheckers(8);
 	coneCheckerPtr.setHorizontalLineWidth(0.25);
-	coneCheckerPtr.setVerticleLineWidth(0.1);
+	coneCheckerPtr.setVerticalLineWidth(0.1);
 	coneCheckerPtr.setColor1(Utility.WHITE);
 	coneCheckerPtr.setColor2(Utility.BLACK);
 	coneCheckerPtr.setLineColor(Utility.RED);

@@ -121,7 +121,6 @@ public class BuildFigure42 implements BuildWorldFunction {
 	// texture:
         WrappedRamp wrappedPtr1 = new WrappedRamp(imagePtr1);
         wrappedPtr1.setNoise(noisePtr1);
-        wrappedPtr1.setPerturbation(6.0);
         wrappedPtr1.setWrapNumber(8.0);
 
         TInstance texturePtr1 = new TInstance(wrappedPtr1);
@@ -157,7 +156,6 @@ public class BuildFigure42 implements BuildWorldFunction {
 	// texture:
         WrappedRamp wrappedPtr2 = new WrappedRamp(imagePtr2);
         wrappedPtr2.setNoise(noisePtr2);
-        wrappedPtr2.setPerturbation(6.0);
         wrappedPtr2.setWrapNumber(8.0);
 
         TInstance texturePtr2 = new TInstance(wrappedPtr2);
@@ -194,7 +192,6 @@ public class BuildFigure42 implements BuildWorldFunction {
 	// texture:
         WrappedRamp wrappedPtr3 = new WrappedRamp(imagePtr3);
         wrappedPtr3.setNoise(noisePtr3);
-        wrappedPtr3.setPerturbation(6.0);
         wrappedPtr3.setWrapNumber(8.0);
 
         TInstance texturePtr3 = new TInstance(wrappedPtr3);

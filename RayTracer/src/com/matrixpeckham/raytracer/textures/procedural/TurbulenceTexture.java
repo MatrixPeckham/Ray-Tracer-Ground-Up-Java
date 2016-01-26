@@ -23,67 +23,158 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Turbulence noise texture for black to color.
  *
  * @author William Matrix Peckham
  */
 public class TurbulenceTexture implements Texture {
-    private LatticeNoise noise=null;
-    private RGBColor color=new RGBColor();
+
+    /**
+     * noise
+     */
+    private LatticeNoise noise = null;
+
+    /**
+     * colors
+     */
+    private final RGBColor color = new RGBColor();
+
+    /**
+     * min value for normalization
+     */
     private double minValue;
+
+    /**
+     * max value for normalization
+     */
     private double maxValue;
-    
-    public TurbulenceTexture(){
+
+    /**
+     * default turbulence
+     */
+    public TurbulenceTexture() {
         this(Utility.WHITE);
     }
-    public TurbulenceTexture(RGBColor col){
-        this(col,0.0,1.0);
-    }
-    public TurbulenceTexture(LatticeNoise n){
-        this(Utility.WHITE,0,1,n);
-    }
-    public TurbulenceTexture(RGBColor col, double min, double max){
-        this(col,min,max,new LinearNoise());
-    }
-    public TurbulenceTexture(RGBColor col, double min, double max, LatticeNoise n){
-        color.setTo(col);
-        minValue=min;
-        maxValue=max;
-        noise=n;
-    }
-    
-    public TurbulenceTexture(TurbulenceTexture t){
-        this.color.setTo(t.color);
-        this.maxValue=t.maxValue;
-        this.minValue=t.minValue;
-        this.noise=t.noise.clone();
+
+    /**
+     * this constructor sets color
+     *
+     * @param col
+     */
+    public TurbulenceTexture(RGBColor col) {
+        this(col, 0.0, 1.0);
     }
 
+    /**
+     * construct with specified noise.
+     *
+     * @param n
+     */
+    public TurbulenceTexture(LatticeNoise n) {
+        this(Utility.WHITE, 0, 1, n);
+    }
+
+    /**
+     * default noise with other values specified
+     *
+     * @param col
+     * @param min
+     * @param max
+     */
+    public TurbulenceTexture(RGBColor col, double min, double max) {
+        this(col, min, max, new LinearNoise());
+    }
+
+    /**
+     * sets all the values
+     *
+     * @param col
+     * @param min
+     * @param max
+     * @param n
+     */
+    public TurbulenceTexture(RGBColor col, double min, double max,
+            LatticeNoise n) {
+        color.setTo(col);
+        minValue = min;
+        maxValue = max;
+        noise = n;
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param t
+     */
+    public TurbulenceTexture(TurbulenceTexture t) {
+        this.color.setTo(t.color);
+        this.maxValue = t.maxValue;
+        this.minValue = t.minValue;
+        this.noise = t.noise.clone();
+    }
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
         return new TurbulenceTexture(this);
     }
 
-    
+    /**
+     * Sample texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
-    public RGBColor getColor(ShadeRec sr){
+    public RGBColor getColor(ShadeRec sr) {
+        //samble turbulence noise
         double value = noise.valueTurbulence(sr.localHitPosition);
-        value=minValue+(maxValue-minValue)*value;
+        //normalize
+        value = minValue + (maxValue - minValue) * value;
+        //calculate final color
         return color.mul(value);
     }
 
+    /**
+     * setter
+     *
+     * @param color
+     */
     public void setColor(RGBColor color) {
         this.color.setTo(color);
     }
+
+    /**
+     * setter
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
     public void setColor(double r, double g, double b) {
-        this.color.setTo(r,g,b);
+        this.color.setTo(r, g, b);
     }
 
+    /**
+     * setter
+     *
+     * @param minValue
+     */
     public void setMinValue(double minValue) {
         this.minValue = minValue;
     }
 
+    /**
+     * setter
+     *
+     * @param maxValue
+     */
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
-    
+
 }

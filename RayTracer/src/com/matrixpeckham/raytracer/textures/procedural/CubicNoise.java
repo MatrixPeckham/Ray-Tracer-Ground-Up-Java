@@ -22,103 +22,163 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Cubic interpolation implementation of lattice noise.
  *
  * @author William Matrix Peckham
  */
 public class CubicNoise extends LatticeNoise {
-    public CubicNoise(){
-        
+
+    /**
+     * default constructor
+     */
+    public CubicNoise() {
+
     }
 
+    /**
+     * Forward to super class
+     *
+     * @param octaves
+     * @param lacunarity
+     * @param gain
+     */
     public CubicNoise(int octaves, double lacunarity, double gain) {
         super(octaves, lacunarity, gain);
     }
 
+    /**
+     * copy constructor, forwards to superclass
+     *
+     * @param n
+     */
     public CubicNoise(CubicNoise n) {
         super(n);
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public LatticeNoise clone() {
         return new CubicNoise(this);
     }
 
+    /**
+     * set to method forwards to superclass
+     *
+     * @param n
+     * @return
+     */
     @Override
     public LatticeNoise setTo(LatticeNoise n) {
         return super.setTo(n); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * Cubic interpolation of values
+     *
+     * @param p
+     * @return
+     */
     @Override
     public double valueNoise(Point3D p) {
-	int 	ix, iy, iz;		
-    double 	fx, fy, fz;							
-    double[] 	xknots=new double[4], yknots=new double[4], zknots=new double[4];
+        int ix, iy, iz;
+        double fx, fy, fz;
+        double[] xknots = new double[4], yknots = new double[4], zknots
+                = new double[4];
 
-    ix = FLOOR(p.x);
-    fx = p.x - ix;
+        ix = FLOOR(p.x);
+        fx = p.x - ix;
 
-    iy = FLOOR(p.y);
-    fy = p.y - iy;
+        iy = FLOOR(p.y);
+        fy = p.y - iy;
 
-	iz = FLOOR(p.z);
-    fz = p.z - iz;
-   
-    for (int k = -1; k <= 2; k++) {
-        for (int j = -1; j <= 2; j++) {
-            for (int i = -1; i <= 2; i++) {
-                xknots[i+1] = valueTable[INDEX(ix + i, iy + j, iz + k)];
+        iz = FLOOR(p.z);
+        fz = p.z - iz;
+
+        for (int k = -1; k <= 2; k++) {
+            for (int j = -1; j <= 2; j++) {
+                for (int i = -1; i <= 2; i++) {
+                    xknots[i + 1] = valueTable[INDEX(ix + i, iy + j, iz + k)];
+                }
+                yknots[j + 1] = four_knot_spline(fx, xknots);
             }
-            yknots[j+1] = four_knot_spline(fx, xknots);
+            zknots[k + 1] = four_knot_spline(fy, yknots);
         }
-        zknots[k+1] = four_knot_spline(fy, yknots);
+
+        return (Utility.clamp(four_knot_spline(fz, zknots), -1.0, 1.0));
     }
 
-    return (Utility.clamp(four_knot_spline(fz, zknots), -1.0, 1.0));     }
-
+    /**
+     * cubic interpolation of vectors
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Vector3D vectorNoise(Point3D p) {
-        int 		ix, iy, iz;
-    double 		fx, fy, fz;
-    Vector3D[] 	xknots=new Vector3D[4], yknots=new Vector3D[4], zknots=new Vector3D[4];
-        
-    ix = FLOOR(p.x);
-    fx = p.x - ix;
+        int ix, iy, iz;
+        double fx, fy, fz;
+        Vector3D[] xknots = new Vector3D[4], yknots = new Vector3D[4], zknots
+                = new Vector3D[4];
 
-    iy = FLOOR(p.y);
-    fy = p.y - iy;
+        ix = FLOOR(p.x);
+        fx = p.x - ix;
 
-	iz = FLOOR(p.z);
-    fz = p.z - iz;
+        iy = FLOOR(p.y);
+        fy = p.y - iy;
 
-    for (int k = -1; k <= 2; k++) {
-        for (int j = -1; j <= 2; j++) {
-            for (int i = -1; i <= 2; i++) {
-                xknots[i+1] = vectorTable[INDEX(ix + i, iy + j, iz + k)];
+        iz = FLOOR(p.z);
+        fz = p.z - iz;
+
+        for (int k = -1; k <= 2; k++) {
+            for (int j = -1; j <= 2; j++) {
+                for (int i = -1; i <= 2; i++) {
+                    xknots[i + 1] = vectorTable[INDEX(ix + i, iy + j, iz + k)];
+                }
+                yknots[j + 1] = four_knot_spline(fx, xknots);
             }
-             yknots[j+1] = four_knot_spline(fx, xknots);
+            zknots[k + 1] = four_knot_spline(fy, yknots);
         }
-     	zknots[k+1] = four_knot_spline(fy, yknots);			
+
+        return (four_knot_spline(fz, zknots));
     }
-    
-	return (four_knot_spline(fz, zknots));
+
+    /**
+     * does the cubic interpolation
+     *
+     * @param x
+     * @param knots
+     * @return
+     */
+    double four_knot_spline(double x, double[] knots) {
+        double c3 = -0.5 * knots[0] + 1.5 * knots[1] - 1.5 * knots[2] + 0.5
+                * knots[3];
+        double c2 = knots[0] - 2.5 * knots[1] + 2.0 * knots[2] - 0.5 * knots[3];
+        double c1 = 0.5 * (-knots[0] + knots[2]);
+        double c0 = knots[1];
+
+        return (((c3 * x + c2) * x + c1) * x + c0);
     }
-    
-    
-    double four_knot_spline(double x, double[] knots){
-	double c3 = -0.5 * knots[0] + 1.5 * knots[1] - 1.5 * knots[2] + 0.5 * knots[3];
-  	double c2 = knots[0] - 2.5 * knots[1] + 2.0 * knots[2] - 0.5 * knots[3];
-  	double c1 = 0.5 * (-knots[0] + knots [2]);
-  	double c0 = knots[1];
-        
-        return (((c3*x + c2)*x + c1)*x + c0); 
+
+    /**
+     * does the cubic interpolation
+     *
+     * @param x
+     * @param knots
+     * @return
+     */
+    Vector3D four_knot_spline(double x, Vector3D[] knots) {
+        Vector3D c3 = knots[0].mul(-0.5).add(knots[1].mul(1.5)).sub(knots[2].
+                mul(1.5)).add(knots[3].mul(0.5));
+        Vector3D c2 = knots[0].sub(knots[1].mul(2.5)).add(knots[2].mul(2.0)).
+                sub(knots[3].mul(0.5));
+        Vector3D c1 = (knots[0].neg().add(knots[2])).mul(0.5);
+        Vector3D c0 = knots[1];
+
+        return (((c3.mul(x).add(c2).mul(x)).add(c1)).mul(x).add(c0));
     }
-    Vector3D four_knot_spline(double x, Vector3D[] knots){
-	Vector3D c3 = knots[0].mul(-0.5).add(knots[1].mul(1.5)).sub(knots[2].mul(1.5)).add(knots[3].mul(0.5));
-  	Vector3D c2 = knots[0].sub(knots[1].mul(2.5)).add( knots[2].mul(2.0)).sub(knots[3].mul(0.5));
-  	Vector3D c1 =  (knots[0].neg() .add( knots [2])).mul(0.5);
-  	Vector3D c0 = knots[1];
-        
-        return (((c3.mul(x).add(c2).mul(x)).add(c1)).mul(x).add(c0)); 
-    }
-    
+
 }

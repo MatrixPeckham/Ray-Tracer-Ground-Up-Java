@@ -24,87 +24,198 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * This texture is a noise texture that differs to another texture as the second
+ * COlor.
  *
  * @author William Matrix Peckham
  */
 public class NestedNoisesTexture implements Texture {
-    private LatticeNoise noise=null;
-    private RGBColor color1=new RGBColor();
-    private Texture color2=null;
+
+    /**
+     * noise to use
+     */
+    private LatticeNoise noise = null;
+
+    /**
+     * black to this color
+     */
+    private RGBColor color1 = new RGBColor();
+
+    /**
+     * Secondary color, this is another texture
+     */
+    private Texture color2 = null;
+
+    /**
+     * normalization min
+     */
     private double minValue;
+
+    /**
+     * normalization max
+     */
     private double maxValue;
+
+    /**
+     * expansion number
+     */
     private double expansionNumber;
-    
-    public NestedNoisesTexture(){
-        this(Utility.WHITE,new ConstantColor(Utility.BLACK));
-    }
-    public NestedNoisesTexture(RGBColor col,Texture col2){
-        this(col,col2,0.0,1.0);
-    }
-    public NestedNoisesTexture(RGBColor col,Texture col2, double min, double max){
-        this(col,col2,min,max,2,new LinearNoise());
-    }
-    public NestedNoisesTexture(RGBColor col,Texture col2, double min, double max, double num, LatticeNoise n){
-        color1.setTo(col);
-        color2=col2.clone();
-        minValue=min;
-        maxValue=max;
-        noise=n;
-        expansionNumber=num;
-    }
-    
-    public NestedNoisesTexture(NestedNoisesTexture t){
-        this.color1.setTo(t.color1);
-        this.color2=t.color2.clone();
-        this.maxValue=t.maxValue;
-        this.minValue=t.minValue;
-        this.noise=t.noise.clone();
-        this.expansionNumber=t.expansionNumber;
+
+    /**
+     * default constructor
+     */
+    public NestedNoisesTexture() {
+        this(Utility.WHITE, new ConstantColor(Utility.BLACK));
     }
 
+    /**
+     * constructor that sets the separate colors
+     *
+     * @param col
+     * @param col2
+     */
+    public NestedNoisesTexture(RGBColor col, Texture col2) {
+        this(col, col2, 0.0, 1.0);
+    }
+
+    public NestedNoisesTexture(RGBColor col, Texture col2, double min,
+            double max) {
+        this(col, col2, min, max, 2, new LinearNoise());
+    }
+
+    /**
+     * sets all the fields
+     *
+     * @param col
+     * @param col2
+     * @param min
+     * @param max
+     * @param num
+     * @param n
+     */
+    public NestedNoisesTexture(RGBColor col, Texture col2, double min,
+            double max, double num, LatticeNoise n) {
+        color1.setTo(col);
+        color2 = col2.clone();
+        minValue = min;
+        maxValue = max;
+        noise = n;
+        expansionNumber = num;
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param t
+     */
+    public NestedNoisesTexture(NestedNoisesTexture t) {
+        this.color1.setTo(t.color1);
+        if (t.color2 != null) {
+            this.color2 = t.color2.clone();
+        }
+        this.maxValue = t.maxValue;
+        this.minValue = t.minValue;
+        if (noise != null) {
+            this.noise = t.noise.clone();
+        }
+        this.expansionNumber = t.expansionNumber;
+    }
+
+    /**
+     * initializes the noise
+     *
+     * @param noisePtr
+     */
     public NestedNoisesTexture(CubicNoise noisePtr) {
         this(Utility.WHITE, new ConstantColor(Utility.BLACK), 0, 1, 2, noisePtr);
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
         return new NestedNoisesTexture(this);
     }
 
-    
+    /**
+     * sample the texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
-    public RGBColor getColor(ShadeRec sr){
+    public RGBColor getColor(ShadeRec sr) {
+        //sample noise
         double n = expansionNumber * noise.valueFBM(sr.localHitPosition);
-        double value=n-Math.floor(n);
-        value=minValue+(maxValue-minValue)*value;
-        if(n<1){
-            return(color1.mul(value));
+        //wrap
+        double value = n - Math.floor(n);
+        //normalize
+        value = minValue + (maxValue - minValue) * value;
+        //return color or defer to inner texture
+        if (n < 1) {
+            return (color1.mul(value));
         } else {
             return color2.getColor(sr).mul(value);
         }
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setColor(double d, double d0, double d1) {
         color1.setTo(d, d0, d1);
     }
 
+    /**
+     * setter
+     *
+     * @param c2
+     */
     public void setTexture(Texture c2) {
-        color2=c2.clone();
+        color2 = c2.clone();
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     */
     public void setExpansionNumber(double d) {
-        expansionNumber=d;
-    }
-    public void setWrapFactor(double d) {
-        expansionNumber=d;
+        expansionNumber = d;
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     */
+    public void setWrapFactor(double d) {
+        expansionNumber = d;
+    }
+
+    /**
+     * setter
+     *
+     * @param minValue
+     */
     public void setMinValue(double minValue) {
         this.minValue = minValue;
     }
 
+    /**
+     * setter
+     *
+     * @param maxValue
+     */
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
-    
+
 }

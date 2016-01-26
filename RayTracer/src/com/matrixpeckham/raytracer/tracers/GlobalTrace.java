@@ -24,7 +24,10 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- * Whitted tracer, pretty much the same as raycast tracer.
+ * GlobalTrace tracer, pretty much the same as PathTrace tracer. But shades with
+ * different function.  globalshade function should use direct lighting AND recursive ray to determine
+ * incoming radiance.  this makes the images it generates similar to ray cast/whitted
+ * tracers, however it adds light from secondary sources. 
  * @author William Matrix Peckham
  */
 public class GlobalTrace extends Tracer{
@@ -39,11 +42,12 @@ public class GlobalTrace extends Tracer{
 
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
-        if(depth>world.vp.maxDepth){
+        if(depth>world.vp.maxDepth){//depth bail out
             return Utility.BLACK;
         } else {
+            //closest intersection
             ShadeRec sr = new ShadeRec(world.hitObjects(ray));
-            if(sr.hitAnObject){
+            if(sr.hitAnObject){//book keep and shade.
                 sr.depth=depth;
                 sr.ray.setTo(ray);
                 return sr.material.globalShade(sr);

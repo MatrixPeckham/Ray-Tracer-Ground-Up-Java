@@ -24,7 +24,11 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- * Whitted tracer, pretty much the same as raycast tracer.
+ * PathTrace tracer, pretty much the same as raycast tracer. But shades with
+ * different function.  pathshade function should use recursive ray to determine
+ * incoming radiance.  This makes pathTrace tracer return noisy, and darker
+ * images than other tracers, because a point is lit only if one of its samples
+ * actually hits a light source
  * @author William Matrix Peckham
  */
 public class PathTrace extends Tracer{
@@ -39,11 +43,12 @@ public class PathTrace extends Tracer{
 
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
-        if(depth>world.vp.maxDepth){
+        if(depth>world.vp.maxDepth){//depth bail out
             return Utility.BLACK;
         } else {
+            //closest intersection
             ShadeRec sr = new ShadeRec(world.hitObjects(ray));
-            if(sr.hitAnObject){
+            if(sr.hitAnObject){//book keep and shade.
                 sr.depth=depth;
                 sr.ray.setTo(ray);
                 return sr.material.pathShade(sr);

@@ -59,11 +59,12 @@ public class RayCast extends Tracer {
      */
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
-        if(depth>world.vp.maxDepth){
+        if(depth>world.vp.maxDepth){//depth bailout
             return Utility.BLACK;
         }
+        //gets closest intersection
         ShadeRec sr = new ShadeRec(world.hitObjects(ray));
-        if(sr.hitAnObject){
+        if(sr.hitAnObject){//book keep and shade
             sr.ray.setTo(ray);
             sr.depth=depth;
             return sr.material.shade(sr);

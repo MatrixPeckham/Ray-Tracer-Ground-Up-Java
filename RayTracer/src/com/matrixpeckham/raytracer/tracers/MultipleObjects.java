@@ -24,7 +24,8 @@ import com.matrixpeckham.raytracer.world.World;
 
 /**
  * Tracer for multiple objects that only have color and no lighting. 
- * Second simplest implementation available.
+ * Second simplest implementation available. only tracer that uses 
+ * GeometricObject.color.
  * @author William Matrix Peckham
  */
 public class MultipleObjects extends Tracer{

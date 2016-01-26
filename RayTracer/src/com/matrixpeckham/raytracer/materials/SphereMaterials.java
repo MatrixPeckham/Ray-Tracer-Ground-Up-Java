@@ -28,9 +28,9 @@ import com.matrixpeckham.raytracer.util.Utility;
  */
 public class SphereMaterials extends Material {
     private int numHorizontalCheckers=20;
-    private int numVerticleCheckers=10;
+    private int numVerticalCheckers=10;
     private double horizontalLineWidth=0;
-    private double verticleLineWidth=0;
+    private double verticalLineWidth=0;
     private Material color1;
     private Material color2;
     private Material lineColor;
@@ -50,9 +50,9 @@ public class SphereMaterials extends Material {
 
     public SphereMaterials(SphereMaterials c) {
         numHorizontalCheckers=c.numHorizontalCheckers;
-        numVerticleCheckers=c.numVerticleCheckers;
+        numVerticalCheckers=c.numVerticalCheckers;
         horizontalLineWidth=c.horizontalLineWidth;
-        verticleLineWidth=c.verticleLineWidth;
+        verticalLineWidth=c.verticalLineWidth;
         if(c.color1!=null)color1=c.color1.clone();
         if(c.color2!=null)color2=c.color2.clone();
         if(c.lineColor!=null)lineColor=c.lineColor.clone();
@@ -62,16 +62,16 @@ public class SphereMaterials extends Material {
         this.numHorizontalCheckers = numHorizontalCheckers;
     }
 
-    public void setNumVerticleCheckers(int numVerticleCheckers) {
-        this.numVerticleCheckers = numVerticleCheckers;
+    public void setNumVerticalCheckers(int numVerticalCheckers) {
+        this.numVerticalCheckers = numVerticalCheckers;
     }
 
     public void setHorizontalLineWidth(double horizontalLineWidth) {
         this.horizontalLineWidth = horizontalLineWidth;
     }
 
-    public void setVerticleLineWidth(double verticleLineWidth) {
-        this.verticleLineWidth = verticleLineWidth;
+    public void setVerticalLineWidth(double verticalLineWidth) {
+        this.verticalLineWidth = verticalLineWidth;
     }
 
     public void setColor1(Material color1) {
@@ -108,7 +108,7 @@ public class SphereMaterials extends Material {
         if(phi<0)
             phi+=Utility.TWO_PI;
         double phiSize = Utility.TWO_PI / numHorizontalCheckers;
-        double thetaSize= Utility.PI / numVerticleCheckers;
+        double thetaSize= Utility.PI / numVerticalCheckers;
         
         int iphi=(int)Math.floor(phi/phiSize);
         int itheta=(int)Math.floor(theta/thetaSize);
@@ -116,7 +116,7 @@ public class SphereMaterials extends Material {
         double fphi = phi/phiSize-iphi;
         double ftheta=theta/thetaSize-itheta;
         
-        double phiLineWidth = 0.5*verticleLineWidth;
+        double phiLineWidth = 0.5*verticalLineWidth;
         double thetaLineWidth = 0.5*horizontalLineWidth;
         
         boolean inOutline = (fphi<phiLineWidth ||fphi>1.0-phiLineWidth)||
@@ -136,7 +136,7 @@ public class SphereMaterials extends Material {
 
     public void setLineWidth(double d) {
         setHorizontalLineWidth(d);
-        setVerticleLineWidth(d);
+        setVerticalLineWidth(d);
     }
 
     public void setNumlat(int i) {
@@ -144,7 +144,7 @@ public class SphereMaterials extends Material {
     }
 
     public void setNumlong(int i) {
-        setNumVerticleCheckers(i);
+        setNumVerticalCheckers(i);
     }
 
     public void setNumHorizontal(int i) {
@@ -152,11 +152,7 @@ public class SphereMaterials extends Material {
     }
 
     public void setNumVertical(int i) {
-        setNumVerticleCheckers(i);
-    }
-
-    public void setVerticalLineWidth(double d) {
-        setVerticleLineWidth(d);
+        setNumVerticalCheckers(i);
     }
 
     public void setChecker1Material(Material ref) {
@@ -185,7 +181,7 @@ public class SphereMaterials extends Material {
         if(phi<0)
             phi+=Utility.TWO_PI;
         double phiSize = Utility.TWO_PI / numHorizontalCheckers;
-        double thetaSize= Utility.PI / numVerticleCheckers;
+        double thetaSize= Utility.PI / numVerticalCheckers;
         
         int iphi=(int)Math.floor(phi/phiSize);
         int itheta=(int)Math.floor(theta/thetaSize);
@@ -193,7 +189,7 @@ public class SphereMaterials extends Material {
         double fphi = phi/phiSize-iphi;
         double ftheta=theta/thetaSize-itheta;
         
-        double phiLineWidth = 0.5*verticleLineWidth;
+        double phiLineWidth = 0.5*verticalLineWidth;
         double thetaLineWidth = 0.5*horizontalLineWidth;
         
         boolean inOutline = (fphi<phiLineWidth ||fphi>1.0-phiLineWidth)||
@@ -225,7 +221,7 @@ public class SphereMaterials extends Material {
         if(phi<0)
             phi+=Utility.TWO_PI;
         double phiSize = Utility.TWO_PI / numHorizontalCheckers;
-        double thetaSize= Utility.PI / numVerticleCheckers;
+        double thetaSize= Utility.PI / numVerticalCheckers;
         
         int iphi=(int)Math.floor(phi/phiSize);
         int itheta=(int)Math.floor(theta/thetaSize);
@@ -233,7 +229,7 @@ public class SphereMaterials extends Material {
         double fphi = phi/phiSize-iphi;
         double ftheta=theta/thetaSize-itheta;
         
-        double phiLineWidth = 0.5*verticleLineWidth;
+        double phiLineWidth = 0.5*verticalLineWidth;
         double thetaLineWidth = 0.5*horizontalLineWidth;
         
         boolean inOutline = (fphi<phiLineWidth ||fphi>1.0-phiLineWidth)||

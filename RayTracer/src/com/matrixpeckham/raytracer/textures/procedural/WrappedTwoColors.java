@@ -23,75 +23,170 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Wraps two colors from black... n &lt; 0 black-&gt color1 and for &gt;1 black
+ * -&gt; color2
  *
  * @author William Matrix Peckham
  */
 public class WrappedTwoColors implements Texture {
-    private LatticeNoise noise=null;
-    private RGBColor color1=new RGBColor();
-    private RGBColor color2=new RGBColor();
+
+    /**
+     * noise to use
+     */
+    private LatticeNoise noise = null;
+    /**
+     * first color
+     */
+    private RGBColor color1 = new RGBColor();
+    /**
+     * second color
+     */
+    private RGBColor color2 = new RGBColor();
+    /**
+     * min value to use for color ramping (should be 0-1)
+     */
     private double minValue;
+    /**
+     * max value to use for color ramping (should be 0-1(
+     */
     private double maxValue;
+    /**
+     * multiplies noise value before wrapping and normalization (should be
+     * positive)
+     */
     private double expansionNumber;
-    
-    public WrappedTwoColors(){
-        this(Utility.WHITE,Utility.BLACK);
-    }
-    public WrappedTwoColors(RGBColor col,RGBColor col2){
-        this(col,col2,0.0,1.0);
-    }
-    public WrappedTwoColors(RGBColor col,RGBColor col2, double min, double max){
-        this(col,col2,min,max,2,new LinearNoise());
-    }
-    public WrappedTwoColors(RGBColor col,RGBColor col2, double min, double max, double num, LatticeNoise n){
-        color1.setTo(col);
-        color2.setTo(col2);
-        minValue=min;
-        maxValue=max;
-        noise=n;
-        expansionNumber=num;
-    }
-    
-    public WrappedTwoColors(WrappedTwoColors t){
-        this.color1.setTo(t.color1);
-        this.color2.setTo(t.color2);
-        this.maxValue=t.maxValue;
-        this.minValue=t.minValue;
-        this.noise=t.noise.clone();
-        this.expansionNumber=t.expansionNumber;
+
+    /**
+     * white to black
+     */
+    public WrappedTwoColors() {
+        this(Utility.WHITE, Utility.BLACK);
     }
 
+    /**
+     * sets the colors
+     *
+     * @param col
+     * @param col2
+     */
+    public WrappedTwoColors(RGBColor col, RGBColor col2) {
+        this(col, col2, 0.0, 1.0);
+    }
+
+    /**
+     * sets the two colors and sets the values
+     *
+     * @param col
+     * @param col2
+     * @param min
+     * @param max
+     */
+    public WrappedTwoColors(RGBColor col, RGBColor col2, double min, double max) {
+        this(col, col2, min, max, 2, new LinearNoise());
+    }
+
+    /**
+     * sets all the values
+     *
+     * @param col
+     * @param col2
+     * @param min
+     * @param max
+     * @param num
+     * @param n
+     */
+    public WrappedTwoColors(RGBColor col, RGBColor col2, double min, double max,
+            double num, LatticeNoise n) {
+        color1.setTo(col);
+        color2.setTo(col2);
+        minValue = min;
+        maxValue = max;
+        noise = n;
+        expansionNumber = num;
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param t
+     */
+    public WrappedTwoColors(WrappedTwoColors t) {
+        this.color1.setTo(t.color1);
+        this.color2.setTo(t.color2);
+        this.maxValue = t.maxValue;
+        this.minValue = t.minValue;
+        this.noise = t.noise.clone();
+        this.expansionNumber = t.expansionNumber;
+    }
+
+    /**
+     * white to black with specific noise
+     *
+     * @param noisePtr
+     */
     public WrappedTwoColors(CubicNoise noisePtr) {
         this(Utility.WHITE, Utility.BLACK, 0, 1, 2, noisePtr);
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
         return new WrappedTwoColors(this);
     }
 
-    
+    /**
+     * gets the color
+     *
+     * @param sr
+     * @return
+     */
     @Override
-    public RGBColor getColor(ShadeRec sr){
+    public RGBColor getColor(ShadeRec sr) {
+        //expand noise from approx -1-1 -n-n
         double n = expansionNumber * noise.valueFBM(sr.localHitPosition);
-        double value=n-Math.floor(n);
-        value=minValue+(maxValue-minValue)*value;
-        if(n<1){
-            return(color1.mul(value));
+        //wrap to range 0-1
+        double value = n - Math.floor(n);
+        //normalize wrapped value
+        value = minValue + (maxValue - minValue) * value;
+        if (n < 1) {
+            return (color1.mul(value));
         } else {
             return color2.mul(value);
         }
     }
 
+    /**
+     * Sets the first color
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setColor1(double d, double d0, double d1) {
         color1.setTo(d, d0, d1);
     }
 
+    /**
+     * sets the color 2
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setColor2(double d, double d0, double d1) {
         color2.setTo(d, d0, d1);
     }
 
+    /**
+     * sets expansion number.
+     *
+     * @param d
+     */
     public void setExpansionNumber(double d) {
-        expansionNumber=d;
+        expansionNumber = d;
     }
 }

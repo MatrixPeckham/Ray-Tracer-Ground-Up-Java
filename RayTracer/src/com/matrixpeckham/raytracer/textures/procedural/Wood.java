@@ -32,33 +32,40 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 
 /**
+ * This class defines a procedural texture based on the Larry Gritz Renderman
+ * wood texture described in Apodaca and Gritz (2000). The rings here are
+ * centered on the y axis, instead of the z axis as in Apodaca and Gritz. This
+ * is not a complete implementation because it does not do the intrinsic
+ * antialiasing that the Renderman version does. The following description of
+ * the parameters is largely based on code comments in Apodaca and Gritz.
+ * <pre>
+ *  		lightColor: 				The light background color of the wood.
+ *  		darkColor: 				The darker color of the rings and grain.
+ * 		ringFrequency:				The mean radial distance berween the rings.
+ * 		ringUneveness:				If this is zero, the rings are equally spaced and have equal thickness.
+ * 									If this is greater than zero, the rings are unequally spaced and have different thicknesses.
+ * 		ringNoise:					These two parameters just perturb the hit point. The default value of ringNoise is 0.02, and if you
+ * 		ringNoiseFrequency:		make ringNoise = 1.0, the wood is destroyed. The wood still looks good with these parameters set to zero.
+ * 		trunkWobble:				These two parameters perturb the trunk with a noise function so that it's not exactly along the y axis.
+ * 		trunkWobbleFrequency:		trunkWobble determines the noise amplitude, and trunkWobbleFrequency determines its spatial frequency.
+ * 		angularWobble:				These two parameters add noise to the rings so that they are not exactly round; angularWobble specifies
+ * 		angularWobbleFrequency:	the magnitude of the noise, and	angularWobbleFrequency specifies how quckly it varies around the rings.
+ * 		grainFrequency:			This seems to control the size of the grain.
+ * 		grainy:						This is grain-nee, not grain "y". It should be in the range [0, 1]. It determines how the grain is weighted
+ * 									in the shading. With grainy = 0 there is no grain; with grainy = 1, the grain is fully shaded.
+ * 		ringy:						This is ring-ee, not ring "y". It should be in the range [0, 1]. It determines how the rings are weighted
+ * 									in the shading. With ringy = 0 there are no rings; with ringy = 1, the rings are fully shaded.
+ * </pre> All these parameters have default values. The easiest way to
+ * experiment with different values is to use the first or second const Fructor,
+ * and the access functions, which are supplied for each parameter.
  *
  * @author William Matrix Peckham
  */
 public class Wood implements Texture {
 
-// This class defines a procedural texture based on the Larry Gritz Renderman wood texture described in Apodaca and Gritz (2000).
-// The rings here are centered on the y axis, instead of the z axis as in Apodaca and Gritz.
-// This is not a complete implementation because it does not do the intrinsic antialiasing that the Renderman version does. 
-// The following description of the parameters is largely based on code comments in Apodaca and Gritz.
-// 		lightColor: 				The light background color of the wood.
-// 		darkColor: 				The darker color of the rings and grain.
-//		ringFrequency:				The mean radial distance berween the rings.	
-//		ringUneveness:				If this is zero, the rings are equally spaced and have equal thickness.
-//									If this is greater than zero, the rings are unequally spaced and have different thicknesses.	
-//		ringNoise:					These two parameters just perturb the hit point. The default value of ringNoise is 0.02, and if you		
-//		ringNoiseFrequency:		make ringNoise = 1.0, the wood is destroyed. The wood still looks good with these parameters set to zero.
-//		trunkWobble:				These two parameters perturb the trunk with a noise function so that it's not exactly along the y axis.
-//		trunkWobbleFrequency:		trunkWobble determines the noise amplitude, and trunkWobbleFrequency determines its spatial frequency.
-//		angularWobble:				These two parameters add noise to the rings so that they are not exactly round; angularWobble specifies
-//		angularWobbleFrequency:	the magnitude of the noise, and	angularWobbleFrequency specifies how quckly it varies around the rings.
-//		grainFrequency:			This seems to control the size of the grain.
-//		grainy:						This is grain-nee, not grain "y". It should be in the range [0, 1]. It determines how the grain is weighted
-//									in the shading. With grainy = 0 there is no grain; with grainy = 1, the grain is fully shaded.
-//		ringy:						This is ring-ee, not ring "y". It should be in the range [0, 1]. It determines how the rings are weighted
-//									in the shading. With ringy = 0 there are no rings; with ringy = 1, the rings are fully shaded.
-// All these parameters have default values. The easiest way to experiment with different values is to use the first or second ructor, and
-// the access functions, which are supplied for each parameter.
+    /**
+     * default constructor
+     */
     public Wood() {
         noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain 
         lightColor = Utility.WHITE;
@@ -76,8 +83,9 @@ public class Wood implements Texture {
         ringy = 0.5;
     }
 
-// ------------------------------------------------------------------------------------------ ructor
-// Specifies the two colors and uses default values for everything else
+    /**
+     * Specifies the two colors and uses default values for everything else
+     */
     public Wood(RGBColor light, RGBColor dark) {
         noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain 
         lightColor = light;
@@ -95,10 +103,26 @@ public class Wood implements Texture {
         ringy = 0.5;
     }
 
-// ------------------------------------------------------------------------------------------ ructor
-// Allows you to specify everything
-// To use this ructor you will have to define a noise object in the build function or use a call 
-// to a noise ructor as the first argument.
+    /**
+     * Allows you to specify everything To use this ructor you will have to
+     * define a noise object in the build function or use a call to a noise
+     * constructor as the first argument.
+     *
+     * @param NoisePtr
+     * @param LightColor
+     * @param DarkColor
+     * @param RingFrequency
+     * @param RingUneveness
+     * @param RingNoise
+     * @param RingNoiseFrequency
+     * @param TrunkWobble
+     * @param TrunkWobbleFrequency
+     * @param AngularWobble
+     * @param AngularWobbleFrequency
+     * @param GrainFrequency
+     * @param Grainy
+     * @param Ringy
+     */
     public Wood(LatticeNoise NoisePtr,
             RGBColor LightColor,
             RGBColor DarkColor,
@@ -130,7 +154,11 @@ public class Wood implements Texture {
         ringy = Ringy;
     }
 
-// ------------------------------------------------------------------------------------------ copy ructor
+    /**
+     * copy constructor
+     *
+     * @param wood
+     */
     public Wood(Wood wood
     ) {
         lightColor = wood.lightColor;
@@ -153,7 +181,12 @@ public class Wood implements Texture {
         }
     }
 
-// ------------------------------------------------------------------------------------------ assignment operator
+    /**
+     * java equals override
+     *
+     * @param rhs
+     * @return
+     */
     public Wood setTo(Wood rhs) {
         if (this == rhs) {
             return this;
@@ -177,15 +210,22 @@ public class Wood implements Texture {
         ringy = rhs.ringy;
 
         return this;
-    } // ------------------------------------------------------------------------------------------ clone
+    } 
 
+    /**
+     * clone
+     * @return 
+     */
     @Override
     public Texture clone() {
         return new Wood(this);
     }
-    // ------------------------------------------------------------------------------------------ destructor
 
-// ------------------------------------------------------------------------------------------ getColor
+    /**
+     * sample texture
+     * @param sr
+     * @return 
+     */
     @Override
     public RGBColor getColor(ShadeRec sr
     ) {
@@ -254,139 +294,204 @@ public class Wood implements Texture {
 
         return (mixColor(lightColor, darkColor, finalValue));
     }
-        // publicd access functions
 
-    // The noise access functions don't need to check if the noise pointer is not NULL because the only way we can
-    // ruct a Wood object with a NULL noise pointer is to use a NULL pointer in the third ructor.
-    // -------------------------------------------------------------------- setNoise
+    /**
+     * setter
+     * @param NoisePtr 
+     */
     public void setNoise(LatticeNoise NoisePtr
     ) {
         noisePtr = NoisePtr;
     }
-    // -------------------------------------------------------------------- setNumOctaves
 
+    /**
+     * setter
+     * @param NumOctaves 
+     */
     public void setNumOctaves(int NumOctaves
     ) {
         noisePtr.setNumOctaves(NumOctaves);
     }
-    // -------------------------------------------------------------------- setLacunarity
 
+    /**
+     * setter
+     * @param Lacunarity 
+     */
     public void setLacunarity(double Lacunarity
     ) {
         noisePtr.setLacunarity(Lacunarity);
     }
-    // -------------------------------------------------------------------- setGain
 
+    /**
+     * 
+     * @param Gain 
+     */
     public void setGain(double Gain
     ) {
         noisePtr.setGain(Gain);
     }
-    // -------------------------------------------------------------------- setLightColor
 
+    /**
+     * setter
+     * @param c 
+     */
     public void setLightColor(RGBColor c
     ) {
         lightColor = c;
     }
-    // -------------------------------------------------------------------- setLightColor
 
+    /**
+     * setter
+     * @param r
+     * @param g
+     * @param b 
+     */
     public void setLightColor(double r, double g, double b
     ) {
         lightColor.r = r;
         lightColor.b = b;
         lightColor.g = g;
     }
-    // -------------------------------------------------------------------- setLightColor
 
+    /**
+     * setter
+     * @param c 
+     */
     public void setLightColor(double c
     ) {
         lightColor.r = lightColor.b = lightColor.g = c;
     }
-    // -------------------------------------------------------------------- setDarkColor
 
+    /**
+     * setter
+     * @param c 
+     */
     public void setDarkColor(RGBColor c
     ) {
         darkColor = c;
     }
-    // -------------------------------------------------------------------- setDarkColor
 
+    /**
+     * setter
+     * @param r
+     * @param g
+     * @param b 
+     */
     public void setDarkColor(double r, double g, double b
     ) {
         darkColor.r = r;
         darkColor.b = b;
         darkColor.g = g;
     }
-    // -------------------------------------------------------------------- setDarkColor
 
+    /**
+     * setter
+     * @param c 
+     */
     public void setDarkColor(double c
     ) {
         darkColor.r = darkColor.b = darkColor.g = c;
     }
-    // -------------------------------------------------------------------- setRingFrequency
 
+    /**
+     * setter
+     * @param RingFrequency 
+     */
     public void setRingFrequency(double RingFrequency
     ) {
         ringFrequency = RingFrequency;
     }
-    // -------------------------------------------------------------------- setRingUneveness
 
+    /**
+     * setter
+     * @param RingUneveness 
+     */
     public void setRingUneveness(double RingUneveness
     ) {
         ringUneveness = RingUneveness;
     }
-    // -------------------------------------------------------------------- setRingNoise
 
+    /**
+     * setter
+     * @param RingNoise 
+     */
     public void setRingNoise(double RingNoise
     ) {
         ringNoise = RingNoise;
     }
-    // -------------------------------------------------------------------- setRingNoiseFrequency
 
+    /**
+     * setter
+     * @param RingNoiseFrequency 
+     */
     public void setRingNoiseFrequency(double RingNoiseFrequency
     ) {
         ringNoiseFrequency = RingNoiseFrequency;
     }
-    // -------------------------------------------------------------------- setTrunkWobble
 
+    /**
+     * setter
+     * @param TrunkWobble 
+     */
     public void setTrunkWobble(double TrunkWobble
     ) {
         trunkWobble = TrunkWobble;
     }
-    // -------------------------------------------------------------------- setTrunkWobbleFrequency
 
+    /**
+     * setter
+     * @param TrunkWobbleFrequency 
+     */
     public void setTrunkWobbleFrequency(double TrunkWobbleFrequency
     ) {
         trunkWobbleFrequency = TrunkWobbleFrequency;
     }
-    // -------------------------------------------------------------------- setAngularWobble
 
+    /**
+     * setter
+     * @param AngularWobble 
+     */
     public void setAngularWobble(double AngularWobble
     ) {
         angularWobble = AngularWobble;
     }
-    // -------------------------------------------------------------------- setAngularWobbleFrequency
 
+    /**
+     * setter
+     * @param AngularWobbleFrequency 
+     */
     public void setAngularWobbleFrequency(double AngularWobbleFrequency
     ) {
         angularWobbleFrequency = AngularWobbleFrequency;
     }
-    // -------------------------------------------------------------------- setGrainFrequency
 
+    /**
+     * setter
+     * @param GrainFrequency 
+     */
     public void setGrainFrequency(double GrainFrequency
     ) {
         grainFrequency = GrainFrequency;
     }
-    // -------------------------------------------------------------------- setGrainy
 
+    /**
+     * setter
+     * @param Grainy 
+     */
     public void setGrainy(double Grainy
     ) {
         grainy = Grainy;
     }
-    // -------------------------------------------------------------------- setRingy
 
+    /**
+     * setter
+     * @param Ringy 
+     */
     public void setRingy(double Ringy) {
         ringy = Ringy;
     }
 
+    //see class comment
     LatticeNoise noisePtr;
     RGBColor lightColor;
     RGBColor darkColor;
@@ -401,6 +506,5 @@ public class Wood implements Texture {
     double grainFrequency;
     double grainy;
     double ringy;
-
 
 }

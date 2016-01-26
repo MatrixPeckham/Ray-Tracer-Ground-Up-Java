@@ -22,9 +22,11 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.textures.procedural.FBMBump;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.world.World;
 
 /**
  *
@@ -61,9 +63,9 @@ public class BumpedObject extends GeometricObject {
             Normal n = new Normal(s.normal);
             RGBColor c = bumpMap.getColor(s);
             n.addLocal(new Normal(c.r,c.g,c.b));
-            //n.x/=2;
-            //n.y/=2;
-            //n.z/=2;
+            n.x/=2;
+            n.y/=2;
+            n.z/=2;
             n.normalize();
             s.normal.setTo(n);
         }
@@ -74,5 +76,24 @@ public class BumpedObject extends GeometricObject {
     public boolean shadowHit(Ray ray, DoubleRef t) {
         return obj.shadowHit(ray, t);
     }
-    
+
+    @Override
+    public Normal getNormal() {
+        return obj.getNormal();
+    }
+
+    @Override
+    public Normal getNormal(Point3D p) {
+            Normal n = new Normal(obj.getNormal(p));
+            ShadeRec r = new ShadeRec((World)null);
+            r.localHitPosition.setTo(p);
+            RGBColor c = bumpMap.getColor(r);
+            n.addLocal(new Normal(c.r,c.g,c.b));
+            //n.x/=2;
+            //n.y/=2;
+            //n.z/=2;
+            n.normalize();
+            return n;
+    }
+
 }

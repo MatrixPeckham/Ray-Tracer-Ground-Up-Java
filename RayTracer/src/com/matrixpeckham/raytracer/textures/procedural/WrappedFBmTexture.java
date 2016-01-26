@@ -23,73 +23,155 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Wrapped noise from black to a color.
  *
  * @author William Matrix Peckham
  */
 public class WrappedFBmTexture implements Texture {
-    private LatticeNoise noise=null;
-    private RGBColor color=new RGBColor();
-    private double minValue;
-    private double maxValue;
-    private double expansionNumber;
+
+    /**
+     * noise
+     */
+    private LatticeNoise noise = null;
+
+    /**
+     *
+     */
+    private RGBColor color = new RGBColor();
     
-    public WrappedFBmTexture(){
+    /**
+     * min value for normalizing
+     */
+    private double minValue;
+
+    /**
+     * max value for normalizing
+     */
+    private double maxValue;
+    
+    /**
+     * multiplicative factor for number of wraps
+     */
+    private double expansionNumber;
+
+    /**
+     * default constructor black to white
+     */
+    public WrappedFBmTexture() {
         this(Utility.WHITE);
     }
-    
-    public WrappedFBmTexture(LatticeNoise noise){
-        this(Utility.WHITE,0,1,2,noise);
-    }
-    
-    public WrappedFBmTexture(RGBColor col){
-        this(col,0.0,1.0);
-    }
-    public WrappedFBmTexture(RGBColor col, double min, double max){
-        this(col,min,max,2,new LinearNoise());
-    }
-    public WrappedFBmTexture(RGBColor col, double min, double max, double num, LatticeNoise n){
-        color.setTo(col);
-        minValue=min;
-        maxValue=max;
-        noise=n;
-        expansionNumber=num;
-    }
-    
-    public WrappedFBmTexture(WrappedFBmTexture t){
-        this.color.setTo(t.color);
-        this.maxValue=t.maxValue;
-        this.minValue=t.minValue;
-        this.noise=t.noise.clone();
-        this.expansionNumber=t.expansionNumber;
+
+    /**
+     * initializes with specified noise
+     * @param noise 
+     */
+    public WrappedFBmTexture(LatticeNoise noise) {
+        this(Utility.WHITE, 0, 1, 2, noise);
     }
 
+    /**
+     * initializes with specified color
+     * @param col 
+     */
+    public WrappedFBmTexture(RGBColor col) {
+        this(col, 0.0, 1.0);
+    }
+
+    /**
+     * initialize values
+     * @param col
+     * @param min
+     * @param max 
+     */
+    public WrappedFBmTexture(RGBColor col, double min, double max) {
+        this(col, min, max, 2, new LinearNoise());
+    }
+
+    /**
+     * initialize all fields
+     * @param col
+     * @param min
+     * @param max
+     * @param num
+     * @param n 
+     */
+    public WrappedFBmTexture(RGBColor col, double min, double max, double num,
+            LatticeNoise n) {
+        color.setTo(col);
+        minValue = min;
+        maxValue = max;
+        noise = n;
+        expansionNumber = num;
+    }
+
+    /**
+     * copy constructor
+     * @param t 
+     */
+    public WrappedFBmTexture(WrappedFBmTexture t) {
+        this.color.setTo(t.color);
+        this.maxValue = t.maxValue;
+        this.minValue = t.minValue;
+        this.noise = t.noise.clone();
+        this.expansionNumber = t.expansionNumber;
+    }
+
+    /**
+     * clone
+     * @return 
+     */
     @Override
     public Texture clone() {
         return new WrappedFBmTexture(this);
     }
 
-    
-    public RGBColor getColor(ShadeRec sr){
+    /**
+     * sample texture
+     * @param sr
+     * @return 
+     */
+    public RGBColor getColor(ShadeRec sr) {
+        //sample and expand noise
         double value = expansionNumber * noise.valueFBM(sr.localHitPosition);
-        value=value-Math.floor(value);
-        value=minValue+(maxValue-minValue)*value;
+        //wrap
+        value = value - Math.floor(value);
+        //normalize
+        value = minValue + (maxValue - minValue) * value;
         return color.mul(value);
     }
 
+    /**
+     * setter
+     * @param d
+     * @param d0
+     * @param d1 
+     */
     public void setColor(double d, double d0, double d1) {
         color.setTo(d, d0, d1);
     }
 
+    /**
+     * setter
+     * @param d 
+     */
     public void setExpansionNumber(double d) {
-        expansionNumber=d;
+        expansionNumber = d;
     }
 
+    /**
+     * setter
+     * @param minValue 
+     */
     public void setMinValue(double minValue) {
         this.minValue = minValue;
     }
 
+    /**
+     * setter
+     * @param maxValue 
+     */
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
-    
+
 }

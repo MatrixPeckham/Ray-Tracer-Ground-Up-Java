@@ -25,32 +25,53 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- * Whitted tracer, pretty much the same as raycast tracer.
+ * Whitted tracer, pretty much the same as raycast tracer. Overrides method 
+ * that is needed for dielectric.  
  * @author William Matrix Peckham
  */
 public class Whitted extends Tracer{
 
+    /**
+     * default 
+     */
     public Whitted() {
         super();
     }
 
+    /**
+     * for world
+     * @param w 
+     */
     public Whitted(World w) {
         super(w);
     }
 
+    
+    /**
+     * Traces a ray and returns the ray parameter in the double reference parameter
+     * @param ray
+     * @param t
+     * @param depth
+     * @return 
+     */
     @Override
     public RGBColor traceRay(Ray ray,DoubleRef t, int depth) {
+        //bail out for depth
         if(depth>world.vp.maxDepth){
             return Utility.BLACK;
         } else {
+            //get the shaderec from the nearest hit object
             ShadeRec sr = new ShadeRec(world.hitObjects(ray));
+            //book keep the shaderec for shading, updates
+            //ray, depth, and edits the reference parameter.
             if(sr.hitAnObject){
                 sr.depth=depth;
                 sr.ray.setTo(ray);
                 t.d=sr.lastT;
-                
+                //shade point
                 return sr.material.shade(sr);
             } else {
+                //no hit
                 t.d=Utility.HUGE_VALUE;
                 return world.backgroundColor;
             }

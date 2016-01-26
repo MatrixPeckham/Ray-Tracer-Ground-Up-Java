@@ -24,19 +24,45 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Class for location based noise functions.
  *
  * @author William Matrix Peckham
  */
 public abstract class LatticeNoise {
 
+    /**
+     * table size
+     */
     static final int kTableSize = 256;
+
+    /**
+     * table mask.
+     */
     static final int kTableMask = kTableSize - 1;
+
+    /**
+     * seed value for random generation
+     */
     static final int seed_value = 253;
 
+    /**
+     * octaves for fractal sum and FBM
+     */
     protected int numOctaves;
+
+    /**
+     * frequency modulator
+     */
     protected double lacunarity;
+
+    /**
+     * amplitude modulator
+     */
     protected double gain;
 
+    /**
+     * permutation table for scrambling indices.
+     */
     static protected short permutationTable[] = new short[]{
         225, 155, 210, 108, 175, 199, 221, 144, 203, 116, 70, 213, 69, 158, 33,
         252,
@@ -59,180 +85,319 @@ public abstract class LatticeNoise {
         48, 79, 147, 85, 30, 207, 219, 54, 88, 234, 190, 122, 95, 67, 143, 109,
         137, 214, 145, 93, 92, 100, 245, 0, 216, 186, 60, 83, 105, 97, 204, 52
     };
+
+    /**
+     * value table
+     */
     protected double valueTable[] = new double[kTableSize];
+
+    /**
+     * vector table
+     */
     protected Vector3D vectorTable[] = new Vector3D[kTableSize];
 
+    /**
+     * min value this noise will produce
+     */
     private double fbmMin;
+
+    /**
+     * max value this noise will produce
+     */
     private double fbmMax;
 
+    /**
+     * initializes value table
+     *
+     * @param seed
+     */
     private void initValueTable(int seed) {
         Utility.setRandSeed(seed);
-        for(int i = 0; i<kTableSize; i++){
-            valueTable[i]=1-2*Utility.randDouble();
+        for (int i = 0; i < kTableSize; i++) {
+            valueTable[i] = 1 - 2 * Utility.randDouble();
         }
     }
 
+    /**
+     * fills the vector table
+     *
+     * @param seed
+     */
     private void initVectorTable(int seed) {
-        double r1,r2,x,y,z,r,phi;
+        double r1, r2, x, y, z, r, phi;
         Utility.setRandSeed(seed);
         MultiJittered sample = new MultiJittered(256, 1);
-        for(int j = 0; j<kTableSize; j++){
+        for (int j = 0; j < kTableSize; j++) {
             Point2D samplePoint = sample.sampleOneSet();
-            r1=samplePoint.x;
-            r2=samplePoint.y;
-            z=1.0-2.0*r1;
-            r=Math.sqrt(1.0-z*z);
-            phi = Utility.TWO_PI*r2;
-            x=r*Math.cos(phi);
-            y=r*Math.sin(phi);
-            vectorTable[j]=new Vector3D(x,y,z).hat();
+            r1 = samplePoint.x;
+            r2 = samplePoint.y;
+            z = 1.0 - 2.0 * r1;
+            r = Math.sqrt(1.0 - z * z);
+            phi = Utility.TWO_PI * r2;
+            x = r * Math.cos(phi);
+            y = r * Math.sin(phi);
+            vectorTable[j] = new Vector3D(x, y, z).hat();
         }
     }
 
+    /**
+     * computes the bounds of this noise function.
+     */
     private void computeFBMBounds() {
-        if(gain==1){
-            fbmMax=numOctaves;
+        if (gain == 1) {
+            fbmMax = numOctaves;
         } else {
-            fbmMax=(1.0-Math.pow(gain, numOctaves))/(1.0-gain);
+            fbmMax = (1.0 - Math.pow(gain, numOctaves)) / (1.0 - gain);
         }
-        fbmMin=-fbmMax;
+        fbmMin = -fbmMax;
     }
 
+    /**
+     * default constructor
+     */
     public LatticeNoise() {
-        numOctaves=1;
-        lacunarity=2;
-        gain=0.5;
+        numOctaves = 1;
+        lacunarity = 2;
+        gain = 0.5;
         initValueTable(seed_value);
         initVectorTable(seed_value);
         computeFBMBounds();
     }
 
+    /**
+     * constructor sets octaves.
+     *
+     * @param octaves
+     */
     public LatticeNoise(int octaves) {
-        numOctaves=octaves;
-        lacunarity=2;
-        gain=0.5;
+        numOctaves = octaves;
+        lacunarity = 2;
+        gain = 0.5;
         initValueTable(seed_value);
         initVectorTable(seed_value);
         computeFBMBounds();
     }
 
+    /**
+     * constructor for specifying values
+     *
+     * @param octaves
+     * @param lacunarity
+     * @param gain
+     */
     public LatticeNoise(int octaves, double lacunarity, double gain) {
-        numOctaves=octaves;
-        this.lacunarity=lacunarity;
-        this.gain=gain;
+        numOctaves = octaves;
+        this.lacunarity = lacunarity;
+        this.gain = gain;
         initValueTable(seed_value);
         initVectorTable(seed_value);
         computeFBMBounds();
     }
 
+    /**
+     * copy constructor
+     *
+     * @param n
+     */
     public LatticeNoise(LatticeNoise n) {
-        numOctaves=n.numOctaves;
-        lacunarity=n.lacunarity;
-        gain=n.gain;
+        numOctaves = n.numOctaves;
+        lacunarity = n.lacunarity;
+        gain = n.gain;
         initValueTable(seed_value);
         initVectorTable(seed_value);
         computeFBMBounds();
     }
 
+    /**
+     * set to method
+     *
+     * @param n
+     * @return
+     */
     public LatticeNoise setTo(LatticeNoise n) {
-        numOctaves=n.numOctaves;
-        lacunarity=n.lacunarity;
-        gain=n.gain;
+        numOctaves = n.numOctaves;
+        lacunarity = n.lacunarity;
+        gain = n.gain;
         return this;
     }
 
+    /**
+     * clone method.
+     *
+     * @return
+     */
     public abstract LatticeNoise clone();
 
+    /**
+     * gets the value noise from this noise. overriding methods are for
+     * different interpolations
+     *
+     * @param p
+     * @return
+     */
     public abstract double valueNoise(Point3D p);
 
+    /**
+     * gats the vector noise from this noise. overriding methods are for
+     * different interpolations
+     *
+     * @param p
+     * @return
+     */
     public abstract Vector3D vectorNoise(Point3D p);
 
+    /**
+     * special case of FBM value noise
+     *
+     * @param p
+     * @return
+     */
     public double valueFractalSum(Point3D p) {
-        double amplitude=1.0;
-        double frequency=1.0;
-        double fractalSum=0;
-        for(int j=0; j<numOctaves; j++){
-            fractalSum+=amplitude*valueNoise(p.mul(frequency));
-            amplitude*=0.5;
-            frequency*=2;
+        double amplitude = 1.0;
+        double frequency = 1.0;
+        double fractalSum = 0;
+        for (int j = 0; j < numOctaves; j++) {
+            fractalSum += amplitude * valueNoise(p.mul(frequency));
+            amplitude *= 0.5;
+            frequency *= 2;
         }
-        fractalSum=(fractalSum-fbmMin)/(fbmMax-fbmMin);
+        fractalSum = (fractalSum - fbmMin) / (fbmMax - fbmMin);
         return fractalSum;
     }
 
+    /**
+     * special case of FBM vector noise
+     *
+     * @param p
+     * @return
+     */
     public Vector3D vectorFractalSum(Point3D p) {
-        double amplitude=1.0;
-        double frequency=1.0;
-        Vector3D fractalSum=new Vector3D(0,0,0);
-        for(int j=0; j<numOctaves; j++){
+        double amplitude = 1.0;
+        double frequency = 1.0;
+        Vector3D fractalSum = new Vector3D(0, 0, 0);
+        for (int j = 0; j < numOctaves; j++) {
             fractalSum.addLocal(vectorNoise(p.mul(frequency)).mul(amplitude));
-            amplitude*=0.5;
-            frequency*=2;
+            amplitude *= 0.5;
+            frequency *= 2;
         }
         return fractalSum;
     }
-    
-    public double valueTurbulence(Point3D p){
-        double amplitude=1.0;
-        double frequency=1.0;
-        double turbulence=0;
-        for(int j=0; j<numOctaves; j++){
-            turbulence+=amplitude*Math.abs(valueNoise(p.mul(frequency)));
+
+    /**
+     * same as value FBM, but the noise values are all absolute values
+     *
+     * @param p
+     * @return
+     */
+    public double valueTurbulence(Point3D p) {
+        double amplitude = 1.0;
+        double frequency = 1.0;
+        double turbulence = 0;
+        for (int j = 0; j < numOctaves; j++) {
+            turbulence += amplitude * Math.abs(valueNoise(p.mul(frequency)));
             //turbulence+=amplitude*Math.sqrt(Math.abs(valueNoise(p.mul(frequency)));
-            amplitude*=0.5;
-            frequency*=2;
+            amplitude *= 0.5;
+            frequency *= 2;
         }
-        turbulence/=fbmMax;
+        turbulence /= fbmMax;
         return turbulence;
     }
 
+    /**
+     * samples noise at point for Fractal Brownian Motion, gain and lacunarity
+     * parameterized.
+     *
+     * @param p
+     * @return
+     */
     public double valueFBM(Point3D p) {
-        double amplitude=1;
-        double frequency=1;
-        double fbm=0;
-        for(int j=0; j<numOctaves; j++){
-            fbm+=amplitude*valueNoise(p.mul(frequency));
-            amplitude*=gain;
-            frequency*=lacunarity;
+        double amplitude = 1;
+        double frequency = 1;
+        double fbm = 0;
+        for (int j = 0; j < numOctaves; j++) {
+            fbm += amplitude * valueNoise(p.mul(frequency));
+            amplitude *= gain;
+            frequency *= lacunarity;
         }
-        fbm=(fbm-fbmMin)/(fbmMax-fbmMin);
+        fbm = (fbm - fbmMin) / (fbmMax - fbmMin);
         return fbm;
     }
 
+    /**
+     * gets a random vector from this noise as Fractal Brownian noise
+     *
+     * @param p
+     * @return
+     */
     public Vector3D vectorFBM(Point3D p) {
-        double amplitude=1;
-        double frequency=1;
+        double amplitude = 1;
+        double frequency = 1;
         Vector3D sum = new Vector3D(0, 0, 0);
-        for(int j=0; j<numOctaves; j++){
+        for (int j = 0; j < numOctaves; j++) {
             sum.addLocal(vectorNoise(p.mul(frequency)).mul(amplitude));
-            amplitude*=gain;
-            frequency*=lacunarity;
+            amplitude *= gain;
+            frequency *= lacunarity;
         }
         return sum;
     }
 
+    /**
+     * sets the octaves and recomutes the bounds
+     *
+     * @param octaves
+     */
     public void setNumOctaves(int octaves) {
-        numOctaves=octaves;
+        numOctaves = octaves;
         computeFBMBounds();
     }
 
+    /**
+     * sets the lacunarity
+     *
+     * @param lacunarity
+     */
     public void setLacunarity(double lacunarity) {
-        this.lacunarity=lacunarity;
+        this.lacunarity = lacunarity;
     }
 
+    /**
+     * sets the gain and re-computes the bounds
+     *
+     * @param gain
+     */
     public void setGain(double gain) {
-        this.gain=gain;
+        this.gain = gain;
         computeFBMBounds();
     }
 
+    /**
+     * Uses the permutation table to scramble the input
+     *
+     * @param x
+     * @return
+     */
     static int PERM(int x) {
         return permutationTable[(x) & kTableMask];
     }
 
+    /**
+     * Gets the index of the permutation table from the integer coordinates
+     *
+     * @param ix
+     * @param iy
+     * @param iz
+     * @return
+     */
     static int INDEX(int ix, int iy, int iz) {
         return PERM((ix) + PERM((iy) + PERM(iz)));
     }
 
+    /**
+     * Floors the parameter directly to an integer
+     *
+     * @param x
+     * @return
+     */
     static int FLOOR(double x) {
         return ((int) Math.floor(x));
     }

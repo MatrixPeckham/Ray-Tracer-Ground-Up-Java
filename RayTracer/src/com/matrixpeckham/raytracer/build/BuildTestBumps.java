@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.build;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.BumpedObject;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.PointLight;
@@ -108,7 +109,7 @@ public class BuildTestBumps implements BuildWorldFunction{
 	// the bath water
 	// w is a bump mapped rectangle with a transparent material	
 	
-	
+        Box box = new Box(new Point3D(bathXmin,-1,bathZmin),new Point3D(bathXmax,0,bathZmax));
 	Rectangle waterSurfacePtr = new Rectangle(	new Point3D(bathXmin, 0, bathZmin), 
 													new Vector3D(0, 0, zSize), 
 													new Vector3D(xSize, 0, 0),
@@ -130,7 +131,7 @@ public class BuildTestBumps implements BuildWorldFunction{
         tinst.scale(0.125);
 	BumpedObject bumpedWaterPtr = new BumpedObject();
 	bumpedWaterPtr.setMaterial(phongPtr);
-	bumpedWaterPtr.setObject(waterSurfacePtr);
+	bumpedWaterPtr.setObject(box);//waterSurfacePtr);
 	bumpedWaterPtr.setBumpMap(tinst);//fBmBumpPtr);
 	world.addObject(bumpedWaterPtr);						// use w for Figure 29.2
 

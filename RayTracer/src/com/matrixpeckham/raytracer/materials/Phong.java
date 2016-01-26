@@ -72,6 +72,8 @@ public class Phong extends Material {
                             wi)).mul(sr.w.lights.get(j).
                                     L(sr)).mul(sr.w.lights.get(j).G(sr)*ndotwi/sr.w.lights.get(j).pdf(sr)));
                 }
+            } else {
+                int breakable = (int)sr.lastT;
             }
         }
         return L;

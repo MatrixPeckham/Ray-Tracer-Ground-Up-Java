@@ -66,9 +66,9 @@ int numSamples = 16;
 	checkerPtr.setColor1(new RGBColor(0.85));
 	checkerPtr.setColor2(new RGBColor(0.85));
 	checkerPtr.setLineColor(Utility.BLACK);
-	checkerPtr.setVerticleLineWidth(0.075);
+	checkerPtr.setVerticalLineWidth(0.075);
 	checkerPtr.setHorizontalLineWidth(0.075);
-	checkerPtr.setNumVerticleCheckers(10);
+	checkerPtr.setNumVerticalCheckers(10);
 	checkerPtr.setNumHorizontalCheckers(14);
 
         SV_Matte svMattePtr = new SV_Matte();		

@@ -24,34 +24,84 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Noise bump map texture.
  *
  * @author William Matrix Peckham
  */
 public class FBMBump implements Texture {
-    private LatticeNoise noise=null;
-    
-    public FBMBump(){
-    }
-    public FBMBump(int numOctaves, double lacunarity, double gain, double perturbationAmount){
-        noise=new CubicNoise(numOctaves, lacunarity, gain);
-    }
-    public FBMBump(LatticeNoise n){
-        noise=n.clone();
-    }
-    
-    public FBMBump(FBMBump n){
-        noise=n.noise.clone();
+
+    /**
+     * noise value to use
+     */
+    private LatticeNoise noise = null;
+    /**
+     * perturbation value (scales noise vectors)
+     */
+    double perturbation = 1;
+
+    /**
+     * default constructor doesn't initialize anything.
+     */
+    public FBMBump() {
     }
 
+    /**
+     * initialize all fields.
+     *
+     * @param numOctaves
+     * @param lacunarity
+     * @param gain
+     * @param perturbationAmount
+     */
+    public FBMBump(int numOctaves, double lacunarity, double gain,
+            double perturbationAmount) {
+        noise = new CubicNoise(numOctaves, lacunarity, gain);
+        perturbation = perturbationAmount;
+    }
+
+    /**
+     * initialize noise
+     *
+     * @param n
+     */
+    public FBMBump(LatticeNoise n) {
+        noise = n.clone();
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param n
+     */
+    public FBMBump(FBMBump n) {
+        noise = n.noise.clone();
+        perturbation = n.perturbation;
+    }
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
         return new FBMBump(this);
     }
 
-    
+    /**
+     * sample texture. Even though this function should return a vector it
+     * returns a color as per the Texture.getColor() contract. this color is NOT
+     * in the 0-1 range that regular colors will be. It will instead represent
+     * an x,y,z vector with values -perturbation-perturbation as r,g,b.
+     *
+     * @param sr
+     * @return
+     */
     @Override
-    public RGBColor getColor(ShadeRec sr){
+    public RGBColor getColor(ShadeRec sr) {
         Vector3D v = noise.vectorFBM(sr.localHitPosition);
-        return new RGBColor(v.x,v.y,v.z);
+        v.normalize();
+        v = v.mul(perturbation);
+        return new RGBColor(v.x, v.y, v.z);
     }
 }

@@ -58,9 +58,9 @@ public class BuildFigure06A implements BuildWorldFunction{
 	w.addLight(lightPtr);
 	
 	SphereChecker checkerPtr = new SphereChecker();
-	checkerPtr.setNumVerticleCheckers(20);
+	checkerPtr.setNumVerticalCheckers(20);
 	checkerPtr.setNumHorizontalCheckers(45);
-	checkerPtr.setVerticleLineWidth(0.1);
+	checkerPtr.setVerticalLineWidth(0.1);
 	checkerPtr.setHorizontalLineWidth(0.1);
 	checkerPtr.setColor1(Utility.WHITE);
 	checkerPtr.setColor2(Utility.WHITE);

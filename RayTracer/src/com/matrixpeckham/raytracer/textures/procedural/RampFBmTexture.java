@@ -23,67 +23,135 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 
 /**
+ * Texture for looping the ramp through the y coordinate, and perturb it with
+ * the noise value.
  *
  * @author William Matrix Peckham
  */
 public class RampFBmTexture implements Texture {
-    private Image ramp;
-    LatticeNoise noise;
-    double perturbation;
-    int hres;
 
-    public RampFBmTexture(Image ramp, LatticeNoise noise, double perturbation,
-            int hres) {
+    /**
+     * ramp image
+     */
+    private Image ramp;
+
+    /**
+     * noise
+     */
+    LatticeNoise noise;
+
+    /**
+     * perturbation value
+     */
+    double perturbation;
+
+    /**
+     * Makes a new texture with the provided values
+     *
+     * @param ramp
+     * @param noise
+     * @param perturbation
+     */
+    public RampFBmTexture(Image ramp, LatticeNoise noise, double perturbation) {
         this.ramp = ramp;
         this.noise = noise;
         this.perturbation = perturbation;
-        this.hres = hres;
-    }
-    
-    public RampFBmTexture(Image imagePtr,int octaves,double fbmamount){
-        this(imagePtr,new CubicNoise(octaves,2,0.5),fbmamount,imagePtr.getHres());
     }
 
+    /**
+     * Makes a new texture with the provided values.
+     *
+     * @param imagePtr
+     * @param octaves
+     * @param fbmamount
+     */
+    public RampFBmTexture(Image imagePtr, int octaves, double fbmamount) {
+        this(imagePtr, new CubicNoise(octaves, 2, 0.5), fbmamount);
+    }
+
+    /**
+     * Makes a new texture with the ramp
+     *
+     * @param imagePtr1
+     */
     public RampFBmTexture(Image imagePtr1) {
-        this(imagePtr1, new CubicNoise(), 2, imagePtr1.getHres());
+        this(imagePtr1, new CubicNoise(), 2);
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
-        return new RampFBmTexture(ramp, noise, perturbation, hres);
+        return new RampFBmTexture(ramp, noise, perturbation);
     }
-    
-    
 
+    /**
+     * sample texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor getColor(ShadeRec sr) {
+        //sample noise
         double n = noise.valueFBM(sr.localHitPosition);
-        double y = sr.localHitPosition.y + perturbation*n;
-        double u = (1.0+Math.sin(y))/2.0;
-        int row=0;
-        int col = (int)(u*hres-1);
+        //perturb y coordinate of hit point
+        double y = sr.localHitPosition.y + perturbation * n;
+        //normalize sine wave of y coordinate
+        double u = (1.0 + Math.sin(y)) / 2.0;
+        //color ramp always zero row
+        int row = 0;
+        //sample the image
+        int col = (int) (u * ramp.getHres() - 1);
         return ramp.getColor(row, col);
     }
 
+    /**
+     * setter
+     *
+     * @param numOctaves
+     */
     public void setNumOctaves(int numOctaves) {
         noise.setNumOctaves(numOctaves);
     }
 
+    /**
+     * setter
+     *
+     * @param lacunarity
+     */
     public void setLacunarity(double lacunarity) {
         noise.setLacunarity(lacunarity);
     }
 
+    /**
+     * setter
+     *
+     * @param gain
+     */
     public void setGain(double gain) {
         noise.setGain(gain);
     }
 
+    /**
+     * setter
+     *
+     * @param perturbation
+     */
     public void setPerturbation(double perturbation) {
-        this.perturbation=perturbation;
+        this.perturbation = perturbation;
     }
 
+    /**
+     * setter
+     *
+     * @param noise
+     */
     public void setNoise(LatticeNoise noise) {
         this.noise = noise;
     }
-    
-    
+
 }

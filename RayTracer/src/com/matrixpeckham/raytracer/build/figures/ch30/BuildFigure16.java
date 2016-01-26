@@ -130,7 +130,7 @@ public class BuildFigure16 implements BuildWorldFunction {
 	
 	SphereTextures sphereTexturesPtr = new SphereTextures();
 	sphereTexturesPtr.setNumHorizontalCheckers(12); 
-	sphereTexturesPtr.setNumVerticleCheckers(6);   
+	sphereTexturesPtr.setNumVerticalCheckers(6);   
 	sphereTexturesPtr.setTexture1(scaledMarblePtr);
 	sphereTexturesPtr.setTexture2(woodPtr);
 	

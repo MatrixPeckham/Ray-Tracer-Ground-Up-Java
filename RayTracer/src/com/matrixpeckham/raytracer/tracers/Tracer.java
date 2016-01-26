@@ -58,6 +58,14 @@ public class Tracer {
      * @return 
      */
     public RGBColor traceRay(Ray ray, int depth){return Utility.BLACK;}
+    /**
+     * Trace a ray to a color with depth.  uses reference t to return ray parameter
+     * at intersection
+     * @param ray ray to trace
+     * @param t reference return parameter.
+     * @param depth depth
+     * @return 
+     */
     public RGBColor traceRay(Ray ray,DoubleRef t, int depth) {
         t.d=0;
         return traceRay(ray,depth);
