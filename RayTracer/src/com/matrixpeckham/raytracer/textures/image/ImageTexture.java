@@ -22,57 +22,117 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 
 /**
+ * Image based texture.
  *
  * @author William Matrix Peckham
  */
-public class ImageTexture implements Texture{
+public class ImageTexture implements Texture {
+
+    /**
+     * horizontal size of image (default 100)
+     */
     private int hRes = 100;
+
+    /**
+     * vertical size of image (default 100)
+     */
     private int vRes = 100;
+
+    /**
+     * image to use
+     */
     private Image image = null;
+
+    /**
+     * mapping to use, this can be null.
+     */
     private Mapping mapping = null;
-    
-    public ImageTexture(){
-    }
-    
-    public ImageTexture(Image i){
-        image=i;
-        hRes=image.getHres();
-        vRes=image.getVres();
-    }
-    public ImageTexture(ImageTexture i){
-        hRes=i.hRes;
-        vRes=i.vRes;
-        if(i.image!=null){
-            image=i.image;
-        }
-        if(i.mapping!=null){
-            mapping=i.mapping.clone();
-        }
-    }
-    
-    public void setImage(Image i){
-        image = i;
-        hRes=image.getHres();
-        vRes=image.getVres();
-    }
-    
-    public void setMapping(Mapping map){
-        mapping=map;
+
+    /**
+     * default constructor.
+     */
+    public ImageTexture() {
     }
 
+    /**
+     * initializes this texture with the image provided.
+     *
+     * @param i
+     */
+    public ImageTexture(Image i) {
+        image = i;
+        hRes = image.getHres();
+        vRes = image.getVres();
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param i
+     */
+    public ImageTexture(ImageTexture i) {
+        //copy image resolution
+        hRes = i.hRes;
+        vRes = i.vRes;
+
+        //clone image and mapping if they aren't null
+        if (i.image != null) {
+            image = i.image;
+        }
+
+        if (i.mapping != null) {
+            mapping = i.mapping.clone();
+        }
+    }
+
+    /**
+     * sets the image and resolution
+     *
+     * @param i
+     */
+    public void setImage(Image i) {
+        image = i;
+        hRes = image.getHres();
+        vRes = image.getVres();
+    }
+
+    /**
+     * sets the mapping for this texture
+     *
+     * @param map
+     */
+    public void setMapping(Mapping map) {
+        mapping = map;
+    }
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Texture clone() {
         return new ImageTexture(this);
     }
 
+    /**
+     * sample texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor getColor(ShadeRec sr) {
         TexelCoord point = new TexelCoord();
-        if(mapping!=null){
-            point.setTo(mapping.getTexelCoordinate(sr.localHitPosition, hRes, vRes));
+
+        //if a mapping exists we get the texel coordinate from the mapping
+        if (mapping != null) {
+            point.setTo(mapping.getTexelCoordinate(sr.localHitPosition, hRes,
+                    vRes));
         } else {
-            point.row=(int)(sr.v*(vRes-1));
-            point.col=(int)(sr.u*(hRes-1));
+            //otherwise we use the u, v coordinates in the shade rec.
+            point.row = (int) (sr.v * (vRes - 1));
+            point.col = (int) (sr.u * (hRes - 1));
         }
         return image.getColor(point.row, point.col);
     }

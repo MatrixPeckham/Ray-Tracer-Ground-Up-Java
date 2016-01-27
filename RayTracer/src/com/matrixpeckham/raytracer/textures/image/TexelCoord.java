@@ -18,23 +18,47 @@
 package com.matrixpeckham.raytracer.textures.image;
 
 /**
+ * Simple class for integer texture coordinates.
  *
  * @author William Matrix Peckham
  */
 public class TexelCoord {
+
+    /**
+     * row, or y coord
+     */
     public int row;
+    /**
+     * col, or x coord
+     */
     public int col;
-    public TexelCoord(){
-        row=0;
-        col=0;
-    }
-    public TexelCoord(int row, int col){
-        this.row=row;
-        this.col=col;
+
+    /**
+     * zero defaults
+     */
+    public TexelCoord() {
+        row = 0;
+        col = 0;
     }
 
+    /**
+     * sets the two coordinates
+     *
+     * @param row
+     * @param col
+     */
+    public TexelCoord(int row, int col) {
+        this.row = row;
+        this.col = col;
+    }
+
+    /**
+     * java equal
+     *
+     * @param texelCoordinate
+     */
     void setTo(TexelCoord texelCoordinate) {
-        row=texelCoordinate.row;
-        col=texelCoordinate.col;
+        row = texelCoordinate.row;
+        col = texelCoordinate.col;
     }
 }

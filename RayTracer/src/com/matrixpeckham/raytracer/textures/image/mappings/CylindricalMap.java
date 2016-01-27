@@ -23,28 +23,50 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Mapping for generic cylinder
  *
  * @author William Matrix Peckham
  */
 public class CylindricalMap implements Mapping {
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Mapping clone() {
         return new CylindricalMap();
     }
 
+    /**
+     * get texel
+     *
+     * @param hitPoint
+     * @param xRes
+     * @param yRes
+     * @return
+     */
     @Override
     public TexelCoord getTexelCoordinate(Point3D hitPoint, int xRes, int yRes) {
         TexelCoord p = new TexelCoord();
-        double theta = Math.acos(hitPoint.y);
+
+        //compute angle around cylinder
         double phi = Math.atan2(hitPoint.x, hitPoint.z);
-        if(phi<0)
-            phi+=Utility.TWO_PI;
-        double u = phi* Utility.INV_2_PI;
-        double v = (hitPoint.y+1)/2;//1.0 - theta*Utility.INV_PI;
-        p.col=(int)((xRes-1)*u);
-        p.row=(int)((yRes-1)*v);
+        if (phi < 0) {
+            phi += Utility.TWO_PI;
+        }
+
+        //normalize angle
+        double u = phi * Utility.INV_2_PI;
+
+        //generic cylinder goes from -1-1 normalize y coordinte
+        double v = (hitPoint.y + 1) / 2;//1.0 - theta*Utility.INV_PI;
+
+        //get texel
+        p.col = (int) ((xRes - 1) * u);
+        p.row = (int) ((yRes - 1) * v);
         return p;
     }
-    
+
 }

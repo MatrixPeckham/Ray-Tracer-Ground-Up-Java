@@ -23,28 +23,48 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Spherical mapping, maps whole image to generic sphere.
  *
  * @author William Matrix Peckham
  */
 public class SphericalMap implements Mapping {
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Mapping clone() {
         return new SphericalMap();
     }
 
+    /**
+     * Get texel coordinate
+     *
+     * @param hitPoint
+     * @param xRes
+     * @param yRes
+     * @return
+     */
     @Override
     public TexelCoord getTexelCoordinate(Point3D hitPoint, int xRes, int yRes) {
         TexelCoord p = new TexelCoord();
+        //calculate angles of hit point
         double theta = Math.acos(hitPoint.y);
         double phi = Math.atan2(hitPoint.x, hitPoint.z);
-        if(phi<0)
-            phi+=Utility.TWO_PI;
-        double u = phi* Utility.INV_2_PI;
-        double v = 1.0 - theta*Utility.INV_PI;
-        p.col=(int)((xRes-1)*u);
-        p.row=(int)((yRes-1)*v);
+        if (phi < 0) {
+            phi += Utility.TWO_PI;
+        }
+
+        //normalize angles
+        double u = phi * Utility.INV_2_PI;
+        double v = 1.0 - theta * Utility.INV_PI;
+
+        //calculate texel
+        p.col = (int) ((xRes - 1) * u);
+        p.row = (int) ((yRes - 1) * v);
         return p;
     }
-    
+
 }

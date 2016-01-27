@@ -20,10 +20,27 @@ package com.matrixpeckham.raytracer.textures.image;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
+ * Interface that image texture uses to map hit position to texture coordinates.
  *
  * @author William Matrix Peckham
  */
 public interface Mapping {
+
+    /**
+     * clone
+     *
+     * @return
+     */
     public Mapping clone();
-    public TexelCoord getTexelCoordinate(Point3D hitPoint,int xRes, int yRes);
+
+    /**
+     * return a texture coordinate based on the point3d and the size of the
+     * image.
+     *
+     * @param hitPoint
+     * @param xRes
+     * @param yRes
+     * @return
+     */
+    public TexelCoord getTexelCoordinate(Point3D hitPoint, int xRes, int yRes);
 }

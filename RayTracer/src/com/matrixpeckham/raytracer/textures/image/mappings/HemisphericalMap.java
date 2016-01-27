@@ -23,31 +23,52 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Map for generic hemisphere
  *
  * @author William Matrix Peckham
  */
 public class HemisphericalMap implements Mapping {
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Mapping clone() {
         return new HemisphericalMap();
     }
 
+    /**
+     * get texel coordinate
+     *
+     * @param hitPoint
+     * @param xRes
+     * @param yRes
+     * @return
+     */
     @Override
     public TexelCoord getTexelCoordinate(Point3D hitPoint, int xRes, int yRes) {
         TexelCoord p = new TexelCoord();
+
+        //calculate angles
         double theta = Math.acos(hitPoint.y);
         double phi = Math.atan2(hitPoint.x, hitPoint.z);
-        if(phi<0)
-            phi+=Utility.TWO_PI;
-        double u = phi* Utility.INV_2_PI;
-        double v = 0;
-        if(hitPoint.y>0) {
-            v=1-theta/(Utility.PI/2);
+        if (phi < 0) {
+            phi += Utility.TWO_PI;
         }
-        p.col=(int)((xRes-1)*u);
-        p.row=(int)((yRes-1)*v);
+
+        //normalize
+        double u = phi * Utility.INV_2_PI;
+        double v = 0;
+        if (hitPoint.y > 0) {
+            v = 1 - theta / (Utility.PI / 2);
+        }
+
+        //look up texel
+        p.col = (int) ((xRes - 1) * u);
+        p.row = (int) ((yRes - 1) * v);
         return p;
     }
-    
+
 }

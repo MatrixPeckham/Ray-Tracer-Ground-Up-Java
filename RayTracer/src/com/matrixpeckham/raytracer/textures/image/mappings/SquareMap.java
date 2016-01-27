@@ -23,30 +23,41 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Mapping for generic rectangle to full image
  *
  * @author William Matrix Peckham
  */
-public class SquareMap implements Mapping{
+public class SquareMap implements Mapping {
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Mapping clone() {
         return new SquareMap();
     }
 
+    /**
+     * get texel coordinate
+     *
+     * @param hitPoint
+     * @param xRes
+     * @param yRes
+     * @return
+     */
     @Override
     public TexelCoord getTexelCoordinate(Point3D hitPoint, int xRes, int yRes) {
+        //generic rectangle is from -1-1 normalize to 0-1
         TexelCoord p = new TexelCoord();
-//        double theta = Math.acos(hitPoint.y);
-  //      double phi = Math.atan2(hitPoint.x, hitPoint.z);
-    //    if(phi<0)
-      //      phi+=Utility.TWO_PI;
-        //double u = phi* Utility.INV_2_PI;
-        //double v = 1.0 - theta*Utility.INV_PI;
-        double u=(hitPoint.z+1)/2;
-        double v=(hitPoint.x+1)/2;
-        p.col=(int)((xRes-1)*u);
-        p.row=(int)((yRes-1)*v);
+        double u = (hitPoint.z + 1) / 2;
+        double v = (hitPoint.x + 1) / 2;
+
+        //find texel based on normalized coordinates
+        p.col = (int) ((xRes - 1) * u);
+        p.row = (int) ((yRes - 1) * v);
         return p;
     }
-    
+
 }

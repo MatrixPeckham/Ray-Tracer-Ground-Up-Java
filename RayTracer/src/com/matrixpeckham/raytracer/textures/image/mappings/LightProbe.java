@@ -23,39 +23,82 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Light probe mapping.
  *
  * @author William Matrix Peckham
  */
 public class LightProbe implements Mapping {
-    boolean lightProbe=true;
-    public LightProbe(){
-        
+
+    /**
+     * light probe or panorama
+     */
+    boolean lightProbe = true;
+
+    /**
+     * default mapping
+     */
+    public LightProbe() {
+
     }
-    public LightProbe(boolean lightProbe){
-        this.lightProbe=lightProbe;
+
+    /**
+     * Constructor for choosing light probe or panorama
+     *
+     * @param lightProbe
+     */
+    public LightProbe(boolean lightProbe) {
+        this.lightProbe = lightProbe;
     }
-    public void makePanoramic(){
-        lightProbe=false;
+
+    /**
+     * sets mapping for panoramic
+     */
+    public void makePanoramic() {
+        lightProbe = false;
     }
-    public void setLightprobe(boolean b){
-        lightProbe=b;
+
+    /**
+     * sets light probe boolean directly
+     *
+     * @param b
+     */
+    public void setLightprobe(boolean b) {
+        lightProbe = b;
     }
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Mapping clone() {
         return new LightProbe(lightProbe);
     }
 
+    /**
+     * get Texel coordinate
+     *
+     * @param localHitPoint
+     * @param xRes
+     * @param yRes
+     * @return
+     */
     @Override
-    public TexelCoord getTexelCoordinate(Point3D localHitPoint, int xRes, int yRes) {
+    public TexelCoord getTexelCoordinate(Point3D localHitPoint, int xRes,
+            int yRes) {
+        //hit point
         double x = localHitPoint.x;
         double y = localHitPoint.y;
         double z = localHitPoint.z;
 
+        //computes the radius and angles
         double d = Math.sqrt(x * x + y * y);
         double sinBeta = y / d;
         double cosBeta = x / d;
         double alpha;
 
+        //compute angle based on panoramic or probe
         if (lightProbe) // the default
         {
             alpha = Math.acos(z);
@@ -63,6 +106,7 @@ public class LightProbe implements Mapping {
             alpha = Math.acos(-z);
         }
 
+        //normalize and look up
         double r = alpha * Utility.INV_PI;
         double u = (1.0 + r * cosBeta) * 0.5;
         double v = (1.0 + r * sinBeta) * 0.5;
