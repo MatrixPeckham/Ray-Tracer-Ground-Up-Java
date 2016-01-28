@@ -20,25 +20,42 @@ package com.matrixpeckham.raytracer.samplers;
 import com.matrixpeckham.raytracer.util.Point2D;
 
 /**
+ * Generates Hammersley samples. Not random follows a mathematical pattern,
  *
  * @author William Matrix Peckham
  */
 public class Hammersley extends Sampler {
 
+    /**
+     * default
+     */
     public Hammersley() {
         super();
     }
 
+    /**
+     * set number of samples
+     *
+     * @param num
+     */
     public Hammersley(int num) {
         super(num);
         generateSamples();
     }
 
+    /**
+     * copy constructor
+     *
+     * @param u
+     */
     public Hammersley(Hammersley u) {
         super(u);
         generateSamples();
     }
 
+    /**
+     * generates hammersley samples
+     */
     @Override
     public void generateSamples() {
 
@@ -49,6 +66,11 @@ public class Hammersley extends Sampler {
         }
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Sampler clone() {
         return new Hammersley(this);
