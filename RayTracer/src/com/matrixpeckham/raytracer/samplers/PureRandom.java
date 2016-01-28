@@ -21,38 +21,64 @@ import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Purely random samples.
  *
  * @author William Matrix Peckham
  */
 public class PureRandom extends Sampler {
 
-    public PureRandom(){
+    /**
+     * default
+     */
+    public PureRandom() {
         super();
     }
-    public PureRandom(int num){
+
+    /**
+     * construct with number of samples
+     *
+     * @param num
+     */
+    public PureRandom(int num) {
         super(num);
         generateSamples();
     }
-    public PureRandom(PureRandom u){
+
+    /**
+     * copy constructor
+     *
+     * @param u
+     */
+    public PureRandom(PureRandom u) {
         super(u);
         generateSamples();
     }
-    
-    
-    
+
+    /**
+     * generate samples
+     */
     @Override
     public void generateSamples() {
-int n = (int) Math.sqrt(numSamples);
+        int n = (int) Math.sqrt(numSamples);
 
-	for (int j = 0; j < numSets; j++)
-		for (int p = 0; p < n; p++)		
-			for (int q = 0; q < n; q++)
-				samples.add(new Point2D(Utility.randDouble(), Utility.randDouble()));
+        for (int j = 0; j < numSets; j++) {
+            for (int p = 0; p < n; p++) {
+                for (int q = 0; q < n; q++) {
+                    samples.add(new Point2D(Utility.randDouble(), Utility.
+                            randDouble()));
+                }
+            }
+        }
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Sampler clone() {
         return new PureRandom(this);
     }
-    
+
 }

@@ -60,7 +60,7 @@ public class Disk extends GeometricObject {
         area=d.area;
         invArea=d.invArea;
         sampler=d.sampler.clone();
-        sampler.mapSamplesToUnitDisk();
+        sampler.mapSamplesToUnitDisc();
         u.setTo(d.u);
         v.setTo(d.v);
         w.setTo(d.w);
@@ -140,7 +140,7 @@ public class Disk extends GeometricObject {
 
     public void setSampler(Sampler samplerPtr) {
         sampler = samplerPtr.clone();
-        sampler.mapSamplesToUnitDisk();
+        sampler.mapSamplesToUnitDisc();
     }
     
     public void computeUVW() {
@@ -165,7 +165,7 @@ public class Disk extends GeometricObject {
 
     @Override
     public Point3D sample() {
-        Point2D dp = sampler.sampleUnitDisk();
+        Point2D dp = sampler.sampleUnitDisc();
         dp=dp.mul(radius);
         Point3D rp = new Point3D(center);
         rp=rp.add(u.mul(dp.x)).add(v.mul(dp.y));

@@ -21,10 +21,25 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 
 /**
+ * Texture represents a spatially varying color.
  *
  * @author William Matrix Peckham
  */
 public interface Texture {
+
+    /**
+     * Clone the texture.
+     *
+     * @return
+     */
     public Texture clone();
+
+    /**
+     * return the color at the location represented by the shaderec.
+     * Implementation of this will vary wildly.
+     *
+     * @param sr
+     * @return
+     */
     public RGBColor getColor(ShadeRec sr);
 }

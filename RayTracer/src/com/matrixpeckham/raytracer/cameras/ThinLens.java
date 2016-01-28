@@ -103,7 +103,7 @@ public class ThinLens extends Camera {
      */
     public void setSampler(Sampler sampler) {
         this.sampler = sampler;
-        sampler.mapSamplesToUnitDisk();
+        sampler.mapSamplesToUnitDisc();
     }
     
     /**
@@ -177,7 +177,7 @@ public class ThinLens extends Camera {
                     pp.y=vp.s*(r-vp.vRes/2.0+sp.y);
                     
                     //find lens point
-                    dp.setTo(sampler.sampleUnitDisk());
+                    dp.setTo(sampler.sampleUnitDisc());
                     lp.setTo(dp.mul(lensRadius));
                     
                     //ray origin is lens point
@@ -238,7 +238,7 @@ public class ThinLens extends Camera {
                     pp.y=vp.s*(r-vp.vRes/2.0+sp.y);
                     
                     //find lens point
-                    dp.setTo(sampler.sampleUnitDisk());
+                    dp.setTo(sampler.sampleUnitDisc());
                     lp.setTo(dp.mul(lensRadius));
                     
                     //ray origin is lens point

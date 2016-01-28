@@ -21,40 +21,65 @@ import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Generates an NRooks distribution of samples.
  *
  * @author William Matrix Peckham
  */
 public class NRooks extends Sampler {
 
-    public NRooks(){
+    /**
+     * default
+     */
+    public NRooks() {
         super();
     }
-    public NRooks(int num){
+
+    /**
+     * num samples sample
+     *
+     * @param num
+     */
+    public NRooks(int num) {
         super(num);
         generateSamples();
     }
-    public NRooks(NRooks u){
+
+    /**
+     * copy constructor
+     *
+     * @param u
+     */
+    public NRooks(NRooks u) {
         super(u);
         generateSamples();
     }
-    
-    
-    
+
+    /**
+     * generate the NRooks samples
+     */
     @Override
     public void generateSamples() {
-for (int p = 0; p < numSets; p++)          			
-		for (int j = 0; j < numSamples; j++) {
-			Point2D sp=new Point2D((j + Utility.randDouble()) / numSamples, (j + Utility.randDouble()) / numSamples);
-			samples.add(sp);
-		}		
+        for (int p = 0; p < numSets; p++) {
+            for (int j = 0; j < numSamples; j++) {
+                Point2D sp
+                        = new Point2D((j + Utility.randDouble()) / numSamples,
+                                (j + Utility.randDouble()) / numSamples);
+                samples.add(sp);
+            }
+        }
 
-	shuffleXCoordinates();
-	shuffleYCoordinates();
+        shuffleXCoordinates();
+        shuffleYCoordinates();
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Sampler clone() {
         return new NRooks(this);
     }
-    
+
 }

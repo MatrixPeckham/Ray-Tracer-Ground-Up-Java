@@ -20,38 +20,63 @@ package com.matrixpeckham.raytracer.samplers;
 import com.matrixpeckham.raytracer.util.Point2D;
 
 /**
+ * Regular sampler, not random at all, generates a regular grid.
  *
  * @author William Matrix Peckham
  */
 public class Regular extends Sampler {
 
-    public Regular(){
+    /**
+     * default
+     */
+    public Regular() {
         super();
     }
-    public Regular(int num){
+
+    /**
+     * set num samples
+     *
+     * @param num
+     */
+    public Regular(int num) {
         super(num);
         generateSamples();
     }
-    public Regular(Regular u){
+
+    /**
+     * copy constructor
+     *
+     * @param u
+     */
+    public Regular(Regular u) {
         super(u);
         generateSamples();
     }
-    
-    
-    
+
+    /**
+     * generates the regular grid of samples.
+     */
     @Override
     public void generateSamples() {
-int n = (int) Math.sqrt(numSamples);
+        int n = (int) Math.sqrt(numSamples);
 
-	for (int j = 0; j < numSets; j++)
-		for (int p = 0; p < n; p++)		
-			for (int q = 0; q < n; q++)
-				samples.add(new Point2D((q + 0.5) / n, (p + 0.5) / n));
+        for (int j = 0; j < numSets; j++) {
+            for (int p = 0; p < n; p++) {
+                for (int q = 0; q < n; q++) {
+                    samples.add(new Point2D((q + 0.5) / n, (p + 0.5) / n));
+                }
+            }
+        }
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Sampler clone() {
         return new Regular(this);
     }
-    
+
 }

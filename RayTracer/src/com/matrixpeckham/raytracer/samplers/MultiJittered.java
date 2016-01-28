@@ -21,33 +21,56 @@ import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Multijittered samples.
  *
  * @author William Matrix Peckham
  */
 public class MultiJittered extends Sampler {
 
+    /**
+     * default
+     */
     public MultiJittered() {
         super();
     }
 
+    /**
+     * number of samples settable
+     *
+     * @param num
+     */
     public MultiJittered(int num) {
         super(num);
         generateSamples();
     }
-    
-    public MultiJittered(int num, int m){
-        super(num,m);
+
+    /**
+     * num is sample number and m is sets.
+     *
+     * @param num
+     * @param m
+     */
+    public MultiJittered(int num, int m) {
+        super(num, m);
         generateSamples();
     }
 
+    /**
+     * copy constructor
+     *
+     * @param u
+     */
     public MultiJittered(MultiJittered u) {
         super(u);
         //generateSamples();
     }
 
+    /**
+     * generate samples that will be multijittered
+     */
     @Override
     public void generateSamples() {
-// numSamples needs to be a perfect square
+        // numSamples needs to be a perfect square
 
         int n = (int) Math.sqrt((double) numSamples);
         double subcell_width = 1.0 / ((double) numSamples);
@@ -70,7 +93,7 @@ public class MultiJittered extends Sampler {
             }
         }
 
-	// shuffle x coordinates
+        // shuffle x coordinates
         for (int p = 0; p < numSets; p++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
@@ -83,7 +106,7 @@ public class MultiJittered extends Sampler {
             }
         }
 
-	// shuffle y coordinates
+        // shuffle y coordinates
         for (int p = 0; p < numSets; p++) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
@@ -97,6 +120,11 @@ public class MultiJittered extends Sampler {
         }
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Sampler clone() {
         return new MultiJittered(this);

@@ -70,7 +70,7 @@ public class Ring extends GeometricObject {
         invArea = d.invArea;
         if(d.sampler!=null){
             sampler = d.sampler.clone();
-            sampler.mapSamplesToUnitDisk();
+            sampler.mapSamplesToUnitDisc();
         }
         u.setTo(d.u);
         v.setTo(d.v);
@@ -170,7 +170,7 @@ public class Ring extends GeometricObject {
 
     public void setSampler(Sampler samplerPtr) {
         sampler = samplerPtr.clone();
-        sampler.mapSamplesToUnitDisk();
+        sampler.mapSamplesToUnitDisc();
     }
 
     public void computeUVW() {
@@ -195,7 +195,7 @@ public class Ring extends GeometricObject {
 
     @Override
     public Point3D sample() {
-        Point2D dp = sampler.sampleUnitDisk();
+        Point2D dp = sampler.sampleUnitDisc();
         dp = dp.mul(outerRadius-innerRadius);
         Point3D rp = new Point3D(center);
         rp = rp.add(u.mul(dp.x+innerRadius)).add(v.mul(dp.y+innerRadius));
