@@ -729,7 +729,6 @@ public class BuildFigure02 implements BuildWorldFunction {
         bumpedWaterPtr.setBumpMap(fBmBumpPtr);
         world.addObject(bumpedWaterPtr);						// use w for Figure 29.2
 
-//TODO: NEED TO IMPLEMENT BUMPS
 	// ************************************************************************************************* tiles
 	// build reflective tiles on the wall behind the bath
         // these are beveled boxes with a spatially varying reflective material

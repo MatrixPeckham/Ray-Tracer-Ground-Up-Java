@@ -27,86 +27,177 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Glossy reflective material, imperfect blurry reflections
  *
  * @author William Matrix Peckham
  */
 public class GlossyReflector extends Phong {
+
+    /**
+     * BRDF for reflection
+     */
     private GlossySpecular glossySpecularBrdf = new GlossySpecular();
 
-    public GlossyReflector(){}
-    
+    /**
+     * default constructor
+     */
+    public GlossyReflector() {
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param g
+     */
     public GlossyReflector(GlossyReflector g) {
         super(g);
-        if(g.glossySpecularBrdf!=null)glossySpecularBrdf=g.glossySpecularBrdf.clone();
+        if (g.glossySpecularBrdf != null) {
+            glossySpecularBrdf = g.glossySpecularBrdf.clone();
+        }
     }
-    
-    public void setKr(double k){
+
+    /**
+     * sets reflective multiplier
+     *
+     * @param k
+     */
+    public void setKr(double k) {
         glossySpecularBrdf.setKs(k);
     }
-    public void setExponent(double ex){
+
+    /**
+     * reflective exponent
+     *
+     * @param ex
+     */
+    public void setExponent(double ex) {
         glossySpecularBrdf.setExp(ex);
     }
-    public void setSamples(int samples, double exp){
+
+    /**
+     * sets sampler to new multijittered. with exponent
+     *
+     * @param samples
+     * @param exp
+     */
+    public void setSamples(int samples, double exp) {
         glossySpecularBrdf.setSamples(samples, exp);
     }
 
+    /**
+     * sets reflective color
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setCr(double d, double d0, double d1) {
         glossySpecularBrdf.setCs(d, d0, d1);
     }
 
+    /**
+     * shade function
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
+
+        //gets phong shading
         RGBColor L = super.shade(sr);
+
+        //camera direction
         Vector3D wo = sr.ray.d.neg();
+
+        //reflected sample direction
         Vector3D wi = new Vector3D();
-        DoubleRef pdf=new DoubleRef();
+
+        //sample pdf
+        DoubleRef pdf = new DoubleRef();
+
+        //sample brdf
         RGBColor fr = glossySpecularBrdf.sampleF(sr, wo, wi, pdf);
+
+        //ray
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(
-                sr.normal.dot(wi)/pdf.d));
-        
-        return L; //To change body of generated methods, choose Tools | Templates.
+
+        //recursive trace and color computation
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1)).mul(
+                sr.normal.dot(wi) / pdf.d));
+
+        return L;
     }
+
+    /**
+     * path shade function, for this is identical to shade function, but
+     * differed to super path shade instead of shade.
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor pathShade(ShadeRec sr) {
         RGBColor L = super.pathShade(sr);
         Vector3D wo = sr.ray.d.neg();
         Vector3D wi = new Vector3D();
-        DoubleRef pdf=new DoubleRef();
+        DoubleRef pdf = new DoubleRef();
         RGBColor fr = glossySpecularBrdf.sampleF(sr, wo, wi, pdf);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(
-                sr.normal.dot(wi)/pdf.d));
-        
-        return L; //To change body of generated methods, choose Tools | Templates.
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1)).mul(
+                sr.normal.dot(wi) / pdf.d));
+
+        return L;
     }
+
+    /**
+     * global shade function, same as shade function but differed to super
+     * global shade instead of plain shade funcion
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor globalShade(ShadeRec sr) {
         RGBColor L = super.globalShade(sr);
         Vector3D wo = sr.ray.d.neg();
         Vector3D wi = new Vector3D();
-        DoubleRef pdf=new DoubleRef();
+        DoubleRef pdf = new DoubleRef();
         RGBColor fr = glossySpecularBrdf.sampleF(sr, wo, wi, pdf);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(
-                sr.normal.dot(wi)/pdf.d));
-        
-        return L; //To change body of generated methods, choose Tools | Templates.
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1)).mul(
+                sr.normal.dot(wi) / pdf.d));
+
+        return L;
     }
 
+    /**
+     * setter
+     *
+     * @param c
+     */
     public void setCr(RGBColor c) {
         glossySpecularBrdf.setCs(c);
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Material clone() {
         return new GlossyReflector(this);
     }
 
+    /**
+     * sets sampler, and maps it to hemisphere
+     *
+     * @param multiJittered
+     * @param exp1
+     */
     public void setSampler(Sampler multiJittered, double exp1) {
         glossySpecularBrdf.setSampler(multiJittered, exp1);
     }
-    
-    
-    
+
 }

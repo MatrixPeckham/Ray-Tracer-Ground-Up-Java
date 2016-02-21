@@ -135,7 +135,6 @@ public class BuildTestBumps implements BuildWorldFunction{
 	bumpedWaterPtr.setBumpMap(tinst);//fBmBumpPtr);
 	world.addObject(bumpedWaterPtr);						// use w for Figure 29.2
 
-//TODO: NEED TO IMPLEMENT BUMPS
 
 
     }

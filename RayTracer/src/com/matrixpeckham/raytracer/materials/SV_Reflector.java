@@ -26,78 +26,150 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Reflector that uses textures for reflection color.
  *
  * @author William Matrix Peckham
  */
 public class SV_Reflector extends Phong {
+
+    /**
+     * texture BRDF
+     */
     private SV_PerfectSpecular perfectBRDF;
 
+    /**
+     * default constructor
+     */
     public SV_Reflector() {
         super();
-        perfectBRDF=new SV_PerfectSpecular();
-    }
-    public SV_Reflector(SV_Reflector r){
-        super(r);
-        perfectBRDF=r.perfectBRDF.clone();
+        perfectBRDF = new SV_PerfectSpecular();
     }
 
+    /**
+     * copy constructor
+     *
+     * @param r
+     */
+    public SV_Reflector(SV_Reflector r) {
+        super(r);
+        perfectBRDF = r.perfectBRDF.clone();
+    }
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Material clone() {
         return new SV_Reflector(this);
     }
-    public void setCr(Texture c){
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCr(Texture c) {
         perfectBRDF.setCr(c);
     }
-    public void setKr(double k){
+
+    /**
+     * setter
+     *
+     * @param k
+     */
+    public void setKr(double k) {
         perfectBRDF.setKr(k);
     }
 
+    /**
+     * shade function for perfect reflective with texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
+        //phong shade
         RGBColor L = super.shade(sr);
+
+        //from camera
         Vector3D wo = sr.ray.d.neg();
+
+        //sample
         Vector3D wi = new Vector3D();
-        
+
+        //reflected color, and gets reflected direction
         RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
-        Ray reflectedRay = new Ray(sr.hitPoint,wi);
-        
-        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
-        
+
+        //reflected ray
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+
+        //trace ray and compute color
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1).mul(
+                sr.normal.dot(wi))));
+
         return L;
     }
 
+    /**
+     * path shade reflective texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor pathShade(ShadeRec sr) {
+
+        //color
         RGBColor L = new RGBColor();
+
+        //from camera
         Vector3D wo = sr.ray.d.neg();
+
+        //reflected direction
         Vector3D wi = new Vector3D();
-        
+
+        //sample
         RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
-        Ray reflectedRay = new Ray(sr.hitPoint,wi);
-        
-        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
-        
+
+        //ray
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+
+        //recursive trace and calculate color
+        L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1).mul(
+                sr.normal.dot(wi))));
+
         return L;
     }
 
+    /**
+     * global shade, same as path shade but with a hack to make area light
+     * reflections render right
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor globalShade(ShadeRec sr) {
         RGBColor L = new RGBColor();
         Vector3D wo = sr.ray.d.neg();
         Vector3D wi = new Vector3D();
-        
+
         RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
-        Ray reflectedRay = new Ray(sr.hitPoint,wi);
-        if(sr.depth==0){
-            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+2).mul(sr.normal.dot(wi))));
+        Ray reflectedRay = new Ray(sr.hitPoint, wi);
+        //hack mentioned in book, because area lights have special case for 
+        //depth 1, we don't let depth one happen here
+        if (sr.depth == 0) {
+            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 2).
+                    mul(sr.normal.dot(wi))));
         } else {
-            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(sr.normal.dot(wi))));
+            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1).
+                    mul(sr.normal.dot(wi))));
         }
-        
+
         return L;
     }
-    
-    
 
-    
 }

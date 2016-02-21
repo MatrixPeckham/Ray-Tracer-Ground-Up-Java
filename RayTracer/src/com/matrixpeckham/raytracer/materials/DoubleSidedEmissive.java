@@ -22,62 +22,134 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Class for two sided emissive materials. created for use in the 28.46. That
+ * image didn't render properly because the emissive material was considering
+ * the interior or the sphere the back of the emissive material.
  *
  * @author William Matrix Peckham
  */
-public class DoubleSidedEmissive extends Material{
+public class DoubleSidedEmissive extends Material {
 
+    /**
+     * radiance scale
+     */
     private double ls = 1;
+
+    /**
+     * color
+     */
     private RGBColor ce = new RGBColor(1);
-    public DoubleSidedEmissive(){}
-    public DoubleSidedEmissive(DoubleSidedEmissive e){
-        ls=e.ls;
+
+    /**
+     * default constructor
+     */
+    public DoubleSidedEmissive() {
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param e
+     */
+    public DoubleSidedEmissive(DoubleSidedEmissive e) {
+        ls = e.ls;
         ce.setTo(e.ce);
     }
-    
-    public void scaleRadiance(double ls){
-        this.ls=ls;
+
+    /**
+     * sets ls
+     *
+     * @param ls
+     */
+    public void scaleRadiance(double ls) {
+        this.ls = ls;
     }
-    
-    public void setCe(double r, double g, double b){
-        ce.setTo(r,g,b);
+
+    /**
+     * set color
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
+    public void setCe(double r, double g, double b) {
+        ce.setTo(r, g, b);
     }
-    public void setCe(RGBColor c){
-        ce.setTo(c);
-    }
-    public void setCe(double c){
+
+    /**
+     * set color
+     *
+     * @param c
+     */
+    public void setCe(RGBColor c) {
         ce.setTo(c);
     }
 
+    /**
+     * sets color gray
+     *
+     * @param c
+     */
+    public void setCe(double c) {
+        ce.setTo(c);
+    }
+
+    /**
+     * shade function
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
-            return ce.mul(ls);
+        //multiplies color by radiance
+        return ce.mul(ls);
     }
 
+    /**
+     * path shade, same as shade
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor pathShade(ShadeRec sr) {
-            return ce.mul(ls);
+        return ce.mul(ls);
     }
 
+    /**
+     * global shade, same as shade but with depth hack discussed in book
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor globalShade(ShadeRec sr) {
-        if(sr.depth==1){
+        if (sr.depth == 1) {
             return Utility.BLACK;
         }
-            return ce.mul(ls);
+        return ce.mul(ls);
     }
-    
-    
+
+    /**
+     * illumination term, color multiplied by radiance
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor getLe(ShadeRec sr) {
-            return ce.mul(ls);
+        return ce.mul(ls);
     }
-    
-    
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Material clone() {
         return new DoubleSidedEmissive(this);
     }
-    
+
 }

@@ -27,21 +27,44 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Realistic transparency with color filtering.
  *
  * @author William Matrix Peckham
  */
 public class Dielectric extends Phong {
 
+    /**
+     * inside color
+     */
     private RGBColor cfIn = new RGBColor(1);
+    /**
+     * outside color
+     */
     private RGBColor cfOut = new RGBColor(1);
+
+    /**
+     * reflective BRDF
+     */
     FresnelReflector fresnelBRDF;
+
+    /**
+     * BTDF for transparency
+     */
     FresnelTransmitter fresnelBTDF;
 
+    /**
+     * default constructor
+     */
     public Dielectric() {
         fresnelBRDF = new FresnelReflector();
         fresnelBTDF = new FresnelTransmitter();
     }
 
+    /**
+     * copy Constructor
+     *
+     * @param cp
+     */
     public Dielectric(Dielectric cp) {
         super(cp);
         fresnelBRDF = new FresnelReflector(cp.fresnelBRDF);
@@ -50,24 +73,52 @@ public class Dielectric extends Phong {
         cfOut.setTo(cp.cfOut);
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Material clone() {
-        return new Dielectric(this); //To change body of generated methods, choose Tools | Templates.
+        return new Dielectric(this);
     }
 
+    /**
+     * shade function
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
-        RGBColor L = super.shade(sr); //To change body of generated methods, choose Tools | Templates.
+        RGBColor L = super.shade(sr);//get phong shade, for specular reflections
 
+        //sample reflected ray
         final Vector3D wi = new Vector3D();
+
+        //ray from camera
         Vector3D wo = new Vector3D(sr.ray.d.neg());
+
+        //sample reflection
         RGBColor fr = fresnelBRDF.sampleF(sr, wo, wi);
+
+        //ray
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
+
+        //reflection color
         final RGBColor Lr = new RGBColor();
+
+        //transmission color
         final RGBColor Lt = new RGBColor();
+
+        //cosine
         double ndotwi = sr.normal.dot(wi);
+
+        //intersection ray parameter
         DoubleRef t = new DoubleRef(Utility.HUGE_VALUE);
+
         if (fresnelBTDF.tir(sr)) {//total internal reflection
+            //trace only one reflected ray, filter with proper color
             if (ndotwi < 0) {
                 //inside
                 Lr.setTo(sr.w.tracer.traceRay(reflectedRay, t, sr.depth + 1));
@@ -78,9 +129,16 @@ public class Dielectric extends Phong {
                 L.addLocal(cfOut.powc(t.d).mul(Lr));
             }
         } else {
+            //refracted ray
             Vector3D wt = new Vector3D();
+
+            //sample transmission
             RGBColor ft = fresnelBTDF.sampleF(sr, wo, wt);
+
+            //ray
             Ray transmittedRay = new Ray(sr.hitPoint, wt);
+
+            //cosine term
             double ndotwt = sr.normal.dot(wt);
 
             if (ndotwi < 0) {
@@ -108,47 +166,94 @@ public class Dielectric extends Phong {
         return L;
     }
 
+    /**
+     * sets the interior index of refraction
+     *
+     * @param d
+     */
     public void setIorIn(double d) {
         fresnelBRDF.setIorIn(d);
         fresnelBTDF.setIorIn(d);
     }
 
+    /**
+     * sets the exterior index of refraction
+     *
+     * @param d
+     */
     public void setIorOut(double d) {
         fresnelBRDF.setIorOut(d);
         fresnelBTDF.setIorOut(d);
     }
 
+    /**
+     * sets the interior color
+     *
+     * @param c
+     */
     public void setCfIn(RGBColor c) {
         cfIn.setTo(c);
     }
 
+    /**
+     * sets the exterior color
+     *
+     * @param c
+     */
     public void setCfOut(RGBColor c) {
         cfOut.setTo(c);
     }
 
-    /*public void setKt(double d) {
-     fresnelBTDF.setKt(d);
-     }*/
+    /**
+     * sets the diffuse color that the specular shading will use
+     *
+     * @param brown
+     */
     @Override
     public void setCd(RGBColor brown) {
         super.setCd(brown); //To change body of generated methods, choose Tools | Templates.
         //cfIn.setTo(brown);
     }
 
+    /**
+     * sets the interior color
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
     public void setCfIn(double r, double g, double b) {
         setCfIn(new RGBColor(r, g, b));
     }
 
+    /**
+     * sets the interior color gray
+     *
+     * @param r
+     */
     public void setCfIn(double r) {
         setCfIn(new RGBColor(r, r, r));
     }
 
+    /**
+     * sets the exterior color
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
     public void setCfOut(double r, double g, double b) {
         setCfOut(new RGBColor(r, g, b));
     }
 
+    /**
+     * sets the exterior color gray
+     *
+     * @param r
+     */
     public void setCfOut(double r) {
         setCfOut(new RGBColor(r, r, r));
     }
 
+    //TODO: this class does not yet implement path/global tracing
 }

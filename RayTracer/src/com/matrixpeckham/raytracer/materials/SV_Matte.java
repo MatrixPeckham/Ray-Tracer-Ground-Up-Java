@@ -27,96 +27,158 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Textured Matte Material.
  *
  * @author William Matrix Peckham
  */
 public class SV_Matte extends Material {
+
+    /**
+     * texture ambient brdf
+     */
     private SV_Lambertian ambientBRDF;
+
+    /**
+     * texture diffuse brdf
+     */
     private SV_Lambertian diffuseBRDF;
-    
-    
-    public SV_Matte(){
+
+    /**
+     * default constructor
+     */
+    public SV_Matte() {
         super();
-        ambientBRDF=new SV_Lambertian();
-        diffuseBRDF=new SV_Lambertian();
+        ambientBRDF = new SV_Lambertian();
+        diffuseBRDF = new SV_Lambertian();
     }
-    
-    public SV_Matte(SV_Matte m){
+
+    /**
+     * copy constructor
+     *
+     * @param m
+     */
+    public SV_Matte(SV_Matte m) {
         super(m);
-        if(m.ambientBRDF!=null){
-            ambientBRDF=m.ambientBRDF.clone();
+        if (m.ambientBRDF != null) {
+            ambientBRDF = m.ambientBRDF.clone();
         } else {
-            ambientBRDF=null;
+            ambientBRDF = null;
         }
-        if(m.diffuseBRDF!=null){
-            diffuseBRDF=m.diffuseBRDF.clone();
+        if (m.diffuseBRDF != null) {
+            diffuseBRDF = m.diffuseBRDF.clone();
         } else {
-            diffuseBRDF=null;
+            diffuseBRDF = null;
         }
     }
 
+    /**
+     * shade function, same as Matte.shade except differs to textures
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
         Vector3D wo = sr.ray.d.neg();
-        RGBColor L = ambientBRDF.rho(sr,wo).mul(sr.w.ambient.L(sr));
+        RGBColor L = ambientBRDF.rho(sr, wo).mul(sr.w.ambient.L(sr));
         int numLights = sr.w.lights.size();
-        for(int j = 0; j<numLights; j++){
-            Vector3D wi=sr.w.lights.get(j).getDirection(sr);
+        for (int j = 0; j < numLights; j++) {
+            Vector3D wi = sr.w.lights.get(j).getDirection(sr);
             wi.normalize();
             double ndotwi = sr.normal.dot(wi);
             double ndotwo = sr.normal.dot(wo);
-            if(ndotwi>0.0&&ndotwo>0.0){
+            if (ndotwi > 0.0 && ndotwo > 0.0) {
                 boolean inShadow = false;
-                if(sr.w.lights.get(j).castsShadows()){
-                    Ray shadowRay=new Ray(sr.hitPoint,wi);
-                    inShadow = sr.w.lights.get(j).inShadow(shadowRay,sr);
+                if (sr.w.lights.get(j).castsShadows()) {
+                    Ray shadowRay = new Ray(sr.hitPoint, wi);
+                    inShadow = sr.w.lights.get(j).inShadow(shadowRay, sr);
                 }
-                if(!inShadow||!shadow){
-                    L.addLocal(diffuseBRDF.f(sr,wo,wi).mul(sr.w.lights.get(j).L(sr)).mul(sr.w.lights.get(j).G(sr)*ndotwi/sr.w.lights.get(j).pdf(sr)));
+                if (!inShadow || !shadow) {
+                    L.addLocal(diffuseBRDF.f(sr, wo, wi).mul(sr.w.lights.get(j).
+                            L(sr)).mul(sr.w.lights.get(j).G(sr) * ndotwi
+                                    / sr.w.lights.get(j).pdf(sr)));
                 }
             }
         }
         return L;
     }
-    
-    
-        @Override
+
+    /**
+     * path shade function same as Matte.pathShade() except differs to textures
+     *
+     * @param sr
+     * @return
+     */
+    @Override
     public RGBColor pathShade(ShadeRec sr) {
         Vector3D wo = sr.ray.d.neg();
         Vector3D wi = new Vector3D();
         DoubleRef pdf = new DoubleRef();
         RGBColor f = diffuseBRDF.sampleF(sr, wo, wi, pdf);
-        double ndotwi=sr.normal.dot(wi);
+        double ndotwi = sr.normal.dot(wi);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        return f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(ndotwi/pdf.d));
+        return f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1).mul(ndotwi
+                / pdf.d));
     }
 
+    /**
+     * global shade function same as Matte.globalShade() except differs to
+     * textures
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor globalShade(ShadeRec sr) {
         RGBColor L = new RGBColor();
-        if(sr.depth==0)L.setTo(shade(sr));
+        if (sr.depth == 0) {
+            L.setTo(shade(sr));
+        }
         Vector3D wo = sr.ray.d.neg();
         Vector3D wi = new Vector3D();
         DoubleRef pdf = new DoubleRef();
         RGBColor f = diffuseBRDF.sampleF(sr, wo, wi, pdf);
-        double ndotwi=sr.normal.dot(wi);
+        double ndotwi = sr.normal.dot(wi);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        L.addLocal(f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1).mul(ndotwi/pdf.d)));
+        L.addLocal(f.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1).mul(
+                ndotwi / pdf.d)));
         return L;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Material clone() {
         return new SV_Matte(this);
     }
-    
-    public void setKa(double ka){
+
+    /**
+     * setter
+     *
+     * @param ka
+     */
+    public void setKa(double ka) {
         ambientBRDF.setKd(ka);
     }
-    public void setKd(double kd){
+
+    /**
+     * setter
+     *
+     * @param kd
+     */
+    public void setKd(double kd) {
         diffuseBRDF.setKd(kd);
     }
-    public void setCd(Texture c){
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCd(Texture c) {
         ambientBRDF.setCd(c);
         diffuseBRDF.setCd(c);
     }

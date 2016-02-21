@@ -25,28 +25,55 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Material class for perfect transmission. Extends Phong to allow specular
+ * highlights.
  *
  * @author William Matrix Peckham
  */
 public class Transparent extends Phong {
+
+    /**
+     * reflective BRDF for doing reflections
+     */
     private PerfectSpecular reflectiveBRDF;
+    
+    /**
+     * perfect transmission BTDF for refraction
+     */
     private PerfectTransmitter specularBTDF;
 
-    public Transparent(){
-        reflectiveBRDF=new PerfectSpecular();
-        specularBTDF=new PerfectTransmitter();
-    }
-    public Transparent(Transparent t){
-        super(t);
-        reflectiveBRDF=t.reflectiveBRDF.clone();
-        specularBTDF=t.specularBTDF.clone();
+    /**
+     * Default constructor.
+     */
+    public Transparent() {
+        reflectiveBRDF = new PerfectSpecular();
+        specularBTDF = new PerfectTransmitter();
     }
 
+    /**
+     * copy constructor
+     * @param t 
+     */
+    public Transparent(Transparent t) {
+        super(t);
+        reflectiveBRDF = t.reflectiveBRDF.clone();
+        specularBTDF = t.specularBTDF.clone();
+    }
+
+    /**
+     * clone method
+     * @return 
+     */
     @Override
     public Material clone() {
         return new Transparent(this);
     }
-    
+
+    /**
+     * Shade function to implement transparency.
+     * @param sr
+     * @return 
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
         RGBColor L = new RGBColor(super.shade(sr));
@@ -54,36 +81,47 @@ public class Transparent extends Phong {
         Vector3D wi = new Vector3D();
         RGBColor fr = reflectiveBRDF.sampleF(sr, wo, wi);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        if(specularBTDF.tir(sr)){
-            L.addLocal(sr.w.tracer.traceRay(reflectedRay, sr.depth+1));
+        if (specularBTDF.tir(sr)) {
+            L.addLocal(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1));
             //kr=1;
         } else {
             Vector3D wt = new Vector3D();
             RGBColor ft = specularBTDF.sampleF(sr, wo, wt);
             Ray transmittedRay = new Ray(sr.hitPoint, wt);
-            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth+1)).mul(Math.abs(sr.normal.dot(wi))));
-            L.addLocal(ft.mul(sr.w.tracer.traceRay(transmittedRay, sr.depth+1)).mul(Math.abs(sr.normal.dot(wt))));
+            L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 1)).
+                    mul(Math.abs(sr.normal.dot(wi))));
+            L.addLocal(ft.
+                    mul(sr.w.tracer.traceRay(transmittedRay, sr.depth + 1)).mul(
+                            Math.abs(sr.normal.dot(wt))));
         }
-        
-        
+
         return L;
     }
 
+    /**
+     * sets index of refraction
+     * @param d 
+     */
     public void setIor(double d) {
         specularBTDF.setIor(d);
     }
 
+    /**
+     * sets the reflective multiplier
+     * @param d 
+     */
     public void setKr(double d) {
         reflectiveBRDF.setKr(d);
     }
 
+    /**
+     * sets the transmissive multiplier
+     * @param d 
+     */
     public void setKt(double d) {
         specularBTDF.setKt(d);
     }
+    
+    //TODO: this class does not yet implement path/global tracing
 
-  
-    
-    
-    
-    
 }

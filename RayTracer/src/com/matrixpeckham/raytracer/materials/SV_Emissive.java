@@ -27,74 +27,131 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Emissive texture material.
  *
  * @author William Matrix Peckham
  */
 public class SV_Emissive extends Material {
-    private Texture ce=null;
-    private double ls=1;
-    
-    public SV_Emissive(){
+
+    /**
+     * texture for light color
+     */
+    private Texture ce = null;
+
+    /**
+     * radiance
+     */
+    private double ls = 1;
+
+    /**
+     * default constructor
+     */
+    public SV_Emissive() {
         super();
     }
-    
-    public SV_Emissive(SV_Emissive m){
+
+    /**
+     * copy constructor
+     *
+     * @param m
+     */
+    public SV_Emissive(SV_Emissive m) {
         super(m);
-        if(m.ce!=null){
-            ce=m.ce.clone();
+        if (m.ce != null) {
+            ce = m.ce.clone();
         }
-        ls=m.ls;
+        ls = m.ls;
     }
-    public void scaleRadiance(double ls){
-        this.ls=ls;
+
+    /**
+     * sets radiance
+     *
+     * @param ls
+     */
+    public void scaleRadiance(double ls) {
+        this.ls = ls;
     }
+
+    /**
+     * shade function multiplies color by radiance, looks up color in texture
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor shade(ShadeRec sr) {
-        if(sr.normal.neg().dot(sr.ray.d)>0){
-            return ce.getColor(sr).mul(ls);
-        } else {
-            return Utility.BLACK;
-        }
-    }
-        @Override
-    public RGBColor pathShade(ShadeRec sr) {
-        if(sr.normal.neg().dot(sr.ray.d)>0){
+        if (sr.normal.neg().dot(sr.ray.d) > 0) {
             return ce.getColor(sr).mul(ls);
         } else {
             return Utility.BLACK;
         }
     }
 
+    /**
+     * same as shade function
+     *
+     * @param sr
+     * @return
+     */
+    @Override
+    public RGBColor pathShade(ShadeRec sr) {
+        if (sr.normal.neg().dot(sr.ray.d) > 0) {
+            return ce.getColor(sr).mul(ls);
+        } else {
+            return Utility.BLACK;
+        }
+    }
+
+    /**
+     * same as path shade function, includes hack mentioned in book.
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor globalShade(ShadeRec sr) {
-        if(sr.depth==1){
+        if (sr.depth == 1) {
             return Utility.BLACK;
         }
-        if(sr.normal.neg().dot(sr.ray.d)>0){
+        if (sr.normal.neg().dot(sr.ray.d) > 0) {
             return ce.getColor(sr).mul(ls);
         } else {
             return Utility.BLACK;
         }
     }
 
-    
-    
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Material clone() {
         return new SV_Emissive(this);
     }
-    
-    public void setCe(Texture c){
-        ce=c.clone();
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCe(Texture c) {
+        ce = c.clone();
     }
 
+    /**
+     * gets the illumination
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor getLe(ShadeRec sr) {
-        if(sr.normal.neg().dot(sr.ray.d)>0){
+        if (sr.normal.neg().dot(sr.ray.d) > 0) {
             return ce.getColor(sr).mul(ls);
         } else {
             return Utility.BLACK;
         }
     }
-    
+
 }
