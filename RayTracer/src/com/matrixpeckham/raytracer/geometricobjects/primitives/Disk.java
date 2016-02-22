@@ -90,10 +90,6 @@ public class Disk extends GeometricObject {
         return new Disk(this);
     }
 
-    @Override
-    public Normal getNormal() {
-        return normal;
-    }
 
     @Override
     public Normal getNormal(Point3D p) {

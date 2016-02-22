@@ -27,21 +27,55 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Class that represents a triangle that is part of a mesh, saves on memory by
+ * sharing vertices, normals, and uv coordinates for all vertices. Implements
+ * all the methods of geometric object except hit(). Hit() itself is almost
+ * nearly identical between implementations, the smooth triangles use
+ * interpolate normals instead of using a single one, and the uv ones add uv
+ * coordinates to the ShadeRec. unfortunately these two things are not easy to
+ * add outside of the hit function.
  *
  * @author William Matrix Peckham
  */
 public abstract class MeshTriangle extends GeometricObject {
 
+    /**
+     * reference to a mesh that contains the information for the triangle
+     */
     public Mesh mesh = null;
+
+    /**
+     * mesh indices
+     */
     public int index0 = 0;
     public int index1 = 0;
     public int index2 = 0;
+
+    /**
+     * normal of triangle plane
+     */
     public Normal normal = new Normal();
+
+    /**
+     * area of triangle, not used yet, could be used for making meshes area
+     * lights, but that would be non-trivial
+     */
     public double area = 0;
 
+    /**
+     * default constructor
+     */
     public MeshTriangle() {
     }
 
+    /**
+     * constructor initializes indices and mesh
+     *
+     * @param mesh
+     * @param i0
+     * @param i1
+     * @param i2
+     */
     public MeshTriangle(Mesh mesh, int i0, int i1, int i2) {
         super();
         this.mesh = mesh;
@@ -50,6 +84,11 @@ public abstract class MeshTriangle extends GeometricObject {
         index2 = i2;
     }
 
+    /**
+     * copy constructor
+     *
+     * @param mt
+     */
     public MeshTriangle(MeshTriangle mt) {
         super(mt);
         mesh = mt.mesh;
@@ -59,21 +98,41 @@ public abstract class MeshTriangle extends GeometricObject {
         normal.setTo(mt.normal);
     }
 
+    /**
+     * computes the single plane normal of the triangle, used during loading
+     * mesh, as flat normal for triangles and for creating per-vertex normals
+     * for smooth meshes
+     *
+     * @param reverseNormal
+     */
     public void computeNormal(boolean reverseNormal) {
+        //cross product of vertex position differences
         normal.setTo(
                 mesh.vertices.get(index1).sub(mesh.vertices.get(index0)).cross(
                         mesh.vertices.get(index2).sub(mesh.vertices.get(index0)))
         );
+        //normalize and reverse if requested
         normal.normalize();
         if (reverseNormal) {
             normal.setTo(normal.neg());
         }
     }
 
+    /**
+     * returns the plane normal. used only in triangle mesh creation
+     *
+     * @return
+     */
     public Normal getNormal() {
         return normal;
     }
 
+    /**
+     * bounding box method, calculates the bounding box. we get the coordinates
+     * from the mesh by using the image
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
         double delta = 0.0001;  // to avoid degenerate bounding boxes
@@ -90,8 +149,17 @@ public abstract class MeshTriangle extends GeometricObject {
                                 v1.z, v2.z), v3.z) + delta));
     }
 
+    /**
+     * shadow hit, works like Triangle.hit(), but we have to get the vertices
+     * from the indexes
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        //early bailout that all implementations have
         if (!shadows) {
             return false;
         }
@@ -115,7 +183,7 @@ public abstract class MeshTriangle extends GeometricObject {
             return (false);
         }
 
-        double r = r = e * l - h * i;
+        double r = e * l - h * i;
         double e2 = a * n + d * q + c * r;
         double gamma = e2 * inv_denom;
 
@@ -139,11 +207,28 @@ public abstract class MeshTriangle extends GeometricObject {
         return (true);
     }
 
+    /**
+     * interpolates u coordinate of the mesh based on the barycentric
+     * coordinates
+     *
+     * @param beta
+     * @param gamma
+     * @return
+     */
     double interpolateU(double beta, double gamma) {
         return (1 - beta - gamma) * mesh.u.get(index0)
                 + beta * mesh.u.get(index1)
                 + gamma * mesh.u.get(index2);
     }
+
+    /**
+     * interpolates v coordinate of the mesh based on the barycentric
+     * coordinates
+     *
+     * @param beta
+     * @param gamma
+     * @return
+     */
     double interpolateV(double beta, double gamma) {
         return (1 - beta - gamma) * mesh.v.get(index0)
                 + beta * mesh.v.get(index1)

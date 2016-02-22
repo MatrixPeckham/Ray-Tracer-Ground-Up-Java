@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.triangles.FlatMeshTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.FlatUVMeshTriangle;
+import com.matrixpeckham.raytracer.geometricobjects.triangles.MeshTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothMeshTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothTriangle;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothUVMeshTriangle;
@@ -65,9 +66,10 @@ public class TriangleMesh extends Grid {
     }
 
     public TriangleMesh(TriangleMesh m) {
-        this();
+        this(m.mesh);
     }
 
+    @Override
     public TriangleMesh clone() {
         return new TriangleMesh(this);
     }
@@ -162,7 +164,7 @@ public class TriangleMesh extends Grid {
         for (int ind = 0; ind < mesh.numVertices; ind++) {
             Normal normal = new Normal();
             for (int j = 0; j < mesh.vertexFaces.get(ind).size(); j++) {
-                normal.addLocal(objects.get(mesh.vertexFaces.get(ind).get(j)).
+                normal.addLocal(((MeshTriangle)objects.get(mesh.vertexFaces.get(ind).get(j))).
                         getNormal());
             }
             if (normal.x == 0 && normal.y == 0 && normal.z == 0) {

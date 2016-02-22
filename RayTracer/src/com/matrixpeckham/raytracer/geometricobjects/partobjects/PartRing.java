@@ -91,10 +91,6 @@ public class PartRing extends GeometricObject {
         return new PartRing(this);
     }
 
-    @Override
-    public Normal getNormal() {
-        return normal;
-    }
 
     @Override
     public Normal getNormal(Point3D p) {

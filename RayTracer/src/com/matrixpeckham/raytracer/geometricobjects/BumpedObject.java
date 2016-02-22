@@ -77,10 +77,6 @@ public class BumpedObject extends GeometricObject {
         return obj.shadowHit(ray, t);
     }
 
-    @Override
-    public Normal getNormal() {
-        return obj.getNormal();
-    }
 
     @Override
     public Normal getNormal(Point3D p) {

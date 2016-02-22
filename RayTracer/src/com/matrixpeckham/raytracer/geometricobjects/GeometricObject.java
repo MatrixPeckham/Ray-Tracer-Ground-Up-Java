@@ -73,9 +73,6 @@ public abstract class GeometricObject {
         return color;
     }
     
-    public Normal getNormal(){
-        return new Normal();
-    }
     
     public Normal getNormal(Point3D p){
         return new Normal();

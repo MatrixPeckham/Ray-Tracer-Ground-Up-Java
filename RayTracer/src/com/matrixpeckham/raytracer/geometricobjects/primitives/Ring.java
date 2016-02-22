@@ -115,10 +115,6 @@ public class Ring extends GeometricObject {
         return new Ring(this);
     }
 
-    @Override
-    public Normal getNormal() {
-        return normal;
-    }
 
     @Override
     public Normal getNormal(Point3D p) {

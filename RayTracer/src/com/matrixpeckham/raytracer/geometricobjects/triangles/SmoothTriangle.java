@@ -27,22 +27,57 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Triangle class that represents a single triangle, but uses a normal per
+ * vertex which is interpolated to the hit point of the rays.
  *
  * @author William Matrix Peckham
  */
 public class SmoothTriangle extends GeometricObject {
 
+    /**
+     * normal for point 1
+     */
     public final Normal n0 = new Normal(0, 1, 0);
+
+    /**
+     * normal for point 2
+     */
     public final Normal n1 = new Normal(0, 1, 0);
+
+    /**
+     * normal for point 3
+     */
     public final Normal n2 = new Normal(0, 1, 0);
+
+    /**
+     * point 1
+     */
     private final Point3D v0 = new Point3D(0);
+
+    /**
+     * point 2
+     */
     private final Point3D v1 = new Point3D(0, 0, 1);
+
+    /**
+     * point 3
+     */
     private final Point3D v2 = new Point3D(1, 0, 0);
 
+    /**
+     * default constructor
+     */
     public SmoothTriangle() {
         super();
     }
 
+    /**
+     * constructor with vertices
+     *
+     * @param a
+     * @param b
+     * @param c
+     */
     public SmoothTriangle(Point3D a, Point3D b, Point3D c) {
         super();
         v0.setTo(a);
@@ -50,6 +85,11 @@ public class SmoothTriangle extends GeometricObject {
         v2.setTo(c);
     }
 
+    /**
+     * copy constructor
+     *
+     * @param s
+     */
     public SmoothTriangle(SmoothTriangle s) {
         super(s);
         v0.setTo(s.v0);
@@ -60,20 +100,40 @@ public class SmoothTriangle extends GeometricObject {
         n2.setTo(s.n2);
     }
 
+    /**
+     * clone method
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new SmoothTriangle(this);
     }
 
+    /**
+     * method interpolates a normal based on the barycentric coordinates
+     *
+     * @param beta
+     * @param gamma
+     * @return
+     */
     private Normal interpolateNormal(double beta, double gamma) {
-        Normal normal = new Normal(n0.mul(1 - beta - gamma).add(n1.mul(beta)).add(n2.mul(
-                gamma)));
+        Normal normal = new Normal(n0.mul(1 - beta - gamma).add(n1.mul(beta)).
+                add(n2.mul(
+                                gamma)));
         normal.normalize();
         return normal;
     }
 
+    /**
+     * bounding box method
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
+
+        //identical to Triangle.getBoundingBox()
         double delta = 0.0001;
 
         return (new BBox(Math.min(Math.min(v0.x, v1.x), v2.x) - delta, Math.max(
@@ -84,8 +144,16 @@ public class SmoothTriangle extends GeometricObject {
                                 v0.z, v1.z), v2.z) + delta));
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
+        //identical to Triangle.hit() except normal is set to interpolateNormal() instead of normal member.
         double a = v0.x - v1.x, b = v0.x - v2.x, c = ray.d.x, d = v0.x - ray.o.x;
         double e = v0.y - v1.y, f = v0.y - v2.y, g = ray.d.y, h = v0.y - ray.o.y;
         double i = v0.z - v1.z, j = v0.z - v2.z, k = ray.d.z, l = v0.z - ray.o.z;
@@ -102,7 +170,7 @@ public class SmoothTriangle extends GeometricObject {
             return (false);
         }
 
-        double r  = e * l - h * i;
+        double r = e * l - h * i;
         double e2 = a * n + d * q + c * r;
         double gamma = e2 * inv_denom;
 
@@ -128,9 +196,21 @@ public class SmoothTriangle extends GeometricObject {
         return (true);
     }
 
+    /**
+     * shadow hit
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        //early bailout all implementations have.
+        if (!shadows) {
+            return false;
+        }
+
+        //identical to Triangle.shadowHit()
         double a = v0.x - v1.x, b = v0.x - v2.x, c = ray.d.x, d = v0.x - ray.o.x;
         double e = v0.y - v1.y, f = v0.y - v2.y, g = ray.d.y, h = v0.y - ray.o.y;
         double i = v0.z - v1.z, j = v0.z - v2.z, k = ray.d.z, l = v0.z - ray.o.z;
