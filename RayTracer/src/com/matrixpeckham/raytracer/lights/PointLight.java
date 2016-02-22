@@ -25,92 +25,186 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Point Light class.
  *
  * @author William Matrix Peckham
  */
-public class PointLight extends Light{
+public class PointLight extends Light {
+
+    /**
+     * radiance
+     */
     private double ls;
+
+    /**
+     * attenuation exponent
+     */
     private double exp;
+
+    /**
+     * light color
+     */
     private RGBColor color;
+
+    /**
+     * point light location
+     */
     Point3D location;
-    
-    public PointLight(){
+
+    /**
+     * default constructor
+     */
+    public PointLight() {
         super();
-        ls=1;
-        exp=0;
-        color=new RGBColor(1);
-        location=new Point3D(0,1,0);
+        ls = 1;
+        exp = 0;
+        color = new RGBColor(1);
+        location = new Point3D(0, 1, 0);
     }
-    
-    public PointLight(PointLight dl){
+
+    /**
+     * copy constructor
+     *
+     * @param dl
+     */
+    public PointLight(PointLight dl) {
         super(dl);
-        ls=dl.ls;
-        exp=dl.exp;
-        color=new RGBColor(dl.color);
-        location=new Point3D(dl.location);
+        ls = dl.ls;
+        exp = dl.exp;
+        color = new RGBColor(dl.color);
+        location = new Point3D(dl.location);
     }
-    
-    public void scaleRadiance(double b){
-        ls=b;
+
+    /**
+     * sets the radiance
+     *
+     * @param b
+     */
+    public void scaleRadiance(double b) {
+        ls = b;
     }
-    
-    public void setExp(double exp){
-        this.exp=exp;
+
+    /**
+     * sets the attenuation exponent
+     *
+     * @param exp
+     */
+    public void setExp(double exp) {
+        this.exp = exp;
     }
-    
-    public void setColor(double c){
-        color.r=c;
-        color.g=c;
-        color.b=c;
+
+    /**
+     * sets color gray
+     *
+     * @param c
+     */
+    public void setColor(double c) {
+        color.r = c;
+        color.g = c;
+        color.b = c;
     }
-    
-    public void setColor(RGBColor c){
+
+    /**
+     * sets the color
+     *
+     * @param c
+     */
+    public void setColor(RGBColor c) {
         color.setTo(c);
     }
-    
-    public void setColor(double r, double g, double b){
+
+    /**
+     * sets the color
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
+    public void setColor(double r, double g, double b) {
         color.setTo(r, g, b);
     }
-    
-    public void setLocation(Point3D d){
+
+    /**
+     * sets location
+     *
+     * @param d
+     */
+    public void setLocation(Point3D d) {
         location.setTo(d);
     }
-    
-    public void setLocation(double dx, double dy, double dz){
-        location.setTo(dx,dy,dz);
+
+    /**
+     * sets location
+     *
+     * @param dx
+     * @param dy
+     * @param dz
+     */
+    public void setLocation(double dx, double dy, double dz) {
+        location.setTo(dx, dy, dz);
     }
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Light clone() {
         return new PointLight(this);
     }
 
+    /**
+     * returns direction from hit point to light location
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public Vector3D getDirection(ShadeRec sr) {
         return location.sub(sr.hitPoint).hat();
     }
 
+    /**
+     * returns the illumination provided by this light to the hit point. it's
+     * the color times radiance over distance to the power of exponent
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor L(ShadeRec sr) {
         double dist = sr.hitPoint.distance(location);
-        return color.mul(ls/Math.pow(dist, exp));
+        return color.mul(ls / Math.pow(dist, exp));
     }
 
+    /**
+     * in shadow function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean inShadow(Ray ray, ShadeRec sr) {
-        DoubleRef t = new DoubleRef(0); 
-        int numObjects = sr.w.objects.size();
+        //reference double for shadow hit function
+        DoubleRef t = new DoubleRef(0);
+
+        //distance from light to hit position
         double d = location.distance(ray.o);
-        for(int j=0;j<numObjects;j++){
-            if(sr.w.objects.get(j).shadowHit(ray,t)&&t.d<d&&sr.material.getShadows()){
+
+        //loop though objects in scene
+        int numObjects = sr.w.objects.size();
+        for (int j = 0; j < numObjects; j++) {
+            //shadow hit function returns distance through reference
+            //if that point is closer than the light we're in shadow
+            //also check if the material casts shadows
+            if (sr.w.objects.get(j).shadowHit(ray, t) && t.d < d && sr.material.
+                    getShadows()) {
                 return true;
             }
         }
         return false;
     }
 
-    
-    
-    
-    
 }

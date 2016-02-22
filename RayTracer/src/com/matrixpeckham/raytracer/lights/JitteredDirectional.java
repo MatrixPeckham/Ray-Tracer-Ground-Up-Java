@@ -22,48 +22,85 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Jittered directional light for getting soft shadows. For reproducible results
+ * call Utility.setSeed() if you use this class.
  *
  * @author William Matrix Peckham
  */
 public class JitteredDirectional extends Directional {
+
+    /**
+     * jitter amount
+     */
     double r = 1;
+
+    /**
+     * default constructor
+     */
     public JitteredDirectional() {
         super();
         dir.normalize();
     }
 
+    /**
+     * copy constructor
+     *
+     * @param dl
+     */
     public JitteredDirectional(JitteredDirectional dl) {
         super(dl);
         dir.normalize();
-        this.r=dl.r;
+        this.r = dl.r;
     }
 
+    /**
+     * setter, makes sure normalization occurs
+     *
+     * @param d
+     */
     @Override
     public void setDirection(Vector3D d) {
-        super.setDirection(d); //To change body of generated methods, choose Tools | Templates.
+        super.setDirection(d);
         dir.normalize();
     }
 
+    /**
+     * set direction
+     *
+     * @param dx
+     * @param dy
+     * @param dz
+     */
     @Override
     public void setDirection(double dx, double dy, double dz) {
-        super.setDirection(dx, dy, dz); //To change body of generated methods, choose Tools | Templates.
+        super.setDirection(dx, dy, dz);
         dir.normalize();
     }
 
+    /**
+     * get direction randomly jitters the direction, to be reproduced we need to
+     * set the seed of the Utility class if we use this class
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public Vector3D getDirection(ShadeRec sr) {
         Vector3D ndir = new Vector3D();
-        ndir.x=dir.x+r*(2*Utility.randDouble()-1);
-        ndir.y=dir.y+r*(2*Utility.randDouble()-1);
-        ndir.z=dir.z+r*(2*Utility.randDouble()-1);
+        ndir.x = dir.x + r * (2 * Utility.randDouble() - 1);
+        ndir.y = dir.y + r * (2 * Utility.randDouble() - 1);
+        ndir.z = dir.z + r * (2 * Utility.randDouble() - 1);
         ndir.normalize();
         return ndir;
     }
 
+    /**
+     * sets the jitter amount.
+     *
+     * @param d
+     */
     public void setJitterAmount(double d) {
-        r=d;
+        r = d;
     }
 
-
-    
 }

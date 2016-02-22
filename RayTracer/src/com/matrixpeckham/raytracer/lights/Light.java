@@ -24,39 +24,103 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Light class. This class is for light sources in the scene.
  *
  * @author William Matrix Peckham
  */
 public abstract class Light {
+
+    /**
+     * boolean flag for whether or not this light will cast shadows.
+     */
     protected boolean shadows = true;
 
-    public Light(){}
-    public Light(Light ls){
-        this.shadows=ls.shadows;
+    /**
+     * default constructor
+     */
+    public Light() {
     }
-    public Light setTo(Light l){
-        this.shadows=l.shadows;
-        return this;
+
+    /**
+     * copy constructor
+     *
+     * @param ls
+     */
+    public Light(Light ls) {
+        this.shadows = ls.shadows;
     }
+
+    /**
+     * clone method
+     *
+     * @return
+     */
     public abstract Light clone();
+
+    /**
+     * Gets the direction from the hit point to this light. For area lights this
+     * will choose a sample point on the light and return the direction to that
+     * point.
+     *
+     * @param sr
+     * @return
+     */
     public abstract Vector3D getDirection(ShadeRec sr);
-    public RGBColor L(ShadeRec sr){
+
+    /**
+     * Gets the light that this light is producing.
+     *
+     * @param sr
+     * @return
+     */
+    public RGBColor L(ShadeRec sr) {
         return Utility.BLACK;
     }
-    
-    public double G(ShadeRec sr){
+
+    /**
+     * part of the geometric term.
+     *
+     * @param sr
+     * @return
+     */
+    public double G(ShadeRec sr) {
         return 1;
     }
-    
-    public double pdf(ShadeRec sr){
+
+    /**
+     * probability density function.
+     *
+     * @param sr
+     * @return
+     */
+    public double pdf(ShadeRec sr) {
         return 1;
     }
+
+    /**
+     * setters
+     *
+     * @param b
+     */
     public void setShadows(boolean b) {
-        shadows=b;
+        shadows = b;
     }
+
+    /**
+     * does this light cast shadows
+     *
+     * @return
+     */
     public boolean castsShadows() {
         return shadows;
     }
 
+    /**
+     * Whether or not the hit point is in shadow following the ray.
+     *
+     * @param shadowRay
+     * @param sr
+     * @return
+     */
     public abstract boolean inShadow(Ray shadowRay, ShadeRec sr);
 }

@@ -23,32 +23,58 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Class approximates a spherical light. users of this class should call
+ * Utility.setSeed() to ensure reproducibility.
  *
  * @author William Matrix Peckham
  */
 public class FakeSphericalLight extends PointLight {
+
+    /**
+     * radius of light
+     */
     double r = 1;
 
-    public FakeSphericalLight(){}
-    
-    public FakeSphericalLight(FakeSphericalLight dl) {
-        super(dl);
-        r=dl.r;
+    /**
+     * default constructor
+     */
+    public FakeSphericalLight() {
     }
 
+    /**
+     * copy constructor
+     *
+     * @param dl
+     */
+    public FakeSphericalLight(FakeSphericalLight dl) {
+        super(dl);
+        r = dl.r;
+    }
+
+    /**
+     * get direction method, gets the direction from the hit point to this
+     * light, chooses a random point with radius distance to make the point of
+     * the light
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public Vector3D getDirection(ShadeRec sr) {
         Point3D nloc = new Point3D();
-        nloc.x=location.x+r*(2*Utility.randDouble()-1);
-        nloc.y=location.y+r*(2*Utility.randDouble()-1);
-        nloc.z=location.z+r*(2*Utility.randDouble()-1);
+        nloc.x = location.x + r * (2 * Utility.randDouble() - 1);
+        nloc.y = location.y + r * (2 * Utility.randDouble() - 1);
+        nloc.z = location.z + r * (2 * Utility.randDouble() - 1);
         return nloc.sub(sr.hitPoint).hat();
     }
 
+    /**
+     * sets the light radius
+     *
+     * @param radius
+     */
     public void setJitterAmount(double radius) {
-        r=radius;
+        r = radius;
     }
-    
-    
-    
+
 }

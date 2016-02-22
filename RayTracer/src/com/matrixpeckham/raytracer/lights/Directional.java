@@ -24,83 +24,162 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Directional light class. Light from a direction with no location.
  *
  * @author William Matrix Peckham
  */
-public class Directional extends Light{
+public class Directional extends Light {
+
+    /**
+     * radiance
+     */
     private double ls;
+
+    /**
+     * color
+     */
     private RGBColor color;
+
+    /**
+     * direction of light
+     */
     Vector3D dir;
-    
-    public Directional(){
+
+    /**
+     * default constructor
+     */
+    public Directional() {
         super();
-        ls=1;
-        color=new RGBColor(1);
-        dir=new Vector3D(0,1,0);
+        ls = 1;
+        color = new RGBColor(1);
+        dir = new Vector3D(0, 1, 0);
     }
-    
-    public Directional(Directional dl){
+
+    /**
+     * copy constructor
+     *
+     * @param dl
+     */
+    public Directional(Directional dl) {
         super(dl);
-        ls=dl.ls;
-        color=new RGBColor(dl.color);
-        dir=new Vector3D(dl.dir);
+        ls = dl.ls;
+        color = new RGBColor(dl.color);
+        dir = new Vector3D(dl.dir);
     }
-    
-    public void scaleRadiance(double b){
-        ls=b;
+
+    /**
+     * sets radiance
+     *
+     * @param b
+     */
+    public void scaleRadiance(double b) {
+        ls = b;
     }
-    
-    public void setColor(double c){
-        color.r=c;
-        color.g=c;
-        color.b=c;
+
+    /**
+     * sets color gray
+     *
+     * @param c
+     */
+    public void setColor(double c) {
+        color.r = c;
+        color.g = c;
+        color.b = c;
     }
-    
-    public void setColor(RGBColor c){
+
+    /**
+     * sets light color
+     *
+     * @param c
+     */
+    public void setColor(RGBColor c) {
         color.setTo(c);
     }
-    
-    public void setColor(double r, double g, double b){
+
+    /**
+     * sets color
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
+    public void setColor(double r, double g, double b) {
         color.setTo(r, g, b);
     }
-    
-    public void setDirection(Vector3D d){
+
+    /**
+     * set direction of light
+     *
+     * @param d
+     */
+    public void setDirection(Vector3D d) {
         dir.setTo(d);
         dir.normalize();
     }
-    
-    public void setDirection(double dx, double dy, double dz){
-        dir.setTo(dx,dy,dz);
+
+    /**
+     * set direction of light
+     *
+     * @param dx
+     * @param dy
+     * @param dz
+     */
+    public void setDirection(double dx, double dy, double dz) {
+        dir.setTo(dx, dy, dz);
         dir.normalize();
     }
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Light clone() {
         return new Directional(this);
     }
 
+    /**
+     * get direction from point to light, returns this lights direction
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public Vector3D getDirection(ShadeRec sr) {
         return dir;
     }
 
+    /**
+     * returns luminescence
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public RGBColor L(ShadeRec sr) {
         return color.mul(ls);
     }
 
+    /**
+     * shadow test returns true if any object intersects the ray from the hit
+     * point
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean inShadow(Ray ray, ShadeRec sr) {
-        DoubleRef t = new DoubleRef(0); 
+        DoubleRef t = new DoubleRef(0);
         int numObjects = sr.w.objects.size();
-        for(int j=0;j<numObjects;j++){
-            if(sr.w.objects.get(j).shadowHit(ray,t)&&sr.material.getShadows()){
+        for (int j = 0; j < numObjects; j++) {
+            if (sr.w.objects.get(j).shadowHit(ray, t) && sr.material.
+                    getShadows()) {
                 return true;
             }
         }
         return false;
     }
-    
-    
-    
+
 }
