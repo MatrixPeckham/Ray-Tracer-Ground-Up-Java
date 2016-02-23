@@ -30,153 +30,268 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * rectangle class, starts at a point and uses two vectors for extents
  *
  * @author William Matrix Peckham
  */
-public class Rectangle extends GeometricObject{
-    private final Point3D p0 = new Point3D(-1,0,-1);
-    private final Vector3D a = new Vector3D(0,0,2);
-    private final Vector3D b = new Vector3D(2,0,0);
+public class Rectangle extends GeometricObject {
+
+    /**
+     * coordinate point
+     */
+    private final Point3D p0 = new Point3D(-1, 0, -1);
+
+    /**
+     * one directions extents
+     */
+    private final Vector3D a = new Vector3D(0, 0, 2);
+
+    /**
+     * other directions extents
+     */
+    private final Vector3D b = new Vector3D(2, 0, 0);
+
+    /**
+     * square of length along a
+     */
     private double aLenSquared = 4;
+
+    /**
+     * square of length along b
+     */
     private double bLenSquared = 4;
-    private final Normal normal = new Normal(0,1,0);
+
+    /**
+     * normal of rectangle
+     */
+    private final Normal normal = new Normal(0, 1, 0);
+
+    /**
+     * area of rectangle
+     */
     private double area = 4;
+
+    /**
+     * inverse of area
+     */
     private double invArea = 0.25;
+
+    /**
+     * sampler if this is an area light
+     */
     private Sampler sampler = null;
 
-    public Rectangle(){super();}
-    public Rectangle(Point3D p, Vector3D a, Vector3D b){
-        p0.setTo(p);
-        this.a.setTo(a);
-        this.b.setTo(b);
-        aLenSquared=a.lenSquared();
-        bLenSquared=b.lenSquared();
-        area=a.length()*b.length();
-        invArea=1/area;
-        sampler=null;
-        normal.setTo(a.cross(b));
-        normal.normalize();
+    /**
+     * default constructor
+     */
+    public Rectangle() {
+        super();
     }
-    public Rectangle(Point3D p, Vector3D a, Vector3D b, Normal n){
+
+    /**
+     * initializing constructor
+     *
+     * @param p
+     * @param a
+     * @param b
+     */
+    public Rectangle(Point3D p, Vector3D a, Vector3D b) {
         super();
         p0.setTo(p);
         this.a.setTo(a);
         this.b.setTo(b);
-        area=a.length()*b.length();
-        aLenSquared=a.lenSquared();
-        bLenSquared=b.lenSquared();
-        invArea=1/area;
-        sampler=null;
+        aLenSquared = a.lenSquared();
+        bLenSquared = b.lenSquared();
+        area = a.length() * b.length();
+        invArea = 1 / area;
+        sampler = null;
+        normal.setTo(a.cross(b));
+        normal.normalize();
+    }
+
+    /**
+     * another initializing constructor, this one takes the normal too which
+     * prevents it from being recalculated if the calling code already has
+     *
+     * @param p
+     * @param a
+     * @param b
+     * @param n
+     */
+    public Rectangle(Point3D p, Vector3D a, Vector3D b, Normal n) {
+        super();
+        p0.setTo(p);
+        this.a.setTo(a);
+        this.b.setTo(b);
+        area = a.length() * b.length();
+        aLenSquared = a.lenSquared();
+        bLenSquared = b.lenSquared();
+        invArea = 1 / area;
+        sampler = null;
         normal.setTo(n);
         normal.normalize();
     }
-    
-    public Rectangle(Rectangle r){
+
+    /**
+     * copy constructor
+     *
+     * @param r
+     */
+    public Rectangle(Rectangle r) {
         super(r);
         p0.setTo(r.p0);
         this.a.setTo(r.a);
         this.b.setTo(r.b);
-        aLenSquared=r.aLenSquared;
-        bLenSquared=r.bLenSquared;
-        area=r.area;
-        invArea=r.invArea;
-        sampler=null;
+        aLenSquared = r.aLenSquared;
+        bLenSquared = r.bLenSquared;
+        area = r.area;
+        invArea = r.invArea;
+        sampler = null;
         normal.setTo(r.normal);
         normal.normalize();
-        if(r.sampler!=null){
-            sampler=r.sampler.clone();
+        if (r.sampler != null) {
+            sampler = r.sampler.clone();
         }
     }
 
+    /**
+     * gets a bounding box
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
-	double delta = 0.0001; 
+        double delta = 0.0001;
 
-	return(new BBox(Math.min(p0.x, p0.x + a.x + b.x) - delta, Math.max(p0.x, p0.x + a.x + b.x) + delta,
-				Math.min(p0.y, p0.y + a.y + b.y) - delta, Math.max(p0.y, p0.y + a.y + b.y) + delta, 
-				Math.min(p0.z, p0.z + a.z + b.z) - delta, Math.max(p0.z, p0.z + a.z + b.z) + delta));
+        return (new BBox(Math.min(p0.x, p0.x + a.x + b.x) - delta, Math.
+                max(p0.x, p0.x + a.x + b.x) + delta,
+                Math.min(p0.y, p0.y + a.y + b.y) - delta, Math.max(p0.y, p0.y
+                        + a.y + b.y) + delta,
+                Math.min(p0.z, p0.z + a.z + b.z) - delta, Math.max(p0.z, p0.z
+                        + a.z + b.z) + delta));
     }
-    
-    
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Rectangle(this);
     }
 
+    /**
+     * hit method
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
+        //plane intersection parameter
         double t = p0.sub(ray.o).dot(normal) / ray.d.dot(normal);
-        if(t<=Utility.EPSILON){
-            return false;
-        }
-        Point3D p = ray.o.add(ray.d.mul(t));
-        Vector3D d = p.sub(p0);
-        
-        double ddota = d.dot(a);
-        
-        if(ddota<0 || ddota > aLenSquared){
+        if (t <= Utility.EPSILON) {
             return false;
         }
 
-        double ddotb = d.dot(b);
-        
-        if(ddotb<0 || ddotb > bLenSquared){
+        //hit point
+        Point3D p = ray.o.add(ray.d.mul(t));
+
+        //from point on plane to hit point
+        Vector3D d = p.sub(p0);
+
+        //project onto a
+        double ddota = d.dot(a);
+        //we're outside of the a direction
+        if (ddota < 0 || ddota > aLenSquared) {
             return false;
         }
-        
-        s.lastT=t;
+
+        //project onto b
+        double ddotb = d.dot(b);
+        //we're outside of the b direction
+        if (ddotb < 0 || ddotb > bLenSquared) {
+            return false;
+        }
+        //if we're here we hit and set shaderec up
+        s.lastT = t;
         s.normal.setTo(normal);
         s.localHitPosition.setTo(p);
         return true;
-}
+    }
 
+    /**
+     * shadow hit function, works the same way as the hit function
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        //early out if we don't cast shadows all implementations have this
+        if (!shadows) {
+            return false;
+        }
         double t = p0.sub(ray.o).dot(normal) / ray.d.dot(normal);
-        if(t<=Utility.EPSILON){
+        if (t <= Utility.EPSILON) {
             return false;
         }
         Point3D p = ray.o.add(ray.d.mul(t));
         Vector3D d = p.sub(p0);
-        
+
         double ddota = d.dot(a);
-        
-        if(ddota<0 || ddota > aLenSquared){
+
+        if (ddota < 0 || ddota > aLenSquared) {
             return false;
         }
 
         double ddotb = d.dot(b);
-        
-        if(ddotb<0 || ddotb > bLenSquared){
+
+        if (ddotb < 0 || ddotb > bLenSquared) {
             return false;
         }
-        
-        tr.d=t;
+
+        tr.d = t;
         return true;
     }
-    
-    public void setSampler(Sampler s){
-        sampler=s;
+
+    /**
+     * sets a sampler
+     *
+     * @param s
+     */
+    public void setSampler(Sampler s) {
+        sampler = s;
     }
-    
+
+    /**
+     * samples the rectangle
+     *
+     * @return
+     */
     @Override
-    public Point3D sample(){
+    public Point3D sample() {
         Point2D samplePoint = sampler.sampleUnitSquare();
         return p0.add(a.mul(samplePoint.x).add(b.mul(samplePoint.y)));
     }
 
+    /**
+     * returns the normal, rectangle normals don't vary based on position.
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Normal getNormal(Point3D p) {
         return normal;
     }
-    
-    
-    
+
     @Override
-    public double pdf(ShadeRec s){
+    public double pdf(ShadeRec s) {
         return invArea;
     }
-    
+
 }

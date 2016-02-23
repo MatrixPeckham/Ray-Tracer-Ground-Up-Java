@@ -28,7 +28,12 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
- * NOT PUBLIC UNTIL I CAN SPEED UP HIT FUNCTION
+ * NOT PUBLIC UNTIL I CAN SPEED UP HIT FUNCTION This class should be the torus
+ * primitive, but in porting the quartic solving code I ran into problems I
+ * couldn't seem to fix. They appear to be due to roundoff errors. I tried many
+ * different things, but the one I have that doesn't have artifacts is extremely
+ * slow.
+ *
  * @author William Matrix Peckham
  */
 class Torus extends GeometricObject {
@@ -111,7 +116,6 @@ class Torus extends GeometricObject {
         coeffs[4] = A;
 
         boolean intersected = false;
-        
 
         // find roots of the quartic equation
         //int num_real_roots = Utility.solveQuartic(coeffs, roots);
@@ -195,7 +199,7 @@ class Torus extends GeometricObject {
             return (false);
         }
 
-         // find the smallest root greater than kEpsilon, if any
+        // find the smallest root greater than kEpsilon, if any
         // the roots array is not sorted
         for (int j = 0; j < num_real_roots; j++) {
             if (roots[j] > Utility.EPSILON) {

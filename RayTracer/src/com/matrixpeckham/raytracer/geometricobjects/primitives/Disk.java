@@ -30,81 +30,176 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Disk class.
  *
  * @author William Matrix Peckham
  */
 public class Disk extends GeometricObject {
+
+    /**
+     * center of disk
+     */
     private Point3D center = new Point3D();
-    private Normal normal = new Normal(0,1,0);
+
+    /**
+     * normal of disk
+     */
+    private Normal normal = new Normal(0, 1, 0);
+
+    /**
+     * radius of disk
+     */
     private double radius = 1;
+
+    /**
+     * sampler if we're a light
+     */
     private Sampler sampler;
-    double area = Utility.PI*radius*radius;
-    double invArea = 1/area;
-    final Vector3D up=new Vector3D(0,1,0);
-    Vector3D u=new Vector3D(1,0,0);
-    Vector3D v=new Vector3D(0,0,1);
-    Vector3D w=new Vector3D(0,1,0);
-    
-    public Disk(){}
-    public Disk(Point3D loc, Normal nor, double rad){
+
+    /**
+     * surface area
+     */
+    double area = Utility.PI * radius * radius;
+
+    /**
+     * inverse of area
+     */
+    double invArea = 1 / area;
+
+    /**
+     * coordinate vectors
+     */
+    final Vector3D up = new Vector3D(0, 1, 0);
+    Vector3D u = new Vector3D(1, 0, 0);
+    Vector3D v = new Vector3D(0, 0, 1);
+    Vector3D w = new Vector3D(0, 1, 0);
+
+    /**
+     * default constructor
+     */
+    public Disk() {
+    }
+
+    /**
+     * initializing constructor
+     *
+     * @param loc
+     * @param nor
+     * @param rad
+     */
+    public Disk(Point3D loc, Normal nor, double rad) {
         center.setTo(loc);
         normal.setTo(nor);
-        radius=rad;
-        area = Utility.PI*radius*radius;
-        invArea = 1/area;
+        radius = rad;
+        area = Utility.PI * radius * radius;
+        invArea = 1 / area;
     }
-    public Disk(Disk d){
+
+    /**
+     * copy constructor
+     *
+     * @param d
+     */
+    public Disk(Disk d) {
         center.setTo(d.center);
         normal.setTo(d.normal);
-        radius=d.radius;
-        area=d.area;
-        invArea=d.invArea;
-        sampler=d.sampler.clone();
+        radius = d.radius;
+        area = d.area;
+        invArea = d.invArea;
+        sampler = d.sampler.clone();
         sampler.mapSamplesToUnitDisc();
         u.setTo(d.u);
         v.setTo(d.v);
         w.setTo(d.w);
-        
+
     }
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public Point3D getCenter() {
         return center;
     }
 
+    /**
+     * setter
+     *
+     * @param center
+     */
     public void setCenter(Point3D center) {
-        this.center.setTo( center );
+        this.center.setTo(center);
     }
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public double getRadius() {
         return radius;
     }
 
+    /**
+     * setter
+     *
+     * @param radius
+     */
     public void setRadius(double radius) {
         this.radius = radius;
     }
-    public void setNormal(Normal n){
+
+    /**
+     * setter
+     *
+     * @param n
+     */
+    public void setNormal(Normal n) {
         normal.setTo(n);
     }
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Disk(this);
     }
 
-
+    /**
+     * get normal at point, returns the disk normal which doesn't change
+     * spatially
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Normal getNormal(Point3D p) {
         return normal;
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
-        double t = (center.sub(ray.o).dot(normal)/(ray.d.dot(normal)));
-        if(t<Utility.EPSILON){
+        //get the intersection of the ray with the plane
+        double t = (center.sub(ray.o).dot(normal) / (ray.d.dot(normal)));
+        //prevent self intersection noise
+        if (t < Utility.EPSILON) {
             return false;
         }
+        //find point on plane and check it for distance from center point
         Point3D p = ray.o.add(ray.d.mul(t));
-        if(center.distSquared(p)<radius*radius){
-            s.lastT=t;
+        if (center.distSquared(p) < radius * radius) {
+            s.lastT = t;
             s.normal.setTo(normal);
             s.localHitPosition.setTo(p);
             return true;
@@ -113,66 +208,105 @@ public class Disk extends GeometricObject {
         }
     }
 
+    /**
+     * same as hit function.
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
-        double t = (center.sub(ray.o).dot(normal)/(ray.d.dot(normal)));
-        if(t<Utility.EPSILON){
+        //early out for non-shadow casting objects, all implementations have this
+        if (!shadows) {
+            return false;
+        }
+        double t = (center.sub(ray.o).dot(normal) / (ray.d.dot(normal)));
+        if (t < Utility.EPSILON) {
             return false;
         }
         Point3D p = ray.o.add(ray.d.mul(t));
-        if(center.distSquared(p)<radius*radius){
-            tr.d=t;
+        if (center.distSquared(p) < radius * radius) {
+            tr.d = t;
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * bounding box function, returns a much larger bounds than it needs to.
+     * this is faster and easier to understand. makes bounding box of size 2 *
+     * radius on all sides, when normal is axis aligned this is much bigger than
+     * it should be. the bounds would really only need two axes to be 2 * radius
+     * and the third would be EPS sized. but our hit function is simple enough
+     * that the false positives caused by this large bounds will not have too
+     * large an effect.
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
-        return new BBox(center.x-radius, center.x+radius, center.y-radius, center.y+radius, center.z-radius, center.z+radius);
+        return new BBox(center.x - radius, center.x + radius, center.y - radius,
+                center.y + radius, center.z - radius, center.z + radius);
     }
 
+    /**
+     * sets the sampler
+     *
+     * @param samplerPtr
+     */
     public void setSampler(Sampler samplerPtr) {
         sampler = samplerPtr.clone();
         sampler.mapSamplesToUnitDisc();
     }
-    
+
+    /**
+     * computes local coordinate system
+     */
     public void computeUVW() {
         w.setTo(normal);
         w.normalize();
-        u=up.cross(w);
+        u = up.cross(w);
         u.normalize();
-        v=w.cross(u);
-        
+        v = w.cross(u);
+
         //special cases for strait up and down view.
-        if(normal.x==up.x&&normal.z==up.z&&normal.y==up.y){
-            u.setTo(new Vector3D(0,0,1));
-            v.setTo(new Vector3D(1,0,0));
-            w.setTo(new Vector3D(0,1,0));
+        if (normal.x == up.x && normal.z == up.z && normal.y == up.y) {
+            u.setTo(new Vector3D(0, 0, 1));
+            v.setTo(new Vector3D(1, 0, 0));
+            w.setTo(new Vector3D(0, 1, 0));
         }
-        if(normal.x==up.x&&normal.z==up.z&&normal.y==-up.y){
-            u.setTo(new Vector3D(1,0,0));
-            v.setTo(new Vector3D(0,0,1));
-            w.setTo(new Vector3D(0,-1,0));
+        if (normal.x == up.x && normal.z == up.z && normal.y == -up.y) {
+            u.setTo(new Vector3D(1, 0, 0));
+            v.setTo(new Vector3D(0, 0, 1));
+            w.setTo(new Vector3D(0, -1, 0));
         }
     }
 
+    /**
+     * sample point on the light
+     *
+     * @return
+     */
     @Override
     public Point3D sample() {
         Point2D dp = sampler.sampleUnitDisc();
-        dp=dp.mul(radius);
+        dp = dp.mul(radius);
         Point3D rp = new Point3D(center);
-        rp=rp.add(u.mul(dp.x)).add(v.mul(dp.y));
+        rp = rp.add(u.mul(dp.x)).add(v.mul(dp.y));
         return rp;
     }
 
+    /**
+     * return the inverse area
+     *
+     * @param sr
+     * @return
+     */
     @Override
     public double pdf(ShadeRec sr) {
         return invArea;
     }
-    
-    
-    
+
 }

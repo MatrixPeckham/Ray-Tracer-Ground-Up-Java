@@ -28,28 +28,69 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Axis Aligned Box class.
  *
  * @author William Matrix Peckham
  */
 public class Box extends GeometricObject {
 
+    /**
+     * low x
+     */
     public double x0 = -1;
+
+    /**
+     * low y
+     */
     public double y0 = -1;
+
+    /**
+     * low x
+     */
     public double z0 = -1;
+
+    /**
+     * high x
+     */
     public double x1 = 1;
+
+    /**
+     * high y
+     */
     public double y1 = 1;
+
+    /**
+     * high z
+     */
     public double z1 = 1;
 
+    /**
+     * get bounding box, a bit redundant for a box class, but necessary for
+     * proper interaction with Grids
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
         return new BBox(x0, x1, y0, y1, z0, z1); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
-    
+    /**
+     * default constructor
+     */
     public Box() {
     }
 
+    /**
+     * initializing constructor
+     *
+     * @param x0
+     * @param x1
+     * @param y0
+     * @param y1
+     * @param z0
+     * @param z1
+     */
     public Box(double x0, double x1, double y0, double y1, double z0, double z1) {
         this.x0 = x0;
         this.x1 = x1;
@@ -59,6 +100,12 @@ public class Box extends GeometricObject {
         this.z1 = z1;
     }
 
+    /**
+     * initialize with corner points
+     *
+     * @param p0
+     * @param p1
+     */
     public Box(Point3D p0, Point3D p1) {
         x0 = p0.x;
         y0 = p0.y;
@@ -68,6 +115,11 @@ public class Box extends GeometricObject {
         z1 = p1.z;
     }
 
+    /**
+     * copy constructor
+     *
+     * @param b
+     */
     public Box(Box b) {
         this.x0 = b.x0;
         this.x1 = b.x1;
@@ -77,8 +129,17 @@ public class Box extends GeometricObject {
         this.z1 = b.z1;
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
+
+        //convienence variables
         double ox = ray.o.x;
         double oy = ray.o.y;
         double oz = ray.o.z;
@@ -86,9 +147,11 @@ public class Box extends GeometricObject {
         double dy = ray.d.y;
         double dz = ray.d.z;
 
+        //variables for ray parameters
         double tx_min, ty_min, tz_min;
         double tx_max, ty_max, tz_max;
 
+        //calculate slab intersection times
         double a = 1.0 / dx;
         if (a >= 0) {
             tx_min = (x0 - ox) * a;
@@ -116,11 +179,12 @@ public class Box extends GeometricObject {
             tz_max = (z0 - oz) * c;
         }
 
+        //find the times for entering and exiting the box and the faces
         double t0, t1;
 
         int face_in, face_out;
 
-	// find largest entering t value
+        // find largest entering t value
         if (tx_min > ty_min) {
             t0 = tx_min;
             face_in = (a >= 0.0) ? 0 : 3;
@@ -134,7 +198,7 @@ public class Box extends GeometricObject {
             face_in = (c >= 0.0) ? 2 : 5;
         }
 
-	// find smallest exiting t value
+        // find smallest exiting t value
         if (tx_max < ty_max) {
             t1 = tx_max;
             face_out = (a >= 0.0) ? 3 : 0;
@@ -148,22 +212,29 @@ public class Box extends GeometricObject {
             face_out = (c >= 0.0) ? 5 : 2;
         }
 
+        //hit test and fills shaderec.
         if (t0 < t1 && t1 > Utility.EPSILON) {  // condition for a hit
             if (t0 > Utility.EPSILON) {
                 sr.lastT = t0;  			// ray hits outside surface
-                sr.normal .setTo( getNormal(face_in));
+                sr.normal.setTo(getNormal(face_in));
             } else {
                 sr.lastT = t1;				// ray hits inside surface
-                sr.normal .setTo( getNormal(face_out));
+                sr.normal.setTo(getNormal(face_out));
             }
 
-            sr.localHitPosition .setTo( ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
+            sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
             return (true);
         } else {
             return (false);
         }
     }
 
+    /**
+     * private method for transforming an integer index into the proper normal
+     *
+     * @param i
+     * @return
+     */
     private Normal getNormal(int i) {
         switch (i) {
             case 0:
@@ -183,19 +254,30 @@ public class Box extends GeometricObject {
         }
     }
 
-    public boolean inside(Point3D p) {
-        return ((p.x > x0 && p.x < x1) && (p.y > y0 && p.y < y1) && (p.z > z0
-                && p.z < z1));
-    }
-
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Box(this);
     }
 
+    /**
+     * shadow hit function, same as the hit function but doesn't do normal
+     * calculations
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows) return false;
+        //early out that all implementations have
+        if (!shadows) {
+            return false;
+        }
         double ox = ray.o.x;
         double oy = ray.o.y;
         double oz = ray.o.z;
@@ -235,7 +317,7 @@ public class Box extends GeometricObject {
 
         double t0, t1;
 
-	// find largest entering t value
+        // find largest entering t value
         if (tx_min > ty_min) {
             t0 = tx_min;
         } else {
@@ -246,7 +328,7 @@ public class Box extends GeometricObject {
             t0 = tz_min;
         }
 
-	// find smallest exiting t value
+        // find smallest exiting t value
         if (tx_max < ty_max) {
             t1 = tx_max;
         } else {
@@ -269,12 +351,26 @@ public class Box extends GeometricObject {
         }
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     * @param i
+     * @param d0
+     */
     public void setP0(double d, double i, double d0) {
         x0 = d;
         y0 = i;
         z0 = d0;
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setP1(double d, double d0, double d1) {
         x1 = d;
         y1 = d0;

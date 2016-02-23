@@ -27,41 +27,81 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Cone class.
  *
  * @author William Matrix Peckham
  */
 public class OpenCone extends GeometricObject {
 
+    /**
+     * height above 0
+     */
     double h = 2;
+
+    /**
+     * radius at 0
+     */
     double r = 1;
+
+    /**
+     * epsilon value
+     */
     private static final double EPSILON = 0.001;
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new OpenCone();
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
+
+        //book didn't include this, only the implicit equation, I derived these
+        // and it works, but I doubt it's as good as it could be.
+        //param
         double t = Utility.HUGE_VALUE;
+
+        //location
         double x = ray.o.x;
         double y = ray.o.y;
         double z = ray.o.z;
+
+        //directions
         double u = ray.d.x;
         double v = ray.d.y;
         double w = ray.d.z;
+
+        //radius and height squared
         double r2 = r * r;
         double h2 = h * h;
+
+        //squares
         double u2 = u * u;
         double w2 = w * w;
         double v2 = v * v;
         double x2 = x * x;
         double y2 = y * y;
         double z2 = z * z;
+
+        //quadratic coefficients
         double a = ((h2 * u2) / r2 + (h2 * w2) / r2 - v2);
         double b = (2 * h2 * x * u) / r2 + (2 * h2 * w * z) / r2 + 2 * h * v - 2
                 * v * y;
         double c = (h2 * x2) / r2 + (h2 * z2) / r2 - h2 + 2 * h * y - y2;
+
+        //solve
         double disc = b * b - 4.0 * a * c;
         if (disc < 0) {
             return false;
@@ -71,11 +111,12 @@ public class OpenCone extends GeometricObject {
             t = (-b - e) / denom;
             if (t > EPSILON) {
                 double yhit = y + t * v;
+                //check y coordinates
                 if (yhit >= 0 && yhit <= h) {
                     sr.lastT = t;
                     sr.normal.setTo(calcNormal(ray.o.add(ray.d.mul(t))));
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal .setTo( sr.normal.neg());
+                        sr.normal.setTo(sr.normal.neg());
                     }
                     sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                     return true;
@@ -83,12 +124,13 @@ public class OpenCone extends GeometricObject {
             }
             t = (-b + e) / denom;
             if (t > EPSILON) {
+                //check y coordinates
                 double yhit = y + t * v;
                 if (yhit >= 0 && yhit <= h) {
                     sr.lastT = t;
                     sr.normal.setTo(calcNormal(ray.o.add(ray.d.mul(t))));
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal .setTo( sr.normal.neg());
+                        sr.normal.setTo(sr.normal.neg());
                     }
                     sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                     return true;
@@ -98,9 +140,18 @@ public class OpenCone extends GeometricObject {
         return false;
     }
 
+    /**
+     * works the same as the hit function.
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        if (!shadows) {
+            return false;
+        }
         double t = Utility.HUGE_VALUE;
         double x = ray.o.x;
         double y = ray.o.y;
@@ -130,7 +181,7 @@ public class OpenCone extends GeometricObject {
             if (t > EPSILON) {
                 double yhit = y + t * v;
                 if (yhit >= 0 && yhit <= h) {
-                    tr.d=t;
+                    tr.d = t;
                     return true;
                 }
             }
@@ -138,13 +189,20 @@ public class OpenCone extends GeometricObject {
             if (t > EPSILON) {
                 double yhit = y + t * v;
                 if (yhit >= 0 && yhit <= h) {
-                    tr.d=t;
+                    tr.d = t;
                     return true;
                 }
             }
         }
-        return false;    }
+        return false;
+    }
 
+    /**
+     * calculates the normal at a point
+     *
+     * @param p
+     * @return
+     */
     private Normal calcNormal(Point3D p) {
         Normal n = new Normal();
         n.x = h * p.x / r;

@@ -27,16 +27,35 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.util.Normal;
 
 /**
+ * Cylinder class, makes a cylinder centered at the origin with y extents.
  *
  * @author William Matrix Peckham
  */
 public class OpenCylinder extends GeometricObject {
 
+    /**
+     * low y
+     */
     protected double y0;
+
+    /**
+     * high y
+     */
     protected double y1;
+
+    /**
+     * radius
+     */
     protected double radius;
+
+    /**
+     * inverse radius
+     */
     protected double invRadius;
 
+    /**
+     * default constructor
+     */
     public OpenCylinder() {
         super();
         y0 = -1;
@@ -45,6 +64,13 @@ public class OpenCylinder extends GeometricObject {
         invRadius = 1;
     }
 
+    /**
+     * initializing constructor
+     *
+     * @param y0
+     * @param y1
+     * @param radius
+     */
     public OpenCylinder(double y0, double y1, double radius) {
         super();
         this.y0 = y0;
@@ -53,6 +79,11 @@ public class OpenCylinder extends GeometricObject {
         this.invRadius = 1.0 / radius;
     }
 
+    /**
+     * copy constructor
+     *
+     * @param cy
+     */
     public OpenCylinder(OpenCylinder cy) {
         super(cy);
         y0 = cy.y0;
@@ -61,14 +92,29 @@ public class OpenCylinder extends GeometricObject {
         invRadius = cy.invRadius;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new OpenCylinder(this);
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
+        //ray param
         double t;
+
+        //convienence variables
         double ox = ray.o.x;
         double oy = ray.o.y;
         double oz = ray.o.z;
@@ -76,9 +122,12 @@ public class OpenCylinder extends GeometricObject {
         double dy = ray.d.y;
         double dz = ray.d.z;
 
+        //quadratic function coefficents
         double a = dx * dx + dz * dz;
         double b = 2.0 * (ox * dx + oz * dz);
         double c = ox * ox + oz * oz - radius * radius;
+
+        //solves the quadratic.
         double disc = b * b - 4.0 * a * c;
 
         if (disc < 0.0) {
@@ -89,6 +138,8 @@ public class OpenCylinder extends GeometricObject {
             t = (-b - e) / denom;    // smaller root
 
             if (t > Utility.EPSILON) {
+
+                //test height
                 double yhit = oy + t * dy;
 
                 if (yhit > y0 && yhit < y1) {
@@ -96,9 +147,9 @@ public class OpenCylinder extends GeometricObject {
                     sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
                             (oz + t * dz) * invRadius));
 
-				// test for hitting from inside
+                    // test for hitting from inside
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal .setTo( sr.normal.neg());
+                        sr.normal.setTo(sr.normal.neg());
                     }
 
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
@@ -111,16 +162,18 @@ public class OpenCylinder extends GeometricObject {
             t = (-b + e) / denom;    // larger root
 
             if (t > Utility.EPSILON) {
+
+                //test height
                 double yhit = oy + t * dy;
 
                 if (yhit > y0 && yhit < y1) {
                     sr.lastT = t;
-                    sr.normal .setTo( new Normal((ox + t * dx) * invRadius, 0.0, (oz
-                            + t * dz) * invRadius));
+                    sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                            (oz + t * dz) * invRadius));
 
-				// test for hitting inside surface
+                    // test for hitting inside surface
                     if (ray.d.neg().dot(sr.normal) < 0.0) {
-                        sr.normal .setTo( sr.normal.neg());
+                        sr.normal.setTo(sr.normal.neg());
                     }
 
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
@@ -134,8 +187,16 @@ public class OpenCylinder extends GeometricObject {
         return (false);
     }
 
+    /**
+     * shadow hit function works same as hit function
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        //early out shadow test all implementations do this
         if (!shadows) {
             return false;
         }
@@ -183,9 +244,14 @@ public class OpenCylinder extends GeometricObject {
         return (false);
     }
 
+    /**
+     * gets bounding box
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
         return new BBox(-radius, radius, y0, y1, -radius, radius);
     }
-    
+
 }

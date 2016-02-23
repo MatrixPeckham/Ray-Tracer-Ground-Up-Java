@@ -29,37 +29,43 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Sphere that flips its normal based on which side the ray hits on. This was an
+ * attempt to fix 28.46 bug I had, this didn't fix it, but I figured this class
+ * may be useful in the future.
  *
  * @author William Matrix Peckham
  */
 public class NormalFlippingSphere extends GeometricObject {
+
+    //All implementation is the same as Sphere, for comments please see that class
+
     private Point3D center;
     private double radius;
-    private static final double EPSILON=0.001;
+    private static final double EPSILON = 0.001;
     double invSurfaceArea;
     private Sampler sampler = null;
-    
-    public NormalFlippingSphere(){
+
+    public NormalFlippingSphere() {
         super();
-        center=new Point3D(0);
-        radius=1;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        center = new Point3D(0);
+        radius = 1;
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
-    
-    public NormalFlippingSphere(Point3D c, double r){
+
+    public NormalFlippingSphere(Point3D c, double r) {
         super();
-        center=new Point3D(c);
-        radius=r;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        center = new Point3D(c);
+        radius = r;
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
-    
-    public NormalFlippingSphere(NormalFlippingSphere sphere){
+
+    public NormalFlippingSphere(NormalFlippingSphere sphere) {
         super(sphere);
-        center=new Point3D(sphere.center);
-        radius=sphere.radius;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        center = new Point3D(sphere.center);
+        radius = sphere.radius;
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
-    
+
     @Override
     public GeometricObject clone() {
         return new NormalFlippingSphere(this);
@@ -71,28 +77,28 @@ public class NormalFlippingSphere extends GeometricObject {
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);
-        double c = temp.dot(temp)-radius*radius;
-        double disc = b*b-4.0*a*c;
-        if(disc<0){
+        double c = temp.dot(temp) - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+        if (disc < 0) {
             return false;
         } else {
             double e = Math.sqrt(disc);
-            double denom = 2.0*a;
-            t=(-b-e)/denom;
-            if(t>EPSILON){
-                sr.lastT=t;
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;
+            if (t > EPSILON) {
+                sr.lastT = t;
                 sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
-                if(sr.normal.dot(sr.ray.d.neg())<0){
+                if (sr.normal.dot(sr.ray.d.neg()) < 0) {//only difference flip normal
                     sr.normal.setTo(temp.add(ray.d.mul(t)).div(-radius));
                 }
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                 return true;
             }
-            t=(-b+e)/denom;
-            if(t>EPSILON){
-                sr.lastT=t;
+            t = (-b + e) / denom;
+            if (t > EPSILON) {
+                sr.lastT = t;
                 sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
-                if(sr.normal.dot(sr.ray.d.neg())<0){
+                if (sr.normal.dot(sr.ray.d.neg()) < 0) {//only difference flip normal
                     sr.normal.setTo(temp.add(ray.d.mul(t)).div(-radius));
                 }
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -116,8 +122,6 @@ public class NormalFlippingSphere extends GeometricObject {
         n.normalize();
         return new Normal(n);
     }
-    
-    
 
     public double getRadius() {
         return radius;
@@ -125,31 +129,33 @@ public class NormalFlippingSphere extends GeometricObject {
 
     public void setRadius(double radius) {
         this.radius = radius;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
 
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        if (!shadows) {
+            return false;
+        }
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);
-        double c = temp.dot(temp)-radius*radius;
-        double disc = b*b-4.0*a*c;
-        if(disc<0){
+        double c = temp.dot(temp) - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+        if (disc < 0) {
             return false;
         } else {
             double e = Math.sqrt(disc);
-            double denom = 2.0*a;
-            t=(-b-e)/denom;
-            if(t>EPSILON){
-                tr.d=t;
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;
+            if (t > EPSILON) {
+                tr.d = t;
                 return true;
             }
-            t=(-b+e)/denom;
-            if(t>EPSILON){
-                tr.d=t;
+            t = (-b + e) / denom;
+            if (t > EPSILON) {
+                tr.d = t;
                 return true;
             }
         }
@@ -168,14 +174,13 @@ public class NormalFlippingSphere extends GeometricObject {
 
     @Override
     public BBox getBoundingBox() {
-        return new BBox(center.add(new Vector3D(-radius)), center.add(new Vector3D(radius)));
+        return new BBox(center.add(new Vector3D(-radius)), center.add(
+                new Vector3D(radius)));
     }
 
     @Override
     public double pdf(ShadeRec sr) {
         return invSurfaceArea;
     }
-    
-    
-    
+
 }

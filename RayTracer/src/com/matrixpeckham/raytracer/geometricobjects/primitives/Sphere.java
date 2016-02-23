@@ -29,65 +29,118 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Sphere primitive class.
  *
  * @author William Matrix Peckham
  */
 public class Sphere extends GeometricObject {
+
+    /**
+     * sphere center
+     */
     private Point3D center;
+
+    /**
+     * sphere radius
+     */
     private double radius;
-    private static final double EPSILON=0.001;
+
+    /**
+     * small value
+     */
+    private static final double EPSILON = 0.001;
+
+    /**
+     * inverse surface area
+     */
     double invSurfaceArea;
+
+    /**
+     * sampler for area lights
+     */
     private Sampler sampler = null;
-    
-    public Sphere(){
+
+    /**
+     * default constructor
+     */
+    public Sphere() {
         super();
-        center=new Point3D(0);
-        radius=1;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        center = new Point3D(0);
+        radius = 1;
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
-    
-    public Sphere(Point3D c, double r){
+
+    /**
+     * constructor initializes center and radius
+     *
+     * @param c
+     * @param r
+     */
+    public Sphere(Point3D c, double r) {
         super();
-        center=new Point3D(c);
-        radius=r;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        center = new Point3D(c);
+        radius = r;
+        //surface area calculated
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
-    
-    public Sphere(Sphere sphere){
+
+    /**
+     * copy constructor
+     *
+     * @param sphere
+     */
+    public Sphere(Sphere sphere) {
         super(sphere);
-        center=new Point3D(sphere.center);
-        radius=sphere.radius;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        center = new Point3D(sphere.center);
+        radius = sphere.radius;
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Sphere(this);
     }
 
+    /**
+     * hit function, sphere is one of the simplest
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
+        //intersect ray param
         double t;
+
+        //set up the quadratic for ray parameter
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);
-        double c = temp.dot(temp)-radius*radius;
-        double disc = b*b-4.0*a*c;
-        if(disc<0){
+        double c = temp.dot(temp) - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+
+        //solves the quadratic equation and sets all the ShadeRec fields
+        if (disc < 0) {
             return false;
         } else {
             double e = Math.sqrt(disc);
-            double denom = 2.0*a;
-            t=(-b-e)/denom;
-            if(t>EPSILON){
-                sr.lastT=t;
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;
+            if (t > EPSILON) {
+                sr.lastT = t;
                 sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                 return true;
             }
-            t=(-b+e)/denom;
-            if(t>EPSILON){
-                sr.lastT=t;
+            t = (-b + e) / denom;
+            if (t > EPSILON) {
+                sr.lastT = t;
                 sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
                 sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
                 return true;
@@ -96,54 +149,89 @@ public class Sphere extends GeometricObject {
         return false;
     }
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public Point3D getCenter() {
         return center;
     }
 
+    /**
+     * setter
+     *
+     * @param center
+     */
     public void setCenter(Point3D center) {
         this.center.setTo(center);
     }
 
+    /**
+     * returns the normal at the point
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Normal getNormal(Point3D p) {
+        //simply the direction from the center to the hit point
         Vector3D n = center.sub(p);
         n.normalize();
         return new Normal(n);
     }
-    
-    
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public double getRadius() {
         return radius;
     }
 
+    /**
+     * setter
+     *
+     * @param radius
+     */
     public void setRadius(double radius) {
         this.radius = radius;
-        invSurfaceArea=1/(4*Utility.PI*radius*radius);
+        invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
 
+    /**
+     * shadow hit, works just like the hit function, but doesn't have to compute
+     * normals
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        if (!shadows) {
+            return false;
+        }
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);
-        double c = temp.dot(temp)-radius*radius;
-        double disc = b*b-4.0*a*c;
-        if(disc<0){
+        double c = temp.dot(temp) - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+        if (disc < 0) {
             return false;
         } else {
             double e = Math.sqrt(disc);
-            double denom = 2.0*a;
-            t=(-b-e)/denom;
-            if(t>EPSILON){
-                tr.d=t;
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;
+            if (t > EPSILON) {
+                tr.d = t;
                 return true;
             }
-            t=(-b+e)/denom;
-            if(t>EPSILON){
-                tr.d=t;
+            t = (-b + e) / denom;
+            if (t > EPSILON) {
+                tr.d = t;
                 return true;
             }
         }
@@ -162,14 +250,13 @@ public class Sphere extends GeometricObject {
 
     @Override
     public BBox getBoundingBox() {
-        return new BBox(center.add(new Vector3D(-radius)), center.add(new Vector3D(radius)));
+        return new BBox(center.add(new Vector3D(-radius)), center.add(
+                new Vector3D(radius)));
     }
 
     @Override
     public double pdf(ShadeRec sr) {
         return invSurfaceArea;
     }
-    
-    
-    
+
 }

@@ -26,45 +26,84 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Plane class, models an infinite plane, that goes through a point and has a
+ * normal.
  *
  * @author William Matrix Peckham
  */
 public class Plane extends GeometricObject {
-    
+
+    /**
+     * Point that the plane will go through
+     */
     private Point3D a;
-    private Normal n; 
-    private static final double EPSILON=0.001;
-    
-    public Plane(){
+
+    /**
+     * normal
+     */
+    private Normal n;
+
+    //epsilon
+    private static final double EPSILON = 0.001;
+
+    /**
+     * default constructor plane at 0 height with positive y normal
+     */
+    public Plane() {
         super();
-        a=new Point3D(0);
-        n=new Normal(0,1,0);
+        a = new Point3D(0);
+        n = new Normal(0, 1, 0);
     }
-    
-    public Plane(Point3D point, Normal normal){
+
+    /**
+     * initializing constructor
+     *
+     * @param point
+     * @param normal
+     */
+    public Plane(Point3D point, Normal normal) {
         super();
-        a=new Point3D(point);
-        n=new Normal(normal);
+        a = new Point3D(point);
+        n = new Normal(normal);
         n.normalize();
     }
-    
-    public Plane(Plane p){
+
+    /**
+     * copy constructor
+     *
+     * @param p
+     */
+    public Plane(Plane p) {
         super(p);
-        a=new Point3D(p.a);
-        n=new Normal(p.n);
+        a = new Point3D(p.a);
+        n = new Normal(p.n);
     }
-    
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Plane(this);
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
-        double t = a.sub(ray.o).dot(new Vector3D(n))/(ray.d.dot(new Vector3D(n)));
-        if(t>EPSILON){
-            s.lastT=t;
+        //intersection point with plane
+        double t = a.sub(ray.o).dot(new Vector3D(n)) / (ray.d.dot(
+                new Vector3D(n)));
+        //t is greater than eps
+        if (t > EPSILON) {
+            s.lastT = t;
             s.normal.setTo(n);
             s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
             return true;
@@ -72,11 +111,20 @@ public class Plane extends GeometricObject {
         return false;
     }
 
+    /**
+     * same as hit function
+     *
+     * @param ray
+     * @param t
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
-        if(!shadows) return false;
-        t.d = a.sub(ray.o).dot(new Vector3D(n))/(ray.d.dot(new Vector3D(n)));
-        if(t.d>EPSILON){
+        if (!shadows) {
+            return false;
+        }
+        t.d = a.sub(ray.o).dot(new Vector3D(n)) / (ray.d.dot(new Vector3D(n)));
+        if (t.d > EPSILON) {
             return true;
         }
         return false;
