@@ -23,104 +23,153 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Torus class. Is a parametric object.
  *
  * @author William Matrix Peckham
  */
 public class Torus extends ParametricObject {
-    public Torus(){
-        this(1,0.5);
+
+    /**
+     * default constructor
+     */
+    public Torus() {
+        this(1, 0.5);
     }
-    public Torus(double a, double b){
-        super(new TorusParametric(a,b));
+
+    /**
+     * initializing constructor
+     *
+     * @param a
+     * @param b
+     */
+    public Torus(double a, double b) {
+        super(new TorusParametric(a, b));
     }
-    protected Torus(TorusParametric par){
+
+    /**
+     * protected constructor, this is the workhorse constructor, calls
+     * superclass constructor that does the real work
+     *
+     * @param par
+     */
+    protected Torus(TorusParametric par) {
         super(par);
     }
+
+    /**
+     * implementation of parametric equation for torus
+     */
     protected static class TorusParametric implements ParametricEquation {
-        double a=0;
-        double b=0;
-        public TorusParametric(double a, double b){
-            this.a=a;
-            this.b=b;
+
+        //large radius
+
+        double a = 0;
+        //small radius
+        double b = 0;
+
+        /**
+         * initializing constructor
+         *
+         * @param a
+         * @param b
+         */
+        public TorusParametric(double a, double b) {
+            this.a = a;
+            this.b = b;
         }
-            @Override
-            public double getMinU() {
-                return 0;
-            }
 
-            @Override
-            public double getMaxU() {
-                return Utility.TWO_PI;
-            }
+        //bounds of u and v are both 0-2pi
 
-            @Override
-            public double getMinV() {
-                return 0;
-            }
+        @Override
+        public double getMinU() {
+            return 0;
+        }
 
-            @Override
-            public double getMaxV() {
-                return Utility.TWO_PI;
-            }
+        @Override
+        public double getMaxU() {
+            return Utility.TWO_PI;
+        }
 
-            @Override
-            public double getUStep() {
-                return 0.1;
-            }
+        @Override
+        public double getMinV() {
+            return 0;
+        }
 
-            @Override
-            public double getVStep() {
-                return 0.1;
-            }
+        @Override
+        public double getMaxV() {
+            return Utility.TWO_PI;
+        }
 
-            @Override
-            public Point3D getPointAt(double u, double v) {
-                Point3D p=new Point3D();
-                double cosu=Math.cos(u);
-                double sinu=Math.sin(u);
-                double cosv=Math.cos(v);
-                double sinv=Math.sin(v);
-                p.x=sinu*(b*cosv+a);
-                p.y=b*sinv;
-                p.z=cosu*(b*cosv+a);
-                
-                return p;
-            }
+            //steps are arbitrarily 0.1
+        @Override
+        public double getUStep() {
+            return 0.1;
+        }
 
-            @Override
-            public Normal getNormalAt(double u, double v) {
-                double cosu=Math.cos(u);
-                double sinu=Math.sin(u);
-                double cosv=Math.cos(v);
-                double sinv=Math.sin(v);
-                Vector3D dv = new Vector3D();
-                dv.z=cosu*b*-sinv;
-                dv.y=b*cosv;
-                dv.x=sinu*b*-sinv;
-                Vector3D du = new Vector3D();
-                du.z=-sinu*(b*cosv+a);
-                du.y=0;
-                du.x=cosu*(b*cosv+a);
-                
-                
-                Normal n = new Normal(dv.cross(du)).neg();
-                n.normalize();
-                return n;
-            }
+        @Override
+        public double getVStep() {
+            return 0.1;
+        }
 
-            @Override
-            public boolean isClosedU() {
-                return true;
-            }
+            //most important two methods here do the actual work
+        @Override
+        public Point3D getPointAt(double u, double v) {
+            //direct implementation of torus parametric equation
+            Point3D p = new Point3D();
+            double cosu = Math.cos(u);
+            double sinu = Math.sin(u);
+            double cosv = Math.cos(v);
+            double sinv = Math.sin(v);
+            p.x = sinu * (b * cosv + a);
+            p.y = b * sinv;
+            p.z = cosu * (b * cosv + a);
 
-            @Override
-            public boolean isClosedV() {
-                return true;
-            }
+            return p;
+        }
 
-            @Override
-            public ParametricEquation.NormalType getNormalType() {
-                return ParametricEquation.NormalType.REGULAR;
-            }
-        }    
+        @Override
+        public Normal getNormalAt(double u, double v) {
+                //not the parametric normal equation 
+            //wikipedia gave, that didn't work
+            //this is a manual differentiation 
+            //and cross produc implementation
+
+            double cosu = Math.cos(u);
+            double sinu = Math.sin(u);
+            double cosv = Math.cos(v);
+            double sinv = Math.sin(v);
+            //dp/dv
+            Vector3D dv = new Vector3D();
+            dv.z = cosu * b * -sinv;
+            dv.y = b * cosv;
+            dv.x = sinu * b * -sinv;
+            //dp/du
+            Vector3D du = new Vector3D();
+            du.z = -sinu * (b * cosv + a);
+            du.y = 0;
+            du.x = cosu * (b * cosv + a);
+
+            //cross normal
+            Normal n = new Normal(dv.cross(du)).neg();
+            n.normalize();
+            return n;
+        }
+
+        //both closed
+        @Override
+        public boolean isClosedU() {
+            return true;
+        }
+
+        @Override
+        public boolean isClosedV() {
+            return true;
+        }
+
+        //outward normals
+        @Override
+        public ParametricEquation.NormalType getNormalType() {
+            return ParametricEquation.NormalType.REGULAR;
+        }
+    }
 }
