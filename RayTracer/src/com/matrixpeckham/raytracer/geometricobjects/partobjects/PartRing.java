@@ -31,83 +31,183 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Part of a ring.
  *
  * @author William Matrix Peckham
  */
 public class PartRing extends GeometricObject {
 
+    /**
+     * center point of ring
+     */
     private Point3D center = new Point3D();
+
+    /**
+     * normal of ring
+     */
     private Normal normal = new Normal(0, 1, 0);
+
+    /**
+     * outer radius
+     */
     private double outerRadius = 1;
+
+    /**
+     * inner radius
+     */
     private double innerRadius = 0.5;
+
+    /**
+     * low angle
+     */
     private double phiMin = 0;
+
+    /**
+     * high angle
+     */
     private double phiMax = Utility.TWO_PI;
 
+    /**
+     * default constructor
+     */
     public PartRing() {
     }
 
-    public PartRing(Point3D loc, double innrad, double outrad,double phiMin, double phiMax) {
+    /**
+     * initialization constructor (degrees)
+     *
+     * @param loc
+     * @param innrad
+     * @param outrad
+     * @param phiMin
+     * @param phiMax
+     */
+    public PartRing(Point3D loc, double innrad, double outrad, double phiMin,
+            double phiMax) {
         center.setTo(loc);
         outerRadius = outrad;
         innerRadius = innrad;
-        this.phiMin=phiMin*Utility.PI_ON_180;
-        this.phiMax=phiMax*Utility.PI_ON_180;
+        this.phiMin = phiMin * Utility.PI_ON_180;
+        this.phiMax = phiMax * Utility.PI_ON_180;
     }
 
+    /**
+     * copy constructor
+     *
+     * @param d
+     */
     public PartRing(PartRing d) {
         center.setTo(d.center);
+        normal.setTo(d.normal);
         innerRadius = d.innerRadius;
         outerRadius = d.outerRadius;
-
+        phiMin = d.phiMin;
+        phiMax = d.phiMax;
     }
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public Point3D getCenter() {
         return center;
     }
 
+    /**
+     * setter
+     *
+     * @param center
+     */
     public void setCenter(Point3D center) {
         this.center.setTo(center);
     }
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public double getInnerRadius() {
         return innerRadius;
     }
 
+    /**
+     * setter
+     *
+     * @param radius
+     */
     public void setInnerRadius(double radius) {
         this.innerRadius = radius;
     }
 
+    /**
+     * getter
+     *
+     * @return
+     */
     public double getOuterRadius() {
         return outerRadius;
     }
 
+    /**
+     * setter
+     *
+     * @param radius
+     */
     public void setOuterRadius(double radius) {
         this.outerRadius = radius;
     }
 
-
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new PartRing(this);
     }
 
-
+    /**
+     * gets the normal for the point, the normal of the ring doesn't vary over
+     * space so we return the normal
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Normal getNormal(Point3D p) {
         return normal;
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
+        //plane hit
         double t = (center.sub(ray.o).dot(normal) / (ray.d.dot(normal)));
         if (t < Utility.EPSILON) {
             return false;
         }
+
+        //location of plane hit
         Point3D p = ray.o.add(ray.d.mul(t));
+
+        //angle of point
         double phi = Math.atan2(p.x, p.z);
-        if(phi<0){
-            phi+=Utility.TWO_PI;
+
+        //resets angle
+        if (phi < 0) {
+            phi += Utility.TWO_PI;
         }
+
+        //checks location ray parameter and distance and angle for hit 
         if (phi >= phiMin && phi <= phiMax) {
             if (center.distSquared(p) < outerRadius * outerRadius) {
                 if (center.distSquared(p) > innerRadius * innerRadius) {
@@ -121,8 +221,16 @@ public class PartRing extends GeometricObject {
         return false;
     }
 
+    /**
+     * shadow hit, same as hit function
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
+        //early out shadow, all implementations do this
         if (!shadows) {
             return false;
         }
@@ -132,8 +240,8 @@ public class PartRing extends GeometricObject {
         }
         Point3D p = ray.o.add(ray.d.mul(t));
         double phi = Math.atan2(p.x, p.z);
-        if(phi<0){
-            phi+=Utility.TWO_PI;
+        if (phi < 0) {
+            phi += Utility.TWO_PI;
         }
         if (phi >= phiMin && phi <= phiMax) {
             if (center.distSquared(p) < outerRadius * outerRadius) {
@@ -146,13 +254,17 @@ public class PartRing extends GeometricObject {
         return false;
     }
 
+    /**
+     * naive bounding box, for whole ring returned
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
-        return new BBox(center.x - outerRadius, center.x + outerRadius, center.y - outerRadius,
-                center.y + outerRadius, center.z - outerRadius, center.z + outerRadius);
+        return new BBox(center.x - outerRadius, center.x + outerRadius, center.y
+                - outerRadius,
+                center.y + outerRadius, center.z - outerRadius, center.z
+                + outerRadius);
     }
-
-
-
 
 }

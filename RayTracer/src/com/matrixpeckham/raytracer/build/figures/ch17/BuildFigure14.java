@@ -18,7 +18,7 @@
 package com.matrixpeckham.raytracer.build.figures.ch17;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.partobjects.OpenPartCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.PartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.materials.Matte;
@@ -84,7 +84,7 @@ public class BuildFigure14 implements BuildWorldFunction{
 	double phiMin 	= 0;
 	double phiMax 	= 180;
 	
-	OpenPartCylinder cylinderPtr = new OpenPartCylinder(	bottom, 
+	PartCylinder cylinderPtr = new PartCylinder(	bottom, 
 															top, 
 															radius, 
 															phiMin, 

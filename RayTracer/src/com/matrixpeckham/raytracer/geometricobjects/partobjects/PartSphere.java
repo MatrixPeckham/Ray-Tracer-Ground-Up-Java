@@ -26,25 +26,56 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Part Sphere class
  *
  * @author William Matrix Peckham
  */
 public class PartSphere extends GeometricObject {
 
+    /**
+     * center of sphere
+     */
     Point3D center = new Point3D();
+
+    /**
+     * radius
+     */
     double radius = 1;
+
+    /**
+     * radial min
+     */
     double phiMin = 0;
+
+    /**
+     * radial max
+     */
     double phiMax = Utility.TWO_PI;
+
+    /**
+     * polar min
+     */
     double thetaMin = 0;
+
+    /**
+     * polar max
+     */
     double thetaMax = Utility.PI;
+
+    /**
+     * cached cosines
+     */
     double cosThetaMin = 1;
     double cosThetaMax = -1;
 
+    /**
+     * default constructor
+     */
     public PartSphere() {
     }
 
     /**
-     * Degrees
+     * parameter constructor in degrees Degrees
      *
      * @param c
      * @param r
@@ -66,6 +97,11 @@ public class PartSphere extends GeometricObject {
         cosThetaMax = Math.cos(thetaMax);
     }
 
+    /**
+     * copy constructor
+     *
+     * @param o
+     */
     public PartSphere(PartSphere o) {
         super(o);
         center.setTo(o.center);
@@ -78,11 +114,23 @@ public class PartSphere extends GeometricObject {
         cosThetaMin = o.cosThetaMin;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new PartSphere(this);
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
         double t = Utility.HUGE_VALUE;
@@ -96,6 +144,7 @@ public class PartSphere extends GeometricObject {
         } else {
             double e = Math.sqrt(disc);
             double denom = 2.0 * a;
+            //we check the hit positions with the spherical coordinates.
             t = (-b - e) / denom;
             if (t > Utility.EPSILON) {
                 Vector3D hit = ray.o.add(ray.d.mul(t)).sub(center);
@@ -133,9 +182,18 @@ public class PartSphere extends GeometricObject {
         return false;
     }
 
+    /**
+     * shadow hit, same as hit
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        if (!shadows) {
+            return false;
+        }
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);

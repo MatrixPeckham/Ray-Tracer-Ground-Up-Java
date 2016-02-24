@@ -21,21 +21,30 @@ import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Concave Part Torus class. same as ConvexPartTorus, but
+ * ConcavePartTorus.getNormalType() returns reverse
  *
  * @author William Matrix Peckham
  */
 public class ConcavePartTorus extends Torus {
+
+    //for more comments see PartTorus
+
     protected static class PartTorusParam extends Torus.TorusParametric {
-        double phiMin,phiMax,thetaMin,thetaMax;
-        public PartTorusParam(double a, double b){
-            this(a,b,0,Utility.TWO_PI,0,Utility.TWO_PI);
+
+        double phiMin, phiMax, thetaMin, thetaMax;
+
+        public PartTorusParam(double a, double b) {
+            this(a, b, 0, Utility.TWO_PI, 0, Utility.TWO_PI);
         }
-        public PartTorusParam(double a, double b, double phiMin, double phiMax, double thetaMin, double thetaMax) {
+
+        public PartTorusParam(double a, double b, double phiMin, double phiMax,
+                double thetaMin, double thetaMax) {
             super(a, b);
-            this.phiMax=phiMax*Utility.PI_ON_180;
-            this.phiMin=phiMin*Utility.PI_ON_180;
-            this.thetaMax=thetaMax*Utility.PI_ON_180;
-            this.thetaMin=thetaMin*Utility.PI_ON_180;
+            this.phiMax = phiMax * Utility.PI_ON_180;
+            this.phiMin = phiMin * Utility.PI_ON_180;
+            this.thetaMax = thetaMax * Utility.PI_ON_180;
+            this.thetaMin = thetaMin * Utility.PI_ON_180;
         }
 
         @Override
@@ -72,18 +81,38 @@ public class ConcavePartTorus extends Torus {
         public boolean isClosedV() {
             return false;
         }
-        
+
     }
 
+    /**
+     * default constructor
+     */
     public ConcavePartTorus() {
         super(new PartTorusParam(1, 0.5));
     }
 
+    /**
+     * initializing constructor
+     *
+     * @param a
+     * @param b
+     */
     public ConcavePartTorus(double a, double b) {
         super(new PartTorusParam(a, b));
     }
-    
-    public ConcavePartTorus(double a, double b, double phiMin, double phiMax, double thetaMin, double thetaMax){
+
+    /**
+     * initializing constructor (degrees)
+     *
+     * @param a
+     * @param b
+     * @param phiMin
+     * @param phiMax
+     * @param thetaMin
+     * @param thetaMax
+     */
+    public ConcavePartTorus(double a, double b, double phiMin, double phiMax,
+            double thetaMin, double thetaMax) {
         super(new PartTorusParam(a, b, phiMin, phiMax, thetaMin, thetaMax));
     }
 }

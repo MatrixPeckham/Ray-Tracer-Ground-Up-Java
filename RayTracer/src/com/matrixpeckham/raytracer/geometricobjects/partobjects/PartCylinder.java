@@ -26,19 +26,46 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.util.Normal;
 
 /**
+ * Part Cylinder
  *
  * @author William Matrix Peckham
  */
-public class OpenPartCylinder extends GeometricObject {
+public class PartCylinder extends GeometricObject {
 
+    /**
+     * min y
+     */
     protected double y0;
+
+    /**
+     * max y
+     */
     protected double y1;
+
+    /**
+     * min angle
+     */
     double phiMin = 0;
+
+    /**
+     * max angle
+     */
     double phiMax = Utility.TWO_PI;
+
+    /**
+     * radius
+     */
     protected double radius;
+
+    /**
+     * inverse of the radius
+     */
     protected double invRadius;
 
-    public OpenPartCylinder() {
+    /**
+     * default constructor
+     */
+    public PartCylinder() {
         super();
         y0 = -1;
         y1 = 1;
@@ -46,7 +73,16 @@ public class OpenPartCylinder extends GeometricObject {
         invRadius = 1;
     }
 
-    public OpenPartCylinder(double y0, double y1, double radius, double azimuthmin,
+    /**
+     * initializing constructor (degrees)
+     *
+     * @param y0
+     * @param y1
+     * @param radius
+     * @param azimuthmin
+     * @param azimuthmax
+     */
+    public PartCylinder(double y0, double y1, double radius, double azimuthmin,
             double azimuthmax) {
         super();
         this.y0 = y0;
@@ -57,7 +93,12 @@ public class OpenPartCylinder extends GeometricObject {
         this.invRadius = 1.0 / radius;
     }
 
-    public OpenPartCylinder(OpenPartCylinder cy) {
+    /**
+     * copy constructor
+     *
+     * @param cy
+     */
+    public PartCylinder(PartCylinder cy) {
         super(cy);
         y0 = cy.y0;
         y1 = cy.y1;
@@ -67,11 +108,23 @@ public class OpenPartCylinder extends GeometricObject {
         invRadius = cy.invRadius;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
-        return new OpenPartCylinder(this);
+        return new PartCylinder(this);
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
         double t;
@@ -102,6 +155,7 @@ public class OpenPartCylinder extends GeometricObject {
                     phi += Utility.TWO_PI;
                 }
 
+                //check height and angle
                 if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     sr.lastT = t;
                     sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
@@ -109,7 +163,7 @@ public class OpenPartCylinder extends GeometricObject {
 
                     // test for hitting from inside
                     if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
-                        sr.normal .setTo( sr.normal.neg());
+                        sr.normal.setTo(sr.normal.neg());
                     }
 
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
@@ -129,14 +183,16 @@ public class OpenPartCylinder extends GeometricObject {
                     phi += Utility.TWO_PI;
                 }
 
+                //height and angle
                 if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
                     sr.lastT = t;
-                    sr.normal .setTo( new Normal((ox + t * dx) * invRadius, 0.0, (oz
+                    sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                            (oz
                             + t * dz) * invRadius));
 
                     // test for hitting inside surface
                     if (ray.d.neg().dot(sr.normal) < 0.0) {
-                        sr.normal .setTo( sr.normal.neg());
+                        sr.normal.setTo(sr.normal.neg());
                     }
 
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
@@ -150,6 +206,13 @@ public class OpenPartCylinder extends GeometricObject {
         return (false);
     }
 
+    /**
+     * shadow hit, same as hit function
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
         if (!shadows) {

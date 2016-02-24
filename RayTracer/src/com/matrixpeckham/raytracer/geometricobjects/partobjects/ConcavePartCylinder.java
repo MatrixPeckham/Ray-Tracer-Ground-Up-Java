@@ -26,11 +26,13 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.util.Normal;
 
 /**
+ * Concave Part Cylinder same as PartCylinder, but returns inward facing normal
  *
  * @author William Matrix Peckham
  */
 public class ConcavePartCylinder extends GeometricObject {
 
+    //for more comments see PartCylinder
     protected double y0;
     protected double y1;
     double phiMin = 0;
@@ -38,6 +40,9 @@ public class ConcavePartCylinder extends GeometricObject {
     protected double radius;
     protected double invRadius;
 
+    /**
+     * default constructor
+     */
     public ConcavePartCylinder() {
         super();
         y0 = -1;
@@ -46,9 +51,26 @@ public class ConcavePartCylinder extends GeometricObject {
         invRadius = 1;
     }
 
-    public ConcavePartCylinder(double y0, double y1, double radius){
+    /**
+     * initializing constructor
+     *
+     * @param y0
+     * @param y1
+     * @param radius
+     */
+    public ConcavePartCylinder(double y0, double y1, double radius) {
         this(y0, y1, radius, 0, 360);
     }
+
+    /**
+     * initializing constructor (degrees)
+     *
+     * @param y0
+     * @param y1
+     * @param radius
+     * @param azimuthmin
+     * @param azimuthmax
+     */
     public ConcavePartCylinder(double y0, double y1, double radius,
             double azimuthmin,
             double azimuthmax) {
@@ -61,6 +83,11 @@ public class ConcavePartCylinder extends GeometricObject {
         this.invRadius = 1.0 / radius;
     }
 
+    /**
+     * copy constructor
+     *
+     * @param cy
+     */
     public ConcavePartCylinder(ConcavePartCylinder cy) {
         super(cy);
         y0 = cy.y0;
@@ -71,11 +98,23 @@ public class ConcavePartCylinder extends GeometricObject {
         invRadius = cy.invRadius;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new ConcavePartCylinder(this);
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
         double t;
@@ -111,7 +150,7 @@ public class ConcavePartCylinder extends GeometricObject {
                     sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
                             (oz + t * dz) * invRadius).neg());
 
-				// test for hitting from inside
+                    // test for hitting from inside
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
                             ray.d)));
 
@@ -135,7 +174,7 @@ public class ConcavePartCylinder extends GeometricObject {
                             (oz
                             + t * dz) * invRadius).neg());
 
-				// test for hitting inside surface
+                    // test for hitting inside surface
                     sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
                             ray.d)));
 
@@ -147,6 +186,13 @@ public class ConcavePartCylinder extends GeometricObject {
         return (false);
     }
 
+    /**
+     * shadow hit function
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
         if (!shadows) {

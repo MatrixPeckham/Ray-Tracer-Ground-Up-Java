@@ -19,7 +19,7 @@ package com.matrixpeckham.raytracer.build.figures.ch17;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.partobjects.OpenPartCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.PartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.lights.Directional;
@@ -94,7 +94,7 @@ public class BuildFigure09_11 implements BuildWorldFunction {
                 phiMax);
         cylinderPtr.setMaterial(mattePtr1);
         w.addObject(cylinderPtr);// for fig 09 */
-        OpenPartCylinder cylinderPtr = new OpenPartCylinder(bottom,
+        PartCylinder cylinderPtr = new PartCylinder(bottom,
                 top,
                 radius,
                 phiMin,

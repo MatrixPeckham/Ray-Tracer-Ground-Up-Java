@@ -26,7 +26,7 @@ import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledBox;
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.compound.WireframeBox;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartSphere;
-import com.matrixpeckham.raytracer.geometricobjects.partobjects.OpenPartCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.partobjects.PartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
@@ -136,7 +136,7 @@ public class TEST implements BuildWorldFunction{
                 90, 180, 90, 180);
         cps.setMaterial(matte_ptr);
         w.addObject(cps);*/
-        OpenPartCylinder pc = new OpenPartCylinder(-1, 1, 1,
+        PartCylinder pc = new PartCylinder(-1, 1, 1,
                         90, 180);
         pc.setMaterial(matte_ptr);
         w.addObject(pc);
