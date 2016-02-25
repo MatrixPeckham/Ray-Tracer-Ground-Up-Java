@@ -238,7 +238,7 @@ public class Triangle extends GeometricObject {
         return (true);
     }
 
-    //TODO: this class could be used as an area light, impl
+    //TODO: this class could be used as an area light, implementation
     //the surface area of a triangle is calculable and to mapping a square
     //sample space to it shouldn't be hard.
 }

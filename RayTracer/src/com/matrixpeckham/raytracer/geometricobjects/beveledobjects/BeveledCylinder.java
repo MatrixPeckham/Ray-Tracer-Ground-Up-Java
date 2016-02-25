@@ -26,29 +26,47 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
+ * Beveled torus class, doesn't play well with transparency.
+ *
+ * TODO: implement using part torus to play well with transparency
  *
  * @author William Matrix Peckham
  */
-public class BeveledCylinder extends Compound{
-    double bottom,top,radius,bevelRadius;
-    public BeveledCylinder(double bottom, double top, double radius, double bevelRadius){
+public class BeveledCylinder extends Compound {
+
+    double bottom, top, radius, bevelRadius;
+
+    public BeveledCylinder(double bottom, double top, double radius,
+            double bevelRadius) {
         super();
-        this.bottom=bottom;
-        this.top=top;
-        this.radius=radius;
-        this.bevelRadius=bevelRadius;
-        addObject(new Disk(new Point3D(0,bottom,0), new Normal(0,-1,0), radius-bevelRadius));
-        addObject(new Disk(new Point3D(0,top,0), new Normal(0,1,0), radius-bevelRadius));
-        addObject(new OpenCylinder(bottom+bevelRadius, top-bevelRadius, radius));
-        
-        Instance botTorus = new Instance(new Torus(radius-bevelRadius, bevelRadius));
-        botTorus.translate(0,bottom+bevelRadius,0);
+        //store for later
+        this.bottom = bottom;
+        this.top = top;
+        this.radius = radius;
+        this.bevelRadius = bevelRadius;
+
+        //bottom disk
+        addObject(new Disk(new Point3D(0, bottom, 0), new Normal(0, -1, 0),
+                radius - bevelRadius));
+        //top disk
+        addObject(new Disk(new Point3D(0, top, 0), new Normal(0, 1, 0), radius
+                - bevelRadius));
+        //cylinder
+        addObject(new OpenCylinder(bottom + bevelRadius, top - bevelRadius,
+                radius));
+
+        //bottom torus
+        Instance botTorus = new Instance(new Torus(radius - bevelRadius,
+                bevelRadius));
+        botTorus.translate(0, bottom + bevelRadius, 0);
         botTorus.setTransformTexture(false);
 //        botTorus.setTransformTexture(true);
         addObject(botTorus);
 
-        Instance topTorus = new Instance(new Torus(radius-bevelRadius, bevelRadius));
-        topTorus.translate(0,top-bevelRadius,0);
+        //top torus
+        Instance topTorus = new Instance(new Torus(radius - bevelRadius,
+                bevelRadius));
+        topTorus.translate(0, top - bevelRadius, 0);
         topTorus.setTransformTexture(false);
 //        topTorus.setTransformTexture(true);
         addObject(topTorus);
