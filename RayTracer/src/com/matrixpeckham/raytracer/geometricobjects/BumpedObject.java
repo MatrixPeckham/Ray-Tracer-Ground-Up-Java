@@ -29,67 +29,127 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
+ * Special class for an object that will be bump mapped.
  *
  * @author William Matrix Peckham
  */
 public class BumpedObject extends GeometricObject {
-    GeometricObject obj=null;
+
+    /**
+     * object to bump map
+     */
+    GeometricObject obj = null;
+
+    /**
+     * texture for bump mapping (texture colors are interpreted as vector
+     * displacements to normals)
+     */
     Texture bumpMap = null;
-    public BumpedObject(){}
+
+    /**
+     * default constructor
+     */
+    public BumpedObject() {
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param aThis
+     */
     private BumpedObject(BumpedObject aThis) {
         super(aThis);
-        obj=aThis.obj.clone();
-        bumpMap=aThis.bumpMap.clone();
+        obj = aThis.obj.clone();
+        bumpMap = aThis.bumpMap.clone();
     }
-    
 
+    /**
+     * sets the object to be bumped.
+     *
+     * @param obj
+     */
     public void setObject(GeometricObject obj) {
-        this.obj=obj.clone();
+        this.obj = obj.clone();
     }
 
+    /**
+     * sets the texture to use as a bump map
+     *
+     * @param fBmBumpPtr
+     */
     public void setBumpMap(Texture fBmBumpPtr) {
-        this.bumpMap=fBmBumpPtr.clone();
+        this.bumpMap = fBmBumpPtr.clone();
     }
 
+    /**
+     * clone method
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new BumpedObject(this);
     }
 
+    /**
+     * Hit function this is where we augment the normal before returning.
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
+        //differ to sub object
         boolean hit = obj.hit(ray, s);
-        if(hit){
+        //if we have a hit we need to augment the normal
+        if (hit) {
+            //we get the color from the texture and the default normal
             Normal n = new Normal(s.normal);
             RGBColor c = bumpMap.getColor(s);
-            n.addLocal(new Normal(c.r,c.g,c.b));
-            n.x/=2;
-            n.y/=2;
-            n.z/=2;
+            //now we add the offset. 
+            n.addLocal(new Normal(c.r, c.g, c.b));
+            //offset in range -1-1 so in theory we could double the normal so we average it then renormalize
+            n.x /= 2;
+            n.y /= 2;
+            n.z /= 2;
             n.normalize();
             s.normal.setTo(n);
         }
         return hit;
     }
 
+    /**
+     * shadow hit only differs to sub object, because it doesn't need the normal
+     * it doesn't need to alter anything
+     *
+     * @param ray
+     * @param t
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
         return obj.shadowHit(ray, t);
     }
 
-
+    /**
+     * Here we call the sub-object's method then augment the normal.
+     *
+     * @param p
+     * @return
+     */
     @Override
     public Normal getNormal(Point3D p) {
-            Normal n = new Normal(obj.getNormal(p));
-            ShadeRec r = new ShadeRec((World)null);
-            r.localHitPosition.setTo(p);
-            RGBColor c = bumpMap.getColor(r);
-            n.addLocal(new Normal(c.r,c.g,c.b));
-            //n.x/=2;
-            //n.y/=2;
-            //n.z/=2;
-            n.normalize();
-            return n;
+        Normal n = new Normal(obj.getNormal(p));
+        ShadeRec r = new ShadeRec((World) null);
+        r.localHitPosition.setTo(p);
+        RGBColor c = bumpMap.getColor(r);
+        n.addLocal(new Normal(c.r, c.g, c.b));
+        n.x /= 2;
+        n.y /= 2;
+        n.z /= 2;
+        n.normalize();
+        return n;
     }
 
 }

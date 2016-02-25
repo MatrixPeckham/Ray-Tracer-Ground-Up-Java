@@ -28,17 +28,45 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Instance class. Useful for transforming generic primitives and for creating
+ * multiple visual objects from a single reference, keeps memory down when
+ * visualizing multiple objects that would each take a lot of memory.
  *
  * @author William Matrix Peckham
  */
 public class Instance extends GeometricObject {
 
-    private GeometricObject object=null;
-    private Matrix invMatrix=new Matrix();
-    private Matrix forwardMatrix=new Matrix();
-    private BBox bbox=new BBox();
-    private boolean transformTexture=false;
+    /**
+     * GeometricObject reference to object that we're transforming. Never
+     * cloned, only copy reference.
+     */
+    private GeometricObject object = null;
 
+    /**
+     * Inverse of the transform matrix, we keep track of this as transform
+     * functions are called.
+     */
+    private Matrix invMatrix = new Matrix();
+
+    /**
+     * transform matrix, we keep track of this as transform functions are called
+     * as well.
+     */
+    private Matrix forwardMatrix = new Matrix();
+
+    /**
+     * bounding box for this instance.
+     */
+    private BBox bbox = new BBox();
+
+    /**
+     * flag for if we transform texture coordinates.
+     */
+    private boolean transformTexture = false;
+
+    /**
+     * default constructor
+     */
     public Instance() {
         super();
         object = null;
@@ -48,6 +76,11 @@ public class Instance extends GeometricObject {
         forwardMatrix = new Matrix();
     }
 
+    /**
+     * Constructor that takes an initial object reference
+     *
+     * @param obj
+     */
     public Instance(GeometricObject obj) {
         super();
         object = obj;
@@ -56,8 +89,18 @@ public class Instance extends GeometricObject {
         bbox = new BBox();
         transformTexture = true;
     }
-    /*
-    public Instance(Instance i) {
+
+    /**
+     * This is a private constructor for use by the clone method. It clones an
+     * instance to a new one. it is private because we want clients who create a
+     * new instance with another instance to use the GeometricObject parameter
+     * constructor because we want them to be able to chain instances to create
+     * transformation hierarchies without casting to GeometricObject inside the
+     * constructor.
+     *
+     * @param i
+     */
+    private Instance(Instance i) {
         super(i);
         invMatrix.setTo(i.invMatrix);
         transformTexture = i.transformTexture;
@@ -66,12 +109,24 @@ public class Instance extends GeometricObject {
         }
         forwardMatrix.setTo(i.forwardMatrix);
         bbox = new BBox(i.bbox);
+
     }
-*/
+
+    /**
+     * sets the object reference
+     *
+     * @param obj
+     */
     public void setObject(GeometricObject obj) {
         object = obj;
     }
 
+    /**
+     * computes a bounding box for the instance. To ensure that the new bounds
+     * are not smaller than the object, and to generate somewhat efficiently, we
+     * transform the bounds of the original object, and then compute the
+     * bounding box of the new points.
+     */
     public void computeBoundingBox() {
         BBox objBBox = object.getBoundingBox();
 
@@ -175,32 +230,60 @@ public class Instance extends GeometricObject {
         bbox.z1 = z1;
     }
 
+    /**
+     * returns the bounding box
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
         return bbox;
     }
 
+    /**
+     * sets the texture transform flag
+     *
+     * @param tr
+     */
     public void setTransformTexture(boolean tr) {
         transformTexture = tr;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Instance(this);
     }
 
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
+        //we transform the ray by the inverse transform matrix, then differ to original object's hit function
         Ray invRay = new Ray(ray);
         invRay.o.setTo(Point3D.mul(invMatrix, invRay.o));
         invRay.d.setTo(Vector3D.mul(invMatrix, invRay.d));
 
         if (object.hit(invRay, s)) {
+
+            //we have to transform the hit normal to world coordinates
             s.normal.setTo(Normal.mul(invMatrix, s.normal));
             s.normal.normalize();
+            //use object material
             if (object.getMaterial() != null) {
                 material = object.getMaterial();
             }
+
+            //if we don't transform the texture we use world texture coordinates, otherwise use local texture coordinates
             if (!transformTexture) {
                 s.localHitPosition.setTo(ray.o.add(ray.d.mul(s.lastT)));
             }
@@ -209,22 +292,44 @@ public class Instance extends GeometricObject {
         return false;
     }
 
+    /**
+     * shadow hit function
+     *
+     * @param ray
+     * @param tr
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows) return false;
+        //early out all implementations do this
+        if (!shadows) {
+            return false;
+        }
+        //inverse transform the ray then hit with object
         Ray invRay = new Ray(ray);
         invRay.o.setTo(Point3D.mul(invMatrix, invRay.o));
         invRay.d.setTo(Vector3D.mul(invMatrix, invRay.d));
 
         return object.shadowHit(invRay, tr);
     }
-    
-    public void scale(double d){
-        scale(new Vector3D(d,d,d));
+
+    /**
+     * uniform scale
+     *
+     * @param d
+     */
+    public void scale(double d) {
+        scale(new Vector3D(d, d, d));
     }
+
+    /**
+     * non-uniform scale
+     *
+     * @param s
+     */
     public void scale(Vector3D s) {
 
-        Matrix invScalingMatrix = new Matrix();			// temporary inverse scaling matrix
+        Matrix invScalingMatrix = new Matrix();// temporary inverse scaling matrix
 
         invScalingMatrix.m[0][0] = 1.0 / s.x;
         invScalingMatrix.m[1][1] = 1.0 / s.y;
@@ -232,7 +337,7 @@ public class Instance extends GeometricObject {
 
         invMatrix = invMatrix.mul(invScalingMatrix);
 
-        Matrix scaling_matrix = new Matrix();				// temporary scaling matrix
+        Matrix scaling_matrix = new Matrix();// temporary scaling matrix
 
         scaling_matrix.m[0][0] = s.x;
         scaling_matrix.m[1][1] = s.y;
@@ -241,10 +346,16 @@ public class Instance extends GeometricObject {
         forwardMatrix = scaling_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- scale
+    /**
+     * non-uniform scaling
+     *
+     * @param a
+     * @param b
+     * @param c
+     */
     public void scale(double a, double b, double c) {
 
-        Matrix invScalingMatrix = new Matrix();					// temporary inverse scaling matrix
+        Matrix invScalingMatrix = new Matrix();// temporary inverse scaling matrix
 
         invScalingMatrix.m[0][0] = 1.0 / a;
         invScalingMatrix.m[1][1] = 1.0 / b;
@@ -252,7 +363,7 @@ public class Instance extends GeometricObject {
 
         invMatrix = invMatrix.mul(invScalingMatrix);
 
-        Matrix scaling_matrix = new Matrix();						// temporary scaling matrix
+        Matrix scaling_matrix = new Matrix();// temporary scaling matrix
 
         scaling_matrix.m[0][0] = a;
         scaling_matrix.m[1][1] = b;
@@ -261,124 +372,151 @@ public class Instance extends GeometricObject {
         forwardMatrix = scaling_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- translate
+    /**
+     * translation function
+     *
+     * @param trans
+     */
     public void translate(Vector3D trans) {
 
-        Matrix inv_translation_matrix=new Matrix();				// temporary inverse translation matrix	
+        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix	
 
         inv_translation_matrix.m[0][3] = -trans.x;
         inv_translation_matrix.m[1][3] = -trans.y;
         inv_translation_matrix.m[2][3] = -trans.z;
 
-        invMatrix = invMatrix .mul(inv_translation_matrix);
+        invMatrix = invMatrix.mul(inv_translation_matrix);
 
-        Matrix translation_matrix=new Matrix();					// temporary translation matrix	
+        Matrix translation_matrix = new Matrix();// temporary translation matrix	
 
         translation_matrix.m[0][3] = trans.x;
         translation_matrix.m[1][3] = trans.y;
         translation_matrix.m[2][3] = trans.z;
 
-        forwardMatrix = translation_matrix .mul( forwardMatrix);
+        forwardMatrix = translation_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- translate
+    /**
+     * translate
+     *
+     * @param dx
+     * @param dy
+     * @param dz
+     */
     public void translate(double dx, double dy, double dz) {
 
-        Matrix inv_translation_matrix=new Matrix();				// temporary inverse translation matrix	
+        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix	
 
         inv_translation_matrix.m[0][3] = -dx;
         inv_translation_matrix.m[1][3] = -dy;
         inv_translation_matrix.m[2][3] = -dz;
 
-        invMatrix = invMatrix .mul (inv_translation_matrix);
+        invMatrix = invMatrix.mul(inv_translation_matrix);
 
-        Matrix translation_matrix=new Matrix();					// temporary translation matrix	
+        Matrix translation_matrix = new Matrix();// temporary translation matrix	
 
         translation_matrix.m[0][3] = dx;
         translation_matrix.m[1][3] = dy;
         translation_matrix.m[2][3] = dz;
 
-        forwardMatrix = translation_matrix .mul(forwardMatrix);
+        forwardMatrix = translation_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- rotate_x
+    /**
+     * rotate on the x axis (degrees)
+     *
+     * @param theta
+     */
     public void rotateX(double theta) {
-        
+
         double sin_theta = Math.sin(theta * Utility.PI_ON_180);
         double cos_theta = Math.cos(theta * Utility.PI_ON_180);
 
-        Matrix inv_x_rotation_matrix=new Matrix();					// temporary inverse rotation matrix about x axis
+        Matrix inv_x_rotation_matrix = new Matrix();// temporary inverse rotation matrix about x axis
 
         inv_x_rotation_matrix.m[1][1] = cos_theta;
         inv_x_rotation_matrix.m[1][2] = sin_theta;
         inv_x_rotation_matrix.m[2][1] = -sin_theta;
         inv_x_rotation_matrix.m[2][2] = cos_theta;
 
-        invMatrix = invMatrix .mul(inv_x_rotation_matrix);
+        invMatrix = invMatrix.mul(inv_x_rotation_matrix);
 
-        Matrix x_rotation_matrix=new Matrix();						// temporary rotation matrix about x axis
+        Matrix x_rotation_matrix = new Matrix();// temporary rotation matrix about x axis
 
         x_rotation_matrix.m[1][1] = cos_theta;
         x_rotation_matrix.m[1][2] = -sin_theta;
         x_rotation_matrix.m[2][1] = sin_theta;
         x_rotation_matrix.m[2][2] = cos_theta;
 
-        forwardMatrix = x_rotation_matrix .mul( forwardMatrix);
+        forwardMatrix = x_rotation_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- rotate_y
+    /**
+     * rotate on the y axis (degrees)
+     *
+     * @param theta
+     */
     public void rotateY(double theta) {
 
         double sin_theta = Math.sin(theta * Utility.PI / 180.0);
         double cos_theta = Math.cos(theta * Utility.PI / 180.0);
 
-        Matrix inv_y_rotation_matrix=new Matrix();					// temporary inverse rotation matrix about y axis
+        Matrix inv_y_rotation_matrix = new Matrix();// temporary inverse rotation matrix about y axis
 
         inv_y_rotation_matrix.m[0][0] = cos_theta;
         inv_y_rotation_matrix.m[0][2] = -sin_theta;
         inv_y_rotation_matrix.m[2][0] = sin_theta;
         inv_y_rotation_matrix.m[2][2] = cos_theta;
 
-        invMatrix = invMatrix .mul(inv_y_rotation_matrix);
+        invMatrix = invMatrix.mul(inv_y_rotation_matrix);
 
-        Matrix y_rotation_matrix=new Matrix();						// temporary rotation matrix about x axis
+        Matrix y_rotation_matrix = new Matrix();// temporary rotation matrix about x axis
 
         y_rotation_matrix.m[0][0] = cos_theta;
         y_rotation_matrix.m[0][2] = sin_theta;
         y_rotation_matrix.m[2][0] = -sin_theta;
         y_rotation_matrix.m[2][2] = cos_theta;
 
-        forwardMatrix = y_rotation_matrix .mul(forwardMatrix);
+        forwardMatrix = y_rotation_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- rotate_z
+    /**
+     * rotate on the z axis (degrees)
+     *
+     * @param theta
+     */
     public void rotateZ(double theta) {
         double sin_theta = Math.sin(theta * Utility.PI / 180.0);
         double cos_theta = Math.cos(theta * Utility.PI / 180.0);
 
-        Matrix inv_z_rotation_matrix=new Matrix();					// temporary inverse rotation matrix about y axis	
+        Matrix inv_z_rotation_matrix = new Matrix();// temporary inverse rotation matrix about y axis	
 
         inv_z_rotation_matrix.m[0][0] = cos_theta;
         inv_z_rotation_matrix.m[0][1] = sin_theta;
         inv_z_rotation_matrix.m[1][0] = -sin_theta;
         inv_z_rotation_matrix.m[1][1] = cos_theta;
 
-        invMatrix = invMatrix .mul( inv_z_rotation_matrix);
+        invMatrix = invMatrix.mul(inv_z_rotation_matrix);
 
-        Matrix z_rotation_matrix=new Matrix();						// temporary rotation matrix about y axis
+        Matrix z_rotation_matrix = new Matrix();// temporary rotation matrix about y axis
 
         z_rotation_matrix.m[0][0] = cos_theta;
         z_rotation_matrix.m[0][1] = -sin_theta;
         z_rotation_matrix.m[1][0] = sin_theta;
         z_rotation_matrix.m[1][1] = cos_theta;
 
-        forwardMatrix = z_rotation_matrix .mul(forwardMatrix);
+        forwardMatrix = z_rotation_matrix.mul(forwardMatrix);
     }
 
-//-------------------------------------------------------------------------------- shear
+    /**
+     * shear transformation based on a shear matrix
+     *
+     * @param s
+     */
     public void shear(Matrix s) {
-	
-	Matrix inverse_shearing_matrix=new Matrix();    // inverse shear matrix
+
+        //we manually invert the shear matrix
+        Matrix inverse_shearing_matrix = new Matrix();// inverse shear matrix
 
         // discriminant
         double d = 1.0 - s.m[1][0] * s.m[0][1] - s.m[2][0] * s.m[0][2]
@@ -405,11 +543,11 @@ public class Instance extends GeometricObject {
         inverse_shearing_matrix.m[2][1] = -s.m[1][2] + s.m[1][0] * s.m[0][2];
 
         // divide by discriminant
-        inverse_shearing_matrix = inverse_shearing_matrix .div( d);
+        inverse_shearing_matrix = inverse_shearing_matrix.div(d);
 
-        invMatrix = invMatrix .mul( inverse_shearing_matrix);
+        invMatrix = invMatrix.mul(inverse_shearing_matrix);
 
-        forwardMatrix = s .mul( forwardMatrix);
+        forwardMatrix = s.mul(forwardMatrix);
     }
 
 }
