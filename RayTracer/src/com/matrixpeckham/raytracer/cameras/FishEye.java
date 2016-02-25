@@ -27,25 +27,40 @@ import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
+ * Fish eye camera.
  *
  * @author William Matrix Peckham
  */
 public class FishEye extends Camera {
 
-    private double psiMax = 90;
-    private boolean rectangular=false;
+    private double psiMax = 90;//view angle
+    private boolean rectangular = false;//circle or square
 
+    /**
+     * default constructor
+     */
     public FishEye() {
 
     }
 
+    /**
+     * copy constructor
+     *
+     * @param aThis
+     */
     public FishEye(FishEye aThis) {
         super(aThis);
         psiMax = aThis.psiMax;
     }
 
+    /**
+     * render scene function
+     *
+     * @param w
+     */
     @Override
     public void renderScene(World w) {
+        //we map points on image to angles and project them
         RGBColor L = new RGBColor();
         ViewPlane vp = new ViewPlane(w.vp);
         int hres = vp.hRes;
@@ -53,9 +68,9 @@ public class FishEye extends Camera {
         double s = vp.s;
         Ray ray = new Ray();
         int depth = 0;
-        Point2D sp = new Point2D(); 					// sample point in [0, 1] X [0, 1]
-        Point2D pp = new Point2D();						// sample point on the pixel
-        DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
+        Point2D sp = new Point2D();// sample point in [0, 1] X [0, 1]
+        Point2D pp = new Point2D();// sample point on the pixel
+        DoubleRef r_squared = new DoubleRef();// sum of squares of normalised device coordinates
 
         ray.o.setTo(eye);
 
@@ -70,7 +85,7 @@ public class FishEye extends Camera {
                     pp.y = s * (r - 0.5 * vres + sp.y);
                     ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
 
-                    if (rectangular||r_squared.d <= 1.0) {
+                    if (rectangular || r_squared.d <= 1.0) {
                         L.addLocal(w.tracer.traceRay(ray, depth));
                     }
                 }
@@ -82,6 +97,13 @@ public class FishEye extends Camera {
         }
     }
 
+    /**
+     * stereo render function
+     *
+     * @param w
+     * @param x
+     * @param i
+     */
     @Override
     public void renderStereo(World w, double x, int i) {
         RGBColor L = new RGBColor();
@@ -91,9 +113,9 @@ public class FishEye extends Camera {
         double s = vp.s;
         Ray ray = new Ray();
         int depth = 0;
-        Point2D sp = new Point2D(); 					// sample point in [0, 1] X [0, 1]
-        Point2D pp = new Point2D();						// sample point on the pixel
-        DoubleRef r_squared = new DoubleRef();				// sum of squares of normalised device coordinates
+        Point2D sp = new Point2D();// sample point in [0, 1] X [0, 1]
+        Point2D pp = new Point2D();// sample point on the pixel
+        DoubleRef r_squared = new DoubleRef();// sum of squares of normalised device coordinates
 
         ray.o.setTo(eye);
 
@@ -108,7 +130,7 @@ public class FishEye extends Camera {
                     pp.y = s * (r - 0.5 * vres + sp.y);
                     ray.d.setTo(rayDirection(pp, hres, vres, s, r_squared));
 
-                    if (rectangular||r_squared.d <= 1.0) {
+                    if (rectangular || r_squared.d <= 1.0) {
                         L.addLocal(w.tracer.traceRay(ray, depth));
                     }
                 }
@@ -120,17 +142,32 @@ public class FishEye extends Camera {
         }
     }
 
+    /**
+     * clone function
+     *
+     * @return
+     */
     @Override
     public Camera clone() {
         return new FishEye(this);
     }
 
+    /**
+     * gets the ray direction for the given parameters
+     *
+     * @param pp
+     * @param hres
+     * @param vres
+     * @param s
+     * @param r_squared
+     * @return
+     */
     private Vector3D rayDirection(Point2D pp, int hres, int vres, double s,
             DoubleRef r_squared) {
         Point2D pn = new Point2D(2.0 / (s * hres) * pp.x, 2.0 / (s * vres)
                 * pp.y);
         r_squared.d = pn.x * pn.x + pn.y * pn.y;
-        if (rectangular||r_squared.d <= 1.0) {
+        if (rectangular || r_squared.d <= 1.0) {
             double r = Math.sqrt(r_squared.d);
             double psi = r * psiMax * Utility.PI_ON_180;
             double sinPsi = Math.sin(psi);
@@ -146,12 +183,22 @@ public class FishEye extends Camera {
         }
     }
 
+    /**
+     * sets field of view
+     *
+     * @param d
+     */
     public void setFov(double d) {
         psiMax = d / 2;
     }
 
+    /**
+     * sets rectangular field
+     *
+     * @param b
+     */
     public void setRectangular(boolean b) {
-        rectangular=b;
+        rectangular = b;
     }
 
 }

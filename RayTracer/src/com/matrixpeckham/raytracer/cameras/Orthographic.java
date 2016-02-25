@@ -39,7 +39,7 @@ public class Orthographic extends Camera {
     }
 
     /**
-     * Clone
+     * Copy Constructor
      *
      * @param c
      */
@@ -109,7 +109,7 @@ public class Orthographic extends Camera {
                 }
                 //normalize and expose pixel
                 L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime); 
+                L.mulLocal(exposureTime);
                 //display
                 w.displayPixel(r, c, L);
             }
@@ -117,6 +117,13 @@ public class Orthographic extends Camera {
 
     }
 
+    /**
+     * render stereo function
+     *
+     * @param w
+     * @param x
+     * @param i
+     */
     @Override
     public void renderStereo(World w, double x, int i) {
         //color
@@ -140,8 +147,8 @@ public class Orthographic extends Camera {
                 for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
                     //sample point
                     sp.setTo(vp.sampler.sampleUnitSquare());
-                    //convert normalized sample point to a point somewhere in the pixel
-                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x)+x;
+                    //convert normalized sample point to a point somewhere in the pixel offset for stereo
+                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x) + x;
                     pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
                     //get ray direction
                     ray.d.setTo(getDirection(pp));
@@ -152,9 +159,9 @@ public class Orthographic extends Camera {
                 }
                 //normalize and expose pixel
                 L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime); 
-                //display
-                w.displayPixel(r, c+i, L);
+                L.mulLocal(exposureTime);
+                //display, offset for stereo
+                w.displayPixel(r, c + i, L);
             }
         }
 

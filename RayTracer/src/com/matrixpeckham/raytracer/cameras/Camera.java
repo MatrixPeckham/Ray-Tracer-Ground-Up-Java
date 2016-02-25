@@ -23,11 +23,14 @@ import com.matrixpeckham.raytracer.world.World;
 
 /**
  * Base class for cameras, holds all the stuff that all cameras have in common.
+ *
  * @author William Matrix Peckham
  */
 public abstract class Camera {
+
     /**
-     * Eye Point of the camera, center of ortho view, or focal point of perspective.
+     * Eye Point of the camera, center of ortho view, or focal point of
+     * perspective.
      */
     protected Point3D eye;
     /**
@@ -49,112 +52,168 @@ public abstract class Camera {
      */
     protected Vector3D up;
     /**
-     * Exposure time. 
+     * Exposure time.
      */
-    protected double exposureTime=1;
+    protected double exposureTime = 1;
+
     /**
-     * Sets defaults. 
+     * Sets defaults.
      */
-    public Camera(){
-        eye = new Point3D(0,0,500);
+    public Camera() {
+        eye = new Point3D(0, 0, 500);
         lookat = new Point3D(0);
-        rollAngle=0;
-        up=new Vector3D(0,1,0);
-        u=new Vector3D(1,0,0);
-        v=new Vector3D(0,1,0);
-        w=new Vector3D(0,0,1);
-        exposureTime=1;
+        rollAngle = 0;
+        up = new Vector3D(0, 1, 0);
+        u = new Vector3D(1, 0, 0);
+        v = new Vector3D(0, 1, 0);
+        w = new Vector3D(0, 0, 1);
+        exposureTime = 1;
     }
+
     /**
      * copies other camera.
-     * @param c 
+     *
+     * @param c
      */
-    public Camera(Camera c){
-        eye=new Point3D(c.eye);
-        lookat=new Point3D(c.lookat);
-        rollAngle=c.rollAngle;
-        up=new Vector3D(c.up);
-        u=new Vector3D(c.u);
-        v=new Vector3D(c.v);
-        w=new Vector3D(c.w);
-        exposureTime=c.exposureTime;
+    public Camera(Camera c) {
+        eye = new Point3D(c.eye);
+        lookat = new Point3D(c.lookat);
+        rollAngle = c.rollAngle;
+        up = new Vector3D(c.up);
+        u = new Vector3D(c.u);
+        v = new Vector3D(c.v);
+        w = new Vector3D(c.w);
+        exposureTime = c.exposureTime;
     }
+
     /**
      * Computes basis vectors from look at and up.
      */
-    public void computeUVW(){
+    public void computeUVW() {
         w.setTo(eye.sub(lookat));
         w.normalize();
-        u=up.cross(w);
+        u = up.cross(w);
         u.normalize();
-        v=w.cross(u);
-        
+        v = w.cross(u);
+
         //special cases for strait up and down view.
-        if(eye.x==lookat.x&&eye.z==lookat.z&&eye.y>lookat.y){
-            u.setTo(new Vector3D(0,0,1));
-            v.setTo(new Vector3D(1,0,0));
-            w.setTo(new Vector3D(0,1,0));
+        if (eye.x == lookat.x && eye.z == lookat.z && eye.y > lookat.y) {
+            u.setTo(new Vector3D(0, 0, 1));
+            v.setTo(new Vector3D(1, 0, 0));
+            w.setTo(new Vector3D(0, 1, 0));
         }
-        if(eye.x==lookat.x&&eye.z==lookat.z&&eye.y<lookat.y){
-            u.setTo(new Vector3D(1,0,0));
-            v.setTo(new Vector3D(0,0,1));
-            w.setTo(new Vector3D(0,-1,0));
+        if (eye.x == lookat.x && eye.z == lookat.z && eye.y < lookat.y) {
+            u.setTo(new Vector3D(1, 0, 0));
+            v.setTo(new Vector3D(0, 0, 1));
+            w.setTo(new Vector3D(0, -1, 0));
         }
     }
-    
+
     /**
-     * Setters for eye, up, roll, exposure time, and look at.
-     * @param p 
+     * Setter
+     *
+     * @param p
      */
-    public void setEye(Point3D p){
+    public void setEye(Point3D p) {
         eye.setTo(p);
     }
-    public void setEye(double x, double y, double z){
-        eye.x=x;
-        eye.y=y;
-        eye.z=z;
+
+    /**
+     * setter
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void setEye(double x, double y, double z) {
+        eye.x = x;
+        eye.y = y;
+        eye.z = z;
     }
-    
-    public void setLookat(Point3D p){
+
+    /**
+     * setter
+     *
+     * @param p
+     */
+    public void setLookat(Point3D p) {
         lookat.setTo(p);
     }
-    public void setLookat(double x, double y, double z){
-        lookat.x=x;
-        lookat.y=y;
-        lookat.z=z;
+
+    /**
+     * setter
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void setLookat(double x, double y, double z) {
+        lookat.x = x;
+        lookat.y = y;
+        lookat.z = z;
     }
-    
-    public void setUp(Vector3D p){
+
+    /**
+     * setter
+     *
+     * @param p
+     */
+    public void setUp(Vector3D p) {
         up.setTo(p);
     }
-    public void setUp(double x, double y, double z){
-        up.x=x;
-        up.y=y;
-        up.z=z;
+
+    /**
+     * setter
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void setUp(double x, double y, double z) {
+        up.x = x;
+        up.y = y;
+        up.z = z;
     }
-    
-    public void setRoll(double r){
-        rollAngle=r;
+
+    /**
+     * setter
+     *
+     * @param r
+     */
+    public void setRoll(double r) {
+        rollAngle = r;
     }
-    
-    public void setExposureTime(double exp){
-        exposureTime=exp;
+
+    /**
+     * setter
+     *
+     * @param exp
+     */
+    public void setExposureTime(double exp) {
+        exposureTime = exp;
     }
-    
+
     /**
      * renders a scene.
-     * @param w 
+     *
+     * @param w
      */
     public abstract void renderScene(World w);
-    
+
     /**
      * clone method.
-     * @return 
+     *
+     * @return
      */
     public abstract Camera clone();
 
+    /**
+     * Render stereo, x is an offset for frustum, i is a raster offset.
+     *
+     * @param w
+     * @param x
+     * @param i
+     */
     public abstract void renderStereo(World w, double x, int i);
-    
-    
-    
+
 }

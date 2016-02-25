@@ -29,11 +29,14 @@ import com.matrixpeckham.raytracer.world.World;
 
 /**
  * Thin lens camera with depth of field.
+ *
  * @author William Matrix Peckham
  */
 public class ThinLens extends Camera {
+
     //radius of lens
-    private double lensRadius=1;
+
+    private double lensRadius = 1;
     private double d = 1;//view dist
     private double f = 10;//focal dist
     private double zoom = 1;//zoom
@@ -41,106 +44,126 @@ public class ThinLens extends Camera {
 
     /**
      * getter
-     * @return 
+     *
+     * @return
      */
     public double getLensRadius() {
         return lensRadius;
     }
+
     /**
      * get view distance
-     * @return 
+     *
+     * @return
      */
     public double getD() {
         return d;
     }
+
     /**
      * get focal distance
-     * @return 
+     *
+     * @return
      */
     public double getF() {
         return f;
     }
+
     /**
      * get zoom
-     * @return 
+     *
+     * @return
      */
     public double getZoom() {
         return zoom;
     }
+
     /**
      * set radius
-     * @param lensRadius 
+     *
+     * @param lensRadius
      */
     public void setLensRadius(double lensRadius) {
         this.lensRadius = lensRadius;
     }
+
     /**
      * set view distance
-     * @param d 
+     *
+     * @param d
      */
     public void setViewDistance(double d) {
         this.d = d;
     }
+
     /**
      * set focal distance
-     * @param f 
+     *
+     * @param f
      */
     public void setFocalDistance(double f) {
         this.f = f;
     }
+
     /**
      * set zoom
-     * @param zoom 
+     *
+     * @param zoom
      */
     public void setZoom(double zoom) {
         this.zoom = zoom;
     }
-    
-    
+
     /**
      * sets the sampler and maps it to disk
-     * @param sampler 
+     *
+     * @param sampler
      */
     public void setSampler(Sampler sampler) {
         this.sampler = sampler;
         sampler.mapSamplesToUnitDisc();
     }
-    
+
     /**
      * gets the ray direction from the pixel location and lens point.
+     *
      * @param pixelPoint
      * @param lensPoint
-     * @return 
+     * @return
      */
-    private Vector3D rayDirection(Point2D pixelPoint, Point2D lensPoint){
-        Point2D p = new Point2D(pixelPoint.x*f/d,pixelPoint.y*f/d);
-        Vector3D dir = u.mul(p.x-lensPoint.x).add(v.mul(p.y-lensPoint.y)).sub(w.mul(f));
+    private Vector3D rayDirection(Point2D pixelPoint, Point2D lensPoint) {
+        Point2D p = new Point2D(pixelPoint.x * f / d, pixelPoint.y * f / d);
+        Vector3D dir = u.mul(p.x - lensPoint.x).add(v.mul(p.y - lensPoint.y)).
+                sub(w.mul(f));
         dir.normalize();
         return dir;
     }
 
-    
     /**
      * Default constructor
      */
     public ThinLens() {
         super();
     }
+
     /**
      * copy constructor
-     * @param l 
+     *
+     * @param l
      */
-    public ThinLens(ThinLens l){
+    public ThinLens(ThinLens l) {
         super(l);
-        lensRadius=l.lensRadius;
-        d=l.d;
-        f=l.f;
-        zoom=l.zoom;
-        sampler=l.sampler;
+        lensRadius = l.lensRadius;
+        d = l.d;
+        f = l.f;
+        zoom = l.zoom;
+        sampler = l.sampler;
     }
+
     /**
      * render scene function
-     * @param w 
+     *
+     * @param w
      */
     @Override
     public void renderScene(World w) {
@@ -160,26 +183,26 @@ public class ThinLens extends Camera {
         Point2D dp = new Point2D();
         //lens point
         Point2D lp = new Point2D();
-        
+
         //adjust size for zoom.
-        vp.s/=zoom;
+        vp.s /= zoom;
 
         //loop through pixels
-        for(int r = 0; r<vp.vRes; r++){
-            for(int c=0; c<vp.hRes; c++){
+        for (int r = 0; r < vp.vRes; r++) {
+            for (int c = 0; c < vp.hRes; c++) {
                 //reset color
                 L.setTo(Utility.BLACK);
                 //for every sample
-                for(int n = 0; n<vp.numSamples; n++){
+                for (int n = 0; n < vp.numSamples; n++) {
                     //find pixel point
                     sp.setTo(vp.sampler.sampleUnitSquare());
-                    pp.x=vp.s*(c-vp.hRes/2.0+sp.x);
-                    pp.y=vp.s*(r-vp.vRes/2.0+sp.y);
-                    
+                    pp.x = vp.s * (c - vp.hRes / 2.0 + sp.x);
+                    pp.y = vp.s * (r - vp.vRes / 2.0 + sp.y);
+
                     //find lens point
                     dp.setTo(sampler.sampleUnitDisc());
                     lp.setTo(dp.mul(lensRadius));
-                    
+
                     //ray origin is lens point
                     ray.o.setTo(eye.add(u.mul(lp.x)).add(v.mul(lp.y)));
                     //calc direction and add to color
@@ -192,17 +215,26 @@ public class ThinLens extends Camera {
                 w.displayPixel(r, c, L);
             }
         }
-        
+
     }
+
     /**
      * clone
-     * @return 
+     *
+     * @return
      */
     @Override
     public Camera clone() {
         return new ThinLens(this);
     }
 
+    /**
+     * render stereo function
+     *
+     * @param w
+     * @param x
+     * @param i
+     */
     @Override
     public void renderStereo(World w, double x, int i) {
         //color
@@ -221,26 +253,26 @@ public class ThinLens extends Camera {
         Point2D dp = new Point2D();
         //lens point
         Point2D lp = new Point2D();
-        
+
         //adjust size for zoom.
-        vp.s/=zoom;
+        vp.s /= zoom;
 
         //loop through pixels
-        for(int r = 0; r<vp.vRes; r++){
-            for(int c=0; c<vp.hRes; c++){
+        for (int r = 0; r < vp.vRes; r++) {
+            for (int c = 0; c < vp.hRes; c++) {
                 //reset color
                 L.setTo(Utility.BLACK);
                 //for every sample
-                for(int n = 0; n<vp.numSamples; n++){
+                for (int n = 0; n < vp.numSamples; n++) {
                     //find pixel point
                     sp.setTo(vp.sampler.sampleUnitSquare());
-                    pp.x=vp.s*(c-vp.hRes/2.0+sp.x)+x;
-                    pp.y=vp.s*(r-vp.vRes/2.0+sp.y);
-                    
+                    pp.x = vp.s * (c - vp.hRes / 2.0 + sp.x) + x;
+                    pp.y = vp.s * (r - vp.vRes / 2.0 + sp.y);
+
                     //find lens point
                     dp.setTo(sampler.sampleUnitDisc());
                     lp.setTo(dp.mul(lensRadius));
-                    
+
                     //ray origin is lens point
                     ray.o.setTo(eye.add(u.mul(lp.x)).add(v.mul(lp.y)));
                     //calc direction and add to color
@@ -252,6 +284,7 @@ public class ThinLens extends Camera {
                 L.mulLocal(exposureTime);
                 w.displayPixel(r, c + i, L);
             }
-        }    }
-    
+        }
+    }
+
 }

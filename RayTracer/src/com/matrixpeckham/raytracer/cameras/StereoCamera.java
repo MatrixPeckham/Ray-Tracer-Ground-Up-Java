@@ -22,104 +22,187 @@ import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
+ * Stereo Camera implementation.
  *
  * @author William Matrix Peckham
  */
-public class StereoCamera extends Camera{
+public class StereoCamera extends Camera {
 
+    /**
+     * sets the left camera CANNOT BE STEREO
+     *
+     * @param leftCameraPtr
+     */
     public void setLeftCamera(Camera leftCameraPtr) {
-        leftCamera=leftCameraPtr;
+        leftCamera = leftCameraPtr;
     }
 
+    /**
+     * sets the right camera CANNOT BE STEREO
+     *
+     * @param rightCameraPtr
+     */
     public void setRightCamera(Camera rightCameraPtr) {
-        rightCamera=rightCameraPtr;
+        rightCamera = rightCameraPtr;
     }
 
+    /**
+     * set viewing type
+     */
     public void useTransverseViewing() {
-        viewingType=ViewingType.TRANSVERSE;
+        viewingType = ViewingType.TRANSVERSE;
     }
 
+    /**
+     * set viewing type
+     */
     public void useParallelViewing() {
-        viewingType=ViewingType.PARALLEL;
+        viewingType = ViewingType.PARALLEL;
     }
 
+    /**
+     * sets the gap between the two images
+     *
+     * @param i
+     */
     public void setPixelGap(int i) {
-        pixelGap=i;
+        pixelGap = i;
     }
 
+    /**
+     * stereo angle of the two cameras
+     *
+     * @param d
+     */
     public void setStereoAngle(double d) {
-        beta=d;
+        beta = d;
     }
 
-    public static enum ViewingType{
+    /**
+     * enum for viewing types
+     */
+    public static enum ViewingType {
+
         PARALLEL,
         TRANSVERSE
     }
+
+    /**
+     * viewing type of camera
+     */
     ViewingType viewingType = ViewingType.PARALLEL;
+
+    /**
+     * pixel gap between images
+     */
     int pixelGap = 4;
+
+    /**
+     * separation between cameras
+     */
     double beta = 30;
+
+    //sub cameras
     Camera leftCamera;
     Camera rightCamera;
-    
-    public StereoCamera(){}
-    public StereoCamera(Camera left, Camera right){
+
+    /**
+     * default constructor
+     */
+    public StereoCamera() {
+    }
+
+    /**
+     * initializing constructor
+     *
+     * @param left
+     * @param right
+     */
+    public StereoCamera(Camera left, Camera right) {
         this();
         setLeftCamera(left);
         setRightCamera(right);
     }
-    
-    public StereoCamera(StereoCamera o){
-        viewingType=o.viewingType;
-        pixelGap=o.pixelGap;
-        beta=o.beta;
-        leftCamera=o.leftCamera.clone();
-        rightCamera=o.rightCamera.clone();
+
+    /**
+     * copy constructor
+     *
+     * @param o
+     */
+    public StereoCamera(StereoCamera o) {
+        viewingType = o.viewingType;
+        pixelGap = o.pixelGap;
+        beta = o.beta;
+        leftCamera = o.leftCamera.clone();
+        rightCamera = o.rightCamera.clone();
     }
-    
-    public void setupCameras(ViewPlane vp){
-        vp.imageHeight=vp.vRes;
-        vp.imageWidth=vp.hRes*2+pixelGap;
+
+    /**
+     * setup function, sets up the different camera views
+     *
+     * @param vp
+     */
+    public void setupCameras(ViewPlane vp) {
+        vp.imageHeight = vp.vRes;
+        vp.imageWidth = vp.hRes * 2 + pixelGap;
         double r = eye.distance(lookat);
-        double x = r*Math.tan(0.5*beta*Utility.PI_ON_180);
+        double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
         leftCamera.setEye(eye.sub(u.mul(x)));
         leftCamera.setLookat(lookat.sub(u.mul(x)));
         leftCamera.computeUVW();
         rightCamera.setEye(eye.add(u.mul(x)));
         rightCamera.setLookat(lookat.add(u.mul(x)));
         rightCamera.computeUVW();
-        
+
     }
-    
+
+    /**
+     * Render function, differs to the left and right cameras
+     *
+     * @param w
+     */
     @Override
     public void renderScene(World w) {
         ViewPlane vp = new ViewPlane(w.vp);
-        int hres=vp.hRes;
-        int vres=vp.vRes;
-        
+        int hres = vp.hRes;
+        int vres = vp.vRes;
+
         double r = eye.distance(lookat);
-        double x = r*Math.tan(0.5*beta*Utility.PI_ON_180);
-        
-        if(viewingType==ViewingType.PARALLEL){
-            leftCamera.renderStereo(w,x,0);
-            rightCamera.renderStereo(w,-x,hres+pixelGap);
+        double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
+
+        if (viewingType == ViewingType.PARALLEL) {
+            leftCamera.renderStereo(w, x, 0);
+            rightCamera.renderStereo(w, -x, hres + pixelGap);
         }
-        if(viewingType==ViewingType.TRANSVERSE){
-            leftCamera.renderStereo(w,-x,0);
-            rightCamera.renderStereo(w,x,hres+pixelGap);
+        if (viewingType == ViewingType.TRANSVERSE) {
+            leftCamera.renderStereo(w, -x, 0);
+            rightCamera.renderStereo(w, x, hres + pixelGap);
         }
-        
+
     }
 
+    /**
+     * must override because it's abstract, but throw exception because we can't
+     * have nested stereo cameras
+     *
+     * @param w
+     * @param x
+     * @param i
+     */
     @Override
     public void renderStereo(World w, double x, int i) {
-        throw new RuntimeException("Stereo Camera should not have renderStereo call.");
+        throw new RuntimeException(
+                "Stereo Camera should not have renderStereo call.");
     }
-    
-    
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public Camera clone() {
         return new StereoCamera(this);
     }
-    
+
 }
