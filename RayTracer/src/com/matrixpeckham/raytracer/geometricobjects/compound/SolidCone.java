@@ -23,13 +23,21 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
+ * Solid cone class, open cone and a disc
+ *
+ * as with most compound subclasses nothing is overridden, constructor adds
+ * child objects and does nothing else.
  *
  * @author William Matrix Peckham
  */
-public class SolidCone extends Compound{
-    public SolidCone(){
+public class SolidCone extends Compound {
+
+    /**
+     * default constructor
+     */
+    public SolidCone() {
         OpenCone cone = new OpenCone();
-        Disk bottom = new Disk(new Point3D(), new Normal(0,-1,0), 1);
+        Disk bottom = new Disk(new Point3D(), new Normal(0, -1, 0), 1);
         addObject(cone);
         addObject(bottom);
     }

@@ -30,120 +30,183 @@ import com.matrixpeckham.raytracer.util.Utility;
 import java.util.ArrayList;
 
 /**
+ * Compound class, geometric object constructed of multiple other geometric
+ * objects
  *
  * @author William Matrix Peckham
  */
 public class Compound extends GeometricObject {
+
+    /**
+     * list of sub objects
+     */
     protected ArrayList<GeometricObject> objects = new ArrayList<>();
-    
-    public Compound(){
+
+    /**
+     * default constructor
+     */
+    public Compound() {
         super();
     }
 
-    public Compound(Compound c){
+    /**
+     * copy constructor
+     *
+     * @param c
+     */
+    public Compound(Compound c) {
         copyObjects(c.objects);
     }
-    
+
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public GeometricObject clone() {
         return new Compound(this);
     }
-    
-    public void addObject(GeometricObject obj){
+
+    /**
+     * Add an object to the collection of sub objects
+     *
+     * @param obj
+     */
+    public void addObject(GeometricObject obj) {
         objects.add(obj);
     }
-    
+
+    /**
+     * sets the material for every object
+     *
+     * @param mat
+     */
     @Override
-    public void setMaterial(Material mat){
-        for(GeometricObject obj : objects){
+    public void setMaterial(Material mat) {
+        for (GeometricObject obj : objects) {
             obj.setMaterial(mat);
         }
     }
-    public void setMaterial(Material mat, int i){
+
+    /**
+     * sets the material for an object at index i
+     *
+     * @param mat
+     * @param i
+     */
+    public void setMaterial(Material mat, int i) {
         objects.get(i).setMaterial(mat);
     }
 
+    /**
+     * hit function, works the same way as World.hitObjects does.
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
+
+        //temporary storage for keeping lowest distance hit.
         Normal n = new Normal();
         Point3D localHitPoint = new Point3D();
         boolean hit = false;
         double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
-        
-        for(int j = 0; j<numObjects; j++){
-            if(objects.get(j).hit(ray, s)&&s.lastT<tmin){
-                hit=true;
-                tmin=s.lastT;
-                material=objects.get(j).getMaterial();
+
+        for (int j = 0; j < numObjects; j++) {
+            if (objects.get(j).hit(ray, s) && s.lastT < tmin) {
+                hit = true;
+                tmin = s.lastT;
+                material = objects.get(j).getMaterial();
                 n.setTo(s.normal);
                 localHitPoint.setTo(s.localHitPosition);
             }
         }
-        
-        if(hit){
+
+        if (hit) {
             //s.t=tmin;
-            s.lastT=tmin;
+            s.lastT = tmin;
             s.normal.setTo(n);
             s.localHitPosition.setTo(localHitPoint);
         }
-        
+
         return hit;
-        
+
     }
 
+    /**
+     * shadow hit function works same way as hit function
+     *
+     * @param ray
+     * @param t
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
-        if(!shadows)return false;
+        //early out if shadows false all implementations do this
+        if (!shadows) {
+            return false;
+        }
         boolean hit = false;
         double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
-        
-        for(int j = 0; j<numObjects; j++){
-            if(objects.get(j).shadowHit(ray, t)&&t.d<tmin){
-                hit=true;
-                tmin=t.d;
+
+        for (int j = 0; j < numObjects; j++) {
+            if (objects.get(j).shadowHit(ray, t) && t.d < tmin) {
+                hit = true;
+                tmin = t.d;
             }
         }
-        
-        if(hit){
-            t.d=tmin;
+
+        if (hit) {
+            t.d = tmin;
         }
-        
+
         return hit;
     }
-    
 
-    
-    private void deleteObjects(){
+    /**
+     * clears sub objects
+     */
+    private void deleteObjects() {
         objects.clear();
     }
-    
-    private void copyObjects(ArrayList<GeometricObject> rhs){
+
+    /**
+     * clones objects in rhs into this compound object
+     *
+     * @param rhs
+     */
+    private void copyObjects(ArrayList<GeometricObject> rhs) {
         deleteObjects();
-        for(GeometricObject obj : rhs){
+        for (GeometricObject obj : rhs) {
             objects.add(obj.clone());
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    public int getNumObjects(){
+
+    /**
+     * returns the number of objects in this compound
+     *
+     * @return
+     */
+    public int getNumObjects() {
         return objects.size();
     }
 
+    /**
+     * expands an empty bounding box to hold each sub object
+     *
+     * @return
+     */
     public BBox getBoundingBox() {
         BBox box = new BBox(0, 0, 0, 0, 0, 0);
-        for(GeometricObject obj : objects){
+        for (GeometricObject obj : objects) {
             box.expandToFit(obj.getBoundingBox());
         }
         return box;
     }
 
-
-    
 }

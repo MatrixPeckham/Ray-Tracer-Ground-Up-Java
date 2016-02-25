@@ -28,15 +28,29 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
+ * Class makes a glass of water
  *
  * @author William Matrix Peckham
  */
 public class GlassOfWater extends Compound {
 
+    /**
+     * default constructor
+     */
     public GlassOfWater() {
         this(2, .9, .1, .3, 1.5, .1);
     }
 
+    /**
+     * initializing constructor
+     *
+     * @param _height
+     * @param _inner_radius
+     * @param _wall_thickness
+     * @param _base_thickness
+     * @param _water_height
+     * @param _meniscus_radius
+     */
     public GlassOfWater(double _height,
             double _inner_radius,
             double _wall_thickness,
@@ -53,6 +67,11 @@ public class GlassOfWater extends Compound {
         buildComponents();
     }
 
+    /**
+     * copy constructor
+     *
+     * @param gw
+     */
     public GlassOfWater(GlassOfWater gw) {
         super(gw);
         height = gw.height;
@@ -63,12 +82,20 @@ public class GlassOfWater extends Compound {
         meniscus_radius = gw.meniscus_radius;
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     public GlassOfWater clone() {
         return new GlassOfWater(this);
     }
 
+    /**
+     * builds the compound object
+     */
     void buildComponents() {
-	// build the glass parts
+        // build the glass parts
 
         objects.add(new Ring(new Point3D(0, height, 0), // rim at top
                 new Normal(0, 1, 0),
@@ -80,14 +107,14 @@ public class GlassOfWater extends Compound {
                 inner_radius + wall_thickness));
 
         objects.add(new ConcavePartCylinder(water_height + meniscus_radius, // inner curved surface of glass
-                        height,
-                        inner_radius));
+                height,
+                inner_radius));
 
         objects.add(new ConvexPartCylinder(0, // outer curved surface of glass
                 height,
                 inner_radius + wall_thickness));
 
-	// build the water parts
+        // build the water parts
         objects.add(new Disk(new Point3D(0, water_height, 0), // top of water
                 new Normal(0, 1, 0),
                 inner_radius - meniscus_radius));
@@ -100,7 +127,7 @@ public class GlassOfWater extends Compound {
                 water_height + meniscus_radius,
                 inner_radius));
 
-	// build the meniscus: we need an instance for this
+        // build the meniscus: we need an instance for this
         Instance meniscus_ptr = new Instance(new ConcavePartTorus(inner_radius
                 - meniscus_radius,
                 meniscus_radius,
@@ -110,19 +137,36 @@ public class GlassOfWater extends Compound {
         objects.add(meniscus_ptr);
     }
 
+    /**
+     * sets the materials for the glass that touches air
+     *
+     * @param m_ptr
+     */
     public void setGlassAirMaterial(Material m_ptr) {
- 	for (int j = 0; j < 4; j++)
-		objects.get(j).setMaterial(m_ptr);
-   }
-
-    public void setWaterAirMaterial(Material m_ptr) {
-		objects.get(4).setMaterial(m_ptr);
-		objects.get(7).setMaterial(m_ptr);
+        for (int j = 0; j < 4; j++) {
+            objects.get(j).setMaterial(m_ptr);
+        }
     }
 
+    /**
+     * sets the materials for the water that touches air
+     *
+     * @param m_ptr
+     */
+    public void setWaterAirMaterial(Material m_ptr) {
+        objects.get(4).setMaterial(m_ptr);
+        objects.get(7).setMaterial(m_ptr);
+    }
+
+    /**
+     * sets the material for water that touches glass
+     *
+     * @param m_ptr
+     */
     public void setWaterGlassMaterial(Material m_ptr) {
- 	for (int j = 5; j < 7; j++)
-		objects.get(j).setMaterial(m_ptr);
+        for (int j = 5; j < 7; j++) {
+            objects.get(j).setMaterial(m_ptr);
+        }
     }
 
     double height;// total height

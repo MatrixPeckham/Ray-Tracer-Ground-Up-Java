@@ -17,33 +17,34 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
-/**
- *
- * @author William Matrix Peckham
- */
-// This file contains the declaration of the class Archway
-// This is a door with a semi-circular arch at the top
-// The door sides are beveled boxes, and the arch is beveled wedges
-// An un-transformed archway is parallel to the (x, z) plane with its 
-// minimum (x, y, z) corner at the origin
-// The parameters are: 
-//					width - x dimension
-//					height - y dimension
-//					depth - z dimension
-//					columnWidth - width of the side columns and archway
-//					numBlocks - number of blocks in the side columns
-//					numWedges - number of wedges in the archway
-//					rb - common bevel radius of the block and wedges
-
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledBox;
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledWedge;
 import com.matrixpeckham.raytracer.util.Point3D;
 
-
-//-------------------------------------------------------------------------------- class Archway
-
+/**
+ * Archway This is a door with a semi-circular arch at the top The door sides
+ * are beveled boxes, and the arch is beveled wedges An un-transformed archway
+ * is parallel to the (x, z) plane with its minimum (x, y, z) corner at the
+ * origin The parameters are: width - x dimension, height - y dimension, depth -
+ * z dimension, columnWidth - width of the side columns and archway, numBlocks -
+ * number of blocks in the side columns, numWedges - number of wedges in the
+ * archway, rb - common bevel radius of the block and wedges
+ *
+ * @author William Matrix Peckham
+ */
 public class Archway extends Grid {
 
+    /**
+     * initializing constructor
+     *
+     * @param Width
+     * @param Height
+     * @param Depth
+     * @param ColumnWidth
+     * @param NumBlocks
+     * @param NumWedges
+     * @param Rb
+     */
     public Archway(double Width,
             double Height,
             double Depth,
@@ -59,10 +60,14 @@ public class Archway extends Grid {
         numBlocks = NumBlocks;
         numWedges = NumWedges;
         rb = Rb;
-        ructArchway();
+        constructArchway();
     }
 
-// ------------------------------------------------------------------------------ copy ructor
+    /**
+     * copy constructor
+     *
+     * @param aw
+     */
     public Archway(Archway aw) {
         width = aw.width;
         height = aw.height;
@@ -73,37 +78,23 @@ public class Archway extends Grid {
         rb = aw.rb;
     }
 
-// ------------------------------------------------------------------------------ clone
-    
-
+    /**
+     * clone
+     *
+     * @return
+     */
     public Archway clone() {
         return (new Archway(this));
     }
 
-// ------------------------------------------------------------------------------ assignment operator
-    
-
-    public Archway setTo(Archway rhs) {
-
-        width = rhs.width;
-        height = rhs.height;
-        depth = rhs.depth;
-        columnWidth = rhs.columnWidth;
-        numBlocks = rhs.numBlocks;
-        numWedges = rhs.numWedges;
-        rb = rhs.rb;
-
-        ructArchway();
-        return this;
-    }
-
-// ------------------------------------------------------------------------------ ructArchway
-    
-public void ructArchway() {
+    /**
+     * constructs the archway
+     */
+    public void constructArchway() {
 
         double blockHeight = (height - width / 2.0) / numBlocks;
 
-	// build left column
+        // build left column
         for (int j = 0; j < numBlocks; j++) {
             Point3D p0 = new Point3D(-(height - width / 2.0) + j * blockHeight,
                     0.0, -width / 2.0);
@@ -113,7 +104,7 @@ public void ructArchway() {
             addObject(blockPtr);
         }
 
-	// build right column
+        // build right column
         for (int j = 0; j < numBlocks; j++) {
             Point3D p0 = new Point3D(-(height - width / 2.0) + j * blockHeight,
                     0.0, width / 2.0 - columnWidth);
@@ -123,7 +114,7 @@ public void ructArchway() {
             addObject(blockPtr);
         }
 
-	// build curved arch
+        // build curved arch
         for (int j = 0; j < numWedges; j++) {
             double angleWidth = 180 / numWedges;  // the azimuth angle extent of each wedge
             double r0 = width / 2.0 - columnWidth;
@@ -131,7 +122,7 @@ public void ructArchway() {
             double phi0 = j * angleWidth;
             double phi1 = (j + 1) * angleWidth;
 
-            BeveledWedge  wedgePtr = new BeveledWedge(0.0, depth, r0, r1, rb,
+            BeveledWedge wedgePtr = new BeveledWedge(0.0, depth, r0, r1, rb,
                     phi0, phi1);
             addObject(wedgePtr);
         }
@@ -145,4 +136,3 @@ public void ructArchway() {
     private int numWedges;
     private double rb;
 }
-

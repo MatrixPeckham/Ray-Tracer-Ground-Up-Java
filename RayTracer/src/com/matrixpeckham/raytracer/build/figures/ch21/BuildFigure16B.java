@@ -43,7 +43,7 @@ public class BuildFigure16B implements BuildWorldFunction{
 	
 	w.vp.setHres(400);	  		
 	w.vp.setVres(400);
-	w.vp.setSamples(1);
+	w.vp.setSamples(numSamples);
 	
 	w.tracer = new RayCast(w);
 		

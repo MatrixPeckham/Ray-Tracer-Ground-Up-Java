@@ -25,36 +25,68 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
+ * Solid Cylinder class.
+ *
+ * as with most compound subclasses nothing is overridden, constructor adds
+ * child objects and does nothing else.
  *
  * @author William Matrix Peckham
  */
 public class SolidCylinder extends Compound {
-    
-    public SolidCylinder(){
-        this(-1,1,1);
+
+    /**
+     * default constructor
+     */
+    public SolidCylinder() {
+        this(-1, 1, 1);
     }
-    
+
+    /**
+     * Initializing constructor
+     *
+     * @param bottom
+     * @param top
+     * @param cylinderRadius
+     */
     public SolidCylinder(double bottom, double top, double cylinderRadius) {
+        //two disks and a cylinder make a solid cylinder
         Disk topd = new Disk(new Point3D(0, top, 0), new Normal(0, 1,
                 0), cylinderRadius);
         Disk bottomd = new Disk(new Point3D(0, bottom, 0), new Normal(0, -1,
                 0), cylinderRadius);
-        ConvexPartCylinder cyl = new ConvexPartCylinder(bottom, top, cylinderRadius,0,360);
+        //use convex part cylinder here so that we keep normals outside
+        ConvexPartCylinder cyl = new ConvexPartCylinder(bottom, top,
+                cylinderRadius, 0, 360);
         addObject(topd);
         addObject(bottomd);
         addObject(cyl);
     }
 
+    /**
+     * sets material for bottom disk
+     *
+     * @param mattePtr1
+     */
     public void setBottomMaterial(Matte mattePtr1) {
         objects.get(1).setMaterial(mattePtr1);
     }
 
+    /**
+     * sets material for top disk
+     *
+     * @param mattePtr1
+     */
     public void setTopMaterial(Matte mattePtr1) {
         objects.get(0).setMaterial(mattePtr1);
     }
 
+    /**
+     * sets material for wall
+     *
+     * @param mattePtr2
+     */
     public void setWallMaterial(Matte mattePtr2) {
         objects.get(2).setMaterial(mattePtr2);
     }
-    
+
 }

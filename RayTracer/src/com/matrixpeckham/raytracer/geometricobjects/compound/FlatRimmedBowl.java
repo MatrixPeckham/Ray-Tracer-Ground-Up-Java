@@ -24,20 +24,33 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
+ * Flat Rimmed Bowl hemispherical bowl with a flat rim
  *
  * @author William Matrix Peckham
  */
 public class FlatRimmedBowl extends Compound {
 
+    /**
+     * initializes bowl
+     *
+     * @param innerRadius
+     * @param outerRadius
+     */
     public FlatRimmedBowl(double innerRadius, double outerRadius) {
-        ConvexPartSphere outer = new ConvexPartSphere(new Point3D(), outerRadius, 0,
+        //outer part sphere
+        ConvexPartSphere outer
+                = new ConvexPartSphere(new Point3D(), outerRadius, 0,
                         360, 90, 180);
-        ConcavePartSphere inner = new ConcavePartSphere(new Point3D(), innerRadius, 0,
-                        360, 90, 180);
-        Ring rim = new Ring(new Point3D(),new Normal(0,1,0),innerRadius,outerRadius);
+        //inner part of sphere
+        ConcavePartSphere inner = new ConcavePartSphere(new Point3D(),
+                innerRadius, 0,
+                360, 90, 180);
+        //rim ring
+        Ring rim = new Ring(new Point3D(), new Normal(0, 1, 0), innerRadius,
+                outerRadius);
         this.addObject(outer);
         this.addObject(inner);
         this.addObject(rim);
     }
-    
+
 }

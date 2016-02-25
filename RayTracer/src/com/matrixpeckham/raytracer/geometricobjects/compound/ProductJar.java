@@ -26,67 +26,92 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
- *  The product jar is centered on the y axis
-	// The radius of the cap is bodyRadius - topBevelRadius
-	// The texture image used here completely covers the vertical curved surface
-	// of the body. This has vertical extent from bottom + bottomBevelRadius
-	// to body top - bottomBevelRadius.
-	// If you use the bodyMattePtr defined above for the body, it will be rendered red.
-	// See extra image in the Chapter 29 download.
+ * The product jar is centered on the y axis , The radius of the cap is
+ * bodyRadius - topBevelRadius , The texture image used here completely covers
+ * the vertical curved surface , of the body. This has vertical extent from
+ * bottom + bottomBevelRadius , to body top - bottomBevelRadius. , If you use
+ * the bodyMattePtr defined above for the body, it will be rendered red. , See
+ * extra image in the Chapter 29 download.
  *
  * @author William Matrix Peckham
  */
-public class ProductJar extends Compound{
+public class ProductJar extends Compound {
 
+    /**
+     * initializes jar
+     *
+     * @param bottom
+     * @param bodyTop
+     * @param capTop
+     * @param bodyRadius
+     * @param bottomBevelRadius
+     * @param topBevelRadius
+     * @param capBevelRadius
+     */
     public ProductJar(double bottom, double bodyTop, double capTop,
             double bodyRadius, double bottomBevelRadius, double topBevelRadius,
             double capBevelRadius) {
-        Disk bottomDisc = new Disk(new Point3D(0,bottom,0), new Normal(0,-1,-0), bodyRadius-bottomBevelRadius);
+        //bottom disc body radius - bevel radius
+        Disk bottomDisc = new Disk(new Point3D(0, bottom, 0), new Normal(0, -1,
+                -0), bodyRadius - bottomBevelRadius);
         addObject(bottomDisc);
-        
-        
-        ConvexPartTorus bottomBev = new ConvexPartTorus(bodyRadius-bottomBevelRadius, bottomBevelRadius, 0,
+
+        //bottom bevel torus
+        ConvexPartTorus bottomBev = new ConvexPartTorus(bodyRadius
+                - bottomBevelRadius, bottomBevelRadius, 0,
                 360, 270, 360);
         Instance botBev = new Instance(bottomBev);
-        botBev.translate(0, bottom+bottomBevelRadius, 0);
+        botBev.translate(0, bottom + bottomBevelRadius, 0);
         addObject(botBev);
-        
-        ConvexPartTorus topBevel = new ConvexPartTorus(bodyRadius-topBevelRadius, topBevelRadius, 0,
+
+        //top bevel
+        ConvexPartTorus topBevel = new ConvexPartTorus(bodyRadius
+                - topBevelRadius, topBevelRadius, 0,
                 360, 0, 90);
         Instance topBev = new Instance(topBevel);
-        topBev.translate(0, bodyTop-topBevelRadius, 0);
+        topBev.translate(0, bodyTop - topBevelRadius, 0);
         addObject(topBev);
-        
-        ConvexPartCylinder cap = new ConvexPartCylinder(bodyTop, capTop-capBevelRadius,
-                bodyRadius-topBevelRadius);
+
+        //lid wall
+        ConvexPartCylinder cap = new ConvexPartCylinder(bodyTop, capTop
+                - capBevelRadius,
+                bodyRadius - topBevelRadius);
         addObject(cap);
-        
-        ConvexPartTorus capBevel = new ConvexPartTorus(bodyRadius-topBevelRadius-capBevelRadius, capBevelRadius, 0,
+
+        //cap top bevel
+        ConvexPartTorus capBevel = new ConvexPartTorus(bodyRadius
+                - topBevelRadius - capBevelRadius, capBevelRadius, 0,
                 360, 0, 90);
         Instance capInst = new Instance(capBevel);
-        capInst.translate(0,capTop-capBevelRadius,0);
+        capInst.translate(0, capTop - capBevelRadius, 0);
         addObject(capInst);
-        
-        Disk top = new Disk(new Point3D(0, capTop, 0), new Normal(0, 1, 0), bodyRadius-topBevelRadius-capBevelRadius);
+
+        //lid top disc
+        Disk top = new Disk(new Point3D(0, capTop, 0), new Normal(0, 1, 0),
+                bodyRadius - topBevelRadius - capBevelRadius);
         addObject(top);
-        
-        
-        
+
+        //body cylinder
         ConvexPartCylinder body = new ConvexPartCylinder(-1, 1,
                 bodyRadius);
         //addObject(body);
         Instance bodyInst = new Instance(body);
-        bodyInst.scale(1,0.5,1);
+        bodyInst.scale(1, 0.5, 1);
         bodyInst.translate(0, .5, 0);
-        bodyInst.scale(1,(bodyTop-topBevelRadius)-(bottom+bottomBevelRadius),1);
-        bodyInst.translate(0,bottom+bottomBevelRadius,0);
+        bodyInst.scale(1, (bodyTop - topBevelRadius) - (bottom
+                + bottomBevelRadius), 1);
+        bodyInst.translate(0, bottom + bottomBevelRadius, 0);
         addObject(bodyInst);
-        
-        
+
     }
 
+    /**
+     * sets the material for the outside of the bottle
+     *
+     * @param svMattePtr
+     */
     public void setBodyMaterial(SV_Matte svMattePtr) {
         objects.get(6).setMaterial(svMattePtr);
     }
-    
+
 }

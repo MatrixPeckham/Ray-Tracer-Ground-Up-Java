@@ -35,86 +35,164 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
+ * TriangleMesh class, for storing triangle meshes an rendering them. also has the code to load them.
+ * 
+ * Extends grid because we'll have many child triangles and they need to be efficiently culled from hit tests
  * @author William Matrix Peckham
  */
 public class TriangleMesh extends Grid {
 
+    /**
+     * reads a ply file for flat triangle mesh with uv coordinates
+     * @param fileName
+     * @throws IOException 
+     */
     public void readFlatUVTriangles(File fileName) throws IOException{
         readPLYFileUV(fileName, TriangleType.FLAT);
     }
 
+    /**
+     * reads a ply file for smooth triangle mesh with uv coordinates
+     * @param fileName
+     * @throws IOException 
+     */
     public void readSmoothUvTriangles(File fileName)throws IOException {
         readPLYFileUV(fileName, TriangleType.SMOOTH);
         computeMeshNormals();
     }
 
+    /**
+     * Triangle type 
+     */
     enum TriangleType {
-
-        FLAT, SMOOTH
+        /**
+         * flat triangles, one normal per triangle
+         */
+        FLAT,
+        /**
+         * smooth triangles, interpolated individual normals
+         */
+        SMOOTH
     }
+    
+    /**
+     * mesh reference that will hold all the vertices, normals, uvs. 
+     */
     protected Mesh mesh;
+    
+    /**
+     * are the normals reversed
+     */
     protected boolean reverseNomral = false;
 
+    /**
+     * default constructor, empty mesh
+     */
     public TriangleMesh() {
         super();
         mesh = new Mesh();
     }
 
+    /**
+     * 
+     * @param mesh 
+     */
     public TriangleMesh(Mesh mesh) {
         this.mesh = mesh;
     }
 
+    /**
+     * copy constructor
+     * @param m 
+     */
     public TriangleMesh(TriangleMesh m) {
-        this(m.mesh);
+        super(m);
+        this.mesh=m.mesh;
+        reverseNomral=m.reverseNomral;
     }
-
+    
+    /**
+     * clone
+     * @return 
+     */
     @Override
     public TriangleMesh clone() {
         return new TriangleMesh(this);
     }
 
+    /**
+     * sets flag to reverse normals to true
+     */
     public void reverseNormal() {
         reverseNomral = true;
     }
 
-
+    /**
+     * reads a file for a flat triangle mesh
+     * @param f
+     * @throws IOException 
+     */
     public void readFlatTriangles(File f) throws IOException {
         readPLYFile(f, TriangleType.FLAT);
     }
 
+    /**
+     * reads a file for a smooth triangle mesh
+     * @param f
+     * @throws IOException 
+     */
     public void readSmoothTriangles(File f) throws IOException {
         readPLYFile(f, TriangleType.SMOOTH);
         computeMeshNormals();
     }
 
+    /**
+     * reads a PLY file and creates the correct triangle type for the type input
+     * @param f
+     * @param t
+     * @throws IOException 
+     */
     private void readPLYFile(File f, TriangleType t) throws IOException {
+        
+        //create a plyfile object from the file.
         PLYFile ply = new PLYFile(f);
+        
+        //add all the ply file's vertices to the mesh
         ArrayList<PLYElement> verts = ply.getElements("vertex");
         mesh.numVertices = verts.size();
         for (int i = 0; i < mesh.numVertices; i++) {
             mesh.vertices.add(new Point3D(verts.get(i).getDouble("x"), verts.
                     get(i).getDouble("y"), verts.get(i).getDouble("z")));
         }
+        
+        //get the faces from the ply file, will be a list of lists of indices
         ArrayList<PLYElement> faces = ply.getElements("face");
+        //store triangle count
         mesh.numTriangles = faces.size();
+        //make sure we have empty lists for each vertex to store triangle connectivity, used in smooth triangles
         for (int i = 0; i < mesh.numVertices; i++) {
             mesh.vertexFaces.add(new ArrayList<>());
         }
         int count = 0;
         for (int i = 0; i < mesh.numTriangles; i++) {
+            //gets the integer array of indices for each face
             int[] faceLst = faces.get(i).getIntList("vertex_indices");
+            
             if (t == TriangleType.FLAT) {
+                //flat triangles mean it's easy, make a traignle from the three indices compute its normal and add to grid
                 FlatMeshTriangle tri = new FlatMeshTriangle(mesh, faceLst[0],
                         faceLst[1], faceLst[2]);
                 tri.computeNormal(reverseNomral);
                 objects.add(tri);
             } else {
+                
+                //start by making a smooth triangle from the three indices, compute its normal and add to grid
                 SmoothMeshTriangle tri
                         = new SmoothMeshTriangle(mesh, faceLst[0], faceLst[1],
                                 faceLst[2]);
                 tri.computeNormal(reverseNomral);
                 objects.add(tri);
+                //add connectivity information
                 mesh.vertexFaces.get(faceLst[0]).add(count);
                 mesh.vertexFaces.get(faceLst[1]).add(count);
                 mesh.vertexFaces.get(faceLst[2]).add(count);
@@ -122,13 +200,22 @@ public class TriangleMesh extends Grid {
             }
         }
     }
+    
+    /**
+     * Reads a ply file with per vertex uv coordinates with the specified triangle type
+     * @param f
+     * @param t
+     * @throws IOException 
+     */
     private void readPLYFileUV(File f, TriangleType t) throws IOException {
+        //method works the same way as the non-uv enabled one the only difference is in the vertex part
         PLYFile ply = new PLYFile(f);
         ArrayList<PLYElement> verts = ply.getElements("vertex");
         mesh.numVertices = verts.size();
         for (int i = 0; i < mesh.numVertices; i++) {
             mesh.vertices.add(new Point3D(verts.get(i).getDouble("x"), verts.
                     get(i).getDouble("y"), verts.get(i).getDouble("z")));
+            //these are the only lines added to the other method, they get the uv coordinates and put them in the mesh
             mesh.u.add(verts.get(i).getDouble("u"));
             mesh.v.add(verts.get(i).getDouble("v"));
         }

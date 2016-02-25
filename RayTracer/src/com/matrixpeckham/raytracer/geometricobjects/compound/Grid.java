@@ -29,20 +29,58 @@ import com.matrixpeckham.raytracer.world.World;
 import java.util.ArrayList;
 
 /**
+ * Grid class, for spatial partitioning and speeding up compounds. implements a
+ * regular axis aligned grid.
  *
  * @author William Matrix Peckham
  */
-public class Grid extends Compound{
+public class Grid extends Compound {
+    
+    /**
+     * default constructor
+     */
+    public Grid(){
+        super();
+    }
+    
+    /**
+     * copy constructor
+     * @param g 
+     */
+    public Grid(Grid g){
+        super(g);
+        setupCells();
+    }
+
+    /**
+     * outer bounding box of grid
+     */
     protected BBox bbox = new BBox();
+
+    /**
+     * cell contents, either a single object or a compound of multiple object or
+     * null, per cell
+     */
     protected ArrayList<GeometricObject> cells = new ArrayList<>();
+
+    //num cells in each direction
     protected int nx = 0;
     protected int ny = 0;
     protected int nz = 0;
 
+    /**
+     * clears objects
+     */
     protected void deleteObjects() {
         objects.clear();
     }
 
+    /**
+     * loops through all objects and keeps track of the max extents of the
+     * bounds
+     *
+     * @return
+     */
     Point3D findMaxBounds() {
         BBox objectBox = new BBox();
         Point3D p0 = new Point3D(-Utility.HUGE_VALUE);
@@ -69,12 +107,18 @@ public class Grid extends Compound{
                 p0.z = objectBox.z1;
             }
         }
+        //adds epsilon to avoid false negatives
         p0.x += Utility.EPSILON;
         p0.y += Utility.EPSILON;
         p0.z += Utility.EPSILON;
         return p0;
     }
 
+    /**
+     * loops through all objects and keeps track of the min extents
+     *
+     * @return
+     */
     Point3D findMinBounds() {
         BBox objectBox = new BBox();
         Point3D p0 = new Point3D(Utility.HUGE_VALUE);
@@ -101,21 +145,33 @@ public class Grid extends Compound{
                 p0.z = objectBox.z1;
             }
         }
+        //subtract epsilon to avoid false negative
         p0.x -= Utility.EPSILON;
         p0.y -= Utility.EPSILON;
         p0.z -= Utility.EPSILON;
         return p0;
     }
 
-    
+    /**
+     * bounding box, returns cached box
+     *
+     * @return
+     */
     @Override
     public BBox getBoundingBox() {
         return bbox;
     }
 
-    // ---------------------------------------------------------------- hit
-    // The following grid traversal code is based on the pseudo-code in Shirley (2000)
-    // The first part is the same as the code in BBox::hit
+    /**
+     * Hit function
+     *
+     * The following grid traversal code is based on the pseudo-code in Shirley
+     * (2000) The first part is the same as the code in BBox::hit
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
     @Override
     public boolean hit(Ray ray, ShadeRec sr) {
         double ox = ray.o.x;
@@ -256,8 +312,8 @@ public class Grid extends Compound{
         while (true) {
             GeometricObject objectPtr = cells.get(ix + nx * iy + nx * ny * iz);
             if (txNext < tyNext && txNext < tzNext) {
-                if (objectPtr != null && objectPtr.hit(ray, sr) &&
-                        sr.lastT < txNext) {
+                if (objectPtr != null && objectPtr.hit(ray, sr) && sr.lastT
+                        < txNext) {
                     material = objectPtr.getMaterial();
                     return true;
                 }
@@ -268,8 +324,8 @@ public class Grid extends Compound{
                 }
             } else {
                 if (tyNext < tzNext) {
-                    if (objectPtr != null && objectPtr.hit(ray, sr) &&
-                            sr.lastT < tyNext) {
+                    if (objectPtr != null && objectPtr.hit(ray, sr) && sr.lastT
+                            < tyNext) {
                         material = objectPtr.getMaterial();
                         return true;
                     }
@@ -279,8 +335,8 @@ public class Grid extends Compound{
                         return false;
                     }
                 } else {
-                    if (objectPtr != null && objectPtr.hit(ray, sr) &&
-                            sr.lastT < tzNext) {
+                    if (objectPtr != null && objectPtr.hit(ray, sr) && sr.lastT
+                            < tzNext) {
                         material = objectPtr.getMaterial();
                         return true;
                     }
@@ -294,10 +350,19 @@ public class Grid extends Compound{
         }
     } // end of hit
 
+    /**
+     * pdf, returns 1
+     *
+     * @param sr
+     * @return
+     */
     public double pdf(ShadeRec sr) {
         return 1;
     }
 
+    /**
+     * sets up the cells for the grid
+     */
     public void setupCells() {
         Point3D p0 = findMinBounds();
         Point3D p1 = findMaxBounds();
@@ -340,23 +405,23 @@ public class Grid extends Compound{
             objBBox = objects.get(j).getBoundingBox();
             // compute the cell indices at the corners of the bounding box of the object
             int ixmin
-                    = (int) Utility.clamp((objBBox.x0 - p0.x) * nx /
-                    (p1.x - p0.x), 0, nx - 1);
+                    = (int) Utility.clamp((objBBox.x0 - p0.x) * nx / (p1.x
+                            - p0.x), 0, nx - 1);
             int iymin
-                    = (int) Utility.clamp((objBBox.y0 - p0.y) * ny /
-                    (p1.y - p0.y), 0, ny - 1);
+                    = (int) Utility.clamp((objBBox.y0 - p0.y) * ny / (p1.y
+                            - p0.y), 0, ny - 1);
             int izmin
-                    = (int) Utility.clamp((objBBox.z0 - p0.z) * nz /
-                    (p1.z - p0.z), 0, nz - 1);
+                    = (int) Utility.clamp((objBBox.z0 - p0.z) * nz / (p1.z
+                            - p0.z), 0, nz - 1);
             int ixmax
-                    = (int) Utility.clamp((objBBox.x1 - p0.x) * nx /
-                    (p1.x - p0.x), 0, nx - 1);
+                    = (int) Utility.clamp((objBBox.x1 - p0.x) * nx / (p1.x
+                            - p0.x), 0, nx - 1);
             int iymax
-                    = (int) Utility.clamp((objBBox.y1 - p0.y) * ny /
-                    (p1.y - p0.y), 0, ny - 1);
+                    = (int) Utility.clamp((objBBox.y1 - p0.y) * ny / (p1.y
+                            - p0.y), 0, ny - 1);
             int izmax
-                    = (int) Utility.clamp((objBBox.z1 - p0.z) * nz /
-                    (p1.z - p0.z), 0, nz - 1);
+                    = (int) Utility.clamp((objBBox.z1 - p0.z) * nz / (p1.z
+                            - p0.z), 0, nz - 1);
             // add the object to the cells
             for (int iz = izmin; iz <= izmax;
                     iz++) // cells in z direction
@@ -370,7 +435,7 @@ public class Grid extends Compound{
                         index = ix + nx * iy + nx * ny * iz;
                         if (counts.get(index) == 0) {
                             cells.set(index, objects.get(j));
-                            counts.set(index, counts.get(index)+1); // now = 1
+                            counts.set(index, counts.get(index) + 1); // now = 1
                         } else {
                             if (counts.get(index) == 1) {
                                 Compound compoundPtr = new Compound(); // construct a compound object
@@ -380,7 +445,8 @@ public class Grid extends Compound{
                                 counts.set(index, counts.get(index) + 1); // now = 2
                             } else {
                                 // counts.get(index) > 1
-                                ((Compound) cells.get(index)).addObject(objects.get(j)); // just add current object
+                                ((Compound) cells.get(index)).addObject(objects.
+                                        get(j)); // just add current object
                                 counts.set(index, counts.get(index) + 1); // for statistics only
                             }
                         }
@@ -389,43 +455,51 @@ public class Grid extends Compound{
             }
         } // end of for (int j = 0; j < numObjects; j++)
         // erase the Compound::vector that stores the object pointers, but don't delete the objects
-        
-//IF WE DON'T DO THIS WE CAN CALL setMaterial() AFTER setupCells()
-//this allows us to sub-class grid and call setupCells within a constructor after 
-//generating a mesh, but still allow the user of the class to setup a material.
-//objects.clear();
 
-        
+        //IF WE DON'T DO THIS WE CAN CALL setMaterial() AFTER setupCells()
+        //this allows us to sub-class grid and call setupCells within a constructor after 
+        //generating a mesh, but still allow the user of the class to setup a material.
+        //objects.clear();
         // display some statistics on counts
         // this is useful for finding out how many cells have no objects, one object, etc
         // comment this out if you don't want to use it
-        int numZeroes = 0;
-        int numOnes = 0;
-        int numTwos = 0;
-        int numThrees = 0;
-        int numGreater = 0;
-        for (int j = 0; j < numCells;
-                j++) {
-            if (counts.get(j) == 0) {
-                numZeroes += 1;
-            }
-            if (counts.get(j) == 1) {
-                numOnes += 1;
-            }
-            if (counts.get(j) == 2) {
-                numTwos += 1;
-            }
-            if (counts.get(j) == 3) {
-                numThrees += 1;
-            }
-            if (counts.get(j) > 3) {
-                numGreater += 1;
-            }
-        }
+        /*
+         int numZeroes = 0;
+         int numOnes = 0;
+         int numTwos = 0;
+         int numThrees = 0;
+         int numGreater = 0;
+         for (int j = 0; j < numCells;
+         j++) {
+         if (counts.get(j) == 0) {
+         numZeroes += 1;
+         }
+         if (counts.get(j) == 1) {
+         numOnes += 1;
+         }
+         if (counts.get(j) == 2) {
+         numTwos += 1;
+         }
+         if (counts.get(j) == 3) {
+         numThrees += 1;
+         }
+         if (counts.get(j) > 3) {
+         numGreater += 1;
+         }
+         }
+         */
     }
 
+    /**
+     * shadow hit, same as hit function
+     *
+     * @param ray
+     * @param t
+     * @return
+     */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
+        //early out for shadows, all implementations do this 
         if (!shadows) {
             return false;
         }
@@ -567,8 +641,8 @@ public class Grid extends Compound{
         while (true) {
             GeometricObject objectPtr = cells.get(ix + nx * iy + nx * ny * iz);
             if (txNext < tyNext && txNext < tzNext) {
-                if (objectPtr != null && objectPtr.shadowHit(ray, t) &&
-                        t.d < txNext) {
+                if (objectPtr != null && objectPtr.shadowHit(ray, t) && t.d
+                        < txNext) {
                     return true;
                 }
                 txNext += dtx;
@@ -578,8 +652,8 @@ public class Grid extends Compound{
                 }
             } else {
                 if (tyNext < tzNext) {
-                    if (objectPtr != null && objectPtr.shadowHit(ray, t) &&
-                            t.d < tyNext) {
+                    if (objectPtr != null && objectPtr.shadowHit(ray, t) && t.d
+                            < tyNext) {
                         return true;
                     }
                     tyNext += dty;
@@ -588,8 +662,8 @@ public class Grid extends Compound{
                         return false;
                     }
                 } else {
-                    if (objectPtr != null && objectPtr.shadowHit(ray, t) &&
-                            t.d < tzNext) {
+                    if (objectPtr != null && objectPtr.shadowHit(ray, t) && t.d
+                            < tzNext) {
                         return true;
                     }
                     tzNext += dtz;
@@ -600,25 +674,31 @@ public class Grid extends Compound{
                 }
             }
         }
-/*        double tmin = Utility.HUGE_VALUE;
-        int numObjects = objects.size();
-        for (int j = 0; j < numObjects;
-                j++) {
-            if (objects.get(j).shadowHit(ray, t) && t.d < tmin) {
-                hit = true;
-            }
-        }
-        if (hit) {
-            t.d = tmin;
-        }
-        return hit;*/
+        /*        double tmin = Utility.HUGE_VALUE;
+         int numObjects = objects.size();
+         for (int j = 0; j < numObjects;
+         j++) {
+         if (objects.get(j).shadowHit(ray, t) && t.d < tmin) {
+         hit = true;
+         }
+         }
+         if (hit) {
+         t.d = tmin;
+         }
+         return hit;*/
 //        boolean hit = hit(ray,sr);
-  //      t.d=sr.lastT;
-    //    return hit;
+        //      t.d=sr.lastT;
+        //    return hit;
     }
 
+    /**
+     * sets a material on the material at index
+     *
+     * @param mat
+     * @param index
+     */
     public void storeMaterial(Material mat, int index) {
         objects.get(index).setMaterial(mat);
     }
-    
+
 }
