@@ -23,23 +23,77 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Class for Bidirectional Transmission Distribution Functions
  *
  * @author William Matrix Peckham
  */
 public abstract class BTDF {
-    public BTDF(){}
-    public BTDF(BTDF v){}
-    public BTDF setTo(BTDF o){
+
+    /**
+     * default constructor
+     */
+    public BTDF() {
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param v
+     */
+    public BTDF(BTDF v) {
+    }
+
+    /**
+     * set to function
+     *
+     * @param o
+     * @return
+     */
+    public BTDF setTo(BTDF o) {
         return this;
     }
+
+    /**
+     * clone function
+     *
+     * @return
+     */
     public abstract BTDF clone();
-    public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi){
+
+    /**
+     * Function for getting the color of this point in direction wo, as illuminated from wi. Not used for transparent
+     * objects, most likely will return black.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
+    public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return Utility.BLACK;
     }
-    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi){
+
+    /**
+     * Samples the object. returns the color, sets wi to the direction of light
+     * transport.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return Utility.BLACK;
     }
-    public RGBColor rho(ShadeRec sr, Vector3D wo){
+
+    /**
+     * Rho function. not used for transparency.
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
+    public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return Utility.BLACK;
     }
 }

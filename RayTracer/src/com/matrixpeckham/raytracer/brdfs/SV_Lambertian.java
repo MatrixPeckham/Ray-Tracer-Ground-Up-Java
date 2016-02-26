@@ -24,48 +24,101 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Lambertian texture for colors
  *
  * @author William Matrix Peckham
  */
-public class SV_Lambertian extends BRDF{
+public class SV_Lambertian extends BRDF {
+
+    /**
+     * multiplier
+     */
     private double kd;
+
+    /**
+     * color texture
+     */
     private Texture cd;
 
-    public SV_Lambertian(){
+    /**
+     * default constructor
+     */
+    public SV_Lambertian() {
         super();
-        kd=0;
+        kd = 0;
     }
-    
-    public SV_Lambertian(SV_Lambertian lamb){
+
+    /**
+     * copy constructor
+     *
+     * @param lamb
+     */
+    public SV_Lambertian(SV_Lambertian lamb) {
         super(lamb);
-        kd=lamb.kd;
-        if(lamb.cd!=null)
-            cd=lamb.cd.clone();
+        kd = lamb.kd;
+        if (lamb.cd != null) {
+            cd = lamb.cd.clone();
+        }
     }
-    
-    public SV_Lambertian clone(){
+
+    /**
+     * clone
+     *
+     * @return
+     */
+    public SV_Lambertian clone() {
         return new SV_Lambertian(this);
     }
 
+    /**
+     * f function
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return cd.getColor(sr).mul(kd).mul(Utility.INV_PI);
     }
 
+    /**
+     * rho
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
     @Override
     public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return cd.getColor(sr).mul(kd);
     }
-    
+
+    /**
+     * setter
+     *
+     * @param kd
+     */
     public void setKd(double kd) {
         this.kd = kd;
     }
+
+    /**
+     *
+     * @param kd
+     */
     public void setKa(double kd) {
         this.kd = kd;
     }
 
+    /**
+     * setter
+     *
+     * @param cd
+     */
     public void setCd(Texture cd) {
-        this.cd=cd;
+        this.cd = cd;
     }
-    
+
 }

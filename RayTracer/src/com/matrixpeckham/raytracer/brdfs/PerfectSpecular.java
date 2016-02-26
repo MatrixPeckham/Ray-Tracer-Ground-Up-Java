@@ -24,59 +24,144 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Mirror perfect specular.
  *
  * @author William Matrix Peckham
  */
 public class PerfectSpecular extends BRDF {
+
+    /**
+     * reflectance
+     */
     private double kr = 0;
+
+    /**
+     * color
+     */
     private RGBColor cr = new RGBColor(1);
-    public PerfectSpecular(){super();}
-    public PerfectSpecular(PerfectSpecular s){
+
+    /**
+     * default constructor
+     */
+    public PerfectSpecular() {
+        super();
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param s
+     */
+    public PerfectSpecular(PerfectSpecular s) {
         super(s);
-        kr=s.kr;
+        kr = s.kr;
         cr.setTo(s.cr);
     }
-    public void setKr(double k){
-        kr=k;
+
+    /**
+     * setter
+     *
+     * @param k
+     */
+    public void setKr(double k) {
+        kr = k;
     }
-    public void setCr(RGBColor c){
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCr(RGBColor c) {
         cr.setTo(c);
     }
-    public void setCr(double r, double g, double b){
-        cr.setTo(r,g,b);
+
+    /**
+     * setter
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
+    public void setCr(double r, double g, double b) {
+        cr.setTo(r, g, b);
     }
-    public void setCr(double c){
-        cr.setTo(c,c,c);
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCr(double c) {
+        cr.setTo(c, c, c);
     }
-    
-    public PerfectSpecular clone(){
+
+    /**
+     * clone
+     *
+     * @return
+     */
+    public PerfectSpecular clone() {
         return new PerfectSpecular(this);
     }
 
+    /**
+     * f function, returns black, without a recursive ray it doesn't have a
+     * color
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return Utility.BLACK;
     }
 
+    /**
+     * sample f, returns color, stores reflected direction in wi
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi) {
         double ndotwo = sr.normal.dot(wo);
-        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2*ndotwo))));
+        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2 * ndotwo))));
         return cr.div(Math.abs(sr.normal.dot(wi))).mul(kr);
     }
 
+    /**
+     * sample f, returns color, stores reflected direction in wi, and pdf if
+     * reference
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
         double ndotwo = sr.normal.dot(wo);
-        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2*ndotwo))));
-        pdf.d=Math.abs(sr.normal.dot(wi));
+        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2 * ndotwo))));
+        pdf.d = Math.abs(sr.normal.dot(wi));
         return cr.mul(kr);
     }
 
+    /**
+     * rho, black
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
     @Override
     public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return Utility.BLACK;
     }
-    
-    
+
 }

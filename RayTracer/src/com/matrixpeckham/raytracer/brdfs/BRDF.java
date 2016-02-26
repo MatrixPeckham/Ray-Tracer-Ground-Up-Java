@@ -24,23 +24,84 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Bidirectional reflective distribution function class. Class represents the
+ * materials reflectance for varying directions. Abstract base class.
  *
  * @author William Matrix Peckham
  */
 public abstract class BRDF {
-    public BRDF(){}
-    public BRDF(BRDF brdf){}
+
+    /**
+     * default constructor
+     */
+    public BRDF() {
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param brdf
+     */
+    public BRDF(BRDF brdf) {
+    }
+
+    /**
+     * clone function, needs to return a BRDF that is the same as the class we
+     * call it on.
+     *
+     * @return
+     */
     public abstract BRDF clone();
-    public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi){
+
+    /**
+     * F function, called from functions that don't require a recursive raycast.
+     * Should return the color the BRDF reflects toward wo when illuminated from
+     * wi. used for direct lighting.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
+    public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return Utility.BLACK;
     }
-    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi){
+
+    /**
+     * Sample the distribution, returns the color and fills wi with a direction
+     * to recurse with.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return Utility.BLACK;
     }
-    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf){
+
+    /**
+     * Sample the distribution, returns the color and fills wi with a direction
+     * to recurse with, and a pdf.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     * @return
+     */
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
         return Utility.BLACK;
     }
-    public RGBColor rho(ShadeRec sr, Vector3D wo){
+
+    /**
+     * Gets the color of the point in full lighting. used for ambient lighting
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
+    public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return Utility.BLACK;
     }
 }

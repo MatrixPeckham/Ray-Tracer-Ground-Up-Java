@@ -29,92 +29,173 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Glossy Specular that uses a texture for color. same as glossy specular, but
+ * differs to texture for color
  *
  * @author William Matrix Peckham
  */
 public class SV_GlossySpecular extends BRDF {
-    private double ks=0;
-    private Texture cs=null;
-    private double exp=2;
-    private Sampler sampler=null;
-    
-    public SV_GlossySpecular(){
+
+    /**
+     * multiplier
+     */
+    private double ks = 0;
+
+    /**
+     * color texture
+     */
+    private Texture cs = null;
+
+    /**
+     * exponent
+     */
+    private double exp = 2;
+
+    /**
+     * sampler
+     */
+    private Sampler sampler = null;
+
+    /**
+     * default constructor
+     */
+    public SV_GlossySpecular() {
         super();
     }
-    
-    public SV_GlossySpecular(SV_GlossySpecular gs){
+
+    /**
+     * copy constructor
+     *
+     * @param gs
+     */
+    public SV_GlossySpecular(SV_GlossySpecular gs) {
         super(gs);
-        ks=gs.ks;
-        if(gs.cs!=null){
-            cs=gs.cs.clone();
+        ks = gs.ks;
+        if (gs.cs != null) {
+            cs = gs.cs.clone();
         }
-        exp=gs.exp;
-        if(gs.sampler!=null)
-            sampler=gs.sampler.clone();
+        exp = gs.exp;
+        if (gs.sampler != null) {
+            sampler = gs.sampler.clone();
+        }
     }
-    
-    public SV_GlossySpecular clone(){
+
+    /**
+     * clone
+     *
+     * @return
+     */
+    public SV_GlossySpecular clone() {
         return new SV_GlossySpecular(this);
     }
-    
-    public void setSampler(Sampler s, double exp){
-        sampler=s;
-        sampler.mapSamplesToHemisphere(exp);
-    }
-    
-    public void setSamples(int num, double exp){
-        sampler=new MultiJittered(num);
+
+    /**
+     * setter
+     *
+     * @param s
+     * @param exp
+     */
+    public void setSampler(Sampler s, double exp) {
+        sampler = s;
         sampler.mapSamplesToHemisphere(exp);
     }
 
+    /**
+     * setter
+     *
+     * @param num
+     * @param exp
+     */
+    public void setSamples(int num, double exp) {
+        sampler = new MultiJittered(num);
+        sampler.mapSamplesToHemisphere(exp);
+    }
+
+    /**
+     * f function
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         RGBColor l = new RGBColor();
         double ndotwi = sr.normal.dot(wi);
-        Vector3D r = wi.neg().add(new Vector3D(sr.normal.mul(2*ndotwi)));
+        Vector3D r = wi.neg().add(new Vector3D(sr.normal.mul(2 * ndotwi)));
         double rdotwo = r.dot(wo);
-        if(rdotwo>0){
-            l.setTo(cs.getColor(sr).mul(ks*Math.pow(rdotwo, exp)));
+        if (rdotwo > 0) {
+            l.setTo(cs.getColor(sr).mul(ks * Math.pow(rdotwo, exp)));
         }
         return l;
     }
 
+    /**
+     * sample f function
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
         double ndotwo = sr.normal.dot(wo);
-        Vector3D r = wo.neg().add(new Vector3D(sr.normal.mul(2*ndotwo)));
+        Vector3D r = wo.neg().add(new Vector3D(sr.normal.mul(2 * ndotwo)));
         Vector3D w = new Vector3D(r);
-        Vector3D u = new Vector3D(0.00424,1,0.00764).cross(w);
+        Vector3D u = new Vector3D(0.00424, 1, 0.00764).cross(w);
         u.normalize();
         Vector3D v = u.cross(w);
-        
+
         Point3D sp = sampler.sampleHemisphere();
         wi.setTo(u.mul(sp.x).add(v.mul(sp.y).add(w.mul(sp.z))));
-        if(sr.normal.dot(wi)<0.0){
+        if (sr.normal.dot(wi) < 0.0) {
             wi.setTo(u.mul(-sp.x).add(v.mul(-sp.y).add(w.mul(sp.z))));
         }
         double phong_lobe = Math.pow(r.dot(w), exp);
-        pdf.d=phong_lobe*sr.normal.dot(wi);
-        return cs.getColor(sr).mul(ks*phong_lobe);
+        pdf.d = phong_lobe * sr.normal.dot(wi);
+        return cs.getColor(sr).mul(ks * phong_lobe);
     }
 
+    /**
+     * rho
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
     @Override
     public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return Utility.BLACK;
     }
-    
-    
-    
-    public void setKs(double k){
-        ks=k;
+
+    /**
+     * setter
+     *
+     * @param k
+     */
+    public void setKs(double k) {
+        ks = k;
     }
-    
-    public void setExp(double e){
-        exp=e;
+
+    /**
+     * setter
+     *
+     * @param e
+     */
+    public void setExp(double e) {
+        exp = e;
     }
-        
-    public void setCs(Texture c){
-        cs=c.clone();
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCs(Texture c) {
+        cs = c.clone();
     }
-    
+
 }

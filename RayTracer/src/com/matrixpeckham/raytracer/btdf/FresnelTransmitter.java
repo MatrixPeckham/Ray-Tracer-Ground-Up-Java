@@ -24,17 +24,37 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * More realistic transmission, with color filtering.
  *
  * @author William Matrix Peckham
  */
 public class FresnelTransmitter extends BTDF {
 
+    /**
+     * index of refraction interior
+     */
     private double iorIn = 1;
+
+    /**
+     * index of refraction exterior
+     */
     private double iorOut = 1;
 
+    /**
+     * default constructor
+     */
     public FresnelTransmitter() {
     }
 
+    /**
+     * sample f function, returns the color multiplier, and sets the wt
+     * parameter to the transmitted direction.
+     *
+     * @param sr
+     * @param wo
+     * @param wt
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wt) {
         Normal n = new Normal(sr.normal);
@@ -56,6 +76,12 @@ public class FresnelTransmitter extends BTDF {
         return mul.div(abs);
     }
 
+    /**
+     * fresnel function, chooses the multiplier for the reflections
+     *
+     * @param sr
+     * @return
+     */
     public double fresnel(ShadeRec sr) {
         Normal normal = new Normal(sr.normal);
         double ndotd = normal.neg().dot(sr.ray.d);
@@ -82,12 +108,23 @@ public class FresnelTransmitter extends BTDF {
         return (1 - kr);
     }
 
+    /**
+     * copy constructor
+     *
+     * @param fresnelBTDF
+     */
     public FresnelTransmitter(FresnelTransmitter fresnelBTDF) {
         super(fresnelBTDF);
         iorIn = fresnelBTDF.iorIn;
         iorOut = fresnelBTDF.iorOut;
     }
 
+    /**
+     * total internal reflection test
+     *
+     * @param sr
+     * @return
+     */
     public boolean tir(ShadeRec sr) {
         Vector3D wo = sr.ray.d.neg();
         double cosThetaI = sr.normal.dot(wo);
@@ -101,15 +138,30 @@ public class FresnelTransmitter extends BTDF {
         return (1 - (1 - cosThetaI * cosThetaI) / (eta * eta)) < 0;
     }
 
+    /**
+     * clone function
+     *
+     * @return
+     */
     @Override
     public BTDF clone() {
         return new FresnelTransmitter(this);
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     */
     public void setIorOut(double d) {
         iorOut = d;
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     */
     public void setIorIn(double d) {
         iorIn = d;
     }

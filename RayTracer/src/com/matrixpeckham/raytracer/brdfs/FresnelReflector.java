@@ -24,23 +24,47 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Fresnel reflector BRDF, uses the fresnel equation for reflection.
  *
  * @author William Matrix Peckham
  */
 public class FresnelReflector extends BRDF {
 
+    /**
+     * index of refraction interior
+     */
     private double iorIn = 1;
+
+    /**
+     * index of refraction exterior
+     */
     private double iorOut = 1;
 
+    /**
+     * default constructor
+     */
     public FresnelReflector() {
     }
 
+    /**
+     * copy constructor
+     *
+     * @param fresnelBRDF
+     */
     public FresnelReflector(FresnelReflector fresnelBRDF) {
         super(fresnelBRDF);
         iorIn = fresnelBRDF.iorIn;
         iorOut = fresnelBRDF.iorOut;
     }
 
+    /**
+     * Samples distribution, returns color and reflection direction.
+     *
+     * @param sr
+     * @param wo
+     * @param wr
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wr) {
         double ndotwo = sr.normal.dot(wo);
@@ -48,11 +72,22 @@ public class FresnelReflector extends BRDF {
         return Utility.WHITE.mul(fresnel(sr) / Math.abs(sr.normal.dot(wr)));
     }
 
+    /**
+     * clone
+     *
+     * @return
+     */
     @Override
     public BRDF clone() {
         return new FresnelReflector(this);
     }
 
+    /**
+     * fresnel function, calculates reflectance
+     *
+     * @param sr
+     * @return
+     */
     public double fresnel(ShadeRec sr) {
         Normal normal = new Normal(sr.normal);
         double ndotd = normal.neg().dot(sr.ray.d);
@@ -79,21 +114,22 @@ public class FresnelReflector extends BRDF {
         return (kr);
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     */
     public void setIorIn(double d) {
         iorIn = d;
     }
 
+    /**
+     * setter
+     *
+     * @param d
+     */
     public void setIorOut(double d) {
         iorOut = d;
     }
 
 }
-
-
-
-
-
-
-
-
-

@@ -28,98 +28,194 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 
 /**
+ * Glossy Specular class, provides specular highlights without sampling and
+ * glossed reflection with recursive sampling
  *
  * @author William Matrix Peckham
  */
 public class GlossySpecular extends BRDF {
-    private double ks=0;
-    private RGBColor cs=new RGBColor(1);
-    private double exp=2;
-    private Sampler sampler=null;
-    
-    public GlossySpecular(){
+
+    /**
+     * reflectance
+     */
+    private double ks = 0;
+
+    /**
+     * color
+     */
+    private RGBColor cs = new RGBColor(1);
+
+    /**
+     * exponent
+     */
+    private double exp = 2;
+
+    /**
+     * sampler
+     */
+    private Sampler sampler = null;
+
+    /**
+     * default constructor
+     */
+    public GlossySpecular() {
         super();
     }
-    
-    public GlossySpecular(GlossySpecular gs){
+
+    /**
+     * copy construction
+     *
+     * @param gs
+     */
+    public GlossySpecular(GlossySpecular gs) {
         super(gs);
-        ks=gs.ks;
+        ks = gs.ks;
         cs.setTo(gs.cs);
-        exp=gs.exp;
-        if(gs.sampler!=null)
-            sampler=gs.sampler.clone();
+        exp = gs.exp;
+        if (gs.sampler != null) {
+            sampler = gs.sampler.clone();
+        }
     }
-    
-    public GlossySpecular clone(){
+
+    /**
+     * clone
+     *
+     * @return
+     */
+    public GlossySpecular clone() {
         return new GlossySpecular(this);
     }
-    
-    public void setSampler(Sampler s, double exp){
-        sampler=s;
-        sampler.mapSamplesToHemisphere(exp);
-    }
-    
-    public void setSamples(int num, double exp){
-        sampler=new MultiJittered(num);
+
+    /**
+     * sampler setter
+     *
+     * @param s
+     * @param exp
+     */
+    public void setSampler(Sampler s, double exp) {
+        sampler = s;
         sampler.mapSamplesToHemisphere(exp);
     }
 
+    /**
+     * sampler setter
+     *
+     * @param num
+     * @param exp
+     */
+    public void setSamples(int num, double exp) {
+        sampler = new MultiJittered(num);
+        sampler.mapSamplesToHemisphere(exp);
+    }
+
+    /**
+     * f function, called from non-recursive shading functions, computes the
+     * highlight at hit point viewed from wo and illuminated from wi.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         RGBColor l = new RGBColor();
         double ndotwi = sr.normal.dot(wi);
-        Vector3D r = wi.neg().add(new Vector3D(sr.normal.mul(2*ndotwi)));
+        Vector3D r = wi.neg().add(new Vector3D(sr.normal.mul(2 * ndotwi)));
         double rdotwo = r.dot(wo);
-        if(rdotwo>0){
-            l.setTo(cs.mul(ks*Math.pow(rdotwo, exp)));
+        if (rdotwo > 0) {
+            l.setTo(cs.mul(ks * Math.pow(rdotwo, exp)));
         }
         return l;
     }
 
+    /**
+     * sampling function returns color that will be multiplied by reflected ray,
+     * reflected ray is sampled from the cone around the perfect reflection.
+     * reflected ray stored in wi, pdf stored in reference
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
         double ndotwo = sr.normal.dot(wo);
-        Vector3D r = wo.neg().add(new Vector3D(sr.normal.mul(2*ndotwo)));
+        Vector3D r = wo.neg().add(new Vector3D(sr.normal.mul(2 * ndotwo)));
         Vector3D w = new Vector3D(r);
-        Vector3D u = new Vector3D(0.00424,1,0.00764).cross(w);
+        Vector3D u = new Vector3D(0.00424, 1, 0.00764).cross(w);
         u.normalize();
         Vector3D v = u.cross(w);
-        
+
         Point3D sp = sampler.sampleHemisphere();
         wi.setTo(u.mul(sp.x).add(v.mul(sp.y).add(w.mul(sp.z))));
-        if(sr.normal.dot(wi)<0.0){
+        if (sr.normal.dot(wi) < 0.0) {
             wi.setTo(u.mul(-sp.x).add(v.mul(-sp.y).add(w.mul(sp.z))));
         }
         double phong_lobe = Math.pow(r.dot(w), exp);
-        pdf.d=phong_lobe*sr.normal.dot(wi);
-        return cs.mul(ks*phong_lobe);
+        pdf.d = phong_lobe * sr.normal.dot(wi);
+        return cs.mul(ks * phong_lobe);
     }
 
+    /**
+     * rho, color of lit point, ambient, black
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
     @Override
     public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return Utility.BLACK;
     }
-    
-    
-    
-    public void setKs(double k){
-        ks=k;
+
+    /**
+     * setter
+     *
+     * @param k
+     */
+    public void setKs(double k) {
+        ks = k;
     }
-    
-    public void setExp(double e){
-        exp=e;
+
+    /**
+     * setter
+     *
+     * @param e
+     */
+    public void setExp(double e) {
+        exp = e;
     }
-    
-    public void setCs(RGBColor c){
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCs(RGBColor c) {
         cs.setTo(c);
     }
-    
-    public void setCs(double r, double g, double b){
+
+    /**
+     * setter
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
+    public void setCs(double r, double g, double b) {
         cs.setTo(r, g, b);
     }
-    
-    public void setCs(double c){
-        cs.setTo(c,c,c);
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCs(double c) {
+        cs.setTo(c, c, c);
     }
-    
+
 }

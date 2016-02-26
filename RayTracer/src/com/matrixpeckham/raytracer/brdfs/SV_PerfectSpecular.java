@@ -25,53 +25,123 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Perfect specular that uses a texture for reflection color. same as perfect
+ * specular but differs to texture for color.
  *
  * @author William Matrix Peckham
  */
 public class SV_PerfectSpecular extends BRDF {
+
+    /**
+     * reflectance
+     */
     private double kr = 0;
+
+    /**
+     * color texture
+     */
     private Texture cr = null;
-    public SV_PerfectSpecular(){super();}
-    public SV_PerfectSpecular(SV_PerfectSpecular s){
+
+    /**
+     * default constructor
+     */
+    public SV_PerfectSpecular() {
+        super();
+    }
+
+    /**
+     * copy constructor
+     *
+     * @param s
+     */
+    public SV_PerfectSpecular(SV_PerfectSpecular s) {
         super(s);
-        kr=s.kr;
-        cr=s.cr.clone();
+        kr = s.kr;
+        cr = s.cr.clone();
     }
-    public void setKr(double k){
-        kr=k;
+
+    /**
+     * setter
+     *
+     * @param k
+     */
+    public void setKr(double k) {
+        kr = k;
     }
-    public void setCr(Texture c){
-        cr=c.clone();
+
+    /**
+     * setter
+     *
+     * @param c
+     */
+    public void setCr(Texture c) {
+        cr = c.clone();
     }
-    
-    public SV_PerfectSpecular clone(){
+
+    /**
+     * clone
+     *
+     * @return
+     */
+    public SV_PerfectSpecular clone() {
         return new SV_PerfectSpecular(this);
     }
 
+    /**
+     * f function
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return Utility.BLACK;
     }
 
+    /**
+     * sample function
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi) {
         double ndotwo = sr.normal.dot(wo);
-        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2*ndotwo))));
+        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2 * ndotwo))));
         return cr.getColor(sr).div(Math.abs(sr.normal.dot(wi))).mul(kr);
     }
 
+    /**
+     * sample f
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
         double ndotwo = sr.normal.dot(wo);
-        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2*ndotwo))));
-        pdf.d=Math.abs(sr.normal.dot(wi));
+        wi.setTo(wo.neg().add(new Vector3D(sr.normal.mul(2 * ndotwo))));
+        pdf.d = Math.abs(sr.normal.dot(wi));
         return cr.getColor(sr).mul(kr);
     }
 
+    /**
+     * rho
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
     @Override
     public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return Utility.BLACK;
     }
-    
-    
+
 }

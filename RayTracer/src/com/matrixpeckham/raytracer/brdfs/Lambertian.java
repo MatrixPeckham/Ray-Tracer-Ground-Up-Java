@@ -26,83 +26,167 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
+ * Lambertian class, for matte shading.
  *
  * @author William Matrix Peckham
  */
-public class Lambertian extends BRDF{
+public class Lambertian extends BRDF {
+
+    /**
+     * multiplier
+     */
     private double kd;
+
+    /**
+     * color
+     */
     private RGBColor cd;
+
+    /**
+     * sampler for direction sampling
+     */
     private Sampler sampler;
 
-    public Lambertian(){
+    /**
+     * default constructor
+     */
+    public Lambertian() {
         super();
-        kd=0;
-        cd=new RGBColor(0);
+        kd = 0;
+        cd = new RGBColor(0);
     }
-    
-    public Lambertian(Lambertian lamb){
+
+    /**
+     * copy constructor
+     *
+     * @param lamb
+     */
+    public Lambertian(Lambertian lamb) {
         super(lamb);
-        kd=lamb.kd;
-        cd=new RGBColor(lamb.cd);
-        if(lamb.sampler!=null){
-            sampler=lamb.sampler.clone();
+        kd = lamb.kd;
+        cd = new RGBColor(lamb.cd);
+        if (lamb.sampler != null) {
+            sampler = lamb.sampler.clone();
         }
     }
-    
-    public Lambertian clone(){
+
+    /**
+     * clone
+     *
+     * @return
+     */
+    public Lambertian clone() {
         return new Lambertian(this);
     }
 
+    /**
+     * f function. gets color output to wo, when illuminated from wi.
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @return
+     */
     @Override
     public RGBColor f(ShadeRec sr, Vector3D wo, Vector3D wi) {
         return cd.mul(kd).mul(Utility.INV_PI);
     }
 
+    /**
+     * rho, color when lit, used for ambient lighting
+     *
+     * @param sr
+     * @param wo
+     * @return
+     */
     @Override
     public RGBColor rho(ShadeRec sr, Vector3D wo) {
         return cd.mul(kd);
     }
-    
+
+    /**
+     * setter
+     *
+     * @param kd
+     */
     public void setKd(double kd) {
         this.kd = kd;
     }
+
+    /**
+     * setter
+     *
+     * @param kd
+     */
     public void setKa(double kd) {
         this.kd = kd;
     }
 
+    /**
+     * setter
+     *
+     * @param cd
+     */
     public void setCd(RGBColor cd) {
         this.cd.setTo(cd);
     }
+
+    /**
+     * setter
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
     public void setCd(double r, double g, double b) {
         this.cd.setTo(r, g, b);
     }
+
+    /**
+     * setter gray
+     *
+     * @param c
+     */
     public void setCd(double c) {
         this.cd.setTo(c, c, c);
     }
 
+    /**
+     * sets the sampler
+     *
+     * @param clone
+     */
     public void setSampler(Sampler clone) {
-        this.sampler=clone.clone();
+        this.sampler = clone.clone();
         this.sampler.mapSamplesToHemisphere(1);
-        
+
     }
 
+    /**
+     * samples the distribution,returns color and stores reflected ray in wi,
+     * and pdf in reference
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     * @return
+     */
     @Override
     public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
         Vector3D w = new Vector3D(sr.normal);
-	Vector3D v =new Vector3D(0.0034, 1, 0.0071) .cross( w);
-	v.normalize();
-	Vector3D u = v .cross( w);
-	
-	Point3D sp = sampler.sampleHemisphere();  
-	//wi = sp.x * u + sp.y * v + sp.z * w;
+        Vector3D v = new Vector3D(0.0034, 1, 0.0071).cross(w);
+        v.normalize();
+        Vector3D u = v.cross(w);
+
+        Point3D sp = sampler.sampleHemisphere();
+        //wi = sp.x * u + sp.y * v + sp.z * w;
         wi.setTo(u.mul(sp.x).add(v.mul(sp.y).add(w.mul(sp.z))));
-	wi.normalize(); 	
-	
-	pdf.d = sr.normal .dot( wi) * Utility.INV_PI;
-	
-	return (cd .mul( kd ).mul( Utility.INV_PI));     
+        wi.normalize();
+
+        pdf.d = sr.normal.dot(wi) * Utility.INV_PI;
+
+        return (cd.mul(kd).mul(Utility.INV_PI));
     }
-    
-    
-    
+
 }
