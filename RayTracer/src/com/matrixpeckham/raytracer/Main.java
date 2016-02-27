@@ -407,6 +407,7 @@ public class Main extends JFrame implements ActionListener {
         imageComponent.repaint();
     }
 
+    //class for either a treemap or a class, inner or leaf nodes of a tree
     class TreeOrClass {
 
         Class<? extends BuildWorldFunction> asClass = null;
@@ -414,27 +415,31 @@ public class Main extends JFrame implements ActionListener {
 
         @Override
         public String toString() {
-            if(asClass!=null && asTree!=null){
+            if (asClass != null && asTree != null) {
                 //shouldn't be possible
                 return "TREE AND CLASS!!!!!!!!!!!!!";
-            } else if(asTree!=null) {
+            } else if (asTree != null) {
                 return asTree.toString();
-            } else if(asClass!=null){
+            } else if (asClass != null) {
                 return asClass.getName();
             } else {
                 //both null, shouldn't happen either
                 return "NULL!!!!!!!!!!";
             }
         }
-        
-        
+
     }
+
+    //populates build functions
 
     private void populateBuildFunctions(String packName, JMenu menu) throws
             URISyntaxException {
+        //use reflections api to get all buildworldfunction implementations
         Reflections refl = new Reflections(packName);
         Set<Class<? extends BuildWorldFunction>> clss = refl.getSubTypesOf(
                 BuildWorldFunction.class);
+
+        //we build a tree from the packages of of the classes, we remove the original package name
         TreeMap<String, TreeOrClass> fullList = new TreeMap<>();
         for (Class<? extends BuildWorldFunction> clazz : clss) {
             String name = clazz.getName().substring(clazz.getName().lastIndexOf(
@@ -483,34 +488,37 @@ public class Main extends JFrame implements ActionListener {
             nentry.asClass = clazz;
             tempList.put(name, nentry);
         }
+        //after filling the tree we call this function to traverse it and make menu items
         fillMenu(fullList, menu);
     }
 
+    //fills a jmenu with items recursivly
     private void fillMenu(TreeMap<String, TreeOrClass> map, JMenuItem jmenu) {
         ArrayList<JMenuItem> menu = new ArrayList<>();
-        for(Map.Entry<String,TreeOrClass> entry : map.entrySet()){
+        for (Map.Entry<String, TreeOrClass> entry : map.entrySet()) {
             String name = entry.getKey();
             TreeOrClass val = entry.getValue();
-            if(val.asTree!=null && val.asClass!=null){
+            if (val.asTree != null && val.asClass != null) {
                 //should not happen
-            } else if(val.asTree!=null){
+            } else if (val.asTree != null) {
                 //special case prevents initial menu
-                if(!name.equals("")){
+                if (!name.equals("")) {
                     JMenu sub = new JMenu(name);
                     menu.add(sub);
-                    fillMenu(val.asTree,sub);
+                    fillMenu(val.asTree, sub);
                 } else {
-                    fillMenu(val.asTree,jmenu);
+                    fillMenu(val.asTree, jmenu);
                 }
-            } else if(val.asClass!=null){
+            } else if (val.asClass != null) {
                 JMenuItem item = new JMenuItem(name);
                 final Class<? extends BuildWorldFunction> cls = val.asClass;
+                //action listener takes the current class and creates a new instance and builds a world
                 item.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         try {
-                            builder=cls.newInstance();
+                            builder = cls.newInstance();
                         } catch (InstantiationException ex) {
                             Logger.getLogger(Main.class.getName()).
                                     log(Level.SEVERE, null, ex);
@@ -521,8 +529,9 @@ public class Main extends JFrame implements ActionListener {
                     }
                 });
                 menu.add(item);
+                //sets the current class to the builder, this makes the last class the new one
                 try {
-                    builder=cls.newInstance();
+                    builder = cls.newInstance();
                 } catch (InstantiationException ex) {
                     Logger.getLogger(Main.class.getName()).
                             log(Level.SEVERE, null, ex);
@@ -532,22 +541,24 @@ public class Main extends JFrame implements ActionListener {
                 }
             }
         }
-        if(menu.size()>20){
-            int numSubs = (int)Math.ceil(menu.size()/10.0);
+        //breaks menus into smaller menus, because some packages were larger than screen allowed.
+        if (menu.size() > 20) {
+            int numSubs = (int) Math.ceil(menu.size() / 10.0);
             int index = 0;
             JMenuItem info = new JMenuItem("Too Many Items");
             info.setEnabled(false);
             jmenu.add(info);
-            for(int sub = 0; sub < numSubs && index < menu.size(); sub++){
-                JMenu subMenu = new JMenu("Options "+(sub*10+1)+"-"+Math.min(((sub+1)*10),menu.size()));
-                for(int i = 0; i<10 && index<menu.size(); i++){
+            for (int sub = 0; sub < numSubs && index < menu.size(); sub++) {
+                JMenu subMenu = new JMenu("Options " + (sub * 10 + 1) + "-"
+                        + Math.min(((sub + 1) * 10), menu.size()));
+                for (int i = 0; i < 10 && index < menu.size(); i++) {
                     subMenu.add(menu.get(index));
                     index++;
                 }
                 jmenu.add(subMenu);
             }
         } else {
-            for(JMenuItem item : menu){
+            for (JMenuItem item : menu) {
                 jmenu.add(item);
             }
         }

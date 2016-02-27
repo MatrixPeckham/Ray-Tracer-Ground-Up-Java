@@ -24,10 +24,13 @@ import com.matrixpeckham.raytracer.world.World;
  * @author William Matrix Peckham
  */
 public class RayTraceThread extends Thread {
+    //world to render
     World w;
+    //store the world
     public RayTraceThread(World w){
         this.w=w;
     }
+    //run
     @Override
     public void run() {
         w.camera.renderScene(w);

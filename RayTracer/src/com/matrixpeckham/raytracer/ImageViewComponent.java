@@ -89,7 +89,7 @@ class ImageViewComponent extends JComponent{
     @Override
     public void paint(Graphics g3) {
         Graphics2D g2 = (Graphics2D)g3;
-        super.paint(g2); //To change body of generated methods, choose Tools | Templates.
+        super.paint(g2);
         //if we have an image simply draw it at the size it would be zoomed. 
         //otherwise we fill the viewport with checker pattern see Main for more
         //comments on the checker pattern. 
