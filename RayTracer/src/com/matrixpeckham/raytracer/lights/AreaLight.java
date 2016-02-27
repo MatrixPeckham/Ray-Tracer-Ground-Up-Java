@@ -49,19 +49,40 @@ public class AreaLight extends Light {
      * sample point that was chosen last, stored between calls to the other
      * methods
      */
-    private Point3D samplePoint = new Point3D();
+    private ThreadLocal<Point3D> samplePoint = new ThreadLocal<Point3D>() {
+
+        @Override
+        protected Point3D initialValue() {
+            return new Point3D();
+        }
+        
+    };
 
     /**
      * normal at the sampled light point, stored between calls to the other
      * methods.
      */
-    private Normal lightNormal = new Normal();
+    private ThreadLocal<Normal> lightNormal = new ThreadLocal<Normal>(){
+
+        @Override
+        protected Normal initialValue() {
+            return new Normal();
+        }
+        
+    };
 
     /**
      * the direction vector from the hit point to the light sample point, stored
      * between calls to methods
      */
-    private Vector3D wi = new Vector3D();
+    private ThreadLocal<Vector3D> wi = new ThreadLocal<Vector3D>(){
+
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D();
+        }
+        
+    };
 
     /**
      * default constructor
@@ -115,14 +136,14 @@ public class AreaLight extends Light {
     @Override
     public Vector3D getDirection(ShadeRec sr) {
         //sample object and store point for later use
-        samplePoint.setTo(obj.sample());
+        samplePoint.get().setTo(obj.sample());
         //gets the objects normal from the sample point and stores for later use 
-        lightNormal.setTo(obj.getNormal(samplePoint));
+        lightNormal.get().setTo(obj.getNormal(samplePoint.get()));
         //calculates the direction from the sample point to the hit point and 
         //keeps it in a member variable for later use, also returned
-        wi.setTo(samplePoint.sub(sr.hitPoint));
-        wi.normalize();
-        return wi;
+        wi.get().setTo(samplePoint.get().sub(sr.hitPoint));
+        wi.get().normalize();
+        return wi.get();
     }
 
     /**
@@ -134,7 +155,7 @@ public class AreaLight extends Light {
     @Override
     public RGBColor L(ShadeRec sr) {
         //check for back face and return black if it is
-        double ndotd = lightNormal.neg().dot(wi);
+        double ndotd = lightNormal.get().neg().dot(wi.get());
         if (ndotd > 0) {
             return material.getLe(sr);
         } else {
@@ -153,7 +174,7 @@ public class AreaLight extends Light {
     public boolean inShadow(Ray ray, ShadeRec sr) {
 
         //distance to sample point on object
-        double ts = (samplePoint.sub(ray.o).dot(ray.d));
+        double ts = (samplePoint.get().sub(ray.o).dot(ray.d));
 
         //reference parameter
         DoubleRef t = new DoubleRef();
@@ -180,9 +201,9 @@ public class AreaLight extends Light {
     @Override
     public double G(ShadeRec sr) {
         //cosine term
-        double ndotd = lightNormal.neg().dot(wi);
+        double ndotd = lightNormal.get().neg().dot(wi.get());
         //distance to hit point from sample point squared
-        double d2 = samplePoint.distSquared(sr.hitPoint);
+        double d2 = samplePoint.get().distSquared(sr.hitPoint);
         return ndotd / d2;
     }
 
