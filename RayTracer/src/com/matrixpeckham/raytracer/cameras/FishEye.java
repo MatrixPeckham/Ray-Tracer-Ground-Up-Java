@@ -201,4 +201,50 @@ public class FishEye extends Camera {
         rectangular = b;
     }
 
+    @Override
+    public void multiThreadRenderScene(final World w) {
+        //we map points on image to angles and project them
+        final ViewPlane vp = new ViewPlane(w.vp);
+        final int hres = vp.hRes;
+        final int vres = vp.vRes;
+        final double s = vp.s;
+
+        for (int ri = 0; ri < vp.vRes; ri++) {
+            for (int ci = 0; ci < vp.hRes; ci++) {
+                final int r = ri;
+                final int c = ci;
+                Runnable pix = new Runnable() {
+                    public void run() {
+                        RGBColor L = new RGBColor();
+                        Ray ray = new Ray();
+                        int depth = 0;
+                        Point2D sp = new Point2D();// sample point in [0, 1] X [0, 1]
+                        Point2D pp = new Point2D();// sample point on the pixel
+                        DoubleRef r_squared = new DoubleRef();// sum of squares of normalised device coordinates
+
+                        ray.o.setTo(eye);
+                        L.setTo(Utility.BLACK);
+
+                        for (int j = 0; j < vp.numSamples; j++) {
+                            sp.setTo(vp.sampler.sampleUnitSquare());
+                            pp.x = s * (c - 0.5 * hres + sp.x);
+                            pp.y = s * (r - 0.5 * vres + sp.y);
+                            ray.d.setTo(rayDirection(pp, hres, vres, s,
+                                    r_squared));
+
+                            if (rectangular || r_squared.d <= 1.0) {
+                                L.addLocal(w.tracer.traceRay(ray, depth));
+                            }
+                        }
+
+                        L.divLocal(vp.numSamples);
+                        L.mulLocal(exposureTime);
+                        w.displayPixel(r, c, L);
+                    }
+                };
+                EXEC.submit(pix);
+            }
+        }
+    }
+
 }

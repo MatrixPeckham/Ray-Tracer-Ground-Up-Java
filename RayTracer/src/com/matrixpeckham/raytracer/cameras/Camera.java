@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.cameras;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Base class for cameras, holds all the stuff that all cameras have in common.
@@ -27,6 +28,16 @@ import com.matrixpeckham.raytracer.world.World;
  * @author William Matrix Peckham
  */
 public abstract class Camera {
+    
+    /**
+     * Number of threads to use
+     */
+    public static final int POOL_SIZE = 4;
+    
+    /**
+     * thread pool executor for multithreading.
+     */
+    protected static final ScheduledThreadPoolExecutor EXEC = new ScheduledThreadPoolExecutor(POOL_SIZE);
 
     /**
      * Eye Point of the camera, center of ortho view, or focal point of
@@ -199,6 +210,13 @@ public abstract class Camera {
      * @param w
      */
     public abstract void renderScene(World w);
+
+    /**
+     * renders a scene.
+     *
+     * @param w
+     */
+    public abstract void multiThreadRenderScene(World w);
 
     /**
      * clone method.

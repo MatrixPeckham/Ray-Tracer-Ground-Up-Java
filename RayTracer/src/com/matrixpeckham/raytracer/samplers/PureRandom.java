@@ -51,7 +51,7 @@ public class PureRandom extends Sampler {
      */
     public PureRandom(PureRandom u) {
         super(u);
-        generateSamples();
+        //sgenerateSamples();
     }
 
     /**
@@ -77,7 +77,7 @@ public class PureRandom extends Sampler {
      * @return
      */
     @Override
-    public Sampler clone() {
+    public Sampler protclone() {
         return new PureRandom(this);
     }
 

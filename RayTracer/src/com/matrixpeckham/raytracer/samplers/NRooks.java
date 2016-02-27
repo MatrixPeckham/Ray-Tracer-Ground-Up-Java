@@ -51,7 +51,7 @@ public class NRooks extends Sampler {
      */
     public NRooks(NRooks u) {
         super(u);
-        generateSamples();
+        //generateSamples();
     }
 
     /**
@@ -78,7 +78,7 @@ public class NRooks extends Sampler {
      * @return
      */
     @Override
-    public Sampler clone() {
+    public Sampler protclone() {
         return new NRooks(this);
     }
 

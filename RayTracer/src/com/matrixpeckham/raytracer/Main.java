@@ -72,6 +72,12 @@ public class Main extends JFrame implements ActionListener {
      * Start button for starting render.
      */
     JMenuItem startButton;
+    
+    /**
+     * Checkbox for multithreading.
+     */
+    JCheckBoxMenuItem multiBox;
+    
     /**
      * Open button, for opening an image file.
      */
@@ -175,6 +181,7 @@ public class Main extends JFrame implements ActionListener {
         //standard swing menu bar generation.
         bar = new JMenuBar();
         JMenu file = new JMenu("File");
+        JMenu options = new JMenu("Options");
         JMenu functions = new JMenu("Build Functions");
         populateBuildFunctions("com.matrixpeckham.raytracer.build", functions);
         JMenu render = new JMenu("Render");
@@ -188,6 +195,8 @@ public class Main extends JFrame implements ActionListener {
         z4Button = new JMenuItem("4x");
         z8Button = new JMenuItem("8x");
         z16Button = new JMenuItem("16x");
+        
+        multiBox = new JCheckBoxMenuItem("Multithread enabled",true);
 
         //standard action listeners simply call appropriate methods
         startButton.addActionListener(new ActionListener() {
@@ -250,6 +259,7 @@ public class Main extends JFrame implements ActionListener {
         file.add(saveButton);
         file.add(quitButton);
         render.add(startButton);
+        options.add(multiBox);
         zoom.add(z1Button);
         zoom.add(z2Button);
         zoom.add(z4Button);
@@ -258,6 +268,7 @@ public class Main extends JFrame implements ActionListener {
         bar.add(file);
         bar.add(functions);
         bar.add(render);
+        bar.add(options);
         bar.add(zoom);
     }
 
@@ -307,7 +318,7 @@ public class Main extends JFrame implements ActionListener {
         startTime = System.currentTimeMillis();
 
         //create and start thread and timer
-        thread = new RayTraceThread(w);
+        thread = new RayTraceThread(w, multiBox.getState());
 
         updateTimer.start();
 

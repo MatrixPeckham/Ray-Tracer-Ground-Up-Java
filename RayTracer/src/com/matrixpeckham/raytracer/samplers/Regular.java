@@ -50,7 +50,7 @@ public class Regular extends Sampler {
      */
     public Regular(Regular u) {
         super(u);
-        generateSamples();
+        //generateSamples();
     }
 
     /**
@@ -75,7 +75,7 @@ public class Regular extends Sampler {
      * @return
      */
     @Override
-    public Sampler clone() {
+    public Sampler protclone() {
         return new Regular(this);
     }
 

@@ -52,8 +52,8 @@ public class ReflectiveWithArea implements BuildWorldFunction{
     public void build(World w) {
         int numSamples = 256;
 	
-	w.vp.setHres(4800); 
-	w.vp.setVres(3200);
+	w.vp.setHres(480); 
+	w.vp.setVres(320);
 	w.vp.setSamples(numSamples);
 	//w.vp.setMaxDepth(0);			// for Figure 24.6(a)
 	w.vp.setMaxDepth(400);			// for Figure 24.6(b)
@@ -71,7 +71,7 @@ public class ReflectiveWithArea implements BuildWorldFunction{
 	Pinhole pinholePtr = new Pinhole();
 	pinholePtr.setEye(75, 40, 100); 
 	pinholePtr.setLookat(-10, 39, 0);  
-	pinholePtr.setViewDistance(360);
+	pinholePtr.setViewDistance(36);
         pinholePtr.setZoom(8);
 	pinholePtr.computeUVW();
 	w.setCamera(pinholePtr);

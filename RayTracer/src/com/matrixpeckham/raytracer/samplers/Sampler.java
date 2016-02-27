@@ -127,6 +127,7 @@ public abstract class Sampler {
      * @param s
      */
     public Sampler(Sampler s) {
+        //synchronized(s){
         numSamples = s.numSamples;
         numSets = s.numSets;
         samples = new ArrayList<>(s.samples);
@@ -136,6 +137,7 @@ public abstract class Sampler {
         sphereSamples = new ArrayList<>(s.sphereSamples);
         count = s.count;
         jump = s.jump;
+        //}
     }
 
     /**
@@ -315,7 +317,7 @@ public abstract class Sampler {
      *
      * @return
      */
-    public Point2D sampleUnitSquare() {
+    public synchronized Point2D sampleUnitSquare() {
         //if this is the first sample from this pixel, calculate next set of
         //samples and the jump point
         if (count % numSamples == 0) {
@@ -333,7 +335,7 @@ public abstract class Sampler {
      *
      * @return
      */
-    public Point2D sampleUnitDisc() {
+    public synchronized Point2D sampleUnitDisc() {
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
         }
@@ -349,7 +351,7 @@ public abstract class Sampler {
      *
      * @return
      */
-    public Point3D sampleHemisphere() {
+    public synchronized Point3D sampleHemisphere() {
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
         }
@@ -365,7 +367,7 @@ public abstract class Sampler {
      *
      * @return
      */
-    public Point3D sampleSphere() {
+    public synchronized Point3D sampleSphere() {
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
         }
@@ -381,7 +383,16 @@ public abstract class Sampler {
      *
      * @return
      */
-    public abstract Sampler clone();
+    public abstract Sampler protclone();
+    
+    /**
+     * clone this sampler
+     * 
+     * @return
+     */
+    public final synchronized Sampler clone(){
+        return protclone();
+    }
 
     /**
      * This method should generate numSamples*numSets samples
@@ -394,7 +405,7 @@ public abstract class Sampler {
      *
      * @return
      */
-    public Point2D sampleOneSet() {
+    public synchronized Point2D sampleOneSet() {
         return samples.get(count++ % numSamples);
     }
 }

@@ -126,7 +126,7 @@ public class MultiJittered extends Sampler {
      * @return
      */
     @Override
-    public Sampler clone() {
+    public Sampler protclone() {
         return new MultiJittered(this);
     }
 

@@ -91,6 +91,7 @@ public class Orthographic extends Camera {
         //loop through all pixels
         for (int r = 0; r < vp.vRes; r++) {
             for (int c = 0; c < vp.hRes; c++) {
+                //this is a bad idea
                 //initialize color
                 L.setTo(0, 0, 0);
                 //for all samples in point
@@ -112,6 +113,61 @@ public class Orthographic extends Camera {
                 L.mulLocal(exposureTime);
                 //display
                 w.displayPixel(r, c, L);
+            }
+        }
+
+    }
+
+    /**
+     * Render scene.
+     *
+     * @param w
+     */
+    @Override
+    public void multiThreadRenderScene(final World w) {
+        //copy of view plane.
+        final ViewPlane vp = new ViewPlane(w.vp);
+        //loop through all pixels
+        for (int ri = 0; ri < vp.vRes; ri++) {
+            for (int ci = 0; ci < vp.hRes; ci++) {
+                final int r = ri;
+                final int c = ci;
+                Runnable pix = new Runnable() {
+                    public void run() {
+                        //color
+                        RGBColor L = new RGBColor();
+                        //ray
+                        Ray ray = new Ray();
+                        //depth
+                        int depth = 0;
+                        //pixel point
+                        Point2D pp = new Point2D();
+                        //normalized sample point
+                        Point2D sp = new Point2D();
+                        //initialize color
+                        L.setTo(0, 0, 0);
+                        //for all samples in point
+                        for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
+                            //sample point
+                            sp.setTo(vp.sampler.sampleUnitSquare());
+                            //convert normalized sample point to a point somewhere in the pixel
+                            pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
+                            pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+                            //get ray direction
+                            ray.d.setTo(getDirection(pp));
+                            //set ray origin, eyepoint + pixel location
+                            ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
+                            //sum up samples. 
+                            L.addLocal(w.tracer.traceRay(ray, depth));
+                        }
+                        //normalize and expose pixel
+                        L.divLocal(vp.numSamples);
+                        L.mulLocal(exposureTime);
+                        //display
+                        w.displayPixel(r, c, L);
+                    }
+                };
+                EXEC.submit(pix);
             }
         }
 

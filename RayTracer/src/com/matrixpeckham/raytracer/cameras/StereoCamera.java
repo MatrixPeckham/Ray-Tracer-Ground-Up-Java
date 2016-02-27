@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.cameras;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.concurrent.Callable;
 
 /**
  * Stereo Camera implementation.
@@ -76,6 +77,45 @@ public class StereoCamera extends Camera {
      */
     public void setStereoAngle(double d) {
         beta = d;
+    }
+
+    @Override
+    public void multiThreadRenderScene(World w) {
+        final ViewPlane vp = new ViewPlane(w.vp);
+        final int hres = vp.hRes;
+        final int vres = vp.vRes;
+
+        final double r = eye.distance(lookat);
+        final double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
+
+        if (viewingType == ViewingType.PARALLEL) {
+            Runnable left = new Runnable() {
+                public void run() {
+                    leftCamera.renderStereo(w, x, 0);
+                }
+            };
+            Runnable right = new Runnable() {
+                public void run() {
+                    rightCamera.renderStereo(w, -x, hres + pixelGap);
+                }
+            };
+            EXEC.submit(left);
+            EXEC.submit(right);
+        }
+        if (viewingType == ViewingType.TRANSVERSE) {
+            Runnable left = new Runnable() {
+                public void run() {
+                    leftCamera.renderStereo(w, -x, 0);
+                }
+            };
+            Runnable right = new Runnable() {
+                public void run() {
+                }
+            };
+            rightCamera.renderStereo(w, x, hres + pixelGap);
+            EXEC.submit(left);
+            EXEC.submit(right);
+        }
     }
 
     /**

@@ -50,7 +50,7 @@ public class Hammersley extends Sampler {
      */
     public Hammersley(Hammersley u) {
         super(u);
-        generateSamples();
+        //generateSamples();
     }
 
     /**
@@ -72,7 +72,7 @@ public class Hammersley extends Sampler {
      * @return
      */
     @Override
-    public Sampler clone() {
+    public Sampler protclone() {
         return new Hammersley(this);
     }
 

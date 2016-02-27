@@ -35,7 +35,6 @@ import com.matrixpeckham.raytracer.world.World;
 public class ThinLens extends Camera {
 
     //radius of lens
-
     private double lensRadius = 1;
     private double d = 1;//view dist
     private double f = 10;//focal dist
@@ -285,6 +284,66 @@ public class ThinLens extends Camera {
                 w.displayPixel(r, c + i, L);
             }
         }
+    }
+
+    @Override
+    public void multiThreadRenderScene(final World w) {
+        //duplicate viewport because we manipulate it later
+        final ViewPlane vp = new ViewPlane(w.vp);
+        //adjust size for zoom.
+        vp.s /= zoom;
+
+        for (int ri = 0; ri < vp.vRes; ri++) {
+            for (int ci = 0; ci < vp.hRes; ci++) {
+                final int r = ri;
+                final int c = ci;
+                Runnable pix = new Runnable() {
+                    public void run() {
+                        //color
+                        RGBColor L = new RGBColor();
+                        //ray
+                        Ray ray = new Ray();
+                        //initial depth
+                        int depth = 0;
+                        //normal sample point
+                        Point2D sp = new Point2D();
+                        //pixel point
+                        Point2D pp = new Point2D();
+                        //normal disk point
+                        Point2D dp = new Point2D();
+                        //lens point
+                        Point2D lp = new Point2D();
+
+                        //reset color
+                        L.setTo(Utility.BLACK);
+                        //for every sample
+                        for (int n = 0; n < vp.numSamples; n++) {
+                            //find pixel point
+                            sp.setTo(vp.sampler.sampleUnitSquare());
+                            pp.x = vp.s * (c - vp.hRes / 2.0 + sp.x);
+                            pp.y = vp.s * (r - vp.vRes / 2.0 + sp.y);
+
+                            //find lens point
+                            dp.setTo(sampler.sampleUnitDisc());
+                            lp.setTo(dp.mul(lensRadius));
+
+                            //ray origin is lens point
+                            ray.o.setTo(eye.add(u.mul(lp.x)).add(v.mul(lp.y)));
+                            //calc direction and add to color
+                            ray.d.setTo(rayDirection(pp, lp));
+                            L.addLocal(w.tracer.traceRay(ray, depth));
+                        }
+                        //normalize expose, and display pixel
+                        L.divLocal(vp.numSamples);
+                        L.mulLocal(exposureTime);
+                        w.displayPixel(r, c, L);
+                    }
+                };
+                EXEC.submit(pix);
+            }
+
+        }
+
     }
 
 }
