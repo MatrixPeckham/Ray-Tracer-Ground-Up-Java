@@ -50,9 +50,30 @@ public class AmbientOccluder extends Light {
     private double minAmount = 0.25;
 
     //coordinate system u,v,w cached between method calls used for shadow calculations
-    private final Vector3D u = new Vector3D();
-    private final Vector3D v = new Vector3D();
-    private final Vector3D w = new Vector3D();
+    private ThreadLocal<Vector3D> u = new ThreadLocal<Vector3D>(){
+
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D();
+        }
+        
+    };
+    private ThreadLocal<Vector3D> v = new ThreadLocal<Vector3D>(){
+
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D();
+        }
+        
+    };
+    private ThreadLocal<Vector3D> w = new ThreadLocal<Vector3D>(){
+
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D();
+        }
+        
+    };
 
     /**
      * sampler used to select shadow direction to sample
@@ -122,10 +143,10 @@ public class AmbientOccluder extends Light {
     public RGBColor L(ShadeRec sr) {
 
         //store uvw coordinte system of hit point
-        w.setTo(sr.normal);
-        v.setTo(w.cross(new Vector3D(0.0072, 1, 0.0034)));
-        v.normalize();
-        u.setTo(v.cross(w));
+        w.get().setTo(sr.normal);
+        v.get().setTo(w.get().cross(new Vector3D(0.0072, 1, 0.0034)));
+        v.get().normalize();
+        u.get().setTo(v.get().cross(w.get()));
 
         //shadow ray
         Ray shadowRay = new Ray();
@@ -190,7 +211,7 @@ public class AmbientOccluder extends Light {
         //samples the area aroun the hit point
         Point3D sp = sampler.sampleHemisphere();
         //transform sample point to a direction from the hit point
-        return u.mul(sp.x).add(v.mul(sp.y)).add(w.mul(sp.z));
+        return u.get().mul(sp.x).add(v.get().mul(sp.y)).add(w.get().mul(sp.z));
     }
 
     /**

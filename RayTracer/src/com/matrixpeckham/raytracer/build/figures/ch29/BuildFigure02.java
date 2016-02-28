@@ -100,15 +100,15 @@ public class BuildFigure02 implements BuildWorldFunction {
 // Noise details in the wood, sandstone, and water are slightly different from the orginal images.
 // The sandstone is different because the original image used row 5 in the sandstone texture ramp image,
 // but the current code uses row 0.
-        int numSamples = 1;			// development
-//s	int numSamples = 16;			// production
+//        int numSamples = 1;			// development
+	int numSamples = 16;			// production
 
 //	world.vp.setHres(475);				// development
 //	world.vp.setVres(250); 
         world.vp.setHres(950);				// production
         world.vp.setVres(500);
         world.vp.setSamples(numSamples);
-        world.vp.setMaxDepth(2);
+        world.vp.setMaxDepth(5);
 
         Ambient ambientPtr = new Ambient();
         ambientPtr.scaleRadiance(0.5);

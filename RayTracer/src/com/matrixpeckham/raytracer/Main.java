@@ -381,7 +381,8 @@ public class Main extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         //if we have new pixels to render, set the proper pixels in the image.
-        while (!queue.isEmpty()) {
+        long s = System.currentTimeMillis();
+        while (!queue.isEmpty() && System.currentTimeMillis()-s < 30) {
             try {
                 RenderPixel pix = queue.take();
                 image.setRGB(pix.x, pix.y, pix.color);
