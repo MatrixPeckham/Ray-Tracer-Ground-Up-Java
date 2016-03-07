@@ -43,80 +43,65 @@ public class BuildFigure26 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.26
-
 // This scene illustrates fBm noise.
 // The noise details are different from the images in the book.
 // The noise is also lighter because the original noise functions didn't
 // scale the values to lie in the interval [0,1].
-// This build function renders them at 600 x 600 pixels, instead of the 
+// This build function renders them at 600 x 600 pixels, instead of the
 // original 150 x 150 pixels.
- 
 // The Figure 31.26 images in the book should have been rendered consistently with
-// those in Figures 31.21, 31.23, and 31.25, but instead were rendered with the camera zoomed in 
+// those in Figures 31.21, 31.23, and 31.25, but instead were rendered with the camera zoomed in
 // by a factor of two. This would be equivalent of using d = 12000 in the current biuld function.
 // I've rendered the images consistentenly w time.
-
 // There is no antialiasing.
+        int numSamples = 1;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setGamutDisplay(true);
 
-	int numSamples = 1;
-	
-	w.vp.setHres(600);    
-	w.vp.setVres(600);    
-	w.vp.setSamples(numSamples);
-	w.vp.setGamutDisplay(true);
-	
-	w.backgroundColor = Utility.BLACK;
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0));	
-	pinholePtr.setViewDistance(6000.0); 
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(0, 0, 1);		
-	lightPtr.scaleRadiance(2.5);
-	w.addLight(lightPtr);
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();	
-	noisePtr.setNumOctaves(6);		
-	noisePtr.setGain(0.5);				
+        w.backgroundColor = Utility.BLACK;
+        w.tracer = new RayCast(w);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0));
+        pinholePtr.setViewDistance(6000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(0, 0, 1);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
+
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
 //	noisePtr.setLacunarity(0.5);	   		// for Figure 31.26(a)
 //	noisePtr.setLacunarity(1.0);	   		// for Figure 31.26(b)
 //	noisePtr.setLacunarity(2.0);	   		// for Figure 31.26(c)  fractal sum - identical to Figure 31.25(c)
 //	noisePtr.setLacunarity(4.0);	   		// for Figure 31.26(d)
-	noisePtr.setLacunarity(8.0);	   		// for Figure 31.26(e)	
-	
-	// texture:
+        noisePtr.setLacunarity(8.0);	   		// for Figure 31.26(e)
 
-	FBmTexture texturePtr = new FBmTexture(noisePtr);		
-	texturePtr.setColor(Utility.WHITE);  
-	texturePtr.setMinValue(0.0);  
-	texturePtr.setMaxValue(1.0);
-	
-	
-	// material:
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.85);
-	svMattePtr.setCd(texturePtr);
-	
-	Plane planePtr1 = new Plane(new Point3D(0.0),new Normal(0, 0, 1)); 
-	planePtr1.setMaterial(svMattePtr);
-	w.addObject(planePtr1);
-}
+        // texture:
+        FBmTexture texturePtr = new FBmTexture(noisePtr);
+        texturePtr.setColor(Utility.WHITE);
+        texturePtr.setMinValue(0.0);
+        texturePtr.setMaxValue(1.0);
 
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.85);
+        svMattePtr.setCd(texturePtr);
 
-
+        Plane planePtr1 = new Plane(new Point3D(0.0), new Normal(0, 0, 1));
+        planePtr1.setMaterial(svMattePtr);
+        w.addObject(planePtr1);
+    }
 
 }

@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.brdfs.Lambertian;
 import com.matrixpeckham.raytracer.brdfs.SV_Lambertian;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.DoubleRef;
@@ -25,6 +24,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Textured Matte Material.
@@ -36,12 +36,12 @@ public class SV_Matte extends Material {
     /**
      * texture ambient brdf
      */
-    private SV_Lambertian ambientBRDF;
+    private final SV_Lambertian ambientBRDF;
 
     /**
      * texture diffuse brdf
      */
-    private SV_Lambertian diffuseBRDF;
+    private final SV_Lambertian diffuseBRDF;
 
     /**
      * default constructor
@@ -60,12 +60,12 @@ public class SV_Matte extends Material {
     public SV_Matte(SV_Matte m) {
         super(m);
         if (m.ambientBRDF != null) {
-            ambientBRDF = m.ambientBRDF.clone();
+            ambientBRDF = m.ambientBRDF.cloneBRDF();
         } else {
             ambientBRDF = null;
         }
         if (m.diffuseBRDF != null) {
-            diffuseBRDF = m.diffuseBRDF.clone();
+            diffuseBRDF = m.diffuseBRDF.cloneBRDF();
         } else {
             diffuseBRDF = null;
         }
@@ -151,7 +151,7 @@ public class SV_Matte extends Material {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new SV_Matte(this);
     }
 
@@ -182,4 +182,7 @@ public class SV_Matte extends Material {
         ambientBRDF.setCd(c);
         diffuseBRDF.setCd(c);
     }
+
+    private static final Logger LOG = Logger.getLogger(SV_Matte.class.getName());
+
 }

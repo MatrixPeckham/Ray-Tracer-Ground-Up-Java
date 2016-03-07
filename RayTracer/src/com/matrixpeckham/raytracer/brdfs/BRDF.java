@@ -18,9 +18,9 @@
 package com.matrixpeckham.raytracer.brdfs;
 
 import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
@@ -50,8 +50,9 @@ public abstract class BRDF {
      * call it on.
      *
      * @return
+     *
      */
-    public abstract BRDF clone();
+    public abstract BRDF cloneBRDF();
 
     /**
      * F function, called from functions that don't require a recursive raycast.

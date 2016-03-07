@@ -1,16 +1,16 @@
 /*
  Copyright (C) 2016 William Matrix Peckham
- 
+
  This program is free software{} you can redistribute it and/or
  modify it under the terms of the GNU General Public License
  as published by the Free Software Foundation{} either version 2
  of the License, or (at your option) any later version.
- 
+
  This program is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY{} without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
- 
+
  You should have received a copy of the GNU General Public License
  along with this program{} if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.geometricobjects.primitives.Ring;
 import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
+import java.util.logging.Logger;
 
 /**
  * Class makes a glass of water
@@ -87,14 +88,15 @@ public class GlassOfWater extends Compound {
      *
      * @return
      */
-    public GlassOfWater clone() {
+    @Override
+    public GlassOfWater cloneGeometry() {
         return new GlassOfWater(this);
     }
 
     /**
      * builds the compound object
      */
-    void buildComponents() {
+    final void buildComponents() {
         // build the glass parts
 
         objects.add(new Ring(new Point3D(0, height, 0), // rim at top
@@ -170,9 +172,18 @@ public class GlassOfWater extends Compound {
     }
 
     double height;// total height
+
     double inner_radius;// inner radius of glass, outer radius of water
+
     double wall_thickness;// thickness of the glass wall
+
     double base_thickness;// thickness of the glass base
+
     double water_height;// height of water from bottom of glass base on (x, z) plane
+
     double meniscus_radius;
+
+    private static final Logger LOG
+            = Logger.getLogger(GlassOfWater.class.getName());
+
 }

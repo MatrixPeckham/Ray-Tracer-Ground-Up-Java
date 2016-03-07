@@ -17,18 +17,14 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
-import com.matrixpeckham.raytracer.geometricobjects.primitives.*;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  * Part of a ring.
@@ -40,12 +36,12 @@ public class PartRing extends GeometricObject {
     /**
      * center point of ring
      */
-    private Point3D center = new Point3D();
+    private final Point3D center = new Point3D();
 
     /**
      * normal of ring
      */
-    private Normal normal = new Normal(0, 1, 0);
+    private final Normal normal = new Normal(0, 1, 0);
 
     /**
      * outer radius
@@ -165,7 +161,7 @@ public class PartRing extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new PartRing(this);
     }
 

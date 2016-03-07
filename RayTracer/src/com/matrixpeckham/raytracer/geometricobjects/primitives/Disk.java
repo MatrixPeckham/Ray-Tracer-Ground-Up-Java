@@ -28,6 +28,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Disk class.
@@ -39,12 +40,12 @@ public class Disk extends GeometricObject {
     /**
      * center of disk
      */
-    private Point3D center = new Point3D();
+    private final Point3D center = new Point3D();
 
     /**
      * normal of disk
      */
-    private Normal normal = new Normal(0, 1, 0);
+    private final Normal normal = new Normal(0, 1, 0);
 
     /**
      * radius of disk
@@ -70,8 +71,11 @@ public class Disk extends GeometricObject {
      * coordinate vectors
      */
     final Vector3D up = new Vector3D(0, 1, 0);
+
     Vector3D u = new Vector3D(1, 0, 0);
+
     Vector3D v = new Vector3D(0, 0, 1);
+
     Vector3D w = new Vector3D(0, 1, 0);
 
     /**
@@ -106,7 +110,7 @@ public class Disk extends GeometricObject {
         radius = d.radius;
         area = d.area;
         invArea = d.invArea;
-        sampler = d.sampler.clone();
+        sampler = d.sampler.cloneSampler();
         sampler.mapSamplesToUnitDisc();
         u.setTo(d.u);
         v.setTo(d.v);
@@ -165,7 +169,7 @@ public class Disk extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Disk(this);
     }
 
@@ -257,7 +261,7 @@ public class Disk extends GeometricObject {
      * @param samplerPtr
      */
     public void setSampler(Sampler samplerPtr) {
-        sampler = samplerPtr.clone();
+        sampler = samplerPtr.cloneSampler();
         sampler.mapSamplesToUnitDisc();
     }
 
@@ -308,5 +312,7 @@ public class Disk extends GeometricObject {
     public double pdf(ShadeRec sr) {
         return invArea;
     }
+
+    private static final Logger LOG = Logger.getLogger(Disk.class.getName());
 
 }

@@ -23,7 +23,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * Class to load a ply file.
@@ -34,9 +36,10 @@ public class PLYFile {
 
     /**
      * reads a line from a stream
+     *
      * @param in
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     static String readLine(BufferedInputStream in) throws IOException {
         //builds a string
@@ -48,7 +51,9 @@ public class PLYFile {
             s.append(c);
             //because (char)-1 doesn't work well.
             int temp = in.read();
-            if(temp==-1) break;
+            if (temp == -1) {
+                break;
+            }
             c = (char) temp;
         }
         return s.toString();
@@ -58,47 +63,56 @@ public class PLYFile {
      * is the file binary
      */
     boolean binary = false;
+
     /**
      * if the file is binary which endian-ness is it
      */
     boolean littleEndian = false;
+
     /**
      * Element names to types
      */
     TreeMap<String, ElementType> types = new TreeMap<>();
+
     /**
-     * Names for indices. 
+     * Names for indices.
      */
     ArrayList<String> names = new ArrayList<>();
+
     /**
      * Element names to list of elements.
      */
     TreeMap<String, ArrayList<PLYElement>> elms = new TreeMap<>();
+
     /**
-     * Element counts for indices. 
+     * Element counts for indices.
      */
     ArrayList<Integer> elementCounts = new ArrayList<>();
+
     /**
      * default constructor
      */
     public PLYFile() {
     }
+
     /**
      * Constructor to directly read file.
+     *
      * @param f file to read.
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     public PLYFile(File f) throws FileNotFoundException, IOException {
         readPLYFile(f);
     }
 
     /**
-     * Reads a word from an ascii file, a word is non-whitespace characters 
+     * Reads a word from an ascii file, a word is non-whitespace characters
      * surrounded by whitespace characters.
+     *
      * @param in
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     protected static String readWord(BufferedInputStream in) throws IOException {
         //builds a string
@@ -107,22 +121,28 @@ public class PLYFile {
         //skip whitespace
         while (" \t\r\n\uFFFF".indexOf(c) != -1) {
             int temp = in.read();
-            if(temp==-1) break;
+            if (temp == -1) {
+                break;
+            }
             c = (char) temp;
         }
         //append to the string
         while (" \t\r\n\uFFFF".indexOf(c) == -1) {
             s.append(c);
             int temp = in.read();
-            if(temp==-1) break;
+            if (temp == -1) {
+                break;
+            }
             c = (char) temp;
         }
         //if the word is comment we need to skip the rest of the line and re-call
         if (s.toString().equals("comment")) {
             while ("\r\n\uFFFF".indexOf(c) == -1) {
-            int temp = in.read();
-            if(temp==-1) break;
-            c = (char) temp;
+                int temp = in.read();
+                if (temp == -1) {
+                    break;
+                }
+                c = (char) temp;
 //              s.append(c);
             }
             //c=(char)in.read();
@@ -131,11 +151,13 @@ public class PLYFile {
             return s.toString().trim();
         }
     }
+
     /**
      * Reads a file.
+     *
      * @param f
      * @throws FileNotFoundException
-     * @throws IOException 
+     * @throws IOException
      */
     private void readPLYFile(File f) throws FileNotFoundException, IOException {
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(f));
@@ -156,10 +178,12 @@ public class PLYFile {
             }
         }
     }
+
     /**
      * Reads the header of a file.
+     *
      * @param in
-     * @throws IOException 
+     * @throws IOException
      */
     private void readHeader(BufferedInputStream in) throws IOException {
         //reads the magic number
@@ -190,7 +214,7 @@ public class PLYFile {
         }
         //skip
         readWord(in);
-        
+
         String first = readWord(in);
         //until we reach the end of the header
         int elementsEncountered = 0;
@@ -212,15 +236,16 @@ public class PLYFile {
                 String propType = readWord(in);
                 ElementType.Type propT = null;
                 if (!propType.equals("list")) {
-                    propT = ElementType.Type.valueOf(propType.toUpperCase());
+                    propT = ElementType.Type.valueOf(propType.toUpperCase(
+                            Locale.ROOT));
                 }
                 if (propT == null) {
                     if (propType.equals("list")) {
                         t.isList.add(true);
                         t.listCountType.add(ElementType.Type.valueOf(
-                                readWord(in).toUpperCase()));
+                                readWord(in).toUpperCase(Locale.ROOT)));
                         t.propType.add(ElementType.Type.valueOf(readWord(in).
-                                toUpperCase()));
+                                toUpperCase(Locale.ROOT)));
                         t.props.put(readWord(in), props);
                         props++;
                     } else {
@@ -241,12 +266,17 @@ public class PLYFile {
 
         }
     }
+
     /**
      * get elements by name.
+     *
      * @param name
-     * @return 
+     * @return
      */
     public ArrayList<PLYElement> getElements(String name) {
         return elms.get(name);
     }
+
+    private static final Logger LOG = Logger.getLogger(PLYFile.class.getName());
+
 }

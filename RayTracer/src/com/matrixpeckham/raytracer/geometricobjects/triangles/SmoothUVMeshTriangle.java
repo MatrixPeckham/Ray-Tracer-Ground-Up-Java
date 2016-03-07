@@ -18,11 +18,11 @@
 package com.matrixpeckham.raytracer.geometricobjects.triangles;
 
 import com.matrixpeckham.raytracer.util.Mesh;
-import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Smooth triangle for meshes with UV coordinates
@@ -43,12 +43,16 @@ public class SmoothUVMeshTriangle extends SmoothMeshTriangle {
         super(mesh, i0, i1, i2);
     }
 
+    /**
+     *
+     * @param s
+     */
     public SmoothUVMeshTriangle(SmoothUVMeshTriangle s) {
         super(s);
     }
 
     @Override
-    public SmoothUVMeshTriangle clone() {
+    public SmoothUVMeshTriangle cloneGeometry() {
         return new SmoothUVMeshTriangle(this);
     }
 
@@ -109,5 +113,8 @@ public class SmoothUVMeshTriangle extends SmoothMeshTriangle {
 
         return (true);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SmoothUVMeshTriangle.class.getName());
 
 }

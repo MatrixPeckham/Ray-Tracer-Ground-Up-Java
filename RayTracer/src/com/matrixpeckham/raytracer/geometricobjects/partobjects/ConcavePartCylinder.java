@@ -19,11 +19,11 @@ package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
-import com.matrixpeckham.raytracer.util.Normal;
 
 /**
  * Concave Part Cylinder same as PartCylinder, but returns inward facing normal
@@ -33,11 +33,29 @@ import com.matrixpeckham.raytracer.util.Normal;
 public class ConcavePartCylinder extends GeometricObject {
 
     //for more comments see PartCylinder
-    protected double y0;
+
+    /**
+     *
+     */
+        protected double y0;
+
+    /**
+     *
+     */
     protected double y1;
+
     double phiMin = 0;
+
     double phiMax = Utility.TWO_PI;
+
+    /**
+     *
+     */
     protected double radius;
+
+    /**
+     *
+     */
     protected double invRadius;
 
     /**
@@ -104,7 +122,7 @@ public class ConcavePartCylinder extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new ConcavePartCylinder(this);
     }
 

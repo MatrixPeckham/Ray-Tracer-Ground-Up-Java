@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.util;
 
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 
 /**
  * Class slolves the quartic equation with brute force equations from the
@@ -30,17 +31,29 @@ import java.math.BigDecimal;
 public class BruteForceSolver {
 
     final ComplexNumber a;
+
     final ComplexNumber b;
+
     final ComplexNumber c;
+
     final ComplexNumber d;
+
     final ComplexNumber e;
+
     ComplexNumber S = null;
+
     ComplexNumber D = null;
+
     ComplexNumber P = null;
-    ComplexNumber Delt0 = null;
+
+    ComplexNumber delt0 = null;
+
     ComplexNumber Q = null;
-    ComplexNumber Delt = null;
-    ComplexNumber Delt1 = null;
+
+    ComplexNumber delt = null;
+
+    ComplexNumber delt1 = null;
+
     ComplexNumber p = null;
 
     /**
@@ -60,6 +73,12 @@ public class BruteForceSolver {
         this.e = new ComplexNumber(e, 0);
     }
 
+    /**
+     * solves the quartic equation represented by this class
+     *
+     * @param ret array to hold the up to 4 roots
+     * @return number of roots found
+     */
     public int solveQuartic(double[] ret) {
         int roots = 0;
         if (delt().real.doubleValue() > 0) {
@@ -150,10 +169,10 @@ public class BruteForceSolver {
     }
 
     ComplexNumber delt0() {
-        if (Delt0 == null) {
-            Delt0 = c.mult(c).sub(b.mult(d).mult(3)).add(a.mult(e).mult(12));
+        if (delt0 == null) {
+            delt0 = c.mult(c).sub(b.mult(d).mult(3)).add(a.mult(e).mult(12));
         }
-        return Delt0;
+        return delt0;
     }
 
     ComplexNumber Q() {
@@ -176,31 +195,31 @@ public class BruteForceSolver {
     }
 
     ComplexNumber delt() {
-        if (Delt == null) {
+        if (delt == null) {
             ComplexNumber de0 = delt0();
             ComplexNumber de1 = delt1();
             ComplexNumber de12 = de1.mult(de1);
             ComplexNumber de03 = de0.mult(de0).mult(de0);
             ComplexNumber det = de12.sub(de03.mult(4));
             det = det.div(-27);
-            Delt = det;
+            delt = det;
         }
-        return Delt;
+        return delt;
 //        return t1 - t2 - t3 + t4 - t5
         //              + t6 - t7 - t8 + t9 + t10
         //            - t11 - t12 + t13 - t14 - t15 + t16;
     }
 
     ComplexNumber delt1() {
-        if (Delt1 == null) {
-            ComplexNumber t1 = c.mult(c.mult(c)).mult(2);;
+        if (delt1 == null) {
+            ComplexNumber t1 = c.mult(c.mult(c)).mult(2);
             ComplexNumber t2 = b.mult(c.mult(d)).mult(9);
             ComplexNumber t3 = b.mult(b.mult(e)).mult(27);
             ComplexNumber t4 = a.mult(d.mult(d)).mult(27);
             ComplexNumber t5 = a.mult(c.mult(e)).mult(72);
-            Delt1 = t1.sub(t2).add(t3).add(t4).sub(t5);
+            delt1 = t1.sub(t2).add(t3).add(t4).sub(t5);
         }
-        return Delt1;
+        return delt1;
     }
 
     ComplexNumber p() {
@@ -224,4 +243,8 @@ public class BruteForceSolver {
         ComplexNumber frac = numer.div(denom);
         return frac;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(BruteForceSolver.class.getName());
+
 }

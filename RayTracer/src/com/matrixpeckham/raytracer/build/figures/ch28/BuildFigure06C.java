@@ -18,20 +18,12 @@
 package com.matrixpeckham.raytracer.build.figures.ch28;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
-import com.matrixpeckham.raytracer.lights.Directional;
-import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Dielectric;
-import com.matrixpeckham.raytracer.materials.Reflective;
-import com.matrixpeckham.raytracer.materials.SV_Matte;
-import com.matrixpeckham.raytracer.textures.procedural.Checker3D;
 import com.matrixpeckham.raytracer.tracers.Whitted;
 import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 

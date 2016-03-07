@@ -18,8 +18,8 @@
 package com.matrixpeckham.raytracer.build;
 
 import com.matrixpeckham.raytracer.tracers.SingleSphere;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Point3D;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 
@@ -33,14 +33,14 @@ public class BuildSingleSphere implements BuildWorldFunction {
     public void build(World w) {
         w.vp.setHres(200);
         w.vp.setVres(200);
-	w.vp.setPixelSize(1.0f);
-	w.vp.setGamma(1.0f);
-	
-	w.backgroundColor = Utility.BLACK;
-	w.tracer = new SingleSphere(w); 
-	
-	w.sphere.setCenter(new Point3D(0));
-	w.sphere.setRadius(85);
+        w.vp.setPixelSize(1.0f);
+        w.vp.setGamma(1.0f);
+
+        w.backgroundColor = Utility.BLACK;
+        w.tracer = new SingleSphere(w);
+
+        w.sphere.setCenter(new Point3D(0));
+        w.sphere.setRadius(85);
     }
-    
+
 }

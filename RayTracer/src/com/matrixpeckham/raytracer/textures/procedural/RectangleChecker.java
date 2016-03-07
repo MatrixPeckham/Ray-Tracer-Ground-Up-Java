@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer.textures.procedural;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Class for texturing a generic rectangle with a checker
@@ -154,7 +154,7 @@ public class RectangleChecker implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new RectangleChecker(this);
     }
 
@@ -169,7 +169,6 @@ public class RectangleChecker implements Texture {
 
         //hit point
         double x = sr.localHitPosition.x;
-        double y = sr.localHitPosition.y;
         double z = sr.localHitPosition.z;
 
         //double len = Math.sqrt(x*x+y*y+z*z);
@@ -288,5 +287,8 @@ public class RectangleChecker implements Texture {
     public void setColor2(double d, double d0, double d1) {
         setColor2(new RGBColor(d, d0, d1));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(RectangleChecker.class.getName());
 
 }

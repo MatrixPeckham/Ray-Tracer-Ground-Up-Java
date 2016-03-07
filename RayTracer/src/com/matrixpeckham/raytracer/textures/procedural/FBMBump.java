@@ -20,8 +20,8 @@ package com.matrixpeckham.raytracer.textures.procedural;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Noise bump map texture.
@@ -34,6 +34,7 @@ public class FBMBump implements Texture {
      * noise value to use
      */
     private LatticeNoise noise = null;
+
     /**
      * perturbation value (scales noise vectors)
      */
@@ -65,7 +66,7 @@ public class FBMBump implements Texture {
      * @param n
      */
     public FBMBump(LatticeNoise n) {
-        noise = n.clone();
+        noise = n.cloneNoise();
     }
 
     /**
@@ -74,7 +75,7 @@ public class FBMBump implements Texture {
      * @param n
      */
     public FBMBump(FBMBump n) {
-        noise = n.noise.clone();
+        noise = n.noise.cloneNoise();
         perturbation = n.perturbation;
     }
 
@@ -84,7 +85,7 @@ public class FBMBump implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new FBMBump(this);
     }
 
@@ -104,4 +105,7 @@ public class FBMBump implements Texture {
         v = v.mul(perturbation);
         return new RGBColor(v.x, v.y, v.z);
     }
+
+    private static final Logger LOG = Logger.getLogger(FBMBump.class.getName());
+
 }

@@ -46,80 +46,72 @@ public class BuildFigure32 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 27.32 (a) and (b)
-	int numSamples = 16;
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setMaxDepth(2);     		// for Figure 27.32(a) 
+        int numSamples = 16;
+
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setMaxDepth(2);     		// for Figure 27.32(a)
 //	w.vp.setMaxDepth(3);     		// for Figure 27.32(b)
-	w.vp.setMaxDepth(5);     		// for Figure 27.32(b)
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = Utility.WHITE;
-	
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.25);
-	w.setAmbient(ambientPtr);
-	
-	w.tracer = new Whitted(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(-0.25, 1, 3);
-	pinholePtr.setLookat(0.25, 1.25, 0);
-	pinholePtr.setViewDistance(500);  
-	pinholePtr.computeUVW();
-	w.setCamera(pinholePtr);
-	
-		
-	PointLight lightPtr1 = new PointLight();
-	lightPtr1.setLocation(20, 20, 5);
-	lightPtr1.scaleRadiance(2.75);
-	lightPtr1.setShadows(true);
-	w.addLight(lightPtr1);
-	         
+        w.vp.setMaxDepth(5);     		// for Figure 27.32(b)
+        w.vp.setSamples(numSamples);
 
+        w.backgroundColor = Utility.WHITE;
 
-	// thick ring
-	
-	Transparent glassPtr = new Transparent();
-	glassPtr.setKs(0.15);
-	glassPtr.setExp(2000.0);
-	glassPtr.setIor(1.5);
-	glassPtr.setKr(0.1);
-	glassPtr.setKt(0.9);
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.25);
+        w.setAmbient(ambientPtr);
 
-	
-	double ymin = 0.0;
-	double ymax = 0.35;
-	double innerRadius = 0.9;
-	double outerRadius = 1.25;
-	
-	Instance ringPtr = new Instance (new ThickRing(ymin, ymax, innerRadius, outerRadius));
-	ringPtr.setMaterial(glassPtr);
-	ringPtr.rotateX(90);
-	ringPtr.rotateY(-45);
-	ringPtr.translate(0, 1.25, 0);
-	w.addObject(ringPtr);
-	
-	
-	// plane with checker
-		
-	Checker3D checkerPtr = new Checker3D();
-	checkerPtr.setSize(1.0);		
-	checkerPtr.setColor1(Utility.WHITE);  	
-	checkerPtr.setColor2(0.5);
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.8);
-	svMattePtr.setKd(0.85);
-	svMattePtr.setCd(checkerPtr);
-	
-	Plane planePtr = new Plane(new Point3D(0.0),new  Normal(0, 1, 0));  
-	planePtr.setMaterial(svMattePtr);
-	w.addObject(planePtr);	
-}
+        w.tracer = new Whitted(w);
 
-    
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(-0.25, 1, 3);
+        pinholePtr.setLookat(0.25, 1.25, 0);
+        pinholePtr.setViewDistance(500);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        PointLight lightPtr1 = new PointLight();
+        lightPtr1.setLocation(20, 20, 5);
+        lightPtr1.scaleRadiance(2.75);
+        lightPtr1.setShadows(true);
+        w.addLight(lightPtr1);
+
+        // thick ring
+        Transparent glassPtr = new Transparent();
+        glassPtr.setKs(0.15);
+        glassPtr.setExp(2000.0);
+        glassPtr.setIor(1.5);
+        glassPtr.setKr(0.1);
+        glassPtr.setKt(0.9);
+
+        double ymin = 0.0;
+        double ymax = 0.35;
+        double innerRadius = 0.9;
+        double outerRadius = 1.25;
+
+        Instance ringPtr = new Instance(new ThickRing(ymin, ymax, innerRadius,
+                outerRadius));
+        ringPtr.setMaterial(glassPtr);
+        ringPtr.rotateX(90);
+        ringPtr.rotateY(-45);
+        ringPtr.translate(0, 1.25, 0);
+        w.addObject(ringPtr);
+
+        // plane with checker
+        Checker3D checkerPtr = new Checker3D();
+        checkerPtr.setSize(1.0);
+        checkerPtr.setColor1(Utility.WHITE);
+        checkerPtr.setColor2(0.5);
+
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.8);
+        svMattePtr.setKd(0.85);
+        svMattePtr.setCd(checkerPtr);
+
+        Plane planePtr = new Plane(new Point3D(0.0), new Normal(0, 1, 0));
+        planePtr.setMaterial(svMattePtr);
+        w.addObject(planePtr);
+    }
+
 }

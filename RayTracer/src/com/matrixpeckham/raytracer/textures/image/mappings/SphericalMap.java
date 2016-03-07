@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.image.Mapping;
 import com.matrixpeckham.raytracer.textures.image.TexelCoord;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Spherical mapping, maps whole image to generic sphere.
@@ -35,7 +36,7 @@ public class SphericalMap implements Mapping {
      * @return
      */
     @Override
-    public Mapping clone() {
+    public Mapping cloneMapping() {
         return new SphericalMap();
     }
 
@@ -66,5 +67,7 @@ public class SphericalMap implements Mapping {
         p.row = (int) ((yRes - 1) * v);
         return p;
     }
+    private static final Logger LOG
+            = Logger.getLogger(SphericalMap.class.getName());
 
 }

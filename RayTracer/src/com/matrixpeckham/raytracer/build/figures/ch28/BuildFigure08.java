@@ -57,21 +57,21 @@ public class BuildFigure08 implements BuildWorldFunction {
 
         w.tracer = new Whitted(w);
 
-	// camera looks down y axis because disks have vertical axes	
+        // camera looks down y axis because disks have vertical axes
         Orthographic orthographicPtr = new Orthographic();
         orthographicPtr.setEye(0.23, 100, 0);
         orthographicPtr.setLookat(0.23, 0, 0);
         orthographicPtr.computeUVW();
         w.setCamera(orthographicPtr);
 
-	// top cylinder (in image)
+        // top cylinder (in image)
         double top1 = 0.5;
         double bottom1 = 0.0;
         double radius = 1.25;
 
-        RGBColor glassColor1=new RGBColor(0, 1, 1);    // cyan
-	
-	Dielectric glassPtr1 = new Dielectric();
+        RGBColor glassColor1 = new RGBColor(0, 1, 1);    // cyan
+
+        Dielectric glassPtr1 = new Dielectric();
         glassPtr1.setIorIn(1.5);		// glass
         glassPtr1.setIorOut(1.0);		// air
         glassPtr1.setCfIn(glassColor1);
@@ -83,13 +83,13 @@ public class BuildFigure08 implements BuildWorldFunction {
         cylinderPtr1.setMaterial(glassPtr1);
         w.addObject(cylinderPtr1);
 
-	// left cylinder
+        // left cylinder
         double top2 = 1.5;
         double bottom2 = 1;
 
-        RGBColor glassColor2=new RGBColor(1, 1, 0);   // yellow
-	
-	Dielectric glassPtr2 = new Dielectric();
+        RGBColor glassColor2 = new RGBColor(1, 1, 0);   // yellow
+
+        Dielectric glassPtr2 = new Dielectric();
         glassPtr2.setIorIn(1.5);		// glass
         glassPtr2.setIorOut(1.0);		// air
         glassPtr2.setCfIn(glassColor2);
@@ -101,13 +101,13 @@ public class BuildFigure08 implements BuildWorldFunction {
         cylinderPtr2.setMaterial(glassPtr2);
         w.addObject(cylinderPtr2);
 
-	// right cylinder
+        // right cylinder
         double top3 = 2.5;
         double bottom3 = 2;
 
-        RGBColor glassColor3=new RGBColor(1, 0, 1);    // majenta
-	
-	Dielectric glassPtr3 = new Dielectric();
+        RGBColor glassColor3 = new RGBColor(1, 0, 1);    // majenta
+
+        Dielectric glassPtr3 = new Dielectric();
         glassPtr3.setIorIn(1.5);		// glass
         glassPtr3.setIorOut(1.0);		// air
         glassPtr3.setCfIn(glassColor3);
@@ -119,12 +119,12 @@ public class BuildFigure08 implements BuildWorldFunction {
         cylinderPtr3.setMaterial(glassPtr3);
         w.addObject(cylinderPtr3);
 
-	// Utility.WHITE plane below disks
+        // Utility.WHITE plane below disks
         Emissive emissivePtr = new Emissive();
         emissivePtr.scaleRadiance(1.0);		// default
         emissivePtr.setCe(Utility.WHITE);			// default
 
-        Plane planePtr = new Plane(new Point3D(0, -1, 0),new Normal(0, 1, 0));
+        Plane planePtr = new Plane(new Point3D(0, -1, 0), new Normal(0, 1, 0));
         planePtr.setMaterial(emissivePtr);
         w.addObject(planePtr);
     }

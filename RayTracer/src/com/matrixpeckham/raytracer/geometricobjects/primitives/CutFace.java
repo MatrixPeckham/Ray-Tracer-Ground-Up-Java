@@ -19,10 +19,10 @@ package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Class represents a square on the xz plane centered on the origin with a hole
@@ -77,7 +77,7 @@ public class CutFace extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new CutFace(this);
     }
 
@@ -187,5 +187,7 @@ public class CutFace extends GeometricObject {
 
         return (false);
     }
+
+    private static final Logger LOG = Logger.getLogger(CutFace.class.getName());
 
 }

@@ -24,7 +24,6 @@ import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.lights.EnvironmentLight;
 import com.matrixpeckham.raytracer.materials.Emissive;
 import com.matrixpeckham.raytracer.materials.Matte;
-import com.matrixpeckham.raytracer.samplers.Hammersley;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.tracers.Whitted;
 import com.matrixpeckham.raytracer.util.Point3D;

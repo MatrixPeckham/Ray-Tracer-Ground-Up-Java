@@ -25,7 +25,6 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.world.World;
 import java.util.ArrayList;
 
 /**
@@ -35,19 +34,20 @@ import java.util.ArrayList;
  * @author William Matrix Peckham
  */
 public class Grid extends Compound {
-    
+
     /**
      * default constructor
      */
-    public Grid(){
+    public Grid() {
         super();
     }
-    
+
     /**
      * copy constructor
-     * @param g 
+     *
+     * @param g
      */
-    public Grid(Grid g){
+    public Grid(Grid g) {
         super(g);
         setupCells();
     }
@@ -64,8 +64,20 @@ public class Grid extends Compound {
     protected ArrayList<GeometricObject> cells = new ArrayList<>();
 
     //num cells in each direction
-    protected int nx = 0;
+
+    /**
+     *
+     */
+        protected int nx = 0;
+
+    /**
+     *
+     */
     protected int ny = 0;
+
+    /**
+     *
+     */
     protected int nz = 0;
 
     /**
@@ -356,6 +368,7 @@ public class Grid extends Compound {
      * @param sr
      * @return
      */
+    @Override
     public double pdf(ShadeRec sr) {
         return 1;
     }
@@ -363,7 +376,7 @@ public class Grid extends Compound {
     /**
      * sets up the cells for the grid
      */
-    public void setupCells() {
+    public final void setupCells() {
         Point3D p0 = findMinBounds();
         Point3D p1 = findMaxBounds();
         bbox.x0 = p0.x;
@@ -457,7 +470,7 @@ public class Grid extends Compound {
         // erase the Compound::vector that stores the object pointers, but don't delete the objects
 
         //IF WE DON'T DO THIS WE CAN CALL setMaterial() AFTER setupCells()
-        //this allows us to sub-class grid and call setupCells within a constructor after 
+        //this allows us to sub-class grid and call setupCells within a constructor after
         //generating a mesh, but still allow the user of the class to setup a material.
         //objects.clear();
         // display some statistics on counts
@@ -499,7 +512,7 @@ public class Grid extends Compound {
      */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
-        //early out for shadows, all implementations do this 
+        //early out for shadows, all implementations do this
         if (!shadows) {
             return false;
         }

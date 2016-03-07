@@ -47,8 +47,6 @@ public class BuildFigure22 implements BuildWorldFunction {
 // This is arranged by inserting the statement
 //		mappedColor = rawColor;
 // in the function World::displayPixel in Listing 14.18, just before the gamma correction
-        
-        
         //NOTE: JAVA COLOR THROWS AN EXCEPTION ON OVERFLOW (B) WILL NOT LOOK
         //THE SAME, RenderPixel CHECKS FOR OVERFLOW TO PREVENT THIS, AND CLAMPS
         int numSamples = 16;
@@ -72,37 +70,25 @@ public class BuildFigure22 implements BuildWorldFunction {
         lightPtr.setColor(1.0, 1.0, 1.0);
         lightPtr.setShadows(false);
 //        lightPtr.scaleRadiance(3.0);        	// for Figure 14.22 (a)
-	lightPtr.scaleRadiance(4.5); 	  	// for Figure 14.22 (b)		
+        lightPtr.scaleRadiance(4.5); 	  	// for Figure 14.22 (b)
         w.addLight(lightPtr);
 
-	// colors
-        RGBColor yellow=new RGBColor
-        (1, 1, 0);										// yellow
-	RGBColor brown=new RGBColor
-        (0.71, 0.40, 0.16);								// brown
-	RGBColor darkGreen=new RGBColor
-        (0.0, 0.41, 0.41);							// darkGreen
-	RGBColor orange=new RGBColor
-        (1, 0.75, 0);									// orange
-	RGBColor green=new RGBColor
-        (0, 0.6, 0.3);									// green
-	RGBColor lightGreen=new RGBColor
-        (0.65, 1, 0.30);							// light green
-	RGBColor darkYellow=new RGBColor
-        (0.61, 0.61, 0);							// dark yellow
-	RGBColor lightPurple=new RGBColor
-        (0.65, 0.3, 1);							// light purple
-	RGBColor darkPurple=new RGBColor
-                
-        (0.5, 0, 1);								// dark purple
-	
-	
-	// Matt material reflection coefficients
-	
-	double ka = 0.25;
+        // colors
+        RGBColor yellow = new RGBColor(1, 1, 0);										// yellow
+        RGBColor brown = new RGBColor(0.71, 0.40, 0.16);								// brown
+        RGBColor darkGreen = new RGBColor(0.0, 0.41, 0.41);							// darkGreen
+        RGBColor orange = new RGBColor(1, 0.75, 0);									// orange
+        RGBColor green = new RGBColor(0, 0.6, 0.3);									// green
+        RGBColor lightGreen = new RGBColor(0.65, 1, 0.30);							// light green
+        RGBColor darkYellow = new RGBColor(0.61, 0.61, 0);							// dark yellow
+        RGBColor lightPurple = new RGBColor(0.65, 0.3, 1);							// light purple
+        RGBColor darkPurple = new RGBColor(0.5, 0, 1);								// dark purple
+
+        // Matt material reflection coefficients
+        double ka = 0.25;
         double kd = 0.75;
 
-	// spheres
+        // spheres
         Matte mattePtr1 = new Matte();
         mattePtr1.setKa(ka);
         mattePtr1.setKd(kd);
@@ -364,7 +350,7 @@ public class BuildFigure22 implements BuildWorldFunction {
         mattePtr33.setKd(kd);
         mattePtr33.setCd(green);
         Sphere spherePtr33 = new Sphere(new Point3D(-63, -39, -180), 11);
-        spherePtr33.setMaterial(mattePtr33);							// green 
+        spherePtr33.setMaterial(mattePtr33);							// green
         w.addObject(spherePtr33);
 
         Matte mattePtr34 = new Matte();

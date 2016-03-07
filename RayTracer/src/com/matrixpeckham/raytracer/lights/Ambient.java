@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Ambient light, simplest light, no shadows. approximates background light
@@ -37,7 +38,7 @@ public class Ambient extends Light {
     /**
      * color
      */
-    private RGBColor color;
+    private final RGBColor color = new RGBColor();
 
     /**
      * default constructor
@@ -45,7 +46,7 @@ public class Ambient extends Light {
     public Ambient() {
         super();
         ls = 1;
-        color = new RGBColor(1);
+        color.setTo(1);
     }
 
     /**
@@ -100,7 +101,7 @@ public class Ambient extends Light {
     }
 
     @Override
-    public Light clone() {
+    public Light cloneLight() {
         return new Ambient(this);
     }
 
@@ -137,5 +138,7 @@ public class Ambient extends Light {
     public boolean inShadow(Ray shadowRay, ShadeRec sr) {
         return false;
     }
+
+    private static final Logger LOG = Logger.getLogger(Ambient.class.getName());
 
 }

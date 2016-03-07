@@ -46,66 +46,55 @@ public class BuildFigure16 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 29.16
-
-// As w build function does not use the "panoramic" option for the 
+// As w build function does not use the "panoramic" option for the
 // LightProbe mapping, the resulting image is the mirror image of Figure 11.8(b).
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(900);
+        w.vp.setVres(900);
+        w.vp.setSamples(numSamples);
+        w.vp.setPixelSize(1.0);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(900);			
-	w.vp.setVres(900); 
-	w.vp.setSamples(numSamples);
-	w.vp.setPixelSize(1.0);
-	
-	w.tracer = new RayCast(w);	
-	
-	FishEye fisheyePtr = new FishEye();
-	fisheyePtr.setEye(new Point3D(0.0)); 
-	fisheyePtr.setLookat(0, 0, -100);
-	fisheyePtr.setFov(360);
-	fisheyePtr.computeUVW(); 
-	w.setCamera(fisheyePtr);
-	
-	// image:					
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        w.tracer = new RayCast(w);
+
+        FishEye fisheyePtr = new FishEye();
+        fisheyePtr.setEye(new Point3D(0.0));
+        fisheyePtr.setLookat(0, 0, -100);
+        fisheyePtr.setFov(360);
+        fisheyePtr.computeUVW();
+        w.setCamera(fisheyePtr);
+
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
 //            imagePtr.loadPPMFile(new File(path+"uffizi_probe_large.ppm"));
-            imagePtr.loadPPMFile(new File(path+"uffizi_probe_small.ppm"));
+            imagePtr.loadPPMFile(new File(path + "uffizi_probe_small.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure16.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	LightProbe lightProbePtr = new LightProbe();     	
-	
-	ImageTexture imageTexturePtr = new ImageTexture(imagePtr); 
-	imageTexturePtr.setMapping(lightProbePtr);
-	
-	SV_Matte svMattePtr = new SV_Matte();	// ka + kd > 1
-	svMattePtr.setKa(1.0);
-	svMattePtr.setKd(0.85); 	
-	svMattePtr.setCd(imageTexturePtr);
-	
-	Sphere unitSpherePtr = new Sphere();
-	unitSpherePtr.setShadows(false);	
-	
-	Instance spherePtr = new Instance(unitSpherePtr); 
-	spherePtr.scale(1000000.0);
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
+        LightProbe lightProbePtr = new LightProbe();
 
+        ImageTexture imageTexturePtr = new ImageTexture(imagePtr);
+        imageTexturePtr.setMapping(lightProbePtr);
 
+        SV_Matte svMattePtr = new SV_Matte();	// ka + kd > 1
+        svMattePtr.setKa(1.0);
+        svMattePtr.setKd(0.85);
+        svMattePtr.setCd(imageTexturePtr);
 
+        Sphere unitSpherePtr = new Sphere();
+        unitSpherePtr.setShadows(false);
 
-	
+        Instance spherePtr = new Instance(unitSpherePtr);
+        spherePtr.scale(1000000.0);
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
 
-	
-	
     }
-    
+
 }

@@ -37,7 +37,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure11 implements BuildWorldFunction{
+public class BuildFigure11 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -46,87 +46,74 @@ public class BuildFigure11 implements BuildWorldFunction{
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.11 and the extra images in the Chapter 28 download
+        int numSamples = 25;
 
-	int numSamples = 25;  
-	
-	w.vp.setHres(600);	 		
-	w.vp.setVres(600);
-	w.vp.setMaxDepth(6);  
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = Utility.WHITE;
-	
-	w.tracer = new Whitted(w);
-	
-		
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(10, 2, 20);  
-	pinholePtr.setLookat(0.25, 4, 0);
-	pinholePtr.setViewDistance(1275.0); 	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
-		
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(2, 3, 0.5);
-	lightPtr.scaleRadiance(3.0);
-	lightPtr.setShadows(true);
-	w.addLight(lightPtr);
-	
-	
-	// lens
-	
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setMaxDepth(6);
+        w.vp.setSamples(numSamples);
+
+        w.backgroundColor = Utility.WHITE;
+
+        w.tracer = new Whitted(w);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(10, 2, 20);
+        pinholePtr.setLookat(0.25, 4, 0);
+        pinholePtr.setViewDistance(1275.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(2, 3, 0.5);
+        lightPtr.scaleRadiance(3.0);
+        lightPtr.setShadows(true);
+        w.addLight(lightPtr);
+
+        // lens
 //	RGBColor glassColor=new RGBColor(0.65, 0.45, 0);   // orange 	for Figure 28.11(a)
-	RGBColor glassColor=new RGBColor(0.0, 0.5, 0.5);   // cyan		for Figure 28.11(b)
-	
-	// extra imgages
-	
+        RGBColor glassColor = new RGBColor(0.0, 0.5, 0.5);   // cyan		for Figure 28.11(b)
+
+        // extra imgages
 //	RGBColor glassColor=new RGBColor(0.5, 0.0, 0.5);   // majenta
 //	RGBColor glassColor=new RGBColor(0, 0.65, 0.35);   // blue-green
 //	RGBColor glassColor=new RGBColor(0.0, 0.35, 0.65); // blue
+        Dielectric glassPtr = new Dielectric();
+        glassPtr.setIorIn(1.5);				// glass
+        glassPtr.setIorOut(1.0);			// air
+        glassPtr.setCfIn(glassColor);
+        glassPtr.setCfOut(1, 1, 1);
 
-	
-	Dielectric glassPtr = new Dielectric();
-	glassPtr.setIorIn(1.5);				// glass
-	glassPtr.setIorOut(1.0);			// air
-	glassPtr.setCfIn(glassColor);
-	glassPtr.setCfOut(1, 1, 1); 
-	
-
-	double radius 		= 4.0;
-	double thickness 	= 2.0;
-	double minDistance = 0.35;  			// for cyan
+        double radius = 4.0;
+        double thickness = 2.0;
+        double minDistance = 0.35;  			// for cyan
 //	double minDistance = 0.1;   			// for all other colours
-	
 
-	Instance concaveLensPtr = new Instance(new ConcaveLens(radius, thickness, minDistance));
-	concaveLensPtr.setMaterial(glassPtr);
-	concaveLensPtr.rotateX(90);
-	concaveLensPtr.translate(0.0, radius, 0.0);
-	w.addObject(concaveLensPtr);
-	
-	
-	// plane with checker
-	
-	PlaneChecker planeCheckerPtr = new PlaneChecker();
-	planeCheckerPtr.setSize(3);		
-	planeCheckerPtr.setOutlineWidth(0.4);
-	planeCheckerPtr.setColor1(Utility.WHITE);
-	planeCheckerPtr.setColor2(Utility.WHITE);  
-	planeCheckerPtr.setOutlineColor(new RGBColor(0.25)); 
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.65);
-	svMattePtr.setCd(planeCheckerPtr);
+        Instance concaveLensPtr = new Instance(
+                new ConcaveLens(radius, thickness, minDistance));
+        concaveLensPtr.setMaterial(glassPtr);
+        concaveLensPtr.rotateX(90);
+        concaveLensPtr.translate(0.0, radius, 0.0);
+        w.addObject(concaveLensPtr);
 
-	Plane planePtr = new Plane(new Point3D(0, 0, 0),new Normal(0, 1, 0));
-	planePtr.setMaterial(svMattePtr);
-	planePtr.setShadows(false);
-	w.addObject(planePtr);	
-}
+        // plane with checker
+        PlaneChecker planeCheckerPtr = new PlaneChecker();
+        planeCheckerPtr.setSize(3);
+        planeCheckerPtr.setOutlineWidth(0.4);
+        planeCheckerPtr.setColor1(Utility.WHITE);
+        planeCheckerPtr.setColor2(Utility.WHITE);
+        planeCheckerPtr.setOutlineColor(new RGBColor(0.25));
 
-    
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.65);
+        svMattePtr.setCd(planeCheckerPtr);
+
+        Plane planePtr = new Plane(new Point3D(0, 0, 0), new Normal(0, 1, 0));
+        planePtr.setMaterial(svMattePtr);
+        planePtr.setShadows(false);
+        w.addObject(planePtr);
+    }
+
 }

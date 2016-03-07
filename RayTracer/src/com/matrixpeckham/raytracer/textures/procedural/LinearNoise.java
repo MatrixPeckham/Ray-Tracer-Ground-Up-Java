@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.textures.procedural;
 
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Linear Noise, linearly interpolates the noise values.
@@ -60,7 +61,7 @@ public class LinearNoise extends LatticeNoise {
      * @return
      */
     @Override
-    public LatticeNoise clone() {
+    public LatticeNoise cloneNoise() {
         return new LinearNoise(this);
     }
 
@@ -181,5 +182,8 @@ public class LinearNoise extends LatticeNoise {
     static Vector3D lerp(double f, Vector3D a, Vector3D b) {
         return a.add(b.sub(a).mul(f));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(LinearNoise.class.getName());
 
 }

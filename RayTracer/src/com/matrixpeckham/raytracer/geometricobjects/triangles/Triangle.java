@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Triangle class for rendering a single triangle with known coordinates and a
@@ -37,22 +38,22 @@ public class Triangle extends GeometricObject {
     /**
      * point 1
      */
-    private Point3D v0 = new Point3D(0, 0, 0);
+    private final Point3D v0 = new Point3D(0, 0, 0);
 
     /**
      * point 2
      */
-    private Point3D v1 = new Point3D(0, 0, 1);
+    private final Point3D v1 = new Point3D(0, 0, 1);
 
     /**
      * point 3
      */
-    private Point3D v2 = new Point3D(1, 0, 0);
+    private final Point3D v2 = new Point3D(1, 0, 0);
 
     /**
      * normal of the triangle
      */
-    private Normal normal = new Normal(0, 1, 0);
+    private final Normal normal = new Normal(0, 1, 0);
 
     /**
      * default constructor
@@ -95,16 +96,16 @@ public class Triangle extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Triangle(this);
     }
 
     /**
      * compute normal
      */
-    public void computeNormal() {
+    public final void computeNormal() {
         //cross product of the difference of the points
-        normal = new Normal(v1.sub(v0).cross(v2.sub(v0)));
+        normal.setTo(v1.sub(v0).cross(v2.sub(v0)));
         normal.normalize();
     }
 
@@ -116,7 +117,7 @@ public class Triangle extends GeometricObject {
     @Override
     public BBox getBoundingBox() {
         //offset so that the bounds are slightly larger than the triangle
-        //prevents roundoff area causeing false negatives 
+        //prevents roundoff area causeing false negatives
         double delta = 0.000001;
         //we simply use the min/max of each of the coordinates of all points
 
@@ -197,7 +198,7 @@ public class Triangle extends GeometricObject {
             return false;
         }
 
-        //otherwise works the same as hit. doesn't compute hit point 
+        //otherwise works the same as hit. doesn't compute hit point
         double a = v0.x - v1.x, b = v0.x - v2.x, c = ray.d.x, d = v0.x - ray.o.x;
         double e = v0.y - v1.y, f = v0.y - v2.y, g = ray.d.y, h = v0.y - ray.o.y;
         double i = v0.z - v1.z, j = v0.z - v2.z, k = ray.d.z, l = v0.z - ray.o.z;
@@ -214,7 +215,7 @@ public class Triangle extends GeometricObject {
             return (false);
         }
 
-        double r = r = e * l - h * i;
+        double r = e * l - h * i;
         double e2 = a * n + d * q + c * r;
         double gamma = e2 * inv_denom;
 
@@ -241,4 +242,6 @@ public class Triangle extends GeometricObject {
     //TODO: this class could be used as an area light, implementation
     //the surface area of a triangle is calculable and to mapping a square
     //sample space to it shouldn't be hard.
+    private static final Logger LOG = Logger.getLogger(Triangle.class.getName());
+
 }

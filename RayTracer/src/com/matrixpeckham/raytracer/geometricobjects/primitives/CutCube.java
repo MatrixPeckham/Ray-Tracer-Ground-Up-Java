@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * This is a cube that has a sphere cut out of the max corner. rays will go
@@ -69,6 +70,7 @@ public class CutCube extends GeometricObject {
      * sphere radius
      */
     public double sphereRad = 1;
+
     /**
      * sphere point
      */
@@ -283,7 +285,7 @@ public class CutCube extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new CutCube(this);
     }
 
@@ -405,5 +407,7 @@ public class CutCube extends GeometricObject {
         y1 = d0;
         z1 = d1;
     }
+
+    private static final Logger LOG = Logger.getLogger(CutCube.class.getName());
 
 }

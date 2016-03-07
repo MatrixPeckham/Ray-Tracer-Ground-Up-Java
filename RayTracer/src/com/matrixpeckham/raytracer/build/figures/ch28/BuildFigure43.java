@@ -57,14 +57,14 @@ public class BuildFigure43 implements BuildWorldFunction {
 
         w.tracer = new Whitted(w);
 
-	// camera looks down y axis because disks have vertical axes	
+        // camera looks down y axis because disks have vertical axes
         Orthographic orthographicPtr = new Orthographic();
         orthographicPtr.setEye(0.23, 100, 0);
         orthographicPtr.setLookat(0.23, 0, 0);
         orthographicPtr.computeUVW();
         w.setCamera(orthographicPtr);
 
-	// top cylinder (in image)
+        // top cylinder (in image)
         double top1 = 0.5;
         double bottom1 = 0.0;
         double radius = 1.25;
@@ -83,7 +83,7 @@ public class BuildFigure43 implements BuildWorldFunction {
         cylinderPtr1.setMaterial(glassPtr1);
         w.addObject(cylinderPtr1);
 
-	// left cylinder
+        // left cylinder
         double top2 = 1.5;
         double bottom2 = 1;
 
@@ -101,7 +101,7 @@ public class BuildFigure43 implements BuildWorldFunction {
         cylinderPtr2.setMaterial(glassPtr2);
         w.addObject(cylinderPtr2);
 
-	// right cylinder
+        // right cylinder
         double top3 = 2.5;
         double bottom3 = 2;
 
@@ -119,7 +119,7 @@ public class BuildFigure43 implements BuildWorldFunction {
         cylinderPtr3.setMaterial(glassPtr3);
         w.addObject(cylinderPtr3);
 
-	// Utility.WHITE plane below disks
+        // Utility.WHITE plane below disks
         Emissive emissivePtr = new Emissive();
         emissivePtr.scaleRadiance(1.0);		// default
         emissivePtr.setCe(Utility.WHITE);			// default

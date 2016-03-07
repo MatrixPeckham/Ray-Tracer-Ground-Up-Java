@@ -31,6 +31,12 @@ import com.matrixpeckham.raytracer.world.World;
  
   @author William Matrix Peckham
  */
+
+/**
+ *
+ * @author Owner
+ */
+
 public class BuildFigure07 implements BuildWorldFunction{
 
     @Override

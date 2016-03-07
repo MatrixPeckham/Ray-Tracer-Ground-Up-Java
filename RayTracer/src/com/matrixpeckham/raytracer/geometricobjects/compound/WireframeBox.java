@@ -36,12 +36,12 @@ public class WireframeBox extends Compound {
     /**
      * low corner
      */
-    private Point3D p0 = new Point3D();
+    private final Point3D p0 = new Point3D();
 
     /**
      * high corner
      */
-    private Point3D p1 = new Point3D();
+    private final Point3D p1 = new Point3D();
 
     /**
      * radius of wire frame

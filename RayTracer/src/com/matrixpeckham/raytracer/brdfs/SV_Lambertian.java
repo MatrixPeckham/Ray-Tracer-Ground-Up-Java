@@ -18,9 +18,9 @@
 package com.matrixpeckham.raytracer.brdfs;
 
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
@@ -57,7 +57,7 @@ public class SV_Lambertian extends BRDF {
         super(lamb);
         kd = lamb.kd;
         if (lamb.cd != null) {
-            cd = lamb.cd.clone();
+            cd = lamb.cd.cloneTexture();
         }
     }
 
@@ -66,7 +66,8 @@ public class SV_Lambertian extends BRDF {
      *
      * @return
      */
-    public SV_Lambertian clone() {
+    @Override
+    public SV_Lambertian cloneBRDF() {
         return new SV_Lambertian(this);
     }
 

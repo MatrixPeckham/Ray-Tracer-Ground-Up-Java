@@ -42,62 +42,48 @@ public class BuildFigure39A implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.39(a)
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);     
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor =new RGBColor(0.5);
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(9600.0);
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(20, 20, 40);
-	lightPtr.scaleRadiance(3.0);
-	w.addLight(lightPtr);
+        w.backgroundColor = new RGBColor(0.5);
+        w.tracer = new RayCast(w);
 
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();	
-	noisePtr.setNumOctaves(6);
-	noisePtr.setGain(0.5);	
-	noisePtr.setLacunarity(4.0);		
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(9600.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(20, 20, 40);
+        lightPtr.scaleRadiance(3.0);
+        w.addLight(lightPtr);
 
-	WrappedTwoColors texturePtr = new WrappedTwoColors(noisePtr);	
-	texturePtr.setColor1(1.0, 0.8, 0.0);		// gold
-	texturePtr.setColor2(0.5, 0.75, 1.0);  	// light blue  
-	texturePtr.setExpansionNumber(2.0);	
-        
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(4.0);
 
+        WrappedTwoColors texturePtr = new WrappedTwoColors(noisePtr);
+        texturePtr.setColor1(1.0, 0.8, 0.0);		// gold
+        texturePtr.setColor2(0.5, 0.75, 1.0);  	// light blue
+        texturePtr.setExpansionNumber(2.0);
 
-	// material:
-		
-	SV_Matte svMattePtr = new SV_Matte();	 
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.9);
-	svMattePtr.setCd(texturePtr);
-	
-	
-	Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0);
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
-}
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.9);
+        svMattePtr.setCd(texturePtr);
 
-
+        Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0);
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
+    }
 
 }

@@ -39,7 +39,9 @@ import com.matrixpeckham.raytracer.util.Utility;
 class Torus extends GeometricObject {
 
     private double a;
+
     private double b;
+
     private BBox bbox;
 
     public Torus() {
@@ -61,7 +63,7 @@ class Torus extends GeometricObject {
     }
 
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Torus(this);
     }
 
@@ -95,7 +97,7 @@ class Torus extends GeometricObject {
         double d2 = ray.d.y;
         double d3 = ray.d.z;
 
-        double[] coeffs = new double[5];	// coefficient array for the quartic equation
+        //double[] coeffs = new double[5];	// coefficient array for the quartic equation
         double[] roots = new double[4];	// solution array for the quartic equation
 
         // define the coefficients of the quartic equation
@@ -109,12 +111,12 @@ class Torus extends GeometricObject {
         double C = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
         double B = 4.0 * sum_d_sqrd * f;
         double A = sum_d_sqrd * sum_d_sqrd; // coefficient of t^4
-        coeffs[0] = E;
-        coeffs[1] = D;
-        coeffs[2] = C;
-        coeffs[3] = B;
-        coeffs[4] = A;
-
+        /*coeffs[0] = E;
+         coeffs[1] = D;
+         coeffs[2] = C;
+         coeffs[3] = B;
+         coeffs[4] = A;
+         */
         boolean intersected = false;
 
         // find roots of the quartic equation
@@ -169,7 +171,7 @@ class Torus extends GeometricObject {
         double d2 = ray.d.y;
         double d3 = ray.d.z;
 
-        double[] coeffs = new double[5];	// coefficient array for the quartic equation
+        //double[] coeffs = new double[5];	// coefficient array for the quartic equation
         double[] roots = new double[4];	// solution array for the quartic equation
 
         // define the coefficients of the quartic equation
@@ -178,11 +180,11 @@ class Torus extends GeometricObject {
         double f = x1 * d1 + y1 * d2 + z1 * d3;
         double four_a_sqrd = 4.0 * a * a;
 
-        coeffs[0] = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
-        coeffs[1] = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
-        coeffs[2] = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
-        coeffs[3] = 4.0 * sum_d_sqrd * f;
-        coeffs[4] = sum_d_sqrd * sum_d_sqrd;  					// coefficient of t^4
+        /*coeffs[0] = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
+         coeffs[1] = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
+         coeffs[2] = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
+         coeffs[3] = 4.0 * sum_d_sqrd * f;
+         coeffs[4] = sum_d_sqrd * sum_d_sqrd;*/  					// coefficient of t^4
         double E = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
         double D = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
         double C = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;

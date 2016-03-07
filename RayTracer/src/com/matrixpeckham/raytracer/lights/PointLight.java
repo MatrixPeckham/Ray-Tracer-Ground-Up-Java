@@ -18,11 +18,12 @@
 package com.matrixpeckham.raytracer.lights;
 
 import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Point3D;
+import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
+import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Point Light class.
@@ -44,7 +45,7 @@ public class PointLight extends Light {
     /**
      * light color
      */
-    private RGBColor color;
+    private final RGBColor color;
 
     /**
      * point light location
@@ -150,7 +151,7 @@ public class PointLight extends Light {
      * @return
      */
     @Override
-    public Light clone() {
+    public Light cloneLight() {
         return new PointLight(this);
     }
 
@@ -206,5 +207,8 @@ public class PointLight extends Light {
         }
         return false;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(PointLight.class.getName());
 
 }

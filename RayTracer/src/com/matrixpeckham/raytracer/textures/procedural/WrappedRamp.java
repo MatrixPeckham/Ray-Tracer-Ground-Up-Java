@@ -19,9 +19,9 @@ package com.matrixpeckham.raytracer.textures.procedural;
 
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.textures.image.Image;
-import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.ShadeRec;
+import java.util.logging.Logger;
 
 /**
  * Uses noise value to sample a ramp texture.
@@ -34,18 +34,22 @@ public class WrappedRamp implements Texture {
      * noise
      */
     private LatticeNoise noise = null;
+
     /**
      * ramp image
      */
     private Image ramp = null;
+
     /**
      * min value
      */
     private double minValue = 0;
+
     /**
      * max value
      */
     private double maxValue = 1;
+
     /**
      * scaling parameter
      */
@@ -63,7 +67,7 @@ public class WrappedRamp implements Texture {
      * @param noise
      */
     public WrappedRamp(LatticeNoise noise) {
-        this.noise = noise.clone();
+        this.noise = noise.cloneNoise();
     }
 
     /**
@@ -113,7 +117,7 @@ public class WrappedRamp implements Texture {
         this.ramp = t.ramp;
         this.maxValue = t.maxValue;
         this.minValue = t.minValue;
-        this.noise = t.noise.clone();
+        this.noise = t.noise.cloneNoise();
         this.expansionNumber = t.expansionNumber;
     }
 
@@ -123,7 +127,7 @@ public class WrappedRamp implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new WrappedRamp(this);
     }
 
@@ -178,7 +182,7 @@ public class WrappedRamp implements Texture {
      * @param noise
      */
     public void setNoise(LatticeNoise noise) {
-        this.noise = noise.clone();
+        this.noise = noise.cloneNoise();
     }
 
     /**
@@ -189,5 +193,8 @@ public class WrappedRamp implements Texture {
     public void setWrapNumber(double d) {
         expansionNumber = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(WrappedRamp.class.getName());
 
 }

@@ -1,24 +1,6 @@
-/*
- * Copyright (C) 2015 William Matrix Peckham
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothTriangle;
 import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
@@ -64,7 +46,7 @@ public class Compound extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Compound(this);
     }
 
@@ -84,9 +66,10 @@ public class Compound extends GeometricObject {
      */
     @Override
     public void setMaterial(Material mat) {
-        for (GeometricObject obj : objects) {
-            obj.setMaterial(mat);
-        }
+        objects.stream().
+                forEach((obj) -> {
+                    obj.setMaterial(mat);
+                });
     }
 
     /**
@@ -182,9 +165,10 @@ public class Compound extends GeometricObject {
      */
     private void copyObjects(ArrayList<GeometricObject> rhs) {
         deleteObjects();
-        for (GeometricObject obj : rhs) {
-            objects.add(obj.clone());
-        }
+        rhs.stream().
+                forEach((obj) -> {
+                    objects.add(obj.cloneGeometry());
+                });
     }
 
     /**
@@ -201,11 +185,13 @@ public class Compound extends GeometricObject {
      *
      * @return
      */
+    @Override
     public BBox getBoundingBox() {
         BBox box = new BBox(0, 0, 0, 0, 0, 0);
-        for (GeometricObject obj : objects) {
-            box.expandToFit(obj.getBoundingBox());
-        }
+        objects.stream().
+                forEach((obj) -> {
+                    box.expandToFit(obj.getBoundingBox());
+                });
         return box;
     }
 

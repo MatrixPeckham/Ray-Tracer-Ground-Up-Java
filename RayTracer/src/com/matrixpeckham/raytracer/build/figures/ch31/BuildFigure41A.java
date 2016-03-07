@@ -65,7 +65,7 @@ public class BuildFigure41A implements BuildWorldFunction {
 // independent of the radius.
 // A more flexible way to render w type of object is with constructive solid
 // geometry (CSG), where you just subtract a sphere from a cube.
-// As I have had to re-render these three images from scatch, the texture's details are 
+// As I have had to re-render these three images from scatch, the texture's details are
 // different, as are the box, the lighting, and the viewing.
         int numSamples = 16;
 
@@ -93,13 +93,13 @@ public class BuildFigure41A implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// noise:
+        // noise:
         CubicNoise noisePtr = new CubicNoise();
         noisePtr.setNumOctaves(1);
         noisePtr.setGain(0.5);
         noisePtr.setLacunarity(2.0);
 
-	// image:
+        // image:
         Image imagePtr = new Image();
         String path
                 = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
@@ -111,7 +111,7 @@ public class BuildFigure41A implements BuildWorldFunction {
             throw new RuntimeException(ex);
         }
 
-	// sandstone texture:
+        // sandstone texture:
         RampFBmTexture sandstonePtr = new RampFBmTexture(imagePtr);
         sandstonePtr.setNoise(noisePtr);
         sandstonePtr.setPerturbation(0.1);
@@ -122,13 +122,13 @@ public class BuildFigure41A implements BuildWorldFunction {
         transformedSandstonePtr.rotateY(45);
         transformedSandstonePtr.translate(0.0, 0.0, 0.5);
 
-	// material:
+        // material:
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.5);
         svMattePtr.setKd(0.85);
         svMattePtr.setCd(transformedSandstonePtr);
 
-	// cut cube parameters:
+        // cut cube parameters:
         Point3D p0 = new Point3D(-1.0);
         Point3D p1 = new Point3D(1.0);
         double sphereRadius = 1.5;
@@ -137,7 +137,7 @@ public class BuildFigure41A implements BuildWorldFunction {
         cutCubePtr.setMaterial(svMattePtr);
         w.addObject(cutCubePtr);
 
-	// concave part sphere parameters
+        // concave part sphere parameters
         Point3D center = new Point3D(p1);
         double radius = sphereRadius;
         double phiMin = 180.0;

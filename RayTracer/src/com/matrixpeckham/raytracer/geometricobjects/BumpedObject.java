@@ -17,9 +17,7 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects;
 
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.textures.procedural.FBMBump;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -59,8 +57,8 @@ public class BumpedObject extends GeometricObject {
      */
     private BumpedObject(BumpedObject aThis) {
         super(aThis);
-        obj = aThis.obj.clone();
-        bumpMap = aThis.bumpMap.clone();
+        obj = aThis.obj.cloneGeometry();
+        bumpMap = aThis.bumpMap.cloneTexture();
     }
 
     /**
@@ -69,7 +67,7 @@ public class BumpedObject extends GeometricObject {
      * @param obj
      */
     public void setObject(GeometricObject obj) {
-        this.obj = obj.clone();
+        this.obj = obj.cloneGeometry();
     }
 
     /**
@@ -78,7 +76,7 @@ public class BumpedObject extends GeometricObject {
      * @param fBmBumpPtr
      */
     public void setBumpMap(Texture fBmBumpPtr) {
-        this.bumpMap = fBmBumpPtr.clone();
+        this.bumpMap = fBmBumpPtr.cloneTexture();
     }
 
     /**
@@ -87,7 +85,7 @@ public class BumpedObject extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new BumpedObject(this);
     }
 

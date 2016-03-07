@@ -46,70 +46,57 @@ public class BuildFigure29A implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.29(a)
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);     
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor =new RGBColor(0.5);
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(9500.0); 
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(5, 5, 20);		
-	lightPtr.scaleRadiance(6.0);
-	w.addLight(lightPtr);
+        w.backgroundColor = new RGBColor(0.5);
+        w.tracer = new RayCast(w);
 
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();	
-	noisePtr.setNumOctaves(2);
-	noisePtr.setGain(0.5);	
-	noisePtr.setLacunarity(4.0);		
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(9500.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
-	
-	// texture:
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(5, 5, 20);
+        lightPtr.scaleRadiance(6.0);
+        w.addLight(lightPtr);
 
-	WrappedFBmTexture texturePtr = new WrappedFBmTexture(noisePtr);	
-	texturePtr.setColor(0.3, 0.2, 0.1);   // brown
-	texturePtr.setExpansionNumber(10.0);
-	texturePtr.setMinValue(0.0);
-	texturePtr.setMaxValue(1.0);
-	
-	TInstance scaledTexturePtr = new TInstance(texturePtr);
-	scaledTexturePtr.scale(1.0, 4.0, 4.0);
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(2);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(4.0);
 
+        // texture:
+        WrappedFBmTexture texturePtr = new WrappedFBmTexture(noisePtr);
+        texturePtr.setColor(0.3, 0.2, 0.1);   // brown
+        texturePtr.setExpansionNumber(10.0);
+        texturePtr.setMinValue(0.0);
+        texturePtr.setMaxValue(1.0);
 
-	// material:
-		
-	SV_Phong svPhongPtr = new SV_Phong();		
-	svPhongPtr.setKa(0.5);  
-	svPhongPtr.setKd(0.85);
-	svPhongPtr.setCd(scaledTexturePtr);
-	svPhongPtr.setKs(0.075);  
-	svPhongPtr.setExp(100.0);
-	svPhongPtr.setCs(new ConstantColor(Utility.WHITE));
+        TInstance scaledTexturePtr = new TInstance(texturePtr);
+        scaledTexturePtr.scale(1.0, 4.0, 4.0);
 
-	Instance spherePtr = new Instance(new Sphere(new Point3D(0.0), 3.0)); 
-	spherePtr.setMaterial(svPhongPtr);
-	spherePtr.rotateY(45);
-	w.addObject(spherePtr);
-}
+        // material:
+        SV_Phong svPhongPtr = new SV_Phong();
+        svPhongPtr.setKa(0.5);
+        svPhongPtr.setKd(0.85);
+        svPhongPtr.setCd(scaledTexturePtr);
+        svPhongPtr.setKs(0.075);
+        svPhongPtr.setExp(100.0);
+        svPhongPtr.setCs(new ConstantColor(Utility.WHITE));
 
-
+        Instance spherePtr = new Instance(new Sphere(new Point3D(0.0), 3.0));
+        spherePtr.setMaterial(svPhongPtr);
+        spherePtr.rotateY(45);
+        w.addObject(spherePtr);
+    }
 
 }

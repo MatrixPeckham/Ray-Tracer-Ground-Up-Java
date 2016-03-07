@@ -35,7 +35,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-	// 	Copyright (C) Kevin Suffern 2000-2007.
+        // 	Copyright (C) Kevin Suffern 2000-2007.
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
@@ -63,7 +63,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         lightPtr2.scaleRadiance(3.0);
         w.addLight(lightPtr2);
 
-	// beveled cylinder
+        // beveled cylinder
         double bottom = -2.0;
         double top = 2.0;
         double radius = 1.0;
@@ -73,7 +73,7 @@ public class BuildFigure07 implements BuildWorldFunction {
                 bevelRadius);
 
         for (int j = 0; j < 4; j++) {
-            float exp=1;
+            float exp = 1;
 
             if (j == 0) {
                 exp = 5;

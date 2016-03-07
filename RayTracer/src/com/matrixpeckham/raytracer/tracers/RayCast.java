@@ -22,56 +22,66 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.logging.Logger;
 
 /**
  * Tracer for casting rays into the world taking depth into account. Basically
  * the same as the whitted.
+ *
  * @author William Matrix Peckham
  */
 public class RayCast extends Tracer {
+
     /**
      * default constructor.
      */
-    public RayCast(){
+    public RayCast() {
         super();
     }
+
     /**
      * World setting constructor.
-     * @param world 
+     *
+     * @param world
      */
-    public RayCast(World world){
+    public RayCast(World world) {
         super(world);
     }
+
     /**
      * Trace a ray, without depth.
+     *
      * @param ray
-     * @return 
+     * @return
      */
     @Override
     public RGBColor traceRay(Ray ray) {
-        return traceRay(ray,0);
+        return traceRay(ray, 0);
     }
+
     /**
      * Trace a ray, stopping at world.vp.maxDepth.
+     *
      * @param ray
      * @param depth
-     * @return 
+     * @return
      */
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
-        if(depth>world.vp.maxDepth){//depth bailout
+        if (depth > world.vp.maxDepth) {//depth bailout
             return Utility.BLACK;
         }
         //gets closest intersection
         ShadeRec sr = new ShadeRec(world.hitObjects(ray));
-        if(sr.hitAnObject){//book keep and shade
+        if (sr.hitAnObject) {//book keep and shade
             sr.ray.setTo(ray);
-            sr.depth=depth;
+            sr.depth = depth;
             return sr.material.shade(sr);
         } else {
             return world.backgroundColor;
         }
     }
-    
-    
+
+    private static final Logger LOG = Logger.getLogger(RayCast.class.getName());
+
 }

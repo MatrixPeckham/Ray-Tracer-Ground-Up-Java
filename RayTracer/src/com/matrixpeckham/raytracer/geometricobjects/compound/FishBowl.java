@@ -32,6 +32,7 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import java.util.logging.Logger;
 
 /**
  *
@@ -39,10 +40,29 @@ import static java.lang.Math.sqrt;
  */
 public class FishBowl extends Compound {
 
+    /**
+     *
+     */
     protected double inner_radius;		// radius of the inside glass surface
+
+    /**
+     *
+     */
     protected double glass_thickness;
-    protected double water_depth; 		// measured from the bottom of the water-glass boundary		
+
+    /**
+     *
+     */
+    protected double water_depth; 		// measured from the bottom of the water-glass boundary
+
+    /**
+     *
+     */
     protected double meniscus_radius;
+
+    /**
+     *
+     */
     protected double opening_angle;		// specifies how wide the opening is at the top (alpha in Figure 28.40(a))
 
     /**
@@ -101,17 +121,18 @@ public class FishBowl extends Compound {
      *
      * @return
      */
-    public FishBowl clone() {
+    @Override
+    public FishBowl cloneGeometry() {
         return new FishBowl(this);
     }
 
     /**
      * adds the components for the bowl to the compound
      */
-    public void build_components() {
+    public final void build_components() {
         double angle_radians = (opening_angle / 2.0) * PI_ON_180; // half the opening angle in radians
 
-	// meniscus calculations - required here because they affect the inner surface of the glass-air boundary
+        // meniscus calculations - required here because they affect the inner surface of the glass-air boundary
         // torus tube center coordinates
         double h = water_depth - inner_radius;
         double yc = h + meniscus_radius;
@@ -132,7 +153,7 @@ public class FishBowl extends Compound {
                 inner_radius,
                 0, 360, // azimuth angle - full circle
                 opening_angle / 2.0, // mimimum polar angle measured from top
-                90 - beta));   			// maximum polar angle measured from top																
+                90 - beta));   			// maximum polar angle measured from top
 
         // round rim - need an instance for this as it's a half torus
         double thetaMin = opening_angle / 2.0;  	// measured counter-clockwise from (x, z) plane
@@ -214,5 +235,7 @@ public class FishBowl extends Compound {
         // [6]: water-glass boundary
         objects.get(6).setMaterial(m_ptr);
     }
+
+    private static final Logger LOG = Logger.getLogger(FishBowl.class.getName());
 
 }

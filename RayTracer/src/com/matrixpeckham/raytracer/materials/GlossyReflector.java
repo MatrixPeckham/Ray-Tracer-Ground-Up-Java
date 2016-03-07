@@ -18,13 +18,13 @@
 package com.matrixpeckham.raytracer.materials;
 
 import com.matrixpeckham.raytracer.brdfs.GlossySpecular;
-import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Glossy reflective material, imperfect blurry reflections
@@ -52,7 +52,7 @@ public class GlossyReflector extends Phong {
     public GlossyReflector(GlossyReflector g) {
         super(g);
         if (g.glossySpecularBrdf != null) {
-            glossySpecularBrdf = g.glossySpecularBrdf.clone();
+            glossySpecularBrdf = g.glossySpecularBrdf.cloneBRDF();
         }
     }
 
@@ -186,7 +186,7 @@ public class GlossyReflector extends Phong {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new GlossyReflector(this);
     }
 
@@ -199,5 +199,8 @@ public class GlossyReflector extends Phong {
     public void setSampler(Sampler multiJittered, double exp1) {
         glossySpecularBrdf.setSampler(multiJittered, exp1);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(GlossyReflector.class.getName());
 
 }

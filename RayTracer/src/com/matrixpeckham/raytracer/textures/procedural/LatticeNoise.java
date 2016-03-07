@@ -63,7 +63,7 @@ public abstract class LatticeNoise {
     /**
      * permutation table for scrambling indices.
      */
-    static protected short permutationTable[] = new short[]{
+    static final short permutationTable[] = new short[]{
         225, 155, 210, 108, 175, 199, 221, 144, 203, 116, 70, 213, 69, 158, 33,
         252,
         5, 82, 173, 133, 222, 139, 174, 27, 9, 71, 90, 246, 75, 130, 91, 191,
@@ -226,7 +226,7 @@ public abstract class LatticeNoise {
      *
      * @return
      */
-    public abstract LatticeNoise clone();
+    public abstract LatticeNoise cloneNoise();
 
     /**
      * gets the value noise from this noise. overriding methods are for

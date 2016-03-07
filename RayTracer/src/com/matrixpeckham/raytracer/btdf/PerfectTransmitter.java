@@ -64,7 +64,7 @@ public class PerfectTransmitter extends BTDF {
      * @return
      */
     @Override
-    public PerfectTransmitter clone() {
+    public PerfectTransmitter cloneBTDF() {
         return new PerfectTransmitter(this);
     }
 

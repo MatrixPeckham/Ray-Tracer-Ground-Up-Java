@@ -24,6 +24,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Ambient Occluder class for ambient lighting that is more realistic than
@@ -42,7 +43,7 @@ public class AmbientOccluder extends Light {
     /**
      * light color
      */
-    private RGBColor color = new RGBColor(1);
+    private final RGBColor color = new RGBColor(1);
 
     /**
      * minimum radiance value, prevents truly unlit areas
@@ -51,7 +52,9 @@ public class AmbientOccluder extends Light {
 
     //coordinate system u,v,w cached between method calls used for shadow calculations
     private final Vector3D u = new Vector3D();
+
     private final Vector3D v = new Vector3D();
+
     private final Vector3D w = new Vector3D();
 
     /**
@@ -134,7 +137,7 @@ public class AmbientOccluder extends Light {
         shadowRay.d.setTo(getDirection(sr));
 
         //if we're in shadow we illuminate with minimum, otherwise max.
-        //over the number of samples this gives soft shading 
+        //over the number of samples this gives soft shading
         if (inShadow(shadowRay, sr)) {
             return color.mul(minAmount * ls);
         } else {
@@ -153,7 +156,7 @@ public class AmbientOccluder extends Light {
         color.setTo(a.color);
         minAmount = a.minAmount;
         if (a.sampler != null) {
-            sampler = a.sampler.clone();
+            sampler = a.sampler.cloneSampler();
         }
     }
 
@@ -173,7 +176,7 @@ public class AmbientOccluder extends Light {
      * @return
      */
     @Override
-    public Light clone() {
+    public Light cloneLight() {
         return new AmbientOccluder(this);
     }
 
@@ -222,5 +225,8 @@ public class AmbientOccluder extends Light {
     public void scaleRadiance(double d) {
         ls = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(AmbientOccluder.class.getName());
 
 }

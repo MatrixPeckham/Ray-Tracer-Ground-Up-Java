@@ -62,8 +62,8 @@ int numSamples = 1;
 	int numSpheres = 1000;
 	
 	double volume = 0.1 / numSpheres;
-	double radius = 10.0 * pow(0.75 * volume / 3.14159, 0.333333);  	// for Figure 22.17(a)
-//	double radius = 250.0 * pow(0.75 * volume / 3.14159, 0.333333);  // for Figure 22.17(b)
+	double radius = 10.0 * pow(0.75 * volume / Math.PI, 0.333333);  	// for Figure 22.17(a)
+//	double radius = 250.0 * pow(0.75 * volume / Math.PI, 0.333333);  // for Figure 22.17(b)
 	
 	Utility.setRandSeed(15);
 	

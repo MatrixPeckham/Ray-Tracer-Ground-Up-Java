@@ -26,8 +26,6 @@ import com.matrixpeckham.raytracer.materials.GlossyReflector;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.samplers.Hammersley;
-import com.matrixpeckham.raytracer.samplers.PureRandom;
-import com.matrixpeckham.raytracer.samplers.Regular;
 import com.matrixpeckham.raytracer.textures.image.Image;
 import com.matrixpeckham.raytracer.textures.image.ImageTexture;
 import com.matrixpeckham.raytracer.textures.image.mappings.LightProbe;

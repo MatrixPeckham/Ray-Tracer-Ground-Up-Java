@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.lights;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Jittered directional light for getting soft shadows. For reproducible results
@@ -102,5 +103,8 @@ public class JitteredDirectional extends Directional {
     public void setJitterAmount(double d) {
         r = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(JitteredDirectional.class.getName());
 
 }

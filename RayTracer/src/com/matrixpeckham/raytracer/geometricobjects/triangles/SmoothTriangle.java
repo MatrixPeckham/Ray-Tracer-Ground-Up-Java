@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Triangle class that represents a single triangle, but uses a normal per
@@ -106,7 +107,7 @@ public class SmoothTriangle extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new SmoothTriangle(this);
     }
 
@@ -227,7 +228,7 @@ public class SmoothTriangle extends GeometricObject {
             return (false);
         }
 
-        double r = r = e * l - h * i;
+        double r = e * l - h * i;
         double e2 = a * n + d * q + c * r;
         double gamma = e2 * inv_denom;
 
@@ -250,5 +251,8 @@ public class SmoothTriangle extends GeometricObject {
 
         return (true);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SmoothTriangle.class.getName());
 
 }

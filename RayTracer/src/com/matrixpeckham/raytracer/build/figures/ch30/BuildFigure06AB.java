@@ -72,14 +72,14 @@ public class BuildFigure06AB implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// wrapped noise texture
-	// noise
+        // wrapped noise texture
+        // noise
         CubicNoise noisePtr = new CubicNoise();
         noisePtr.setNumOctaves(6);
         noisePtr.setGain(0.5);
         noisePtr.setLacunarity(2.0);
 
-	// texture
+        // texture
         WrappedFBmTexture wrappedTexturePtr = new WrappedFBmTexture(noisePtr);
         wrappedTexturePtr.setColor(1.0, 0.85, 0.0);   // yellow
         wrappedTexturePtr.setExpansionNumber(10.0);
@@ -88,15 +88,15 @@ public class BuildFigure06AB implements BuildWorldFunction {
         double xs = 7.5;		// non-uniform scaling factor in x direction
         TInstance scaledTexturePtr = new TInstance(wrappedTexturePtr);
 //        scaledTexturePtr.scale(s,s,s);				// for Figure 30.6(a)
-	scaledTexturePtr.scale(s * xs, s, s);	// for Figure 30.6(b)
+        scaledTexturePtr.scale(s * xs, s, s);	// for Figure 30.6(b)
 
-	// material:
+        // material:
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.5);
         svMattePtr.setKd(0.85);
         svMattePtr.setCd(scaledTexturePtr);
 
-	// box parameters
+        // box parameters
         Point3D p0 = new Point3D(-1.0);
         Point3D p1 = new Point3D(1.0);
 

@@ -26,10 +26,10 @@ import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.Checker3D;
 import com.matrixpeckham.raytracer.tracers.RayCast;
+import com.matrixpeckham.raytracer.util.Normal;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Normal;
 
 /**
  *
@@ -49,19 +49,19 @@ public class BuildFigure10 implements BuildWorldFunction {
         Pinhole camera = new Pinhole();
 
 	// Figure9.10(a)
-/*	
+/*
          camera.setEye(150, 195, 125);
          camera.setLookat(0, 195, -40);
          camera.setViewDistance(167);
          */
-        /*		
+        /*
          // Figure9.10(b)
-		
-         camera.setEye(150, 300, 125);   
-         camera.setLookat(0, 265, -40);  
+
+         camera.setEye(150, 300, 125);
+         camera.setLookat(0, 265, -40);
          camera.setViewDistance(167);
          */
-	// Figure9.10(c)
+        // Figure9.10(c)
         camera.setEye(-250, 350, 500);
         camera.setLookat(-250, 350, 0);
         camera.setViewDistance(280);
@@ -90,10 +90,10 @@ public class BuildFigure10 implements BuildWorldFunction {
         matte3.setKa(0.4);
         matte3.setKd(0.5);
 
-	// construct rows of boxes parallel to the zw axis
+        // construct rows of boxes parallel to the zw axis
         Grid grid = new Grid();
 
-	// first row
+        // first row
         int numBoxes = 40;
         double wx = 50;
         double wz = 50;
@@ -108,7 +108,7 @@ public class BuildFigure10 implements BuildWorldFunction {
             grid.addObject(box);
         }
 
-	// second row
+        // second row
         h = 300;
 
         for (int j = 0; j < numBoxes; j++) {
@@ -120,7 +120,7 @@ public class BuildFigure10 implements BuildWorldFunction {
             grid.addObject(box);
         }
 
-	// third row
+        // third row
         h = 600;
 
         for (int j = 0; j < numBoxes; j++) {
@@ -132,7 +132,7 @@ public class BuildFigure10 implements BuildWorldFunction {
             grid.addObject(box);
         }
 
-	// a column
+        // a column
         h = 150;
 
         for (int j = 0; j < numBoxes; j++) {
@@ -147,7 +147,7 @@ public class BuildFigure10 implements BuildWorldFunction {
         grid.setupCells();
         w.addObject(grid);
 
-	// ground plane with checker:
+        // ground plane with checker:
         Checker3D checker3D = new Checker3D();
         checker3D.setSize(wx);
         checker3D.setColor1(0.7);

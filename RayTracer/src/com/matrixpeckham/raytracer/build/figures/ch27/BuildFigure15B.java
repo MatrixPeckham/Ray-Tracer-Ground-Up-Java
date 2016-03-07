@@ -71,28 +71,28 @@ public class BuildFigure15B implements BuildWorldFunction {
         pinholePtr.computeUVW();
         w.setCamera(pinholePtr);
 
-	// point light 
+        // point light
         PointLight lightPtr1 = new PointLight();
         lightPtr1.setLocation(40, 50, 0);
         lightPtr1.scaleRadiance(4.5);
         lightPtr1.setShadows(true);
         w.addLight(lightPtr1);
 
-	// point light 
+        // point light
         PointLight lightPtr2 = new PointLight();
         lightPtr2.setLocation(-10, 20, 10);
         lightPtr2.scaleRadiance(4.5);
         lightPtr2.setShadows(true);
         w.addLight(lightPtr2);
 
-	// directional light 
+        // directional light
         Directional lightPtr3 = new Directional();
         lightPtr3.setDirection(-1, 0, 0);
         lightPtr3.scaleRadiance(4.5);
         lightPtr3.setShadows(true);
         w.addLight(lightPtr3);
 
-	// transparent sphere
+        // transparent sphere
         Transparent glassPtr = new Transparent();
         glassPtr.setKs(0.2);
         glassPtr.setExp(2000.0);
@@ -104,7 +104,7 @@ public class BuildFigure15B implements BuildWorldFunction {
         spherePtr1.setMaterial(glassPtr);
         w.addObject(spherePtr1);
 
-	// red sphere
+        // red sphere
         Reflective reflectivePtr = new Reflective();
         reflectivePtr.setKa(0.3);
         reflectivePtr.setKd(0.3);
@@ -127,7 +127,7 @@ public class BuildFigure15B implements BuildWorldFunction {
         svMattePtr.setKd(0.35);
         svMattePtr.setCd(checkerPtr);
 
-	// rectangle
+        // rectangle
         Rectangle rectanglePtr = new Rectangle(new Point3D(-20, -0.001, -100),
                 new Vector3D(0, 0, 120), new Vector3D(40, 0, 0));
         rectanglePtr.setMaterial(svMattePtr);

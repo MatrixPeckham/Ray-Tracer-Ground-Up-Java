@@ -79,7 +79,7 @@ public class BuildFigure26 implements BuildWorldFunction {
         lightPtr2.setShadows(false);
         w.addLight(lightPtr2);
 
-	// product jar
+        // product jar
         Matte mattePtr = new Matte();
         mattePtr.setKa(0.25);
         mattePtr.setKd(0.75);
@@ -90,7 +90,7 @@ public class BuildFigure26 implements BuildWorldFunction {
         bodyMattePtr.setKd(0.75);
         bodyMattePtr.setCd(Utility.RED);
 
-        // image:					
+        // image:
         Image imagePtr = new Image();
         String imagePath
                 = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
@@ -113,7 +113,7 @@ public class BuildFigure26 implements BuildWorldFunction {
         svMattePtr.setKd(0.75);
         svMattePtr.setCd(imageTexturePtr);
 
-	// The product jar is centered on the y axis
+        // The product jar is centered on the y axis
         // The radius of the cap is bodyRadius - topBevelRadius
         // The texture image used here completely covers the vertical curved surface
         // of the body. This has vertical extent from bottom + bottomBevelRadius
@@ -144,7 +144,7 @@ public class BuildFigure26 implements BuildWorldFunction {
         rotatedJarPtr.rotateY(100);  		// for Figure 29.26(b)
         w.addObject(rotatedJarPtr);
 
-	// ground plane
+        // ground plane
         Matte mattePtr2 = new Matte();
         mattePtr2.setKa(0.25);
         mattePtr2.setKd(0.5);

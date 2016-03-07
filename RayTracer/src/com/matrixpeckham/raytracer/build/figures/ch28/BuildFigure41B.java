@@ -91,8 +91,8 @@ public class BuildFigure41B implements BuildWorldFunction {
         lightPtr2.setShadows(true);
         w.addLight(lightPtr2);
 
-	// fishbowl
-	// glass-air interface
+        // fishbowl
+        // glass-air interface
         double c = 2;
         RGBColor glassColor = new RGBColor(0.27 * c, 0.49 * c, 0.42 * c);
         RGBColor waterColor = new RGBColor(0.75, 1, 0.75);
@@ -105,7 +105,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         glassPtr.setCfIn(glassColor);
         glassPtr.setCfOut(Utility.WHITE);
 
-	// water-air interface
+        // water-air interface
         Dielectric waterPtr = new Dielectric();
         waterPtr.setKs(0.5);
         waterPtr.setExp(8000);
@@ -114,7 +114,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         waterPtr.setCfIn(waterColor);
         waterPtr.setCfOut(Utility.WHITE);
 
-	// water-glass interface
+        // water-glass interface
         Dielectric dielectricPtr1 = new Dielectric();
         dielectricPtr1.setKs(0.5);
         dielectricPtr1.setExp(8000);
@@ -123,7 +123,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         dielectricPtr1.setCfIn(waterColor);
         dielectricPtr1.setCfOut(glassColor);
 
-	// physical bowl parameters (also the defaults)
+        // physical bowl parameters (also the defaults)
         double innerRadius = 1.0;
         double glassThickness = 0.1;
         double waterDepth = 1.25;
@@ -140,11 +140,11 @@ public class BuildFigure41B implements BuildWorldFunction {
         fishbowlPtr.setWaterGlassMaterial(dielectricPtr1);
         w.addObject(fishbowlPtr);
 
-	// goldfish
+        // goldfish
         Phong phongPtr1 = new Phong();
         phongPtr1.setKa(0.4);
         phongPtr1.setKd(0.8);
-        phongPtr1.setCd(1.0, 0.15, 0.0);   	// orange 
+        phongPtr1.setCd(1.0, 0.15, 0.0);   	// orange
         phongPtr1.setKs(0.5);
         phongPtr1.setCs(1.0, 0.35, 0.0);		// orange
         phongPtr1.setExp(50.0);
@@ -187,7 +187,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         goldfishPtr3.translate(-0.1, -0.4, 0.0);
         w.addObject(goldfishPtr3);
 
-	// cylinder under the bowl
+        // cylinder under the bowl
         Phong phongPtr2 = new Phong();
         phongPtr2.setKa(0.4);
         phongPtr2.setKd(0.8);
@@ -204,7 +204,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         cylinderPtr.setMaterial(phongPtr2);
         w.addObject(cylinderPtr);
 
-	// single air bubble
+        // single air bubble
         Dielectric dielectricPtr2 = new Dielectric();
         dielectricPtr2.setIorIn(1.0); 		// air
         dielectricPtr2.setIorOut(1.33); 	// water
@@ -215,7 +215,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         bubblePtr1.setMaterial(dielectricPtr2);
         w.addObject(bubblePtr1);
 
-	// streams of air bubbles
+        // streams of air bubbles
         Utility.setRandSeed(1000);
 
         double bubbleRadius = 0.045;
@@ -226,10 +226,10 @@ public class BuildFigure41B implements BuildWorldFunction {
         double translationFactor = bubbleRadius / 2.0;
         double min = 0.9;   			// minimum bubble scaling
         double max = 1.1;				// maximum bubble scaling
-        double xc = -0.1;   			// center x 
+        double xc = -0.1;   			// center x
         double zc = 0.3;				// center y
 
-	// bubble stream 1
+        // bubble stream 1
         Grid bubbleStreamPtr1 = new Grid();
 
         for (int j = 0; j <= numBubbles; j++) {
@@ -258,7 +258,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         bubbleStreamPtr1.setupCells();
         w.addObject(bubbleStreamPtr1);
 
-	// bubble stream 2 
+        // bubble stream 2
         numBubbles = 7;
         xc = 0.075;
         zc = 0.1;
@@ -291,7 +291,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         bubbleStreamPtr2.setupCells();
         w.addObject(bubbleStreamPtr2);
 
-	// bubble stream 3 
+        // bubble stream 3
         numBubbles = 9;
         xc = -0.15;
         zc = -0.3;
@@ -324,7 +324,7 @@ public class BuildFigure41B implements BuildWorldFunction {
         bubbleStreamPtr3.setupCells();
         w.addObject(bubbleStreamPtr3);
 
-	// plane
+        // plane
         PlaneChecker checkerPtr = new PlaneChecker();
         checkerPtr.setSize(0.5);
         checkerPtr.setOutlineWidth(0.05);

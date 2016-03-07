@@ -23,6 +23,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Flat triangle for meshes with uv coordinates
@@ -58,8 +59,8 @@ public class FlatUVMeshTriangle extends FlatMeshTriangle {
      * @return
      */
     @Override
-    public GeometricObject clone() {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    public GeometricObject cloneGeometry() {
+        return new FlatUVMeshTriangle(mesh, index0, index1, index2);
     }
 
     /**
@@ -120,5 +121,8 @@ public class FlatUVMeshTriangle extends FlatMeshTriangle {
 
         return (true);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(FlatUVMeshTriangle.class.getName());
 
 }

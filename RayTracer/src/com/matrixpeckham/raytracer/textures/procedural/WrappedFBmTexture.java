@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Wrapped noise from black to a color.
@@ -37,8 +38,8 @@ public class WrappedFBmTexture implements Texture {
     /**
      *
      */
-    private RGBColor color = new RGBColor();
-    
+    private final RGBColor color = new RGBColor();
+
     /**
      * min value for normalizing
      */
@@ -48,7 +49,7 @@ public class WrappedFBmTexture implements Texture {
      * max value for normalizing
      */
     private double maxValue;
-    
+
     /**
      * multiplicative factor for number of wraps
      */
@@ -63,7 +64,8 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * initializes with specified noise
-     * @param noise 
+     *
+     * @param noise
      */
     public WrappedFBmTexture(LatticeNoise noise) {
         this(Utility.WHITE, 0, 1, 2, noise);
@@ -71,7 +73,8 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * initializes with specified color
-     * @param col 
+     *
+     * @param col
      */
     public WrappedFBmTexture(RGBColor col) {
         this(col, 0.0, 1.0);
@@ -79,9 +82,10 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * initialize values
+     *
      * @param col
      * @param min
-     * @param max 
+     * @param max
      */
     public WrappedFBmTexture(RGBColor col, double min, double max) {
         this(col, min, max, 2, new LinearNoise());
@@ -89,11 +93,12 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * initialize all fields
+     *
      * @param col
      * @param min
      * @param max
      * @param num
-     * @param n 
+     * @param n
      */
     public WrappedFBmTexture(RGBColor col, double min, double max, double num,
             LatticeNoise n) {
@@ -106,30 +111,34 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * copy constructor
-     * @param t 
+     *
+     * @param t
      */
     public WrappedFBmTexture(WrappedFBmTexture t) {
         this.color.setTo(t.color);
         this.maxValue = t.maxValue;
         this.minValue = t.minValue;
-        this.noise = t.noise.clone();
+        this.noise = t.noise.cloneNoise();
         this.expansionNumber = t.expansionNumber;
     }
 
     /**
      * clone
-     * @return 
+     *
+     * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new WrappedFBmTexture(this);
     }
 
     /**
      * sample texture
+     *
      * @param sr
-     * @return 
+     * @return
      */
+    @Override
     public RGBColor getColor(ShadeRec sr) {
         //sample and expand noise
         double value = expansionNumber * noise.valueFBM(sr.localHitPosition);
@@ -142,9 +151,10 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * setter
+     *
      * @param d
      * @param d0
-     * @param d1 
+     * @param d1
      */
     public void setColor(double d, double d0, double d1) {
         color.setTo(d, d0, d1);
@@ -152,7 +162,8 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * setter
-     * @param d 
+     *
+     * @param d
      */
     public void setExpansionNumber(double d) {
         expansionNumber = d;
@@ -160,7 +171,8 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * setter
-     * @param minValue 
+     *
+     * @param minValue
      */
     public void setMinValue(double minValue) {
         this.minValue = minValue;
@@ -168,10 +180,14 @@ public class WrappedFBmTexture implements Texture {
 
     /**
      * setter
-     * @param maxValue 
+     *
+     * @param maxValue
      */
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(WrappedFBmTexture.class.getName());
 
 }

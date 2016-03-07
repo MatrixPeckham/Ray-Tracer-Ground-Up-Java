@@ -18,7 +18,6 @@
 package com.matrixpeckham.raytracer.build.figures.ch17;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.PartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;

@@ -28,6 +28,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * rectangle class, starts at a point and uses two vectors for extents
@@ -150,7 +151,7 @@ public class Rectangle extends GeometricObject {
         normal.setTo(r.normal);
         normal.normalize();
         if (r.sampler != null) {
-            sampler = r.sampler.clone();
+            sampler = r.sampler.cloneSampler();
         }
     }
 
@@ -177,7 +178,7 @@ public class Rectangle extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Rectangle(this);
     }
 
@@ -293,5 +294,8 @@ public class Rectangle extends GeometricObject {
     public double pdf(ShadeRec s) {
         return invArea;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(Rectangle.class.getName());
 
 }

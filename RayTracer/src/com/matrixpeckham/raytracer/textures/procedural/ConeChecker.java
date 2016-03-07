@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Cone checker texture for texturing generic cones.
@@ -154,7 +155,7 @@ public class ConeChecker implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new ConeChecker(this);
     }
 
@@ -175,7 +176,7 @@ public class ConeChecker implements Texture {
         //x/=len;
         //y/=len;
         //z/=len;
-        //calculate angle 
+        //calculate angle
         double phi = Math.atan2(x, z);
         if (phi < 0) {
             phi += Utility.TWO_PI;
@@ -212,5 +213,8 @@ public class ConeChecker implements Texture {
         }
         return lineColor;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ConeChecker.class.getName());
 
 }

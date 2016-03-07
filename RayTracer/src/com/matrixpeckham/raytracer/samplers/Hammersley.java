@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.samplers;
 
 import com.matrixpeckham.raytracer.util.Point2D;
+import java.util.logging.Logger;
 
 /**
  * Generates Hammersley samples. Not random follows a mathematical pattern,
@@ -57,7 +58,7 @@ public class Hammersley extends Sampler {
      * generates hammersley samples
      */
     @Override
-    public void generateSamples() {
+    public final void generateSamples() {
 
         for (int p = 0; p < numSets; p++) {
             for (int j = 0; j < numSamples; j++) {
@@ -72,7 +73,7 @@ public class Hammersley extends Sampler {
      * @return
      */
     @Override
-    public Sampler clone() {
+    public Sampler cloneSampler() {
         return new Hammersley(this);
     }
 
@@ -86,5 +87,8 @@ public class Hammersley extends Sampler {
         }
         return x;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(Hammersley.class.getName());
 
 }

@@ -18,12 +18,10 @@
 package com.matrixpeckham.raytracer.geometricobjects.beveledobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.compound.*;
+import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
 import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConcavePartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Ring;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.util.Normal;

@@ -189,7 +189,7 @@ public abstract class Sampler {
     /**
      * sets up the shuffled indices for each set
      */
-    public void setupShuffledIndices() {
+    public final void setupShuffledIndices() {
         //make sure we have enough space, more efficient to allocate all at once
         shuffledIndices.ensureCapacity(numSamples * numSets);
 
@@ -381,7 +381,7 @@ public abstract class Sampler {
      *
      * @return
      */
-    public abstract Sampler clone();
+    public abstract Sampler cloneSampler();
 
     /**
      * This method should generate numSamples*numSets samples

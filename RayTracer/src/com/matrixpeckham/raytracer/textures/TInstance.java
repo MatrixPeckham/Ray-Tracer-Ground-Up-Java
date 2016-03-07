@@ -23,6 +23,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Texture instance class, transforms and differs to another texture. As with
@@ -67,7 +68,7 @@ public class TInstance implements Texture {
     public TInstance(TInstance i) {
         invMatrix.setTo(i.invMatrix);
         if (i.texture != null) {
-            texture = i.texture.clone();
+            texture = i.texture.cloneTexture();
         }
     }
 
@@ -86,7 +87,7 @@ public class TInstance implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new TInstance(this);
     }
 
@@ -142,7 +143,7 @@ public class TInstance implements Texture {
      */
     public void translate(Vector3D trans) {
 
-        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix	
+        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix
 
         inv_translation_matrix.m[0][3] = -trans.x;
         inv_translation_matrix.m[1][3] = -trans.y;
@@ -161,7 +162,7 @@ public class TInstance implements Texture {
      */
     public void translate(double dx, double dy, double dz) {
 
-        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix	
+        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix
 
         inv_translation_matrix.m[0][3] = -dx;
         inv_translation_matrix.m[1][3] = -dy;
@@ -221,7 +222,7 @@ public class TInstance implements Texture {
         double sin_theta = Math.sin(theta * Utility.PI / 180.0);
         double cos_theta = Math.cos(theta * Utility.PI / 180.0);
 
-        Matrix inv_z_rotation_matrix = new Matrix();// temporary inverse rotation matrix about y axis	
+        Matrix inv_z_rotation_matrix = new Matrix();// temporary inverse rotation matrix about y axis
 
         inv_z_rotation_matrix.m[0][0] = cos_theta;
         inv_z_rotation_matrix.m[0][1] = sin_theta;
@@ -282,10 +283,14 @@ public class TInstance implements Texture {
     public RGBColor getColor(ShadeRec sr) {
         //copy shadrec
         ShadeRec local = new ShadeRec(sr);
-        //transform local hit point by inverse matrix 
+        //transform local hit point by inverse matrix
         local.localHitPosition.setTo(Point3D.mul(invMatrix,
                 local.localHitPosition));
         //forward translated shaderec to inner texture
         return texture.getColor(local);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(TInstance.class.getName());
+
 }

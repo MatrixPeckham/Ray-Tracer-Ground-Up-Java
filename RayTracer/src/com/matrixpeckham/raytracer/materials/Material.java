@@ -17,9 +17,9 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 
 /**
  * Material is the class responsible for determining the way an object interacts
@@ -59,7 +59,7 @@ public abstract class Material {
      *
      * @return
      */
-    public abstract Material clone();
+    public abstract Material cloneMaterial();
 
     /**
      * Shade function. This is the main shading method that most of the tracers

@@ -17,7 +17,6 @@ import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.AreaLight;
 import com.matrixpeckham.raytracer.materials.Emissive;
 import com.matrixpeckham.raytracer.materials.Matte;
@@ -34,6 +33,12 @@ import com.matrixpeckham.raytracer.world.World;
 
 /*     @author William Matrix Peckham
  */
+
+/**
+ *
+ * @author Owner
+ */
+
 public class BuildFigure04 implements BuildWorldFunction {
 
     @Override

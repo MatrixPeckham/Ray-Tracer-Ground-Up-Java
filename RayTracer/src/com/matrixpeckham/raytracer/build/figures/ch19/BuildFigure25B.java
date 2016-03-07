@@ -20,7 +20,6 @@ package com.matrixpeckham.raytracer.build.figures.ch19;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCone;
 import com.matrixpeckham.raytracer.lights.PointLight;
-import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.ConeChecker;
 import com.matrixpeckham.raytracer.tracers.RayCast;

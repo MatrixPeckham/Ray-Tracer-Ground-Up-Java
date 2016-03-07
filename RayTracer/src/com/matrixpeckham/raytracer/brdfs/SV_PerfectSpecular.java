@@ -57,7 +57,7 @@ public class SV_PerfectSpecular extends BRDF {
     public SV_PerfectSpecular(SV_PerfectSpecular s) {
         super(s);
         kr = s.kr;
-        cr = s.cr.clone();
+        cr = s.cr.cloneTexture();
     }
 
     /**
@@ -75,7 +75,7 @@ public class SV_PerfectSpecular extends BRDF {
      * @param c
      */
     public void setCr(Texture c) {
-        cr = c.clone();
+        cr = c.cloneTexture();
     }
 
     /**
@@ -83,7 +83,8 @@ public class SV_PerfectSpecular extends BRDF {
      *
      * @return
      */
-    public SV_PerfectSpecular clone() {
+    @Override
+    public SV_PerfectSpecular cloneBRDF() {
         return new SV_PerfectSpecular(this);
     }
 
