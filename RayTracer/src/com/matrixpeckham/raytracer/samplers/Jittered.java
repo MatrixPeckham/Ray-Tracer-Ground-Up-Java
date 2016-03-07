@@ -78,11 +78,7 @@ public class Jittered extends Sampler {
      * @return
      */
     @Override
-<<<<<<< HEAD
     public Sampler protclone() {
-=======
-    public Sampler cloneSampler() {
->>>>>>> refs/remotes/origin/master
         return new Jittered(this);
     }
 

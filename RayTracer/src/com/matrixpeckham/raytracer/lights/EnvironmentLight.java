@@ -45,7 +45,6 @@ public class EnvironmentLight extends Light {
      */
     Material material;
 
-<<<<<<< HEAD
     //uvw coordinate system at hit point 
     private ThreadLocal<Vector3D> u = new ThreadLocal<Vector3D>() {
 
@@ -71,14 +70,6 @@ public class EnvironmentLight extends Light {
         }
 
     };
-=======
-    //uvw coordinate system at hit point
-    final Vector3D u = new Vector3D(1, 0, 0);
-
-    final Vector3D v = new Vector3D(0, 1, 0);
-
-    final Vector3D w = new Vector3D(0, 0, 1);
->>>>>>> refs/remotes/origin/master
 
     //sampled direction to light
     Vector3D wi = new Vector3D();
@@ -95,19 +86,11 @@ public class EnvironmentLight extends Light {
      * @param l
      */
     public EnvironmentLight(EnvironmentLight l) {
-<<<<<<< HEAD
         sampler = l.sampler.clone();
         material = l.material.clone();
         u.get().setTo(l.u.get());
         v.get().setTo(l.v.get());
         w.get().setTo(l.w.get());
-=======
-        sampler = l.sampler.cloneSampler();
-        material = l.material.cloneMaterial();
-        u.setTo(l.u);
-        v.setTo(l.v);
-        w.setTo(l.w);
->>>>>>> refs/remotes/origin/master
         wi.setTo(l.wi);
     }
 

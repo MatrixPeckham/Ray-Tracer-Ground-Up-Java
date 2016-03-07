@@ -51,7 +51,6 @@ public class AmbientOccluder extends Light {
     private double minAmount = 0.25;
 
     //coordinate system u,v,w cached between method calls used for shadow calculations
-<<<<<<< HEAD
     private ThreadLocal<Vector3D> u = new ThreadLocal<Vector3D>(){
 
         @Override
@@ -76,13 +75,6 @@ public class AmbientOccluder extends Light {
         }
         
     };
-=======
-    private final Vector3D u = new Vector3D();
-
-    private final Vector3D v = new Vector3D();
-
-    private final Vector3D w = new Vector3D();
->>>>>>> refs/remotes/origin/master
 
     /**
      * sampler used to select shadow direction to sample

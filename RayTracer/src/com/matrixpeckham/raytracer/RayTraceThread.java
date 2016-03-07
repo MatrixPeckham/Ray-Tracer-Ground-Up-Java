@@ -26,31 +26,16 @@ import com.matrixpeckham.raytracer.world.World;
  * @author William Matrix Peckham
  */
 public class RayTraceThread extends Thread {
-<<<<<<< HEAD
     
 //world to render
-=======
-
-    //world to render
->>>>>>> refs/remotes/origin/master
     World w;
     
     //should we parrellelize
     boolean multithread;
     //store the world
-<<<<<<< HEAD
     public RayTraceThread(World w, boolean multiThread){
         this.w=w;
         this.multithread=multiThread;
-=======
-
-    /**
-     *
-     * @param w
-     */
-    public RayTraceThread(World w) {
-        this.w = w;
->>>>>>> refs/remotes/origin/master
     }
 
     //run

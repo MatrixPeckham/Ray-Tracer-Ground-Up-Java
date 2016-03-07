@@ -50,7 +50,6 @@ public class AreaLight extends Light {
      * sample point that was chosen last, stored between calls to the other
      * methods
      */
-<<<<<<< HEAD
     private ThreadLocal<Point3D> samplePoint = new ThreadLocal<Point3D>() {
 
         @Override
@@ -59,15 +58,11 @@ public class AreaLight extends Light {
         }
         
     };
-=======
-    private final Point3D samplePoint = new Point3D();
->>>>>>> refs/remotes/origin/master
 
     /**
      * normal at the sampled light point, stored between calls to the other
      * methods.
      */
-<<<<<<< HEAD
     private ThreadLocal<Normal> lightNormal = new ThreadLocal<Normal>(){
 
         @Override
@@ -76,15 +71,11 @@ public class AreaLight extends Light {
         }
         
     };
-=======
-    private final Normal lightNormal = new Normal();
->>>>>>> refs/remotes/origin/master
 
     /**
      * the direction vector from the hit point to the light sample point, stored
      * between calls to methods
      */
-<<<<<<< HEAD
     private ThreadLocal<Vector3D> wi = new ThreadLocal<Vector3D>(){
 
         @Override
@@ -93,9 +84,6 @@ public class AreaLight extends Light {
         }
         
     };
-=======
-    private final Vector3D wi = new Vector3D();
->>>>>>> refs/remotes/origin/master
 
     /**
      * default constructor
@@ -149,17 +137,10 @@ public class AreaLight extends Light {
     @Override
     public Vector3D getDirection(ShadeRec sr) {
         //sample object and store point for later use
-<<<<<<< HEAD
         samplePoint.get().setTo(obj.sample());
         //gets the objects normal from the sample point and stores for later use 
         lightNormal.get().setTo(obj.getNormal(samplePoint.get()));
         //calculates the direction from the sample point to the hit point and 
-=======
-        samplePoint.setTo(obj.sample());
-        //gets the objects normal from the sample point and stores for later use
-        lightNormal.setTo(obj.getNormal(samplePoint));
-        //calculates the direction from the sample point to the hit point and
->>>>>>> refs/remotes/origin/master
         //keeps it in a member variable for later use, also returned
         wi.get().setTo(samplePoint.get().sub(sr.hitPoint));
         wi.get().normalize();

@@ -64,16 +64,12 @@ public class Main extends JFrame implements ActionListener {
      * Start button for starting render.
      */
     JMenuItem startButton;
-<<<<<<< HEAD
     
     /**
      * Checkbox for multithreading.
      */
     JCheckBoxMenuItem multiBox;
     
-=======
-
->>>>>>> refs/remotes/origin/master
     /**
      * Open button, for opening an image file.
      */

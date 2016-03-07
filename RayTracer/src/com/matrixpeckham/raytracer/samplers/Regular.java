@@ -76,11 +76,7 @@ public class Regular extends Sampler {
      * @return
      */
     @Override
-<<<<<<< HEAD
     public Sampler protclone() {
-=======
-    public Sampler cloneSampler() {
->>>>>>> refs/remotes/origin/master
         return new Regular(this);
     }
 

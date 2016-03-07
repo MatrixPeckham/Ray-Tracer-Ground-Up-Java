@@ -383,7 +383,6 @@ public abstract class Sampler {
      *
      * @return
      */
-<<<<<<< HEAD
     public abstract Sampler protclone();
     
     /**
@@ -391,12 +390,9 @@ public abstract class Sampler {
      * 
      * @return
      */
-    public final synchronized Sampler clone(){
+    public final synchronized Sampler cloneSampler(){
         return protclone();
     }
-=======
-    public abstract Sampler cloneSampler();
->>>>>>> refs/remotes/origin/master
 
     /**
      * This method should generate numSamples*numSets samples
