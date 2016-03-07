@@ -1,27 +1,10 @@
-/*
- * Copyright (C) 2015 William Matrix Peckham
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+
 package com.matrixpeckham.raytracer.build.figures.ch21;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
 import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
-import com.matrixpeckham.raytracer.geometricobjects.parametric.ParametricObject;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.PointLight;
@@ -115,22 +98,23 @@ public class BuildFigure04 implements BuildWorldFunction{
 	Utility.setRandSeed(1000);
 	Grid gridPtr = new Grid();
 	
-	for (int iz = 0; iz < numZBunnies; iz++)
-		for (int ix = 0; ix < numXBunnies; ix++) {
-			Phong phongPtr = new Phong();	
-			phongPtr.setKa(0.25); 
-			phongPtr.setKd(0.75);
-			phongPtr.setCd(Utility.randDouble(), Utility.randDouble(), Utility.randDouble());
-			phongPtr.setKs(0.125);  
-			phongPtr.setExp(20.0);
-			
-			Instance bunnyPtr2 = new Instance(bunnyPtr1);
-			bunnyPtr2.setMaterial(phongPtr);
-			bunnyPtr2.scale(6.5,6.5,6.5);
-			bunnyPtr2.translate(x0 + ix * xSpacing, 0, z0 + iz * zSpacing);
-			bunnyPtr2.computeBoundingBox(); // essential for placing each bunny in the grid
-			gridPtr.addObject(bunnyPtr2);
-		}
+	for (int iz = 0; iz < numZBunnies; iz++) {
+            for (int ix = 0; ix < numXBunnies; ix++) {
+                Phong phongPtr = new Phong();
+                phongPtr.setKa(0.25);
+                phongPtr.setKd(0.75);
+                phongPtr.setCd(Utility.randDouble(), Utility.randDouble(), Utility.randDouble());
+                phongPtr.setKs(0.125);
+                phongPtr.setExp(20.0);
+                
+                Instance bunnyPtr2 = new Instance(bunnyPtr1);
+                bunnyPtr2.setMaterial(phongPtr);
+                bunnyPtr2.scale(6.5,6.5,6.5);
+                bunnyPtr2.translate(x0 + ix * xSpacing, 0, z0 + iz * zSpacing);
+                bunnyPtr2.computeBoundingBox(); // essential for placing each bunny in the grid
+                gridPtr.addObject(bunnyPtr2);
+            }
+        }
 
 	gridPtr.setupCells();
 	w.addObject(gridPtr);

@@ -17,17 +17,20 @@
  */
 package com.matrixpeckham.raytracer.tracers;
 
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.logging.Logger;
 
 /**
  * Simplest tracer, hit tests the single sphere and returns red if it hits.
+ *
  * @author William Matrix Peckham
  */
-public class SingleSphere extends Tracer{
+public class SingleSphere extends Tracer {
+
     /**
      * default constructor
      */
@@ -36,40 +39,46 @@ public class SingleSphere extends Tracer{
 
     /**
      * World setting constructor
-     * @param w 
+     *
+     * @param w
      */
     public SingleSphere(World w) {
         super(w);
     }
 
     /**
-     * Simplest possible implementation of traceRay function.
-     * returns one color if ray hits the only object and the other color if it doesn't.
+     * Simplest possible implementation of traceRay function. returns one color
+     * if ray hits the only object and the other color if it doesn't.
+     *
      * @param ray
-     * @return 
+     * @return
      */
     @Override
     public RGBColor traceRay(Ray ray) {
         ShadeRec sr = new ShadeRec(world);
-        if(world.sphere.hit(ray,sr)){
+        if (world.sphere.hit(ray, sr)) {
             return Utility.RED;
         }
         return Utility.BLACK;
     }
+
     /**
-     * Simplest possible implementation of traceRay function.
-     * returns one color if ray hits the only object and the other color if it doesn't.
+     * Simplest possible implementation of traceRay function. returns one color
+     * if ray hits the only object and the other color if it doesn't.
+     *
      * @param ray
-     * @return 
+     * @return
      */
     @Override
-    public RGBColor traceRay(Ray ray,int depth) {
+    public RGBColor traceRay(Ray ray, int depth) {
         ShadeRec sr = new ShadeRec(world);
-        if(world.sphere.hit(ray,sr)){
+        if (world.sphere.hit(ray, sr)) {
             return Utility.RED;
         }
         return Utility.BLACK;
     }
-    
-    
+
+    private static final Logger LOG
+            = Logger.getLogger(SingleSphere.class.getName());
+
 }

@@ -59,7 +59,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 
         w.tracer = new RayCast(w);
 
-	// pinhole camera for Figure 11.7(a)
+        // pinhole camera for Figure 11.7(a)
         Pinhole pinHole = new Pinhole();
         pinHole.setEye(250, 300, 150);
         pinHole.setLookat(-20, 300, -110);
@@ -67,10 +67,10 @@ public class BuildFigure07 implements BuildWorldFunction {
         pinHole.computeUVW();
 	//w.setCamera(pinHole);
 
-	// fisheye camera for the other parts
+        // fisheye camera for the other parts
         FishEye fisheye = new FishEye();
 
-	// for parts (b), (c), (d)
+        // for parts (b), (c), (d)
         fisheye.setEye(250, 300, 150);
         fisheye.setLookat(-20, 300, -110);
         fisheye.setFov(120d);  // part (b)
@@ -78,23 +78,23 @@ public class BuildFigure07 implements BuildWorldFunction {
 //	fisheye.setFov(360);  // part (d)
 
 
-        /*	
-	
+        /*
+
          // for part (e)
-	
-         fisheye.setEye(250, 450, 150); 
-         fisheye.setLookat(-20, 250, -110);  
+
+         fisheye.setEye(250, 450, 150);
+         fisheye.setLookat(-20, 250, -110);
          fisheye.setFov(360);
-	
+
          */
-        /*	
+        /*
          // for part (f)
          // for this image the skydome is the only object in the scene
          // you need to comment out the two statements:
          // w.addObject(grid);
          // w.addObject(plane);
-	
-         fisheye.setEye(0, 0, 0);     
+
+         fisheye.setEye(0, 0, 0);
          fisheye.setLookat(0, 1, 0);
          fisheye.setFov(180);
          */
@@ -107,7 +107,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         light1.setShadows(true);
         w.addLight(light1);
 
-	// box materials
+        // box materials
         Matte matte1 = new Matte();
         matte1.setCd(0, 0.5, 0.5);     // cyan
         matte1.setKa(0.4);
@@ -123,10 +123,10 @@ public class BuildFigure07 implements BuildWorldFunction {
         matte3.setKa(0.4);
         matte3.setKd(0.5);
 
-	// Construct rows of boxes stored in a grid
+        // Construct rows of boxes stored in a grid
         Grid grid = new Grid();
 
-	// first row
+        // first row
         int numBoxes = 40;
         double wx = 50;
         double wz = 50;
@@ -141,7 +141,7 @@ public class BuildFigure07 implements BuildWorldFunction {
             grid.addObject(box);
         }
 
-	// second row
+        // second row
         h = 300;
 
         for (int j = 0; j < numBoxes; j++) {
@@ -153,7 +153,7 @@ public class BuildFigure07 implements BuildWorldFunction {
             grid.addObject(box);
         }
 
-	// third row
+        // third row
         h = 850;
 
         for (int j = 0; j < numBoxes; j++) {
@@ -165,7 +165,7 @@ public class BuildFigure07 implements BuildWorldFunction {
             grid.addObject(box);
         }
 
-	// a column
+        // a column
         h = 150;
 
         for (int j = 0; j < numBoxes; j++) {
@@ -180,7 +180,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         grid.setupCells();
         w.addObject(grid);
 
-	// ground plane with checker
+        // ground plane with checker
         Checker3D checker = new Checker3D();
         checker.setSize(2 * wx);
         checker.setColor1(0.7);
@@ -194,7 +194,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         plane.setMaterial(svMatte1);
         w.addObject(plane);
 
-	// skydome with clouds
+        // skydome with clouds
         Image image = new Image();
         try {
             image.loadPPMFile(new File(

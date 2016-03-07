@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.samplers;
 
 import com.matrixpeckham.raytracer.util.Point2D;
+import java.util.logging.Logger;
 
 /**
  * Regular sampler, not random at all, generates a regular grid.
@@ -57,7 +58,7 @@ public class Regular extends Sampler {
      * generates the regular grid of samples.
      */
     @Override
-    public void generateSamples() {
+    public final void generateSamples() {
         int n = (int) Math.sqrt(numSamples);
 
         for (int j = 0; j < numSets; j++) {
@@ -75,8 +76,14 @@ public class Regular extends Sampler {
      * @return
      */
     @Override
+<<<<<<< HEAD
     public Sampler protclone() {
+=======
+    public Sampler cloneSampler() {
+>>>>>>> refs/remotes/origin/master
         return new Regular(this);
     }
+
+    private static final Logger LOG = Logger.getLogger(Regular.class.getName());
 
 }

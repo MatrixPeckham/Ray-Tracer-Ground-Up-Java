@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.samplers;
 
 import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * jittered samples
@@ -58,7 +59,7 @@ public class Jittered extends Sampler {
      * generates jittered samples
      */
     @Override
-    public void generateSamples() {
+    public final void generateSamples() {
         int n = (int) Math.sqrt(numSamples);
 
         for (int j = 0; j < numSets; j++) {
@@ -77,8 +78,14 @@ public class Jittered extends Sampler {
      * @return
      */
     @Override
+<<<<<<< HEAD
     public Sampler protclone() {
+=======
+    public Sampler cloneSampler() {
+>>>>>>> refs/remotes/origin/master
         return new Jittered(this);
     }
+
+    private static final Logger LOG = Logger.getLogger(Jittered.class.getName());
 
 }

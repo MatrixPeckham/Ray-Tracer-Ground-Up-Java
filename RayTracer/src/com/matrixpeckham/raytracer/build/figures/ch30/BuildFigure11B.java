@@ -43,50 +43,44 @@ public class BuildFigure11B implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 30.11(b)
+        int numSamples = 16;
 
+        w.vp.setHres(400);
+        w.vp.setVres(400);
+        w.vp.setSamples(numSamples);
 
+        w.tracer = new RayCast(w);
+        w.backgroundColor = new RGBColor(0.5);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(400);	  		
-	w.vp.setVres(400);
-	w.vp.setSamples(numSamples);
-	
-	w.tracer = new RayCast(w);
-	w.backgroundColor = new RGBColor(0.5);	
-	
-	Pinhole pinholePtr = new Pinhole();		
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0));	
-	pinholePtr.setViewDistance(7500.0);  
-	pinholePtr.computeUVW();  
-	w.setCamera(pinholePtr);	
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(0, 0, 1); 
-	lightPtr.scaleRadiance(3.0);
-	w.addLight(lightPtr);
-	
-	Checker3D checkerPtr = new Checker3D();
-	checkerPtr.setSize(0.3);
-	checkerPtr.setColor1(Utility.WHITE);
-	checkerPtr.setColor2(Utility.BLACK);
-		
-	TInstance scaledCheckerPtr = new TInstance(checkerPtr);
-	scaledCheckerPtr.scale(2, 1, 1);
-	 
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.8);  
-	svMattePtr.setKd(0.4);
-	svMattePtr.setCd(scaledCheckerPtr);
-	
-	Box boxPtr = new Box(new Point3D(-1.0), new Point3D(1.0));
-	boxPtr.setMaterial(svMattePtr);
-	w.addObject(boxPtr);
-}
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0));
+        pinholePtr.setViewDistance(7500.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(0, 0, 1);
+        lightPtr.scaleRadiance(3.0);
+        w.addLight(lightPtr);
 
+        Checker3D checkerPtr = new Checker3D();
+        checkerPtr.setSize(0.3);
+        checkerPtr.setColor1(Utility.WHITE);
+        checkerPtr.setColor2(Utility.BLACK);
+
+        TInstance scaledCheckerPtr = new TInstance(checkerPtr);
+        scaledCheckerPtr.scale(2, 1, 1);
+
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.8);
+        svMattePtr.setKd(0.4);
+        svMattePtr.setCd(scaledCheckerPtr);
+
+        Box boxPtr = new Box(new Point3D(-1.0), new Point3D(1.0));
+        boxPtr.setMaterial(svMattePtr);
+        w.addObject(boxPtr);
+    }
 
 }

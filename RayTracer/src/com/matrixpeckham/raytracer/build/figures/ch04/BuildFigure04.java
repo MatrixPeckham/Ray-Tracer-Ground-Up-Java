@@ -18,18 +18,11 @@
 package com.matrixpeckham.raytracer.build.figures.ch04;
 
 import com.matrixpeckham.raytracer.cameras.Orthographic;
-import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Matte;
-import com.matrixpeckham.raytracer.samplers.Hammersley;
-import com.matrixpeckham.raytracer.samplers.Jittered;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
-import com.matrixpeckham.raytracer.samplers.NRooks;
-import com.matrixpeckham.raytracer.samplers.PureRandom;
-import com.matrixpeckham.raytracer.samplers.Regular;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Point3D;

@@ -29,15 +29,31 @@ import com.matrixpeckham.raytracer.util.Utility;
 public class ConvexPartTorus extends Torus {
 
     //for comments on the workings of this class see PartTorus
-
+    /**
+     * Overrides parametric for torus just to change min/max parameters
+     */
     protected static class PartTorusParam extends Torus.TorusParametric {
 
         double phiMin, phiMax, thetaMin, thetaMax;
 
+        /**
+         *
+         * @param a
+         * @param b
+         */
         public PartTorusParam(double a, double b) {
             this(a, b, 0, Utility.TWO_PI, 0, Utility.TWO_PI);
         }
 
+        /**
+         *
+         * @param a
+         * @param b
+         * @param phiMin
+         * @param phiMax
+         * @param thetaMin
+         * @param thetaMax
+         */
         public PartTorusParam(double a, double b, double phiMin, double phiMax,
                 double thetaMin, double thetaMax) {
             super(a, b);

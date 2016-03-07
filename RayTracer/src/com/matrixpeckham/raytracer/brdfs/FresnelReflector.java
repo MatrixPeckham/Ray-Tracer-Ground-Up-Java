@@ -22,6 +22,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Fresnel reflector BRDF, uses the fresnel equation for reflection.
@@ -78,7 +79,7 @@ public class FresnelReflector extends BRDF {
      * @return
      */
     @Override
-    public BRDF clone() {
+    public BRDF cloneBRDF() {
         return new FresnelReflector(this);
     }
 
@@ -101,7 +102,7 @@ public class FresnelReflector extends BRDF {
         }
 
         double cos_thiori = normal.neg().dot(sr.ray.d);
-        double temp = 1.0 - (1.0 - cos_thiori * cos_thiori) / (eta * eta);
+        //double temp = 1.0 - (1.0 - cos_thiori * cos_thiori) / (eta * eta);
         double cos_thiort = Math.sqrt(1.0 - (1.0 - cos_thiori * cos_thiori)
                 / (eta * eta));
         double r_parallel = (eta * cos_thiori - cos_thiort) / (eta * cos_thiori
@@ -131,5 +132,8 @@ public class FresnelReflector extends BRDF {
     public void setIorOut(double d) {
         iorOut = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(FresnelReflector.class.getName());
 
 }

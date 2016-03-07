@@ -83,7 +83,7 @@ public class BuildFigure02 implements BuildWorldFunction {
 // This builds the scene for Figure 29.1
 // Although w build function doesn't render the textures, it defines the textured materials
 // as well as the un-textured (plain) materials.
-// The main differences between the build fuctions for Figures 29.1 and 29.2 
+// The main differences between the build fuctions for Figures 29.1 and 29.2
 // are the materials that are applied to the objects.
 // The walls and the grout do not have textures.
 // The bath water in Figure 29.2 is bump mapped, and w build function does not apply the bump map.
@@ -93,8 +93,8 @@ public class BuildFigure02 implements BuildWorldFunction {
 // This has a lot of code behind it. See Chapter 31.
 // In my ray tracer, water is the only application of vector noise.
 // Bump mapping didn't make it into the book, but I'll include the bump mapping classes in the Chapter 31 download.
-// Figures 29.1 and 29.2 in the book were rendered before I was using the etas 
-// in the Dielectric material. The etas make the materials that are under the water darker, thereby 
+// Figures 29.1 and 29.2 in the book were rendered before I was using the etas
+// in the Dielectric material. The etas make the materials that are under the water darker, thereby
 // making the water edge visible on the bath sides.
 // I've compensated for w by making the filter color lighter.
 // Noise details in the wood, sandstone, and water are slightly different from the orginal images.
@@ -104,7 +104,7 @@ public class BuildFigure02 implements BuildWorldFunction {
 	int numSamples = 16;			// production
 
 //	world.vp.setHres(475);				// development
-//	world.vp.setVres(250); 
+//	world.vp.setVres(250);
         world.vp.setHres(950);				// production
         world.vp.setVres(500);
         world.vp.setSamples(numSamples);
@@ -130,9 +130,9 @@ public class BuildFigure02 implements BuildWorldFunction {
         lightPtr.setShadows(true);
         world.addLight(lightPtr);
 
-	// ************************************************************************************************* walls
-	// these are not textured
-	// back wall 
+        // ************************************************************************************************* walls
+        // these are not textured
+        // back wall
         Matte mattePtr1 = new Matte();
         mattePtr1.setKa(0.75);
         mattePtr1.setKd(0.5);
@@ -142,7 +142,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         backWallPtr.setMaterial(mattePtr1);
         world.addObject(backWallPtr);
 
-	// front wall 
+        // front wall
         Matte mattePtr2 = new Matte();
         mattePtr2.setKa(1.0);
         mattePtr2.setKd(0.5);
@@ -153,7 +153,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         frontWallPtr.setMaterial(mattePtr2);
         world.addObject(frontWallPtr);
 
-	// left wall 
+        // left wall
         Matte mattePtr3 = new Matte();
         mattePtr3.setKa(0.25);
         mattePtr3.setKd(0.75);
@@ -164,7 +164,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         leftWallPtr.setMaterial(mattePtr3);
         world.addObject(leftWallPtr);
 
-	// right wall 
+        // right wall
         Matte mattePtr4 = new Matte();
         mattePtr4.setKa(0.5);
         mattePtr4.setKd(0.5);
@@ -175,9 +175,9 @@ public class BuildFigure02 implements BuildWorldFunction {
         rightWallPtr.setMaterial(mattePtr4);
         world.addObject(rightWallPtr);
 
-	// there is no ceiling
-	// ************************************************************************************************* floor planks
-	// plain material	
+        // there is no ceiling
+        // ************************************************************************************************* floor planks
+        // plain material
         Phong phongPtr = new Phong();
         phongPtr.setKa(0.5);
         phongPtr.setKd(1.0);
@@ -185,14 +185,14 @@ public class BuildFigure02 implements BuildWorldFunction {
         phongPtr.setExp(20.0);
         phongPtr.setCd(0.5, 0.3, 0.1);
 
-	// the floor is a simulation of wood planks using beveled boxes with random lengths in the x direction
+        // the floor is a simulation of wood planks using beveled boxes with random lengths in the x direction
         double x0 = -15.0;				// planks start at x = x0
         double z0 = 0.0;					// planks start at z = z0
         double minLength = 4.0;   				// minumum plank length in x direction
         double maxLength = 10.0;	  				// maximum plank length in x direction
         double plankThickness = 1.0;					// common plank thickness - in y direction
         double y0 = -plankThickness; 	// places top of planks at y = 0;
-        double plankWidth = 1.0;  				// common plank width 
+        double plankWidth = 1.0;  				// common plank width
         double plankBevel = 0.25;    				// the bevel radius
         int numXPlanks = 6;					// number of planks in the x direction (a single column)
         int numZColumns = 50;  					// number of plank columns in the z direction
@@ -240,14 +240,14 @@ public class BuildFigure02 implements BuildWorldFunction {
         planksPtr.setupCells();
         world.addObject(planksPtr);
 
-	// ************************************************************************************************* checkered cylinder
-	// plain material 
+        // ************************************************************************************************* checkered cylinder
+        // plain material
         Matte mattePtr5 = new Matte();
         mattePtr5.setKa(0.25);
         mattePtr5.setKd(0.95);
         mattePtr5.setCd(0.1, 0.4, 0.15);
 
-	// textured material for the curved surface
+        // textured material for the curved surface
         // w is a checker image
         Image imagePtr1 = new Image();
         String imagepath
@@ -278,7 +278,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         cylinderPtr2.translate(new Vector3D(-11, 0, 12));
         world.addObject(cylinderPtr2);
 
-	// a disk for the cylinder top
+        // a disk for the cylinder top
         // w is a 2D procedural checker texture designed to match the checkers
         // on the curved surface
         DiskChecker diskCheckerPtr = new DiskChecker();
@@ -302,14 +302,14 @@ public class BuildFigure02 implements BuildWorldFunction {
         cylinderTopPtr.translate(-11, 5, 12);
         world.addObject(cylinderTopPtr);
 
-	// ************************************************************************************************* Earth sphere
-	// plain material
+        // ************************************************************************************************* Earth sphere
+        // plain material
         Matte mattePtr6 = new Matte();
         mattePtr6.setKa(0.5);
         mattePtr6.setKd(0.5);
         mattePtr6.setCd(0.2, 0.5, 1);
 
-	// Earth image texture
+        // Earth image texture
         Image imagePtr2 = new Image();
         try {
 //            imagePtr2.loadPPMFile(new File(imagepath+"EarthLowRes.ppm"));
@@ -329,7 +329,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         svMattePtr3.setCd(imageTexturePtr2);
 
         Sphere spherePtr1 = new Sphere();
-//	spherePtr1.setMaterial(mattePtr6);				// plain 
+//	spherePtr1.setMaterial(mattePtr6);				// plain
         spherePtr1.setMaterial(svMattePtr3);			// textured with Earth image
 
         Instance spherePtr2 = new Instance(spherePtr1);
@@ -338,23 +338,23 @@ public class BuildFigure02 implements BuildWorldFunction {
         spherePtr2.translate(-11, 8, 12);
         world.addObject(spherePtr2);
 
-	// ************************************************************************************************* picture on back wall
-	// w is initially constructed in the (x, z) plane, and then moved to the back wall
+        // ************************************************************************************************* picture on back wall
+        // w is initially constructed in the (x, z) plane, and then moved to the back wall
         // the picture and its frame are stored in a compound object:
         Compound framedPicturePtr = new Compound();
 
-	// dimensions
+        // dimensions
         double a = 3.5;  	// +ve x coordinate of untransformed image
         double b = 5.05; 	// +ve z coordinate of untransformed image
         double w = 1.0;		// width of the frame
 
-	// plain material picture
+        // plain material picture
         Matte mattePtr7 = new Matte();
         mattePtr7.setKa(0.75);
         mattePtr7.setKd(0.5);
         mattePtr7.setCd(0.3, 0.65, 0.71);
 
-	// the image is applied to a rectangle
+        // the image is applied to a rectangle
         Image imagePtr3 = new Image();
         try {
             imagePtr3.loadPPMFile(new File(imagepath + "BlueGlass.ppm"));
@@ -374,7 +374,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         svMattePtr4.setKd(0.75);
         svMattePtr4.setCd(imageTexturePtr3);
 
-	// construct the picture
+        // construct the picture
         Rectangle rectanglePtr = new Rectangle();
 //	rectanglePtr.setMaterial(mattePtr7);  	// plain
         rectanglePtr.setMaterial(svMattePtr4);  // textured with Blue Glass
@@ -382,15 +382,15 @@ public class BuildFigure02 implements BuildWorldFunction {
         Instance picturePtr = new Instance(rectanglePtr);
         picturePtr.scale(a, 1, b);
 
-	// construct the frame
-	// plain material for the frame
+        // construct the frame
+        // plain material for the frame
         Matte mattePtr8 = new Matte();
         mattePtr8.setKa(0.75);
         mattePtr8.setKd(0.5);
         mattePtr8.setCd(0.5, 0.3, 0.14);
 
-	// wood materials for the frame
-	// for front and back sides
+        // wood materials for the frame
+        // for front and back sides
         TInstance woodPtr1 = new TInstance(new Wood(new RGBColor(0.55, 0.43,
                 0.13), Utility.BLACK));
         woodPtr1.scale(new Vector3D(2));
@@ -401,7 +401,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         svMattePtr5.setKd(1.0);
         svMattePtr5.setCd(woodPtr1);
 
-	// for right and left sides
+        // for right and left sides
         TInstance woodPtr2 = new TInstance(new Wood(new RGBColor(0.55, 0.43,
                 0.13), Utility.BLACK));
         woodPtr2.scale(2.0);
@@ -411,8 +411,8 @@ public class BuildFigure02 implements BuildWorldFunction {
         svMattePtr6.setKd(1.0);
         svMattePtr6.setCd(woodPtr2);
 
-	// construct the frame: two triangles per side
-	// front side: +ve z before any transformations
+        // construct the frame: two triangles per side
+        // front side: +ve z before any transformations
         Triangle trianglePtr1 = new Triangle(new Point3D(-a, 0, b), new Point3D(
                 -a - w, 0, b + w), new Point3D(a + w, 0, b + w));
         trianglePtr1.setMaterial(svMattePtr5);
@@ -423,7 +423,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         trianglePtr2.setMaterial(svMattePtr5);
         framedPicturePtr.addObject(trianglePtr2);
 
-	// back side: -ve z before any transformations
+        // back side: -ve z before any transformations
         Triangle trianglePtr3 = new Triangle(new Point3D(a, 0, -b), new Point3D(
                 a + w, 0, -b - w), new Point3D(-a - w, 0, -b - w));
         trianglePtr3.setMaterial(svMattePtr5);
@@ -434,7 +434,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         trianglePtr4.setMaterial(svMattePtr5);
         framedPicturePtr.addObject(trianglePtr4);
 
-	// right side: +ve x before any transformations
+        // right side: +ve x before any transformations
         Triangle trianglePtr5 = new Triangle(new Point3D(a, 0, b), new Point3D(a
                 + w, 0, b + w), new Point3D(a + w, 0, -b - w));
         trianglePtr5.setMaterial(svMattePtr6);
@@ -445,7 +445,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         trianglePtr6.setMaterial(svMattePtr6);
         framedPicturePtr.addObject(trianglePtr6);
 
-	// left side: -ve x before any transformations
+        // left side: -ve x before any transformations
         Triangle trianglePtr7 = new Triangle(new Point3D(-a, 0, -b),
                 new Point3D(-a - w, 0, -b - w), new Point3D(-a - w, 0, b + w));
         trianglePtr7.setMaterial(svMattePtr6);
@@ -465,14 +465,14 @@ public class BuildFigure02 implements BuildWorldFunction {
         wallPicturePtr.translate(-6, 8, 0.5);
         world.addObject(wallPicturePtr);
 
-	// ************************************************************************************************* bunny
-	// plain material for the bunny	
+        // ************************************************************************************************* bunny
+        // plain material for the bunny
         Matte mattePtr9 = new Matte();
         mattePtr9.setKa(0.25);
         mattePtr9.setKd(0.75);
         mattePtr9.setCd(0.8);
 
-	// ramp based marble texture
+        // ramp based marble texture
         Image imagePtr4 = new Image();
         try {
             imagePtr4.loadPPMFile(new File(imagepath + "GrayMarbleRamp.ppm"));
@@ -492,7 +492,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         marblePtr.rotateZ(30);
         marblePtr.rotateY(20);
 
-	// marble material
+        // marble material
         SV_Matte svMattePtr7 = new SV_Matte();
         svMattePtr7.setKa(0.25);
         svMattePtr7.setKd(0.75);
@@ -509,7 +509,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
-//	bunnyPtr.readFlatTriangles(fileName);	
+//	bunnyPtr.readFlatTriangles(fileName);
 
             gridPtr.readSmoothTriangles(new File(meshpath + fileName));
         } catch (IOException ex) {
@@ -526,8 +526,8 @@ public class BuildFigure02 implements BuildWorldFunction {
         bunnyPtr.translate(-3.25, -1.65, 10);
         world.addObject(bunnyPtr);
 
-	// ************************************************************************************************* bath sides
-	// the front and back sides of the bath run right across the bath in the x direction
+        // ************************************************************************************************* bath sides
+        // the front and back sides of the bath run right across the bath in the x direction
         // the left and right sides fit between the front and back in the z direction
         // the sides are rows of beveled boxes with a random sandstone texture applied
         // these are stored in a single grid
@@ -538,7 +538,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         double xSize = bathXmax - bathXmin;
         double zSize = bathZmax - bathZmin;
         double thickness = 1.5;  	// common box thickness = side thickness
-        double bathHeight = 2.5;		// common box height 
+        double bathHeight = 2.5;		// common box height
         double bathBevelRadius = 0.25;
         int numXboxes = 4;		// number of boxes along the back and front sides
         int numZboxes = 3;		// number of boxes along the left and right sides
@@ -546,13 +546,13 @@ public class BuildFigure02 implements BuildWorldFunction {
         double bathKa = 0.5;  	// common material property
         double bathKd = 0.85; 	// common material property
 
-	// plain material 
+        // plain material
         Matte mattePtr10 = new Matte();
         mattePtr10.setKa(bathKa);
         mattePtr10.setKd(bathKd);
         mattePtr10.setCd(0.53, 0.51, 0.45);
 
-	// sandstone texture
+        // sandstone texture
         Image imagePtr5 = new Image();
         try {
             imagePtr5.loadPPMFile(new File(imagepath + "sandstone_ramp1.ppm"));
@@ -567,14 +567,14 @@ public class BuildFigure02 implements BuildWorldFunction {
 
         Grid bathPtr = new Grid();
 
-	// build back - runs in x direction
+        // build back - runs in x direction
         for (int j = 0; j < numXboxes; j++) {
 
-		// put a sandstone texture with a random world.set of intrinsic transformations on the beveled boxes
+            // put a sandstone texture with a random world.set of intrinsic transformations on the beveled boxes
             TInstance sandstonePtr = new TInstance(new RampFBmTexture(imagePtr5,
                     numOctaves, fbmAmount));
             sandstonePtr.scale(2.0);
-            Utility.setRandSeed(j * 10);
+            Utility.setRandSeed(j * 10L);
             sandstonePtr.rotateX(20.0 * (2.0 * Utility.randDouble() - 1.0));
             sandstonePtr.rotateY(30.0 * (2.0 * Utility.randDouble() - 1.0));
             sandstonePtr.rotateZ(45.0 * (2.0 * Utility.randDouble() - 1.0));
@@ -596,14 +596,14 @@ public class BuildFigure02 implements BuildWorldFunction {
             bathPtr.addObject(boxPtr);
 
         }
-	// build front - runs in xw direction
+        // build front - runs in xw direction
 
         for (int j = 0; j < numXboxes; j++) {
 
             TInstance sandstonePtr = new TInstance(new RampFBmTexture(imagePtr5,
                     numOctaves, fbmAmount));
             sandstonePtr.scale(2.0);
-            Utility.setRandSeed(j * 1000000);
+            Utility.setRandSeed(j * 1000000L);
             sandstonePtr.rotateX(20.0 * (2.0 * Utility.randDouble() - 1.0));
             sandstonePtr.rotateY(30.0 * (2.0 * Utility.randDouble() - 1.0));
             sandstonePtr.rotateZ(45.0 * (2.0 * Utility.randDouble() - 1.0));
@@ -626,7 +626,7 @@ public class BuildFigure02 implements BuildWorldFunction {
 
         }
 
-	// build left side - runs in yw direction
+        // build left side - runs in yw direction
         for (int j = 0; j < numZboxes; j++) {
 
             TInstance sandstonePtr = new TInstance(new RampFBmTexture(imagePtr5,
@@ -656,7 +656,7 @@ public class BuildFigure02 implements BuildWorldFunction {
 
         }
 
-	// build right side - runs in yw direction
+        // build right side - runs in yw direction
         for (int j = 0; j < numZboxes; j++) {
 
             TInstance sandstonePtr = new TInstance(new RampFBmTexture(imagePtr5,
@@ -689,9 +689,9 @@ public class BuildFigure02 implements BuildWorldFunction {
         bathPtr.setupCells();
         world.addObject(bathPtr);
 
-	// ************************************************************************************************* bath water
-	// the bath water
-        // w is a bump mapped rectangle with a transparent material	
+        // ************************************************************************************************* bath water
+        // the bath water
+        // w is a bump mapped rectangle with a transparent material
         double c = 1.2;
         RGBColor waterColor = new RGBColor(0.50 * c, 0.8 * c, 0.8 * c);
         Dielectric waterPtr = new Dielectric();
@@ -713,7 +713,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         waterSurfacePtr.setMaterial(waterPtr);
 	//world.addObject(waterSurfacePtr);						// no bump map - use w for Figure 29.1
 
-	// the bump mapped object
+        // the bump mapped object
         numOctaves = 2;
         double lacunarity = 2.0;
         double gain = 0.33333;
@@ -729,15 +729,15 @@ public class BuildFigure02 implements BuildWorldFunction {
         bumpedWaterPtr.setBumpMap(fBmBumpPtr);
         world.addObject(bumpedWaterPtr);						// use w for Figure 29.2
 
-	// ************************************************************************************************* tiles
-	// build reflective tiles on the wall behind the bath
+        // ************************************************************************************************* tiles
+        // build reflective tiles on the wall behind the bath
         // these are beveled boxes with a spatially varying reflective material
         // there is grout between the tiles which is a rectangle just in front of the back wall
         // because the reflective material has no ambient, there are Utility.BLACK areas in the image where the tiles are reflected in each other
         // w can be minimised by placing the back wall at z = 0.1 for a bevel radius of 0.25 and thickness of 0.6
         // w is where the grout rectangle should be.
         double tileSize = 3.25;	  						// tiles are square with dimensions tileSize in the x and y directions
-        double tileThickness = 0.6;							// tile thickness in the z direction 
+        double tileThickness = 0.6;							// tile thickness in the z direction
         double groutWidth = 0.25;							// the grout width
         double tilesXmin = bathXmin;					// left boundary of the tiles is at left side of bath
         double tilesYmin = bathHeight + groutWidth; 	// tiles start at bath height + the grout width
@@ -747,7 +747,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         int numXTiles = 4;							// number of tiles in the x direction
         int numYTiles = 3;							// number of tiles in the y direction
 
-	// plain material
+        // plain material
         Reflective reflectivePtr = new Reflective();
         reflectivePtr.setCr(0.75, 1.0, 0.85);
         reflectivePtr.setKr(1.0);
@@ -757,13 +757,13 @@ public class BuildFigure02 implements BuildWorldFunction {
         for (int ix = 0; ix < numXTiles; ix++) {    	// across
             for (int iy = 0; iy < numYTiles; iy++) {  // up
 
-			// the noise
+                // the noise
                 CubicNoise noisePtr = new CubicNoise();
                 noisePtr.setNumOctaves(4);
                 noisePtr.setGain(0.5);
                 noisePtr.setLacunarity(2.0);
 
-			// the texture:
+                // the texture:
                 TurbulenceTexture texturePtr = new TurbulenceTexture(noisePtr);
                 texturePtr.setColor(0.75, 1.0, 0.85);		// green
                 texturePtr.setMinValue(0.25);
@@ -773,12 +773,12 @@ public class BuildFigure02 implements BuildWorldFunction {
                 TInstance scaledTexturePtr = new TInstance(texturePtr);
                 scaledTexturePtr.scale(0.5);
 
-			// the material
+                // the material
                 SV_Reflector reflectorPtr = new SV_Reflector();
                 reflectorPtr.setKr(1.0);
                 reflectorPtr.setCr(scaledTexturePtr);
 
-			// the tiles
+                // the tiles
                 Point3D p0 = new Point3D(tilesXmin + ix
                         * (tileSize + groutWidth), tilesYmin + iy * (tileSize
                         + groutWidth), tilesZmin);
@@ -794,8 +794,8 @@ public class BuildFigure02 implements BuildWorldFunction {
 
         tilesPtr.setupCells();
 
-	// ************************************************************************************************* grout
-	// w is not textured
+        // ************************************************************************************************* grout
+        // w is not textured
         Matte mattePtr11 = new Matte();
         mattePtr11.setKa(0.5);
         mattePtr11.setKd(0.75);
@@ -817,5 +817,8 @@ public class BuildFigure02 implements BuildWorldFunction {
         world.addObject(instancePtr);
 
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(BuildFigure02.class.getName());
 
 }

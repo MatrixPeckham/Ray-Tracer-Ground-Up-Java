@@ -49,82 +49,66 @@ public class BuildFigure32A implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.32(a)
-
 // The marble ramp is upside down compared to the image in the book.
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);     
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = Utility.BLACK;
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(5800.0);
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(20, 20, 40);
-	lightPtr.scaleRadiance(2.5);
-	w.addLight(lightPtr);
+        w.backgroundColor = Utility.BLACK;
+        w.tracer = new RayCast(w);
 
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();	
-	noisePtr.setNumOctaves(6);
-	noisePtr.setGain(0.5);	
-	noisePtr.setLacunarity(2.0);		
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(5800.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(20, 20, 40);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
+
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(2.0);
 
 	// ramp image:
-	
-	// image:
-
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"BlueMarbleRamp.ppm"));
+            imagePtr.loadPPMFile(new File(path + "BlueMarbleRamp.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	
-	// marble texture:	
-		
-	RampFBmTexture marblePtr = new RampFBmTexture(imagePtr);
-	marblePtr.setNoise(noisePtr);
-	marblePtr.setPerturbation(0.0);
-	
-	TInstance transformedMarblePtr = new TInstance(marblePtr);
-	transformedMarblePtr.scale(0.2);
-	transformedMarblePtr.rotateZ(80);
 
-	// material:
-		
-	SV_Matte svMattePtr = new SV_Matte();	 
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.9);
-	svMattePtr.setCd(marblePtr);
+        // marble texture:
+        RampFBmTexture marblePtr = new RampFBmTexture(imagePtr);
+        marblePtr.setNoise(noisePtr);
+        marblePtr.setPerturbation(0.0);
 
-	
-	Sphere spherePtr = new Sphere(new Point3D(0.0), 5.0); 
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
-}
+        TInstance transformedMarblePtr = new TInstance(marblePtr);
+        transformedMarblePtr.scale(0.2);
+        transformedMarblePtr.rotateZ(80);
 
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.9);
+        svMattePtr.setCd(marblePtr);
 
-
-
+        Sphere spherePtr = new Sphere(new Point3D(0.0), 5.0);
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
+    }
 
 }

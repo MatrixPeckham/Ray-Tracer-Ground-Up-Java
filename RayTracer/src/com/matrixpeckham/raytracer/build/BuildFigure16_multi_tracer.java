@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.build;
 
-import com.matrixpeckham.raytracer.build.figures.ch08.*;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Box;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
@@ -26,7 +25,6 @@ import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.materials.Phong;
 import com.matrixpeckham.raytracer.tracers.MultipleObjects;
-import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
@@ -34,6 +32,7 @@ import com.matrixpeckham.raytracer.world.World;
 
 /**
  * DOESN'T WORK
+ *
  * @author William Matrix Peckham
  */
 public class BuildFigure16_multi_tracer implements BuildWorldFunction {
@@ -52,8 +51,8 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         Pinhole camera = new Pinhole();
         camera.setEye(0, 0, 250);
         camera.setLookat(new Point3D(0));
-        camera.setViewDistance(200);  	// for Figure 8.16(a)	
-//	camera.setViewDistance(450);  	// for Figure 8.16(b)		
+        camera.setViewDistance(200);  	// for Figure 8.16(a)
+//	camera.setViewDistance(450);  	// for Figure 8.16(b)
 //	camera.setViewDistance(1000);  	// for Figure 8.16(c)
         camera.computeUVW();
         w.setCamera(camera);
@@ -64,7 +63,7 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         light1.setShadows(true);
         w.addLight(light1);
 
-	// sphere
+        // sphere
         Phong phong1 = new Phong();
         phong1.setKa(0.5);
         phong1.setKd(0.4);
@@ -76,7 +75,7 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         sphere1.setMaterial(phong1);
         w.addObject(sphere1);
 
-	// box
+        // box
         Matte matte = new Matte();
         matte.setKa(0.4);
         matte.setKd(0.3);
@@ -87,7 +86,7 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         box1.setMaterial(matte);
         w.addObject(box1);
 
-	// triangle
+        // triangle
         Phong phong2 = new Phong();
         phong2.setKa(0.25);
         phong2.setKd(0.5);

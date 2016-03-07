@@ -23,6 +23,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Flat triangle for meshes
@@ -64,7 +65,7 @@ public class FlatMeshTriangle extends MeshTriangle {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new FlatMeshTriangle(this);
     }
 
@@ -122,5 +123,8 @@ public class FlatMeshTriangle extends MeshTriangle {
 
         return (true);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(FlatMeshTriangle.class.getName());
 
 }

@@ -27,6 +27,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Sphere that flips its normal based on which side the ray hits on. This was an
@@ -38,13 +39,19 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 public class NormalFlippingSphere extends GeometricObject {
 
     //All implementation is the same as Sphere, for comments please see that class
+    private final Point3D center;
 
-    private Point3D center;
     private double radius;
+
     private static final double EPSILON = 0.001;
+
     double invSurfaceArea;
+
     private Sampler sampler = null;
 
+    /**
+     * default constructor
+     */
     public NormalFlippingSphere() {
         super();
         center = new Point3D(0);
@@ -52,6 +59,11 @@ public class NormalFlippingSphere extends GeometricObject {
         invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
 
+    /**
+     *
+     * @param c
+     * @param r
+     */
     public NormalFlippingSphere(Point3D c, double r) {
         super();
         center = new Point3D(c);
@@ -59,6 +71,10 @@ public class NormalFlippingSphere extends GeometricObject {
         invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
     }
 
+    /**
+     *
+     * @param sphere
+     */
     public NormalFlippingSphere(NormalFlippingSphere sphere) {
         super(sphere);
         center = new Point3D(sphere.center);
@@ -67,7 +83,7 @@ public class NormalFlippingSphere extends GeometricObject {
     }
 
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new NormalFlippingSphere(this);
     }
 
@@ -108,10 +124,18 @@ public class NormalFlippingSphere extends GeometricObject {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     public Point3D getCenter() {
         return center;
     }
 
+    /**
+     *
+     * @param center
+     */
     public void setCenter(Point3D center) {
         this.center.setTo(center);
     }
@@ -123,10 +147,18 @@ public class NormalFlippingSphere extends GeometricObject {
         return new Normal(n);
     }
 
+    /**
+     *
+     * @return
+     */
     public double getRadius() {
         return radius;
     }
 
+    /**
+     *
+     * @param radius
+     */
     public void setRadius(double radius) {
         this.radius = radius;
         invSurfaceArea = 1 / (4 * Utility.PI * radius * radius);
@@ -162,8 +194,12 @@ public class NormalFlippingSphere extends GeometricObject {
         return false;
     }
 
+    /**
+     *
+     * @param sampler
+     */
     public void setSampler(Sampler sampler) {
-        this.sampler = sampler.clone();
+        this.sampler = sampler.cloneSampler();
         this.sampler.mapSamplesToSphere();
     }
 
@@ -182,5 +218,8 @@ public class NormalFlippingSphere extends GeometricObject {
     public double pdf(ShadeRec sr) {
         return invSurfaceArea;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(NormalFlippingSphere.class.getName());
 
 }

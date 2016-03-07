@@ -19,7 +19,6 @@ package com.matrixpeckham.raytracer.build.figures.ch28;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
 import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
@@ -57,126 +56,116 @@ public class BuildFigure16 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.16
+        int numSamples = 100;
 
-	int numSamples = 100;
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);	
-	w.vp.setMaxDepth(9);		
-	
-	w.backgroundColor = new RGBColor(0.5);
-	
-	w.tracer = new Whitted(w);
-	
-	Ambient ambientPtr = new Ambient();
-	w.setAmbient(ambientPtr);
-	
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(-4, 4, 20);  
-	pinholePtr.setLookat(-0.2, -0.5, 0);     
-	pinholePtr.setViewDistance(6000.0);	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(9);
 
-	// rectangular area light
-	
-	Emissive emissivePtr = new Emissive();
-	emissivePtr.scaleRadiance(40.0);		
-	emissivePtr.setCe(Utility.WHITE);
-	
-	Point3D center=new Point3D(5, 6, 10);
-	double width = 4.0;
-	double height = 5.0;
-	
-	Point3D p0=new Point3D(-0.5 * width, center.y - 0.5 * height, center.z);
-	Vector3D a=new Vector3D(width, 0.0, 0.0);
-	Vector3D b=new Vector3D(0.0, height, 0.0);
-	Normal normal=new Normal(0, 0, -1);
-	
-	Rectangle rectanglePtr = new Rectangle(p0, a, b, normal);
-	rectanglePtr.setMaterial(emissivePtr);
-	rectanglePtr.setSampler(new MultiJittered(numSamples));
-	rectanglePtr.setShadows(false);
-	w.addObject(rectanglePtr);	
-	
-	AreaLight areaLightPtr = new AreaLight();
-	areaLightPtr.setObject(rectanglePtr);
-	areaLightPtr.setShadows(true);
-	w.addLight(areaLightPtr);
+        w.backgroundColor = new RGBColor(0.5);
 
-	
-	// transparent bunny
-	
-	Dielectric dielectricPtr = new Dielectric();
-	dielectricPtr.setKa(0.0);
-	dielectricPtr.setKd(0.0); 
-	dielectricPtr.setKs(0.2);     
-	dielectricPtr.setExp(2000.0);
-	dielectricPtr.setIorIn(1.5);   
-	dielectricPtr.setIorOut(1.0);
-	dielectricPtr.setCfIn(0.75, 0.45, 0);   // orange
-	dielectricPtr.setCfOut(Utility.WHITE);
-		
-	String fileName = "Bunny4K.ply"; 	
-	String path="C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Stanford Bunny\\";
+        w.tracer = new Whitted(w);
+
+        Ambient ambientPtr = new Ambient();
+        w.setAmbient(ambientPtr);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(-4, 4, 20);
+        pinholePtr.setLookat(-0.2, -0.5, 0);
+        pinholePtr.setViewDistance(6000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        // rectangular area light
+        Emissive emissivePtr = new Emissive();
+        emissivePtr.scaleRadiance(40.0);
+        emissivePtr.setCe(Utility.WHITE);
+
+        Point3D center = new Point3D(5, 6, 10);
+        double width = 4.0;
+        double height = 5.0;
+
+        Point3D p0
+                = new Point3D(-0.5 * width, center.y - 0.5 * height, center.z);
+        Vector3D a = new Vector3D(width, 0.0, 0.0);
+        Vector3D b = new Vector3D(0.0, height, 0.0);
+        Normal normal = new Normal(0, 0, -1);
+
+        Rectangle rectanglePtr = new Rectangle(p0, a, b, normal);
+        rectanglePtr.setMaterial(emissivePtr);
+        rectanglePtr.setSampler(new MultiJittered(numSamples));
+        rectanglePtr.setShadows(false);
+        w.addObject(rectanglePtr);
+
+        AreaLight areaLightPtr = new AreaLight();
+        areaLightPtr.setObject(rectanglePtr);
+        areaLightPtr.setShadows(true);
+        w.addLight(areaLightPtr);
+
+        // transparent bunny
+        Dielectric dielectricPtr = new Dielectric();
+        dielectricPtr.setKa(0.0);
+        dielectricPtr.setKd(0.0);
+        dielectricPtr.setKs(0.2);
+        dielectricPtr.setExp(2000.0);
+        dielectricPtr.setIorIn(1.5);
+        dielectricPtr.setIorOut(1.0);
+        dielectricPtr.setCfIn(0.75, 0.45, 0);   // orange
+        dielectricPtr.setCfOut(Utility.WHITE);
+
+        String fileName = "Bunny4K.ply";
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Stanford Bunny\\";
 
         TriangleMesh bunnyPtr = new TriangleMesh(new Mesh());
-        try{
+        try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
-//	bunnyPtr.readFlatTriangles(fileName);	
-        
-        bunnyPtr.readSmoothTriangles(new File(path+fileName));
-        } catch(IOException ex){
+//	bunnyPtr.readFlatTriangles(fileName);
+
+            bunnyPtr.readSmoothTriangles(new File(path + fileName));
+        } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	bunnyPtr.setMaterial(dielectricPtr); 	
-	bunnyPtr.setupCells();
+        bunnyPtr.setMaterial(dielectricPtr);
+        bunnyPtr.setupCells();
 
-	Instance bigBunnyPtr = new Instance(bunnyPtr);
-	bigBunnyPtr.scale(10.0);
-	bigBunnyPtr.translate(0, -1.5, 0.0);
-	w.addObject(bigBunnyPtr);
-	
-	
-	PlaneChecker planeCheckerPtr = new PlaneChecker();
-	planeCheckerPtr.setSize(0.25);		
-	planeCheckerPtr.setOutlineWidth(0.02);
-	planeCheckerPtr.setColor1(new RGBColor(0.75));
-	planeCheckerPtr.setColor2(new RGBColor(0.75));  
-	planeCheckerPtr.setOutlineColor(Utility.BLACK); 
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.15);
-	svMattePtr.setKd(0.65);
-	svMattePtr.setCd(planeCheckerPtr);
-	
-	// ground plane	
-	
-	Plane planePtr1 = new Plane(new Point3D(0, -1.175, 0), new Normal(0, 1, 0));
-	planePtr1.setMaterial(svMattePtr);
-	planePtr1.setShadows(false);
-	w.addObject(planePtr1);
-		
-	// back plane
+        Instance bigBunnyPtr = new Instance(bunnyPtr);
+        bigBunnyPtr.scale(10.0);
+        bigBunnyPtr.translate(0, -1.5, 0.0);
+        w.addObject(bigBunnyPtr);
 
-	Instance planePtr2 = new Instance(new Plane(new Point3D(0), new Normal(0, 1, 0)));
-	planePtr2.setMaterial(svMattePtr);
-	planePtr2.rotateX(90);
-	planePtr2.translate(0, 0, -2);
-	planePtr2.setShadows(false);
-	w.addObject(planePtr2);
-	
-	
-		
-}
+        PlaneChecker planeCheckerPtr = new PlaneChecker();
+        planeCheckerPtr.setSize(0.25);
+        planeCheckerPtr.setOutlineWidth(0.02);
+        planeCheckerPtr.setColor1(new RGBColor(0.75));
+        planeCheckerPtr.setColor2(new RGBColor(0.75));
+        planeCheckerPtr.setOutlineColor(Utility.BLACK);
 
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.15);
+        svMattePtr.setKd(0.65);
+        svMattePtr.setCd(planeCheckerPtr);
 
+        // ground plane
+        Plane planePtr1 = new Plane(new Point3D(0, -1.175, 0), new Normal(0, 1,
+                0));
+        planePtr1.setMaterial(svMattePtr);
+        planePtr1.setShadows(false);
+        w.addObject(planePtr1);
+
+        // back plane
+        Instance planePtr2 = new Instance(new Plane(new Point3D(0),
+                new Normal(0, 1, 0)));
+        planePtr2.setMaterial(svMattePtr);
+        planePtr2.rotateX(90);
+        planePtr2.translate(0, 0, -2);
+        planePtr2.setShadows(false);
+        w.addObject(planePtr2);
+
+    }
 
 }

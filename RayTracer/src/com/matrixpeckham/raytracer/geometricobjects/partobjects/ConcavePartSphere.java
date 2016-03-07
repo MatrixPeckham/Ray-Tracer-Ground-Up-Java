@@ -34,14 +34,20 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 public class ConcavePartSphere extends GeometricObject {
 
     //same as concave part sphere for more comments see PartSphere
-
     Point3D center = new Point3D();
+
     double radius = 1;
+
     double phiMin = 0;
+
     double phiMax = Utility.TWO_PI;
+
     double thetaMin = 0;
+
     double thetaMax = Utility.PI;
+
     double cosThetaMin = 1;
+
     double cosThetaMax = -1;
 
     /**
@@ -96,7 +102,7 @@ public class ConcavePartSphere extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new ConcavePartSphere(this);
     }
 
@@ -109,7 +115,7 @@ public class ConcavePartSphere extends GeometricObject {
      */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
-        double t = Utility.HUGE_VALUE;
+        double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);

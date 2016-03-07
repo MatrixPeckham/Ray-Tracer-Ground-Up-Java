@@ -19,7 +19,6 @@ package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;

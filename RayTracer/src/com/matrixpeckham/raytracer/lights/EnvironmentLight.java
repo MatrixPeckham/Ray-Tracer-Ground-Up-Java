@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.lights;
 
-import com.matrixpeckham.raytracer.materials.Emissive;
 import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.DoubleRef;
@@ -27,6 +26,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Environment light.
@@ -45,6 +45,7 @@ public class EnvironmentLight extends Light {
      */
     Material material;
 
+<<<<<<< HEAD
     //uvw coordinate system at hit point 
     private ThreadLocal<Vector3D> u = new ThreadLocal<Vector3D>() {
 
@@ -70,6 +71,14 @@ public class EnvironmentLight extends Light {
         }
 
     };
+=======
+    //uvw coordinate system at hit point
+    final Vector3D u = new Vector3D(1, 0, 0);
+
+    final Vector3D v = new Vector3D(0, 1, 0);
+
+    final Vector3D w = new Vector3D(0, 0, 1);
+>>>>>>> refs/remotes/origin/master
 
     //sampled direction to light
     Vector3D wi = new Vector3D();
@@ -86,11 +95,19 @@ public class EnvironmentLight extends Light {
      * @param l
      */
     public EnvironmentLight(EnvironmentLight l) {
+<<<<<<< HEAD
         sampler = l.sampler.clone();
         material = l.material.clone();
         u.get().setTo(l.u.get());
         v.get().setTo(l.v.get());
         w.get().setTo(l.w.get());
+=======
+        sampler = l.sampler.cloneSampler();
+        material = l.material.cloneMaterial();
+        u.setTo(l.u);
+        v.setTo(l.v);
+        w.setTo(l.w);
+>>>>>>> refs/remotes/origin/master
         wi.setTo(l.wi);
     }
 
@@ -100,7 +117,7 @@ public class EnvironmentLight extends Light {
      * @param sampler
      */
     public void setSampler(Sampler sampler) {
-        this.sampler = sampler.clone();
+        this.sampler = sampler.cloneSampler();
         this.sampler.mapSamplesToHemisphere(1);
     }
 
@@ -110,7 +127,7 @@ public class EnvironmentLight extends Light {
      * @return
      */
     @Override
-    public Light clone() {
+    public Light cloneLight() {
         return new EnvironmentLight(this);
     }
 
@@ -180,7 +197,10 @@ public class EnvironmentLight extends Light {
      * @param m
      */
     public void setMaterial(Material m) {
-        material = m.clone();
+        material = m.cloneMaterial();
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(EnvironmentLight.class.getName());
 
 }

@@ -34,7 +34,7 @@ public class StereoCamera extends Camera {
      *
      * @param leftCameraPtr
      */
-    public void setLeftCamera(Camera leftCameraPtr) {
+    public final void setLeftCamera(Camera leftCameraPtr) {
         leftCamera = leftCameraPtr;
     }
 
@@ -43,7 +43,7 @@ public class StereoCamera extends Camera {
      *
      * @param rightCameraPtr
      */
-    public void setRightCamera(Camera rightCameraPtr) {
+    public final void setRightCamera(Camera rightCameraPtr) {
         rightCamera = rightCameraPtr;
     }
 
@@ -123,8 +123,15 @@ public class StereoCamera extends Camera {
      */
     public static enum ViewingType {
 
+        /**
+         *
+         */
         PARALLEL,
+        /**
+         *
+         */
         TRANSVERSE
+
     }
 
     /**
@@ -144,6 +151,7 @@ public class StereoCamera extends Camera {
 
     //sub cameras
     Camera leftCamera;
+
     Camera rightCamera;
 
     /**
@@ -173,8 +181,8 @@ public class StereoCamera extends Camera {
         viewingType = o.viewingType;
         pixelGap = o.pixelGap;
         beta = o.beta;
-        leftCamera = o.leftCamera.clone();
-        rightCamera = o.rightCamera.clone();
+        leftCamera = o.leftCamera.cloneCamera();
+        rightCamera = o.rightCamera.cloneCamera();
     }
 
     /**
@@ -205,7 +213,7 @@ public class StereoCamera extends Camera {
     public void renderScene(World w) {
         ViewPlane vp = new ViewPlane(w.vp);
         int hres = vp.hRes;
-        int vres = vp.vRes;
+        //int vres = vp.vRes;
 
         double r = eye.distance(lookat);
         double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
@@ -241,7 +249,7 @@ public class StereoCamera extends Camera {
      * @return
      */
     @Override
-    public Camera clone() {
+    public Camera cloneCamera() {
         return new StereoCamera(this);
     }
 

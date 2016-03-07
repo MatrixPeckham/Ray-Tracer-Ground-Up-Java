@@ -20,12 +20,11 @@ package com.matrixpeckham.raytracer.brdfs;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  * Glossy Specular class, provides specular highlights without sampling and
@@ -43,7 +42,7 @@ public class GlossySpecular extends BRDF {
     /**
      * color
      */
-    private RGBColor cs = new RGBColor(1);
+    private final RGBColor cs = new RGBColor(1);
 
     /**
      * exponent
@@ -73,7 +72,7 @@ public class GlossySpecular extends BRDF {
         cs.setTo(gs.cs);
         exp = gs.exp;
         if (gs.sampler != null) {
-            sampler = gs.sampler.clone();
+            sampler = gs.sampler.cloneSampler();
         }
     }
 
@@ -82,7 +81,8 @@ public class GlossySpecular extends BRDF {
      *
      * @return
      */
-    public GlossySpecular clone() {
+    @Override
+    public GlossySpecular cloneBRDF() {
         return new GlossySpecular(this);
     }
 

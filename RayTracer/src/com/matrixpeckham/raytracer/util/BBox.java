@@ -17,6 +17,8 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import java.util.logging.Logger;
+
 /**
  * Bounding box class.
  *
@@ -38,20 +40,22 @@ public class BBox {
      * low z
      */
     public double z0 = -1;
-    
+
     /**
      * high x
      */
     public double x1 = 1;
+
     /**
      * high y
      */
     public double y1 = 1;
+
     /**
      * high z
      */
     public double z1 = 1;
-    
+
     /**
      * Default constructor
      */
@@ -60,12 +64,13 @@ public class BBox {
 
     /**
      * Initializing constructor
+     *
      * @param x0
      * @param x1
      * @param y0
      * @param y1
      * @param z0
-     * @param z1 
+     * @param z1
      */
     public BBox(double x0, double x1, double y0, double y1, double z0, double z1) {
         this.x0 = x0;
@@ -78,8 +83,9 @@ public class BBox {
 
     /**
      * Another initializing constructor
+     *
      * @param p0
-     * @param p1 
+     * @param p1
      */
     public BBox(Point3D p0, Point3D p1) {
         x0 = p0.x;
@@ -92,7 +98,8 @@ public class BBox {
 
     /**
      * Copy Constructor
-     * @param b 
+     *
+     * @param b
      */
     public BBox(BBox b) {
         this.x0 = b.x0;
@@ -105,8 +112,9 @@ public class BBox {
 
     /**
      * Checks ray/box intersection
+     *
      * @param ray
-     * @return 
+     * @return
      */
     public boolean hit(Ray ray) {
         double ox = ray.o.x;
@@ -148,7 +156,7 @@ public class BBox {
 
         double t0, t1;
 
-	// find largest entering t value
+        // find largest entering t value
         if (tx_min > ty_min) {
             t0 = tx_min;
         } else {
@@ -159,7 +167,7 @@ public class BBox {
             t0 = tz_min;
         }
 
-	// find smallest exiting t value
+        // find smallest exiting t value
         if (tx_max < ty_max) {
             t1 = tx_max;
         } else {
@@ -175,17 +183,19 @@ public class BBox {
 
     /**
      * point in box check
+     *
      * @param p
-     * @return 
+     * @return
      */
     public boolean inside(Point3D p) {
         return ((p.x > x0 && p.x < x1) && (p.y > y0 && p.y < y1) && (p.z > z0
                 && p.z < z1));
     }
-    
+
     /**
      * sets this box to the other box
-     * @param b 
+     *
+     * @param b
      */
     public void setTo(BBox b) {
         this.x0 = b.x0;
@@ -198,7 +208,8 @@ public class BBox {
 
     /**
      * expands box to contain its current contents and the new box
-     * @param bb 
+     *
+     * @param bb
      */
     public void expandToFit(BBox bb) {
         if (bb.x0 < x0) {
@@ -220,5 +231,7 @@ public class BBox {
             z1 = bb.z1;
         }
     }
+
+    private static final Logger LOG = Logger.getLogger(BBox.class.getName());
 
 }

@@ -35,7 +35,6 @@ public class PartTorus extends Torus {
     protected static class PartTorusParam extends Torus.TorusParametric {
 
         //extents
-
         double phiMin, phiMax, thetaMin, thetaMax;
 
         /**

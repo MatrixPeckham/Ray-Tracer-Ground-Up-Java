@@ -17,14 +17,11 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.brdfs.Lambertian;
-import com.matrixpeckham.raytracer.brdfs.SV_Lambertian;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Emissive texture material.
@@ -58,7 +55,7 @@ public class SV_Emissive extends Material {
     public SV_Emissive(SV_Emissive m) {
         super(m);
         if (m.ce != null) {
-            ce = m.ce.clone();
+            ce = m.ce.cloneTexture();
         }
         ls = m.ls;
     }
@@ -126,7 +123,7 @@ public class SV_Emissive extends Material {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new SV_Emissive(this);
     }
 
@@ -136,7 +133,7 @@ public class SV_Emissive extends Material {
      * @param c
      */
     public void setCe(Texture c) {
-        ce = c.clone();
+        ce = c.cloneTexture();
     }
 
     /**
@@ -153,5 +150,8 @@ public class SV_Emissive extends Material {
             return Utility.BLACK;
         }
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SV_Emissive.class.getName());
 
 }

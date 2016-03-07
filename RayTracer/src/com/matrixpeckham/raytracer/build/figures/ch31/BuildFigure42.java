@@ -88,7 +88,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
-//	bunnyPtr.readFlatTriangles(fileName);	
+//	bunnyPtr.readFlatTriangles(fileName);
 
             gridPtr.readSmoothTriangles(new File(meshpath + fileName));
         } catch (IOException ex) {
@@ -112,13 +112,13 @@ public class BuildFigure42 implements BuildWorldFunction {
             throw new RuntimeException(ex);
         }
 
-	// noise:
+        // noise:
         CubicNoise noisePtr1 = new CubicNoise();
         noisePtr1.setNumOctaves(4);
         noisePtr1.setGain(0.5);
         noisePtr1.setLacunarity(2.0);
 
-	// texture:
+        // texture:
         WrappedRamp wrappedPtr1 = new WrappedRamp(imagePtr1);
         wrappedPtr1.setNoise(noisePtr1);
         wrappedPtr1.setWrapNumber(8.0);
@@ -126,7 +126,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         TInstance texturePtr1 = new TInstance(wrappedPtr1);
         texturePtr1.scale(0.1);
 
-	// material:
+        // material:
         SV_Matte svMattePtr1 = new SV_Matte();
         svMattePtr1.setKa(0.15);
         svMattePtr1.setKd(0.85);
@@ -137,7 +137,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         bunnyPtr1.rotateY(25);
         w.addObject(bunnyPtr1);
 
-	// left bunny 
+        // left bunny
         Image imagePtr2 = new Image();
         try {
             imagePtr2.loadPPMFile(new File(path + "BlueAndBuffRamp.ppm"));
@@ -147,13 +147,13 @@ public class BuildFigure42 implements BuildWorldFunction {
             throw new RuntimeException(ex);
         }
 
-	// noise:
+        // noise:
         CubicNoise noisePtr2 = new CubicNoise();
         noisePtr2.setNumOctaves(4);
         noisePtr2.setGain(0.5);
         noisePtr2.setLacunarity(3.0);
 
-	// texture:
+        // texture:
         WrappedRamp wrappedPtr2 = new WrappedRamp(imagePtr2);
         wrappedPtr2.setNoise(noisePtr2);
         wrappedPtr2.setWrapNumber(8.0);
@@ -161,7 +161,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         TInstance texturePtr2 = new TInstance(wrappedPtr2);
         texturePtr2.scale(0.075);
 
-	// material:
+        // material:
         SV_Matte svMattePtr2 = new SV_Matte();
         svMattePtr2.setKa(0.15);
         svMattePtr2.setKd(0.85);
@@ -173,7 +173,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         bunnyPtr2.translate(-0.15, 0.0, 0.0);
         w.addObject(bunnyPtr2);
 
-	// right bunny:
+        // right bunny:
         Image imagePtr3 = new Image();
         try {
             imagePtr3.loadPPMFile(new File(path + "BrownRamp.ppm"));
@@ -183,13 +183,13 @@ public class BuildFigure42 implements BuildWorldFunction {
             throw new RuntimeException(ex);
         }
 
-	// noise:
+        // noise:
         CubicNoise noisePtr3 = new CubicNoise();
         noisePtr3.setNumOctaves(4);
         noisePtr3.setGain(0.5);
         noisePtr3.setLacunarity(5.0);
 
-	// texture:
+        // texture:
         WrappedRamp wrappedPtr3 = new WrappedRamp(imagePtr3);
         wrappedPtr3.setNoise(noisePtr3);
         wrappedPtr3.setWrapNumber(8.0);
@@ -197,7 +197,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         TInstance texturePtr3 = new TInstance(wrappedPtr3);
         texturePtr3.scale(0.3);
 
-	// material:
+        // material:
         SV_Matte svMattePtr3 = new SV_Matte();
         svMattePtr3.setKa(0.15);
         svMattePtr3.setKd(0.85);
@@ -209,7 +209,7 @@ public class BuildFigure42 implements BuildWorldFunction {
         bunnyPtr3.translate(0.15, 0.0, 0.0);
         w.addObject(bunnyPtr3);
 
-	// reflective ground plane
+        // reflective ground plane
         Reflective reflectivePtr = new Reflective();
         reflectivePtr.setKa(0.2);
         reflectivePtr.setKd(0.75);
@@ -219,7 +219,8 @@ public class BuildFigure42 implements BuildWorldFunction {
         reflectivePtr.setKr(0.5);
         reflectivePtr.setCr(0.8, 1.0, 0.8);
 
-        Plane planePtr = new Plane(new Point3D(0, 0.033, 0),new Normal(0, 1, 0));
+        Plane planePtr
+                = new Plane(new Point3D(0, 0.033, 0), new Normal(0, 1, 0));
         planePtr.setMaterial(reflectivePtr);
         w.addObject(planePtr);
 

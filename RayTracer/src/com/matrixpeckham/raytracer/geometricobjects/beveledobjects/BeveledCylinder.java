@@ -19,9 +19,9 @@ package com.matrixpeckham.raytracer.geometricobjects.beveledobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
+import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Disk;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.OpenCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 
@@ -34,16 +34,16 @@ import com.matrixpeckham.raytracer.util.Point3D;
  */
 public class BeveledCylinder extends Compound {
 
-    double bottom, top, radius, bevelRadius;
-
+    /**
+     *
+     * @param bottom
+     * @param top
+     * @param radius
+     * @param bevelRadius
+     */
     public BeveledCylinder(double bottom, double top, double radius,
             double bevelRadius) {
         super();
-        //store for later
-        this.bottom = bottom;
-        this.top = top;
-        this.radius = radius;
-        this.bevelRadius = bevelRadius;
 
         //bottom disk
         addObject(new Disk(new Point3D(0, bottom, 0), new Normal(0, -1, 0),

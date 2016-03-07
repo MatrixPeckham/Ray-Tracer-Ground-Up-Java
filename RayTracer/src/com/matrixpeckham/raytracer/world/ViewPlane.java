@@ -20,158 +20,201 @@ package com.matrixpeckham.raytracer.world;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Regular;
 import com.matrixpeckham.raytracer.samplers.Sampler;
+import java.util.logging.Logger;
 
 /**
- * Class that represents the viewport for the image. 
+ * Class that represents the viewport for the image.
+ *
  * @author William Matrix Peckham
  */
 public class ViewPlane {
+
     /**
      * Horizontal resolution.
      */
     public int hRes;
+
     /**
-     * Vertical resolution. 
+     * Vertical resolution.
      */
     public int vRes;
+
     /**
      * Pixel size.
      */
     public double s;
+
     /**
      * samples per pixel
      */
     public int numSamples;
+
     /**
      * Sampler for pixel location.
      */
     public Sampler sampler = null;
+
     /**
      * Gamma correction.
      */
     public double gamma;
+
     /**
-     * Inverse of gamma correction, computed once to avoid many divisions. 
+     * Inverse of gamma correction, computed once to avoid many divisions.
      */
     public double invGamma;
+
     /**
-     * Flag to show out of gamut colors as a solid known color. If true shows as red
-     * otherwise normalizes color, third option of clamping color is not implemented,
-     * but would be trivial to add. 
+     * Flag to show out of gamut colors as a solid known color. If true shows as
+     * red otherwise normalizes color, third option of clamping color is not
+     * implemented, but would be trivial to add.
      */
     public boolean showOutOfGamut;//TODO: implement color clamping as well.
+
     /**
      * Maximum recursion depth for rays.
      */
-    public int maxDepth=1;
-    public Integer imageHeight=null;
-    public Integer imageWidth=null;
+    public int maxDepth = 1;
 
     /**
-     * Default constructor. 
+     * used to communicate how many pixels the GUI should expect to get
+     */
+    public Integer imageHeight = null;
+
+    /**
+     * used to communicate how many pixels the GUI should expect to get
+     */
+    public Integer imageWidth = null;
+
+    /**
+     * Default constructor.
      */
     public ViewPlane() {
-        hRes=400;
-        vRes=400;
-        s=1;
-        numSamples=1;
-        gamma=1;
-        invGamma=1;
-        showOutOfGamut=false;
+        hRes = 400;
+        vRes = 400;
+        s = 1;
+        numSamples = 1;
+        gamma = 1;
+        invGamma = 1;
+        showOutOfGamut = false;
     }
 
     /**
      * Copy constructor.
-     * @param vp 
+     *
+     * @param vp
      */
     public ViewPlane(ViewPlane vp) {
-        hRes=vp.hRes;
-        vRes=vp.vRes;
-        s=vp.s;
-        numSamples=vp.numSamples;
-        sampler = vp.sampler.clone();
-        gamma=vp.gamma;
-        invGamma=vp.invGamma;
-        showOutOfGamut=vp.showOutOfGamut;
+        hRes = vp.hRes;
+        vRes = vp.vRes;
+        s = vp.s;
+        numSamples = vp.numSamples;
+        sampler = vp.sampler.cloneSampler();
+        gamma = vp.gamma;
+        invGamma = vp.invGamma;
+        showOutOfGamut = vp.showOutOfGamut;
     }
 
     /**
-     * Java replacement for overridden = operator. 
+     * Java replacement for overridden = operator.
+     *
      * @param vp
      * @return this reference
      */
     public ViewPlane setTo(ViewPlane vp) {
-        hRes=vp.hRes;
-        vRes=vp.vRes;
-        s=vp.s;
-        numSamples=vp.numSamples;
-        gamma=vp.gamma;
-        invGamma=vp.invGamma;
-        showOutOfGamut=vp.showOutOfGamut;
+        hRes = vp.hRes;
+        vRes = vp.vRes;
+        s = vp.s;
+        numSamples = vp.numSamples;
+        gamma = vp.gamma;
+        invGamma = vp.invGamma;
+        showOutOfGamut = vp.showOutOfGamut;
         return this;
     }
 
     /**
      * Setter
-     * @param h_res 
+     *
+     * @param h_res
      */
-    public void setHres(int h_res){hRes=h_res;}
-    /**
-     * Setter
-     * @param v_res 
-     */
-    public void setVres(int v_res){vRes=v_res;}
-    /**
-     * Setter
-     * @param size 
-     */
-    public void setPixelSize(double size){
-        s=size;
+    public void setHres(int h_res) {
+        hRes = h_res;
     }
+
+    /**
+     * Setter
+     *
+     * @param v_res
+     */
+    public void setVres(int v_res) {
+        vRes = v_res;
+    }
+
+    /**
+     * Setter
+     *
+     * @param size
+     */
+    public void setPixelSize(double size) {
+        s = size;
+    }
+
     /**
      * Sets gamma and computes invGamma
-     * @param g 
+     *
+     * @param g
      */
-    public void setGamma(double g){
-        gamma=g;
-        invGamma=1.0f/gamma;
+    public void setGamma(double g) {
+        gamma = g;
+        invGamma = 1.0f / gamma;
     }
+
     /**
      * Setter
-     * @param show 
+     *
+     * @param show
      */
-    public void setGamutDisplay(boolean show){
-        showOutOfGamut=show;
+    public void setGamutDisplay(boolean show) {
+        showOutOfGamut = show;
     }
-    
+
     /**
      * Sets the number of samples, if n>1 creates a new multi-jittered sampler
-     * with that number of samples. Otherwise creates a regular sampler with one 
-     * sample.  
-     * @param n 
+     * with that number of samples. Otherwise creates a regular sampler with one
+     * sample.
+     *
+     * @param n
      */
-    public void setSamples(int n){
-        numSamples=n;
-        if(numSamples>1){
-            sampler=new MultiJittered(numSamples);
+    public void setSamples(int n) {
+        numSamples = n;
+        if (numSamples > 1) {
+            sampler = new MultiJittered(numSamples);
         } else {
-            sampler=new Regular(1);
+            sampler = new Regular(1);
         }
     }
+
     /**
-     * Sets the sampler for the viewport, also sets the number of samples as 
-     * the number of samples in the sampler
-     * @param s 
+     * Sets the sampler for the viewport, also sets the number of samples as the
+     * number of samples in the sampler
+     *
+     * @param s
      */
-    public void setSampler(Sampler s){
+    public void setSampler(Sampler s) {
         sampler = s;
-        numSamples=sampler.getNumSamples();
+        numSamples = sampler.getNumSamples();
     }
+
     /**
      * Setter.
-     * @param i 
+     *
+     * @param i
      */
     public void setMaxDepth(int i) {
-        maxDepth=i;
+        maxDepth = i;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ViewPlane.class.getName());
+
 }

@@ -20,10 +20,10 @@ package com.matrixpeckham.raytracer.build;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.tracers.MultipleObjects;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 
@@ -35,31 +35,29 @@ public class BuildMultipleObjects implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-        w.vp.hRes=200;
-	w.vp.vRes=200;
-	w.vp.s=1.0f;
-        
-        w.tracer = new MultipleObjects(w); 
-	
-	w.backgroundColor = new RGBColor(Utility.BLACK);
-	
-	// use access functions to set centre and radius
-	
-	Sphere sphere_ptr = new Sphere();
-	sphere_ptr.setCenter(new Point3D(0, -25, 0));
-	sphere_ptr.setRadius(80);
-	sphere_ptr.setColor(1, 0, 0);  // red
-	w.addObject(sphere_ptr);
+        w.vp.hRes = 200;
+        w.vp.vRes = 200;
+        w.vp.s = 1.0f;
 
-	// use constructor to set centre and radius 
-	
-	sphere_ptr = new Sphere(new Point3D(0, 30, 0), 60);
-	sphere_ptr.setColor(1, 1, 0);	// yellow
-	w.addObject(sphere_ptr);
-	
-	Plane plane_ptr = new Plane(new Point3D(0), new Normal(0, 1, 1));
-	plane_ptr.setColor(0.0f, 0.3f, 0.0f);	// dark green
-	w.addObject(plane_ptr);
+        w.tracer = new MultipleObjects(w);
+
+        w.backgroundColor = new RGBColor(Utility.BLACK);
+
+        // use access functions to set centre and radius
+        Sphere sphere_ptr = new Sphere();
+        sphere_ptr.setCenter(new Point3D(0, -25, 0));
+        sphere_ptr.setRadius(80);
+        sphere_ptr.setColor(1, 0, 0);  // red
+        w.addObject(sphere_ptr);
+
+        // use constructor to set centre and radius
+        sphere_ptr = new Sphere(new Point3D(0, 30, 0), 60);
+        sphere_ptr.setColor(1, 1, 0);	// yellow
+        w.addObject(sphere_ptr);
+
+        Plane plane_ptr = new Plane(new Point3D(0), new Normal(0, 1, 1));
+        plane_ptr.setColor(0.0f, 0.3f, 0.0f);	// dark green
+        w.addObject(plane_ptr);
     }
-    
+
 }

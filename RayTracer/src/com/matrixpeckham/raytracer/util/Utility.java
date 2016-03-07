@@ -18,6 +18,8 @@
 package com.matrixpeckham.raytracer.util;
 
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that contains many utility functions and variables.
@@ -30,50 +32,62 @@ public class Utility {
      * Defined as Math.PI for convenience
      */
     public static final double PI = Math.PI;
+
     /**
      * Two Pi for convenience, full circle.
      */
     public static final double TWO_PI = 2 * PI;
+
     /**
      * Pi over 180, for conversion to/from degrees.
      */
     public static final double PI_ON_180 = PI / 180.0;
+
     /**
      * Convenience inverse pi
      */
     public static final double INV_PI = 1.0 / PI;
+
     /**
      * convenience inverse two pi
      */
     public static final double INV_2_PI = 1.0 / TWO_PI;
+
     /**
      * common epsilon
      */
     public static final double EPSILON = 0.0001;
+
     /**
      * common too-big value.
      */
     public static final double HUGE_VALUE = 1.0e10;
+
     /**
      * black color
      */
     public static final RGBColor BLACK = new RGBColor(0);
+
     /**
      * white color
      */
     public static final RGBColor WHITE = new RGBColor(1);
+
     /**
      * red color
      */
     public static final RGBColor RED = new RGBColor(1, 0, 0);
+
     /**
      * green color
      */
     public static final RGBColor GREEN = new RGBColor(0, 1, 0);
+
     /**
      * blue color
      */
     public static final RGBColor BLUE = new RGBColor(0, 0, 1);
+
     /**
      * yellow color
      */
@@ -163,7 +177,7 @@ public class Utility {
      * @param s
      * @return
      */
-    public static final int SolveQuadric(double c[], double s[]) {
+    public static final int solveQuadric(double c[], double s[]) {
         double p, q, D;
 
         /* normal form: x^2 + px + q = 0 */
@@ -304,6 +318,11 @@ public class Utility {
 
             int shouldBeOne = solveCubic(coeffs, s);
 
+            if (shouldBeOne != 0) {
+                LOG.log(Level.WARNING,
+                        "Quartic equation got unusual result from solveCubic.");
+            }
+
             /* ... and take the one real solution ... */
             z = s[0];
 
@@ -331,19 +350,17 @@ public class Utility {
             coeffs[1] = q < 0 ? -v : v;
             coeffs[2] = 1;
 
-            num = SolveQuadric(coeffs, s);
+            num = solveQuadric(coeffs, s);
 
             coeffs[0] = z + u;
             coeffs[1] = q < 0 ? v : -v;
             coeffs[2] = 1;
 
-            int tempNum = 0;
+            int tempNum;
             double[] tempSols = new double[2];
-            tempNum = SolveQuadric(coeffs, tempSols);
+            tempNum = solveQuadric(coeffs, tempSols);
 
-            for (int in = 0; in < tempNum; in++) {
-                s[in + num] = tempSols[in];
-            }
+            System.arraycopy(tempSols, 0, s, num, tempNum);
             num += tempNum;
         }
 
@@ -377,12 +394,13 @@ public class Utility {
 
     /**
      * Smooth pulse 0 x for 0-e1 and e3-1 one for e2-e3 lerped between.
+     *
      * @param e0
      * @param e1
      * @param e2
      * @param e3
      * @param x
-     * @return 
+     * @return
      */
     public static double smoothPulse(double e0, double e1, double e2, double e3,
             double x) {
@@ -391,25 +409,28 @@ public class Utility {
 
     /**
      * same as pulse, but repeated for period
+     *
      * @param e0
      * @param e1
      * @param e2
      * @param e3
      * @param period
      * @param x
-     * @return 
+     * @return
      */
     public static double smoothPulseTrain(double e0, double e1, double e2,
             double e3, double period, double x) {
         return (smoothPulse(e0, e1, e2, e3, mod(x, period)));
     }
-    
+
     /**
-     * Steps from as x ranges [0-1] returns 0 for x [0-a] 1 for x [b-inf] lerp from 0-1 for x [a-b].
+     * Steps from as x ranges [0-1] returns 0 for x [0-a] 1 for x [b-inf] lerp
+     * from 0-1 for x [a-b].
+     *
      * @param a
      * @param b
      * @param x
-     * @return 
+     * @return
      */
     public static double smoothStep(double a, double b, double x) {
         if (x < a) {
@@ -427,10 +448,11 @@ public class Utility {
 
     /**
      * lerps color
+     *
      * @param c0
      * @param c1
      * @param f
-     * @return 
+     * @return
      */
     public static RGBColor mixColor(RGBColor c0, RGBColor c1, double f) {
         return c0.mul(1 - f).add(c1.mul(f));
@@ -438,12 +460,16 @@ public class Utility {
 
     /**
      * lerps double
+     *
      * @param a
      * @param b
      * @param f
-     * @return 
+     * @return
      */
     public static double mixDouble(double a, double b, double f) {
         return ((1.0 - f) * a + f * b);
     }
+
+    private static final Logger LOG = Logger.getLogger(Utility.class.getName());
+
 }

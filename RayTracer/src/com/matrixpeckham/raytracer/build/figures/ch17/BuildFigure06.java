@@ -22,9 +22,7 @@ import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.AmbientOccluder;
 import com.matrixpeckham.raytracer.materials.Matte;
-import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.PureRandom;
-import com.matrixpeckham.raytracer.samplers.Regular;
 import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -36,6 +34,12 @@ import com.matrixpeckham.raytracer.world.World;
  
   @author William Matrix Peckham
  */
+
+/**
+ *
+ * @author Owner
+ */
+
 public class BuildFigure06 implements BuildWorldFunction{
 
     @Override

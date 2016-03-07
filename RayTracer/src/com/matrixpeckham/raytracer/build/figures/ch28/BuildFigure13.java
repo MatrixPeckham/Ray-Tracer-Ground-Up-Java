@@ -46,69 +46,63 @@ import java.util.logging.Logger;
 public class BuildFigure13 implements BuildWorldFunction {
 
     @Override
-    public void build(World w) {	
+    public void build(World w) {
 
 // 	Copyright (C) Kevin Suffern 2000-2007.
 //	This C++ code is for non-commercial purposes only.
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
-
-
 // This builds the scene for Figure 28.14
+        int numSamples = 16;
 
-	int numSamples = 16;
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(9);
 
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);	
-	w.vp.setMaxDepth(9);		
-	
-	w.backgroundColor = Utility.WHITE;
-	
-	w.tracer = new Whitted(w);
-	
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.25);
-	w.setAmbient(ambientPtr);
-	
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);  
-	pinholePtr.setLookat(0, -1.5, 0);    
-	pinholePtr.setViewDistance(15000.0);	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
-		
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(0, 0, 1); 
-	lightPtr.scaleRadiance(5.0);
-	lightPtr.setShadows(false);
-	w.addLight(lightPtr);
-	
-	
-	// transparent horse
-	
-	Dielectric dielectricPtr = new Dielectric();
-	dielectricPtr.setKa(0.0);
-	dielectricPtr.setKd(0.0); 
-	dielectricPtr.setKs(0.2);    
-	dielectricPtr.setExp(2000.0);
-	dielectricPtr.setIorIn(1.5);   
-	dielectricPtr.setIorOut(1.0);
-	dielectricPtr.setCfIn(0.35, 0.65, 0.45);   // green
-	dielectricPtr.setCfOut(Utility.WHITE);
-	
-	String fileName = "Horse97K.ply"; 	
-        String path="C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
+        w.backgroundColor = Utility.WHITE;
+
+        w.tracer = new Whitted(w);
+
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.25);
+        w.setAmbient(ambientPtr);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(0, -1.5, 0);
+        pinholePtr.setViewDistance(15000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(0, 0, 1);
+        lightPtr.scaleRadiance(5.0);
+        lightPtr.setShadows(false);
+        w.addLight(lightPtr);
+
+        // transparent horse
+        Dielectric dielectricPtr = new Dielectric();
+        dielectricPtr.setKa(0.0);
+        dielectricPtr.setKd(0.0);
+        dielectricPtr.setKs(0.2);
+        dielectricPtr.setExp(2000.0);
+        dielectricPtr.setIorIn(1.5);
+        dielectricPtr.setIorOut(1.0);
+        dielectricPtr.setCfIn(0.35, 0.65, 0.45);   // green
+        dielectricPtr.setCfOut(Utility.WHITE);
+
+        String fileName = "Horse97K.ply";
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
 
         TriangleMesh horsePtr = new TriangleMesh(new Mesh());
-        try{
+        try {
 //	horsePtr.reverseMeshNormals();				// you must use w for the 10K model
-//	horsePtr.readFlatTriangles(fileName);	
-        
-        horsePtr.readSmoothTriangles(new File(path+fileName));
-        } catch(IOException ex){
+//	horsePtr.readFlatTriangles(fileName);
+
+            horsePtr.readSmoothTriangles(new File(path + fileName));
+        } catch (IOException ex) {
             Logger.getLogger(BuildFigure13.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -116,40 +110,36 @@ public class BuildFigure13 implements BuildWorldFunction {
         horsePtr.setMaterial(dielectricPtr);
         horsePtr.setupCells();
 
-	Instance bigHorsePtr = new Instance(horsePtr);
-	bigHorsePtr.scale(5.0);
-	bigHorsePtr.translate(0, -1.5, 0.0);
-	w.addObject(bigHorsePtr);
-	
-	
-	// vertical checker plane
-	
-	Checker3D checkerPtr = new Checker3D();
-	checkerPtr.setSize(1.0);		
-	checkerPtr.setColor1(Utility.WHITE);
-	checkerPtr.setColor2(0.75);  
-	
-	PlaneChecker planeCheckerPtr = new PlaneChecker();
-	planeCheckerPtr.setSize(1.5);		
-	planeCheckerPtr.setOutlineWidth(0.2);
-	planeCheckerPtr.setColor1(Utility.WHITE);
-	planeCheckerPtr.setColor2(Utility.WHITE);  
-	planeCheckerPtr.setOutlineColor(Utility.BLACK); 
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.65);
-	svMattePtr.setCd(planeCheckerPtr);
+        Instance bigHorsePtr = new Instance(horsePtr);
+        bigHorsePtr.scale(5.0);
+        bigHorsePtr.translate(0, -1.5, 0.0);
+        w.addObject(bigHorsePtr);
 
-	Instance planePtr = new Instance(new Plane(new Point3D(0), new Normal(0, 1, 0)));
-	planePtr.setMaterial(svMattePtr);
-	planePtr.rotateX(90);
-	planePtr.translate(0, 0, -4);
-	planePtr.setShadows(false);
-	w.addObject(planePtr);	
-}
+        // vertical checker plane
+        Checker3D checkerPtr = new Checker3D();
+        checkerPtr.setSize(1.0);
+        checkerPtr.setColor1(Utility.WHITE);
+        checkerPtr.setColor2(0.75);
 
+        PlaneChecker planeCheckerPtr = new PlaneChecker();
+        planeCheckerPtr.setSize(1.5);
+        planeCheckerPtr.setOutlineWidth(0.2);
+        planeCheckerPtr.setColor1(Utility.WHITE);
+        planeCheckerPtr.setColor2(Utility.WHITE);
+        planeCheckerPtr.setOutlineColor(Utility.BLACK);
 
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.65);
+        svMattePtr.setCd(planeCheckerPtr);
 
+        Instance planePtr = new Instance(new Plane(new Point3D(0), new Normal(0,
+                1, 0)));
+        planePtr.setMaterial(svMattePtr);
+        planePtr.rotateX(90);
+        planePtr.translate(0, 0, -4);
+        planePtr.setShadows(false);
+        w.addObject(planePtr);
+    }
 
 }

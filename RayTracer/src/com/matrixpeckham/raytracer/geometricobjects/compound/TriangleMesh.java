@@ -33,38 +33,45 @@ import com.matrixpeckham.raytracer.util.ply.PLYFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
- * TriangleMesh class, for storing triangle meshes an rendering them. also has the code to load them.
- * 
- * Extends grid because we'll have many child triangles and they need to be efficiently culled from hit tests
+ * TriangleMesh class, for storing triangle meshes an rendering them. also has
+ * the code to load them.
+ *
+ * Extends grid because we'll have many child triangles and they need to be
+ * efficiently culled from hit tests
+ *
  * @author William Matrix Peckham
  */
 public class TriangleMesh extends Grid {
 
     /**
      * reads a ply file for flat triangle mesh with uv coordinates
+     *
      * @param fileName
-     * @throws IOException 
+     * @throws IOException
      */
-    public void readFlatUVTriangles(File fileName) throws IOException{
+    public void readFlatUVTriangles(File fileName) throws IOException {
         readPLYFileUV(fileName, TriangleType.FLAT);
     }
 
     /**
      * reads a ply file for smooth triangle mesh with uv coordinates
+     *
      * @param fileName
-     * @throws IOException 
+     * @throws IOException
      */
-    public void readSmoothUvTriangles(File fileName)throws IOException {
+    public void readSmoothUvTriangles(File fileName) throws IOException {
         readPLYFileUV(fileName, TriangleType.SMOOTH);
         computeMeshNormals();
     }
 
     /**
-     * Triangle type 
+     * Triangle type
      */
     enum TriangleType {
+
         /**
          * flat triangles, one normal per triangle
          */
@@ -73,13 +80,14 @@ public class TriangleMesh extends Grid {
          * smooth triangles, interpolated individual normals
          */
         SMOOTH
+
     }
-    
+
     /**
-     * mesh reference that will hold all the vertices, normals, uvs. 
+     * mesh reference that will hold all the vertices, normals, uvs.
      */
     protected Mesh mesh;
-    
+
     /**
      * are the normals reversed
      */
@@ -94,8 +102,8 @@ public class TriangleMesh extends Grid {
     }
 
     /**
-     * 
-     * @param mesh 
+     *
+     * @param mesh
      */
     public TriangleMesh(Mesh mesh) {
         this.mesh = mesh;
@@ -103,20 +111,22 @@ public class TriangleMesh extends Grid {
 
     /**
      * copy constructor
-     * @param m 
+     *
+     * @param m
      */
     public TriangleMesh(TriangleMesh m) {
         super(m);
-        this.mesh=m.mesh;
-        reverseNomral=m.reverseNomral;
+        this.mesh = m.mesh;
+        reverseNomral = m.reverseNomral;
     }
-    
+
     /**
      * clone
-     * @return 
+     *
+     * @return
      */
     @Override
-    public TriangleMesh clone() {
+    public TriangleMesh cloneGeometry() {
         return new TriangleMesh(this);
     }
 
@@ -129,8 +139,9 @@ public class TriangleMesh extends Grid {
 
     /**
      * reads a file for a flat triangle mesh
+     *
      * @param f
-     * @throws IOException 
+     * @throws IOException
      */
     public void readFlatTriangles(File f) throws IOException {
         readPLYFile(f, TriangleType.FLAT);
@@ -138,8 +149,9 @@ public class TriangleMesh extends Grid {
 
     /**
      * reads a file for a smooth triangle mesh
+     *
      * @param f
-     * @throws IOException 
+     * @throws IOException
      */
     public void readSmoothTriangles(File f) throws IOException {
         readPLYFile(f, TriangleType.SMOOTH);
@@ -148,15 +160,16 @@ public class TriangleMesh extends Grid {
 
     /**
      * reads a PLY file and creates the correct triangle type for the type input
+     *
      * @param f
      * @param t
-     * @throws IOException 
+     * @throws IOException
      */
     private void readPLYFile(File f, TriangleType t) throws IOException {
-        
+
         //create a plyfile object from the file.
         PLYFile ply = new PLYFile(f);
-        
+
         //add all the ply file's vertices to the mesh
         ArrayList<PLYElement> verts = ply.getElements("vertex");
         mesh.numVertices = verts.size();
@@ -164,7 +177,7 @@ public class TriangleMesh extends Grid {
             mesh.vertices.add(new Point3D(verts.get(i).getDouble("x"), verts.
                     get(i).getDouble("y"), verts.get(i).getDouble("z")));
         }
-        
+
         //get the faces from the ply file, will be a list of lists of indices
         ArrayList<PLYElement> faces = ply.getElements("face");
         //store triangle count
@@ -177,7 +190,7 @@ public class TriangleMesh extends Grid {
         for (int i = 0; i < mesh.numTriangles; i++) {
             //gets the integer array of indices for each face
             int[] faceLst = faces.get(i).getIntList("vertex_indices");
-            
+
             if (t == TriangleType.FLAT) {
                 //flat triangles mean it's easy, make a traignle from the three indices compute its normal and add to grid
                 FlatMeshTriangle tri = new FlatMeshTriangle(mesh, faceLst[0],
@@ -185,7 +198,7 @@ public class TriangleMesh extends Grid {
                 tri.computeNormal(reverseNomral);
                 objects.add(tri);
             } else {
-                
+
                 //start by making a smooth triangle from the three indices, compute its normal and add to grid
                 SmoothMeshTriangle tri
                         = new SmoothMeshTriangle(mesh, faceLst[0], faceLst[1],
@@ -200,12 +213,14 @@ public class TriangleMesh extends Grid {
             }
         }
     }
-    
+
     /**
-     * Reads a ply file with per vertex uv coordinates with the specified triangle type
+     * Reads a ply file with per vertex uv coordinates with the specified
+     * triangle type
+     *
      * @param f
      * @param t
-     * @throws IOException 
+     * @throws IOException
      */
     private void readPLYFileUV(File f, TriangleType t) throws IOException {
         //method works the same way as the non-uv enabled one the only difference is in the vertex part
@@ -227,10 +242,11 @@ public class TriangleMesh extends Grid {
         int count = 0;
         for (int i = 0; i < mesh.numTriangles; i++) {
             int[] faceLst = faces.get(i).getIntList("vertex_indices");
-            
+
             if (t == TriangleType.FLAT) {
-                FlatUVMeshTriangle tri = new FlatUVMeshTriangle(mesh, faceLst[0],
-                        faceLst[1], faceLst[2]);
+                FlatUVMeshTriangle tri
+                        = new FlatUVMeshTriangle(mesh, faceLst[0],
+                                faceLst[1], faceLst[2]);
                 tri.computeNormal(reverseNomral);
                 objects.add(tri);
             } else {
@@ -247,11 +263,15 @@ public class TriangleMesh extends Grid {
         }
     }
 
+    /**
+     * computes the normals for the mesh from the stored adjacency information
+     */
     public void computeMeshNormals() {
         for (int ind = 0; ind < mesh.numVertices; ind++) {
             Normal normal = new Normal();
             for (int j = 0; j < mesh.vertexFaces.get(ind).size(); j++) {
-                normal.addLocal(((MeshTriangle)objects.get(mesh.vertexFaces.get(ind).get(j))).
+                normal.addLocal(((MeshTriangle) objects.get(mesh.vertexFaces.
+                        get(ind).get(j))).
                         getNormal());
             }
             if (normal.x == 0 && normal.y == 0 && normal.z == 0) {
@@ -263,13 +283,18 @@ public class TriangleMesh extends Grid {
         }
     }
 
+    /**
+     *
+     * @param horizontalSteps
+     * @param verticalSteps
+     */
     public void tessellateFlatSphere(int horizontalSteps, int verticalSteps) {
 
-	// define the top triangles which all touch the north pole
+        // define the top triangles which all touch the north pole
         int k = 1;
 
         for (int j = 0; j <= horizontalSteps - 1; j++) {
-		// define vertices
+            // define vertices
 
             Point3D v0 = new Point3D(0, 1, 0);																		// top (north pole)
 
@@ -291,11 +316,11 @@ public class TriangleMesh extends Grid {
             objects.add(trianglePtr);
         }
 
-	// define the bottom triangles which all touch the south pole
+        // define the bottom triangles which all touch the south pole
         k = verticalSteps - 1;
 
         for (int j = 0; j <= horizontalSteps - 1; j++) {
-		// define vertices
+            // define vertices
 
             Point3D v0 = new Point3D(Math.sin(2.0 * Utility.PI * j
                     / horizontalSteps) * Math.
@@ -304,11 +329,11 @@ public class TriangleMesh extends Grid {
                     Math.cos(2.0 * Utility.PI * j / horizontalSteps) * Math.sin(
                             Utility.PI * k / verticalSteps));
 
-            Point3D v1 = new Point3D(0, -1, 0);																		// bottom (south pole)		
+            Point3D v1 = new Point3D(0, -1, 0);																		// bottom (south pole)
 
             Point3D v2 = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
                     / horizontalSteps) * Math.
-                    sin(Utility.PI * k / verticalSteps), // top right 
+                    sin(Utility.PI * k / verticalSteps), // top right
                     Math.cos(Utility.PI * k / verticalSteps),
                     Math.cos(2.0 * Utility.PI * (j + 1) / horizontalSteps)
                     * Math.sin(Utility.PI * k / verticalSteps));
@@ -317,12 +342,12 @@ public class TriangleMesh extends Grid {
             objects.add(trianglePtr);
         }
 
-	//  define the other triangles
+        //  define the other triangles
         for (k = 1; k <= verticalSteps - 2; k++) {
             for (int j = 0; j <= horizontalSteps - 1; j++) {
 			// define the first triangle
 
-			// vertices
+                // vertices
                 Point3D v0 = new Point3D(Math.sin(2.0 * Utility.PI * j
                         / horizontalSteps) * Math.sin(Utility.PI * (k + 1)
                                 / verticalSteps), // bottom left, use k + 1, j
@@ -347,8 +372,8 @@ public class TriangleMesh extends Grid {
                 Triangle trianglePtr1 = new Triangle(v0, v1, v2);
                 objects.add(trianglePtr1);
 
-			// define the second triangle
-			// vertices
+                // define the second triangle
+                // vertices
                 v0 = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
                         / horizontalSteps) * Math.sin(Utility.PI * k
                                 / verticalSteps), // top right, use k, j + 1
@@ -378,6 +403,11 @@ public class TriangleMesh extends Grid {
 
     // ------------------------------------------------------------------------------------------------  tesselateSmoothSphere
     // tesselate a unit sphere into smooth triangles that are stored directly in the grid
+    /**
+     *
+     * @param horizontalSteps
+     * @param verticalSteps
+     */
     public void tessellateSmoothSphere(int horizontalSteps, int verticalSteps) {
         // define the top triangles
         int k = 1;
@@ -386,19 +416,22 @@ public class TriangleMesh extends Grid {
             // define vertices
             Point3D v0 = new Point3D(0, 1, 0); // top
             Point3D v1
-                    = new Point3D(Math.sin(2.0 * Utility.PI * j / horizontalSteps) *
-                    Math.sin(Utility.PI * k / verticalSteps),
-                    // bottom left
-            Math.cos(Utility.PI * k / verticalSteps),
-                    Math.cos(2.0 * Utility.PI * j / horizontalSteps) * Math.sin(Utility.PI *
-                    k / verticalSteps));
+                    = new Point3D(Math.sin(2.0 * Utility.PI * j
+                                    / horizontalSteps) * Math.sin(Utility.PI * k
+                                    / verticalSteps),
+                            // bottom left
+                            Math.cos(Utility.PI * k / verticalSteps),
+                            Math.cos(2.0 * Utility.PI * j / horizontalSteps)
+                            * Math.sin(Utility.PI * k / verticalSteps));
             Point3D v2
-                    = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1) /
-                    horizontalSteps) * Math.sin(Utility.PI * k / verticalSteps),
-                    // bottom  right
-            Math.cos(Utility.PI * k / verticalSteps),
-                    Math.cos(2.0 * Utility.PI * (j + 1) / horizontalSteps) *
-                    Math.sin(Utility.PI * k / verticalSteps));
+                    = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
+                                    / horizontalSteps) * Math.sin(Utility.PI * k
+                                    / verticalSteps),
+                            // bottom  right
+                            Math.cos(Utility.PI * k / verticalSteps),
+                            Math.cos(2.0 * Utility.PI * (j + 1)
+                                    / horizontalSteps) * Math.sin(Utility.PI * k
+                                    / verticalSteps));
             SmoothTriangle trianglePtr = new SmoothTriangle(v0, v1, v2);
             trianglePtr.n0.setTo(v0);
             trianglePtr.n1.setTo(v1);
@@ -411,20 +444,23 @@ public class TriangleMesh extends Grid {
                 j++) {
             // define vertices
             Point3D v0
-                    = new Point3D(Math.sin(2.0 * Utility.PI * j / horizontalSteps) *
-                    Math.sin(Utility.PI * k / verticalSteps),
-                    // top left
-            Math.cos(Utility.PI * k / verticalSteps),
-                    Math.cos(2.0 * Utility.PI * j / horizontalSteps) * Math.sin(Utility.PI *
-                    k / verticalSteps));
+                    = new Point3D(Math.sin(2.0 * Utility.PI * j
+                                    / horizontalSteps) * Math.sin(Utility.PI * k
+                                    / verticalSteps),
+                            // top left
+                            Math.cos(Utility.PI * k / verticalSteps),
+                            Math.cos(2.0 * Utility.PI * j / horizontalSteps)
+                            * Math.sin(Utility.PI * k / verticalSteps));
             Point3D v1 = new Point3D(0, -1, 0); // bottom
             Point3D v2
-                    = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1) /
-                    horizontalSteps) * Math.sin(Utility.PI * k / verticalSteps),
-                    // top right
-            Math.cos(Utility.PI * k / verticalSteps),
-                    Math.cos(2.0 * Utility.PI * (j + 1) / horizontalSteps) *
-                    Math.sin(Utility.PI * k / verticalSteps));
+                    = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
+                                    / horizontalSteps) * Math.sin(Utility.PI * k
+                                    / verticalSteps),
+                            // top right
+                            Math.cos(Utility.PI * k / verticalSteps),
+                            Math.cos(2.0 * Utility.PI * (j + 1)
+                                    / horizontalSteps) * Math.sin(Utility.PI * k
+                                    / verticalSteps));
             SmoothTriangle trianglePtr = new SmoothTriangle(v0, v1, v2);
             trianglePtr.n0.setTo(v0);
             trianglePtr.n1.setTo(v1);
@@ -439,29 +475,30 @@ public class TriangleMesh extends Grid {
                 // define the first triangle
                 // vertices
                 Point3D v0
-                        = new Point3D(Math.sin(2.0 * Utility.PI * j /
-                        horizontalSteps) *
-                        Math.sin(Utility.PI * (k + 1) / verticalSteps),
-                        // bottom left, use k + 1, j
-                Math.cos(Utility.PI * (k + 1) / verticalSteps),
-                        Math.cos(2.0 * Utility.PI * j / horizontalSteps) *
-                        Math.sin(Utility.PI * (k + 1) / verticalSteps));
+                        = new Point3D(Math.sin(2.0 * Utility.PI * j
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * (k + 1) / verticalSteps),
+                                // bottom left, use k + 1, j
+                                Math.cos(Utility.PI * (k + 1) / verticalSteps),
+                                Math.cos(2.0 * Utility.PI * j / horizontalSteps)
+                                * Math.sin(Utility.PI * (k + 1) / verticalSteps));
                 Point3D v1
-                        = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1) /
-                        horizontalSteps) *
-                        Math.sin(Utility.PI * (k + 1) / verticalSteps),
-                        // bottom  right, use k + 1, j + 1
-                Math.cos(Utility.PI * (k + 1) / verticalSteps),
-                        Math.cos(2.0 * Utility.PI * (j + 1) / horizontalSteps) *
-                        Math.sin(Utility.PI * (k + 1) / verticalSteps));
+                        = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * (k + 1) / verticalSteps),
+                                // bottom  right, use k + 1, j + 1
+                                Math.cos(Utility.PI * (k + 1) / verticalSteps),
+                                Math.cos(2.0 * Utility.PI * (j + 1)
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * (k + 1) / verticalSteps));
                 Point3D v2
-                        = new Point3D(Math.sin(2.0 * Utility.PI * j /
-                        horizontalSteps) *
-                        Math.sin(Utility.PI * k / verticalSteps),
-                        // top left, 	use k, j
-                Math.cos(Utility.PI * k / verticalSteps),
-                        Math.cos(2.0 * Utility.PI * j / horizontalSteps) *
-                        Math.sin(Utility.PI * k / verticalSteps));
+                        = new Point3D(Math.sin(2.0 * Utility.PI * j
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * k / verticalSteps),
+                                // top left, 	use k, j
+                                Math.cos(Utility.PI * k / verticalSteps),
+                                Math.cos(2.0 * Utility.PI * j / horizontalSteps)
+                                * Math.sin(Utility.PI * k / verticalSteps));
                 SmoothTriangle trianglePtr1 = new SmoothTriangle(v0, v1, v2);
                 trianglePtr1.n0.setTo(v0);
                 trianglePtr1.n1.setTo(v1);
@@ -470,29 +507,31 @@ public class TriangleMesh extends Grid {
                 // define the second triangle
                 // vertices
                 v0
-                        = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1) /
-                        horizontalSteps) *
-                        Math.sin(Utility.PI * k / verticalSteps),
-                        // top right, use k, j + 1
-                Math.cos(Utility.PI * k / verticalSteps),
-                        Math.cos(2.0 * Utility.PI * (j + 1) / horizontalSteps) *
-                        Math.sin(Utility.PI * k / verticalSteps));
+                        = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * k / verticalSteps),
+                                // top right, use k, j + 1
+                                Math.cos(Utility.PI * k / verticalSteps),
+                                Math.cos(2.0 * Utility.PI * (j + 1)
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * k / verticalSteps));
                 v1
-                        = new Point3D(Math.sin(2.0 * Utility.PI * j /
-                        horizontalSteps) *
-                        Math.sin(Utility.PI * k / verticalSteps),
-                        // top left, 	use k, j
-                Math.cos(Utility.PI * k / verticalSteps),
-                        Math.cos(2.0 * Utility.PI * j / horizontalSteps) *
-                        Math.sin(Utility.PI * k / verticalSteps));
+                        = new Point3D(Math.sin(2.0 * Utility.PI * j
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * k / verticalSteps),
+                                // top left, 	use k, j
+                                Math.cos(Utility.PI * k / verticalSteps),
+                                Math.cos(2.0 * Utility.PI * j / horizontalSteps)
+                                * Math.sin(Utility.PI * k / verticalSteps));
                 v2
-                        = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1) /
-                        horizontalSteps) *
-                        Math.sin(Utility.PI * (k + 1) / verticalSteps),
-                        // bottom  right, use k + 1, j + 1
-                Math.cos(Utility.PI * (k + 1) / verticalSteps),
-                        Math.cos(2.0 * Utility.PI * (j + 1) / horizontalSteps) *
-                        Math.sin(Utility.PI * (k + 1) / verticalSteps));
+                        = new Point3D(Math.sin(2.0 * Utility.PI * (j + 1)
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * (k + 1) / verticalSteps),
+                                // bottom  right, use k + 1, j + 1
+                                Math.cos(Utility.PI * (k + 1) / verticalSteps),
+                                Math.cos(2.0 * Utility.PI * (j + 1)
+                                        / horizontalSteps) * Math.sin(Utility.PI
+                                        * (k + 1) / verticalSteps));
                 SmoothTriangle trianglePtr2 = new SmoothTriangle(v0, v1, v2);
                 trianglePtr2.n0.setTo(v0);
                 trianglePtr2.n1.setTo(v1);
@@ -501,5 +540,8 @@ public class TriangleMesh extends Grid {
             }
         }
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(TriangleMesh.class.getName());
 
 }

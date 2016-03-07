@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.textures.image.Image;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import java.util.logging.Logger;
 
 /**
  * Texture for looping the ramp through the y coordinate, and perturb it with
@@ -84,7 +85,7 @@ public class RampFBmTexture implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new RampFBmTexture(ramp, noise, perturbation);
     }
 
@@ -153,5 +154,8 @@ public class RampFBmTexture implements Texture {
     public void setNoise(LatticeNoise noise) {
         this.noise = noise;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(RampFBmTexture.class.getName());
 
 }

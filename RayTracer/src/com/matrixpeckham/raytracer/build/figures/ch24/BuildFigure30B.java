@@ -19,8 +19,8 @@ package com.matrixpeckham.raytracer.build.figures.ch24;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.geometricobjects.compound.SolidCylinder;
+import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.Matte;

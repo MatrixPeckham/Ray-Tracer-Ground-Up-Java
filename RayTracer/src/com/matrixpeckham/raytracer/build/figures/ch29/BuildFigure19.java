@@ -48,87 +48,70 @@ public class BuildFigure19 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 29.19
-
- 												
-
 //	int numSamples = 1;      	// for Figures 29.19(a) & (b)
-	int numSamples = 25;      	// for Figure 29.19(c)
-	
-	w.vp.setHres(300);      
-	w.vp.setVres(300);    
-	w.vp.setSamples(numSamples);
-		
-	w.backgroundColor = Utility.BLACK;
-	
-	w.tracer = new RayCast(w);
-	
-	Pinhole cameraPtr = new Pinhole();
-	cameraPtr.setEye(0, 0, 65); 				
-	cameraPtr.setLookat(new Point3D(0.0)); 
+        int numSamples = 25;      	// for Figure 29.19(c)
+
+        w.vp.setHres(300);
+        w.vp.setVres(300);
+        w.vp.setSamples(numSamples);
+
+        w.backgroundColor = Utility.BLACK;
+
+        w.tracer = new RayCast(w);
+
+        Pinhole cameraPtr = new Pinhole();
+        cameraPtr.setEye(0, 0, 65);
+        cameraPtr.setLookat(new Point3D(0.0));
 //	cameraPtr.setViewDistance(9000.0);			// for Figure 29.19(a)
 //	cameraPtr.setViewDistance(9000.0 * 8.0);	// for Figure 29.19(b)
-	cameraPtr.setViewDistance(9000.0 * 20.0);	// for Figure 29.19(c)
-	cameraPtr.computeUVW();     
-	w.setCamera(cameraPtr); 
-	
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(-0.25, 0.4, 1);		
-	lightPtr.scaleRadiance(2.5);  
-	w.addLight(lightPtr);
-	
-	
-	// image:					
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        cameraPtr.setViewDistance(9000.0 * 20.0);	// for Figure 29.19(c)
+        cameraPtr.computeUVW();
+        w.setCamera(cameraPtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(-0.25, 0.4, 1);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
+
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
 //            imagePtr.loadPPMFile(new File(path+"EarthHighRes.ppm"));
-            imagePtr.loadPPMFile(new File(path+"EarthLowRes.ppm"));
+            imagePtr.loadPPMFile(new File(path + "EarthLowRes.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure19.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	
-	// mapping:
-	
-	SphericalMap mapPtr = new SphericalMap(); 
-	
-	
-	// image based texture:  
-	
-	ImageTexture texturePtr = new ImageTexture(); 
-	texturePtr.setImage(imagePtr); 
-	texturePtr.setMapping(mapPtr);
-	
-	
-	// textured material:
 
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.2);
-	svMattePtr.setKd(0.8);
-	svMattePtr.setCd(texturePtr);
-	
-	
-	// generic sphere:
-	
-	Sphere spherePtr = new Sphere(); 
-	spherePtr.setMaterial(svMattePtr);
-	
-	
-	// rotated sphere
-	
-	Instance earthPtr = new Instance(spherePtr);
-	earthPtr.rotateY(-72);
-	earthPtr.rotateX(40);
-	earthPtr.rotateZ(20);
-	w.addObject(earthPtr);
+        // mapping:
+        SphericalMap mapPtr = new SphericalMap();
 
+        // image based texture:
+        ImageTexture texturePtr = new ImageTexture();
+        texturePtr.setImage(imagePtr);
+        texturePtr.setMapping(mapPtr);
 
+        // textured material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.2);
+        svMattePtr.setKd(0.8);
+        svMattePtr.setCd(texturePtr);
 
-	
+        // generic sphere:
+        Sphere spherePtr = new Sphere();
+        spherePtr.setMaterial(svMattePtr);
+
+        // rotated sphere
+        Instance earthPtr = new Instance(spherePtr);
+        earthPtr.rotateY(-72);
+        earthPtr.rotateX(40);
+        earthPtr.rotateZ(20);
+        w.addObject(earthPtr);
+
     }
-    
+
 }

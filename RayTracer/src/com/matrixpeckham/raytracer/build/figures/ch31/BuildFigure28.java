@@ -42,70 +42,56 @@ public class BuildFigure28 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.28.
-
 // This is now rendered with a gray w.background.
 // The color is more orange than the original build function,
 // which makes the images look more like the printed figures.
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);    
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = new RGBColor(0.5);
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(9500.0); 	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(10, 10, 20);		
-	lightPtr.scaleRadiance(2.5); 
-	w.addLight(lightPtr);
-	
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();
-	noisePtr.setNumOctaves(6); 
-	noisePtr.setGain(0.5);
-	noisePtr.setLacunarity(2.0);
-	
-	// texture:		
-	
-	TurbulenceTexture texturePtr = new TurbulenceTexture(noisePtr);			
-	texturePtr.setColor(1.0, 0.7, 0.0);  	// orange 			
-	texturePtr.setMinValue(0.0);  			// for Figure 31.28(a)
-	texturePtr.setMaxValue(1.2);
+        w.backgroundColor = new RGBColor(0.5);
+        w.tracer = new RayCast(w);
+
+        Pinhole pinholePtr = new Pinhole();
+
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(9500.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(10, 10, 20);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
+
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(2.0);
+
+        // texture:
+        TurbulenceTexture texturePtr = new TurbulenceTexture(noisePtr);
+        texturePtr.setColor(1.0, 0.7, 0.0);  	// orange
+        texturePtr.setMinValue(0.0);  			// for Figure 31.28(a)
+        texturePtr.setMaxValue(1.2);
 //	texturePtr.setMinValue(0.15);  			// for Figure 31.28(b)
 //	texturePtr.setMaxValue(0.75);
 
-	// material:
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.85);
-	svMattePtr.setCd(texturePtr);
-	
-	// the sphere:
-	
-	Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0); 
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
-}
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.85);
+        svMattePtr.setCd(texturePtr);
 
-
-
+        // the sphere:
+        Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0);
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
+    }
 
 }

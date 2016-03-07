@@ -70,7 +70,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         lightPtr.scaleRadiance(1.5);
         w.addLight(lightPtr);
 
-	// sphere
+        // sphere
         Checker3D checkerPt1 = new Checker3D();
         checkerPt1.setSize(1.0);
         checkerPt1.setColor1(Utility.BLACK);
@@ -86,7 +86,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         spherePtr.setMaterial(svMattePtr1);
         w.addObject(spherePtr);
 
-	// cylinder
+        // cylinder
         Checker3D checkerPtr2 = new Checker3D();
         checkerPtr2.setSize(1.0);
         checkerPtr2.setColor1(Utility.BLACK);
@@ -103,7 +103,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         cylinderPtr.setMaterial(svMattePtr2);
         w.addObject(cylinderPtr);
 
-	// cone
+        // cone
         Checker3D checkerPtr3 = new Checker3D();
         checkerPtr3.setSize(1.0);
         checkerPtr3.setColor1(Utility.BLACK);
@@ -121,7 +121,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         conePtr.setMaterial(svMattePtr3);
         w.addObject(conePtr);
 
-	// box
+        // box
         Checker3D checkerPtr4 = new Checker3D();
         checkerPtr4.setSize(1.0);
         checkerPtr4.setColor1(Utility.BLACK);
@@ -136,7 +136,7 @@ public class BuildFigure02 implements BuildWorldFunction {
         boxPtr.setMaterial(svMattePtr4);
         w.addObject(boxPtr);
 
-	// ground plane
+        // ground plane
         Checker3D checkerPtr5 = new Checker3D();
         checkerPtr5.setSize(1.5);
         checkerPtr5.setColor1(0.35);

@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.geometricobjects.compound;
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledBox;
 import com.matrixpeckham.raytracer.geometricobjects.beveledobjects.BeveledWedge;
 import com.matrixpeckham.raytracer.util.Point3D;
+import java.util.logging.Logger;
 
 /**
  * Archway This is a door with a semi-circular arch at the top The door sides
@@ -83,14 +84,15 @@ public class Archway extends Grid {
      *
      * @return
      */
-    public Archway clone() {
+    @Override
+    public Archway cloneGeometry() {
         return (new Archway(this));
     }
 
     /**
      * constructs the archway
      */
-    public void constructArchway() {
+    public final void constructArchway() {
 
         double blockHeight = (height - width / 2.0) / numBlocks;
 
@@ -116,7 +118,7 @@ public class Archway extends Grid {
 
         // build curved arch
         for (int j = 0; j < numWedges; j++) {
-            double angleWidth = 180 / numWedges;  // the azimuth angle extent of each wedge
+            double angleWidth = 180d / numWedges;  // the azimuth angle extent of each wedge
             double r0 = width / 2.0 - columnWidth;
             double r1 = width / 2.0;
             double phi0 = j * angleWidth;
@@ -128,11 +130,20 @@ public class Archway extends Grid {
         }
     }
 
-    private double width;
-    private double height;
-    private double depth;
-    private double columnWidth;
-    private int numBlocks;
-    private int numWedges;
-    private double rb;
+    private final double width;
+
+    private final double height;
+
+    private final double depth;
+
+    private final double columnWidth;
+
+    private final int numBlocks;
+
+    private final int numWedges;
+
+    private final double rb;
+
+    private static final Logger LOG = Logger.getLogger(Archway.class.getName());
+
 }

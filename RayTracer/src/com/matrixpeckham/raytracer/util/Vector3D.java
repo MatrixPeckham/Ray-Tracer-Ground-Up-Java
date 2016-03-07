@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- 
+
  */
 package com.matrixpeckham.raytracer.util;
+
+import java.util.logging.Logger;
 
 /**
  * Vector class for directions.
@@ -31,11 +33,13 @@ public class Vector3D {
      *
      */
     public double x;
+
     /**
      * Y coordinate
      *
      */
     public double y;
+
     /**
      * Z coordinate
      *
@@ -45,7 +49,7 @@ public class Vector3D {
     /**
      * For debugging
      *
-     * @return      *
+     * @return *
      */
     @Override
     public String toString() {
@@ -112,7 +116,7 @@ public class Vector3D {
      * assignment operator java substitute
      *
      * @param other
-     * @return      *
+     * @return *
      */
     public Vector3D setTo(Vector3D other) {
         x = other.x;
@@ -126,7 +130,7 @@ public class Vector3D {
      *
      * @param x
      * @param y
-     * @param z      *
+     * @param z *
      */
     public void setTo(double x, double y, double z) {
         this.x = x;
@@ -138,7 +142,7 @@ public class Vector3D {
      * assignment operator java substitute
      *
      * @param other
-     * @return      *
+     * @return *
      */
     public Vector3D setTo(Normal other) {
         x = other.x;
@@ -151,7 +155,7 @@ public class Vector3D {
      * assignment operator java substitute
      *
      * @param other
-     * @return      *
+     * @return *
      */
     public Vector3D setTo(Point3D other) {
         x = other.x;
@@ -163,7 +167,7 @@ public class Vector3D {
     /**
      * java substitute for unary minus
      *
-     * @return      new negated vector
+     * @return new negated vector
      */
     public Vector3D neg() {
         return new Vector3D(-x, -y, -z);
@@ -211,7 +215,7 @@ public class Vector3D {
      * addition
      *
      * @param v
-     * @return      *
+     * @return *
      */
     public Vector3D add(Vector3D v) {
         return new Vector3D(x + v.x, y + v.y, z + v.z);
@@ -287,7 +291,7 @@ public class Vector3D {
      *
      * @param a
      * @param v
-     * @return      *
+     * @return *
      */
     public static Vector3D mul(double a, Vector3D v) {
         return new Vector3D(a * v.x, a * v.y, a * v.z);
@@ -298,7 +302,7 @@ public class Vector3D {
      *
      * @param mat
      * @param v
-     * @return      *
+     * @return *
      */
     public static Vector3D mul(Matrix mat, Vector3D v) {
         return new Vector3D(
@@ -311,10 +315,12 @@ public class Vector3D {
      * dot product with normal
      *
      * @param v
-     * @return      *
+     * @return *
      */
     public double dot(Normal v) {
         return (x * v.x + y * v.y + z * v.z);
     }
+
+    private static final Logger LOG = Logger.getLogger(Vector3D.class.getName());
 
 }

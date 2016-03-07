@@ -58,7 +58,7 @@ public class BuildFigure15A implements BuildWorldFunction {
         w.vp.setSamples(numSamples);
         w.vp.setMaxDepth(7);
 
-        w.backgroundColor =new RGBColor(0.0, 0.3, 0.25);  // blue green
+        w.backgroundColor = new RGBColor(0.0, 0.3, 0.25);  // blue green
 
         w.tracer = new Whitted(w);
 
@@ -79,17 +79,15 @@ public class BuildFigure15A implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// nested spheres
-        RGBColor glassColor=new RGBColor(0.95, 0.95, 1);  	// faint blue
-	RGBColor diamondColor=new RGBColor(1, 1, 0.8);  	// lemon
-	RGBColor waterColor=new RGBColor(1, 0.5, 1);  		// mauve
-	
-	Point3D center=new Point3D(0.5, 0, 0.5);  			// common centre
-	
-	
-	// outer sphere - glass
-	
-	Dielectric glassPtr = new Dielectric();
+        // nested spheres
+        RGBColor glassColor = new RGBColor(0.95, 0.95, 1);  	// faint blue
+        RGBColor diamondColor = new RGBColor(1, 1, 0.8);  	// lemon
+        RGBColor waterColor = new RGBColor(1, 0.5, 1);  		// mauve
+
+        Point3D center = new Point3D(0.5, 0, 0.5);  			// common centre
+
+        // outer sphere - glass
+        Dielectric glassPtr = new Dielectric();
         glassPtr.setKs(0.1);
         glassPtr.setExp(2000.0);
         glassPtr.setIorIn(1.5); 			// water
@@ -101,7 +99,7 @@ public class BuildFigure15A implements BuildWorldFunction {
         spherePtr1.setMaterial(glassPtr);
         w.addObject(spherePtr1);
 
-	// middle sphere - diamond
+        // middle sphere - diamond
         Dielectric diamondPtr = new Dielectric();
         diamondPtr.setKs(0.1);
         diamondPtr.setExp(2000.0);
@@ -114,7 +112,7 @@ public class BuildFigure15A implements BuildWorldFunction {
         spherePtr2.setMaterial(diamondPtr);
         w.addObject(spherePtr2);
 
-	// inner sphere - water
+        // inner sphere - water
         Dielectric waterPtr = new Dielectric();
         waterPtr.setKs(0.1);
         waterPtr.setExp(2000.0);
@@ -127,7 +125,7 @@ public class BuildFigure15A implements BuildWorldFunction {
         spherePtr3.setMaterial(waterPtr);
         w.addObject(spherePtr3);
 
-	// ground plane
+        // ground plane
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(2.0);
         checkerPtr.setColor1(0.25);

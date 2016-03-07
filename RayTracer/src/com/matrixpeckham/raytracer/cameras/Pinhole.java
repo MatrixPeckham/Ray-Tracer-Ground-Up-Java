@@ -32,6 +32,7 @@ import com.matrixpeckham.raytracer.world.World;
 public class Pinhole extends Camera {
 
     private double d;//view plane dist
+
     private double zoom;//zoom factor
 
     /**
@@ -60,7 +61,7 @@ public class Pinhole extends Camera {
      * @return
      */
     @Override
-    public Camera clone() {
+    public Camera cloneCamera() {
         return new Pinhole(this);
     }
 
@@ -102,9 +103,6 @@ public class Pinhole extends Camera {
         //loop through all pixels
         for (int r = 0; r < vp.vRes; r++) {
             for (int c = 0; c < vp.hRes; c++) {
-                if (r == vp.vRes - 258 && c == 315) {
-                    int breakable = c + r;
-                }
                 //reset color
                 L.setTo(0, 0, 0);
                 //for all samples

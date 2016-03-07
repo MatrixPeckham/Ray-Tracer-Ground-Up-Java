@@ -33,6 +33,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,134 +48,116 @@ public class BuildFigure06 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 26.6
-
 // You will have to w.add a w.setSampler function to the Matte class to
 // store the sampler in the BRDF that handles the diffuse shading.
-	int numSamples = 100;
-	
-	w.vp.setHres(600);
-	w.vp.setVres(400);
-	w.vp.setSamples(numSamples);
+        int numSamples = 100;
+
+        w.vp.setHres(600);
+        w.vp.setVres(400);
+        w.vp.setSamples(numSamples);
 //	w.vp.setMaxDepth(0);				// for Figure 26.6(a)
-	w.vp.setMaxDepth(1);				// for Figure 26.6(b)
+        w.vp.setMaxDepth(1);				// for Figure 26.6(b)
 //	w.vp.setMaxDepth(5);				// for Figure 26.6(c)
-	
-	w.tracer = new PathTrace(w);	
 
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.0);
-	w.setAmbient(ambientPtr);	
+        w.tracer = new PathTrace(w);
 
-			
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(100, 45, 100);  
-	pinholePtr.setLookat(-10, 40, 0);  
-	pinholePtr.setViewDistance(400);   	
-	pinholePtr.computeUVW(); 
-	w.setCamera(pinholePtr);
-	
-	
-	Emissive emissivePtr = new Emissive();
-	emissivePtr.setCe(Utility.WHITE);  
-	emissivePtr.scaleRadiance(1.5);  
-	
-	
-	ConcaveSphere spherePtr = new ConcaveSphere();		// centered on the origin
-	spherePtr.setRadius(1000000.0);
-	spherePtr.setShadows(false);
-	spherePtr.setMaterial(emissivePtr);
-	w.addObject(spherePtr);	
-	
-		
-	double ka = 0.2;  // common ambient reflection coefficient	
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.0);
+        w.setAmbient(ambientPtr);
 
-		
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(100, 45, 100);
+        pinholePtr.setLookat(-10, 40, 0);
+        pinholePtr.setViewDistance(400);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Emissive emissivePtr = new Emissive();
+        emissivePtr.setCe(Utility.WHITE);
+        emissivePtr.scaleRadiance(1.5);
+
+        ConcaveSphere spherePtr = new ConcaveSphere();		// centered on the origin
+        spherePtr.setRadius(1000000.0);
+        spherePtr.setShadows(false);
+        spherePtr.setMaterial(emissivePtr);
+        w.addObject(spherePtr);
+
+        double ka = 0.2;  // common ambient reflection coefficient
+
 	// large sphere
+        Matte mattePtr1 = new Matte();
+        mattePtr1.setKa(ka);
+        mattePtr1.setKd(0.60);
+        mattePtr1.setCd(Utility.WHITE);
+        mattePtr1.setSampler(new MultiJittered(numSamples));
 
-	Matte mattePtr1 = new Matte();			
-	mattePtr1.setKa(ka); 
-	mattePtr1.setKd(0.60);
-	mattePtr1.setCd(Utility.WHITE);
-	mattePtr1.setSampler(new MultiJittered(numSamples));
-	
-	Sphere spherePtr1 = new Sphere(new Point3D(38, 20, -24), 20); 
-	spherePtr1.setMaterial(mattePtr1);
-	w.addObject(spherePtr1);
-	
-	
+        Sphere spherePtr1 = new Sphere(new Point3D(38, 20, -24), 20);
+        spherePtr1.setMaterial(mattePtr1);
+        w.addObject(spherePtr1);
+
 	// small sphere
-	
-	Matte mattePtr2 = new Matte();			
-	mattePtr2.setKa(ka); 
-	mattePtr2.setKd(0.5);
-	mattePtr2.setCd(0.85);				// gray
-	mattePtr2.setSampler(new MultiJittered(numSamples));
-	
-	Sphere spherePtr2 = new Sphere(new Point3D(34, 12, 13), 12);
-	spherePtr2.setMaterial(mattePtr2);
-	w.addObject(spherePtr2);
-	
-	
+        Matte mattePtr2 = new Matte();
+        mattePtr2.setKa(ka);
+        mattePtr2.setKd(0.5);
+        mattePtr2.setCd(0.85);				// gray
+        mattePtr2.setSampler(new MultiJittered(numSamples));
+
+        Sphere spherePtr2 = new Sphere(new Point3D(34, 12, 13), 12);
+        spherePtr2.setMaterial(mattePtr2);
+        w.addObject(spherePtr2);
+
 	// medium sphere
-		
-	Matte mattePtr3 = new Matte();			
-	mattePtr3.setKa(ka); 
-	mattePtr3.setKd(0.75);
-	mattePtr3.setCd(0.73, 0.22, 0.0);    // orange
-	mattePtr3.setSampler(new MultiJittered(numSamples));
-	
-	Sphere spherePtr3 = new Sphere(new Point3D(-7, 15, 42), 16);
-	spherePtr3.setMaterial(mattePtr3);
-	w.addObject(spherePtr3);
-	
-	
+        Matte mattePtr3 = new Matte();
+        mattePtr3.setKa(ka);
+        mattePtr3.setKd(0.75);
+        mattePtr3.setCd(0.73, 0.22, 0.0);    // orange
+        mattePtr3.setSampler(new MultiJittered(numSamples));
+
+        Sphere spherePtr3 = new Sphere(new Point3D(-7, 15, 42), 16);
+        spherePtr3.setMaterial(mattePtr3);
+        w.addObject(spherePtr3);
+
 	// cylinder
-	
-	Matte mattePtr4 = new Matte();			
-	mattePtr4.setKa(ka); 
-	mattePtr4.setKd(0.75);
-	mattePtr4.setCd(0.60);				// gray
-	mattePtr4.setSampler(new MultiJittered(numSamples));
-			
-	double bottom 	= 0.0;
-	double top 		= 85.0;
-	double radius	= 22.0;
-	SolidCylinder cylinderPtr = new SolidCylinder(bottom, top, radius);
-	cylinderPtr.setMaterial(mattePtr4);
-	w.addObject(cylinderPtr);
+        Matte mattePtr4 = new Matte();
+        mattePtr4.setKa(ka);
+        mattePtr4.setKd(0.75);
+        mattePtr4.setCd(0.60);				// gray
+        mattePtr4.setSampler(new MultiJittered(numSamples));
 
-	
+        double bottom = 0.0;
+        double top = 85.0;
+        double radius = 22.0;
+        SolidCylinder cylinderPtr = new SolidCylinder(bottom, top, radius);
+        cylinderPtr.setMaterial(mattePtr4);
+        w.addObject(cylinderPtr);
+
 	// box
-		
-	Matte mattePtr5 = new Matte();			
-	mattePtr5.setKa(ka); 
-	mattePtr5.setKd(0.75);
-	mattePtr5.setCd(0.95);				// gray
-	mattePtr5.setSampler(new MultiJittered(numSamples));
-	
-	Box boxPtr = new Box(new Point3D(-55, 0, -110), new Point3D(-25, 60, 65));  // thicker
-	boxPtr.setMaterial(mattePtr5);
-	w.addObject(boxPtr);
-	
-	
+        Matte mattePtr5 = new Matte();
+        mattePtr5.setKa(ka);
+        mattePtr5.setKd(0.75);
+        mattePtr5.setCd(0.95);				// gray
+        mattePtr5.setSampler(new MultiJittered(numSamples));
+
+        Box boxPtr
+                = new Box(new Point3D(-55, 0, -110), new Point3D(-25, 60, 65));  // thicker
+        boxPtr.setMaterial(mattePtr5);
+        w.addObject(boxPtr);
+
 	// ground plane
-		
-	MultiJittered samplerPtr6 = new MultiJittered(numSamples);
-	
-	Matte mattePtr6 = new Matte();			
-	mattePtr6.setKa(0.15); 
-	mattePtr6.setKd(0.95);	
-	mattePtr6.setCd(0.37, 0.43, 0.08);     // olive green
-	mattePtr6.setSampler(new MultiJittered(numSamples));    
-	
-	Plane planePtr = new Plane(new Point3D(0, 0.01, 0), new Normal(0, 1, 0));
-	planePtr.setMaterial(mattePtr6);
-	w.addObject(planePtr);
+        Matte mattePtr6 = new Matte();
+        mattePtr6.setKa(0.15);
+        mattePtr6.setKd(0.95);
+        mattePtr6.setCd(0.37, 0.43, 0.08);     // olive green
+        mattePtr6.setSampler(new MultiJittered(numSamples));
 
-
+        Plane planePtr = new Plane(new Point3D(0, 0.01, 0), new Normal(0, 1, 0));
+        planePtr.setMaterial(mattePtr6);
+        w.addObject(planePtr);
 
     }
-    
+
+    private static final Logger LOG
+            = Logger.getLogger(BuildFigure06.class.getName());
+
 }

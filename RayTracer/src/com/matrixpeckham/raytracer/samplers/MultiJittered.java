@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.samplers;
 
 import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Multijittered samples.
@@ -69,7 +70,7 @@ public class MultiJittered extends Sampler {
      * generate samples that will be multijittered
      */
     @Override
-    public void generateSamples() {
+    public final void generateSamples() {
         // numSamples needs to be a perfect square
 
         int n = (int) Math.sqrt((double) numSamples);
@@ -126,8 +127,15 @@ public class MultiJittered extends Sampler {
      * @return
      */
     @Override
+<<<<<<< HEAD
     public Sampler protclone() {
+=======
+    public Sampler cloneSampler() {
+>>>>>>> refs/remotes/origin/master
         return new MultiJittered(this);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(MultiJittered.class.getName());
 
 }

@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Class approximates a spherical light. users of this class should call
@@ -76,5 +77,8 @@ public class FakeSphericalLight extends PointLight {
     public void setJitterAmount(double radius) {
         r = radius;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(FakeSphericalLight.class.getName());
 
 }

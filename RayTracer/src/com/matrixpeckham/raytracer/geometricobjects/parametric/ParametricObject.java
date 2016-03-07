@@ -19,13 +19,12 @@ package com.matrixpeckham.raytracer.geometricobjects.parametric;
 
 import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothMeshTriangle;
-import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
-import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * ParametricObject. represents any object that can be defined by a parametric
@@ -64,6 +63,7 @@ public class ParametricObject extends TriangleMesh {
              * normal if the ray hits inside from hit function
              */
             TWO_SIDE
+
         }
 
         /**
@@ -175,15 +175,14 @@ public class ParametricObject extends TriangleMesh {
         double vStep = p.getVStep();
         boolean closedU = p.isClosedU();
         boolean closedV = p.isClosedV();
-        
+
         normType = p.getNormalType();//store for later
-        
+
         //u and v counts
         int numU = 0;
         int numV = 0;
-        
+
         //we loop through u and v coordinates and create a regular grid of points.
-        
         //double counter
         double u;
         for (u = uMin; u <= uMax; u += uStep) {
@@ -219,9 +218,8 @@ public class ParametricObject extends TriangleMesh {
             }
             numU++;
         }
-        
+
         //TODO: I should add the ability to make it flat shaded too
-        
         //loop through grid, two triangles per grid, adds to super object list
         for (int i = 0; i < numU - 1; i++) {
             for (int j = 0; j < numV - 1; j++) {
@@ -294,5 +292,8 @@ public class ParametricObject extends TriangleMesh {
         }
         return hit;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ParametricObject.class.getName());
 
 }

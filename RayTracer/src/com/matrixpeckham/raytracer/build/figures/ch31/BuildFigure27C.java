@@ -42,67 +42,52 @@ public class BuildFigure27C implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.27(c).
 // This is now rendered with a gray w.background.
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);    
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor =new RGBColor(0.5);
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(9500.0); 	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(10, 10, 20);		
-	lightPtr.scaleRadiance(2.5);     
-	w.addLight(lightPtr);
-	
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();
-	noisePtr.setNumOctaves(6); 
-	noisePtr.setGain(0.5);
-	noisePtr.setLacunarity(8.0);
-	
-	// texture:		
-	
-	FBmTexture texturePtr = new FBmTexture(noisePtr);			
-	texturePtr.setColor(0.7, 1.0, 0.5);   // light green
-	texturePtr.setMinValue(0.0);  
-	texturePtr.setMaxValue(1.0);
+        w.backgroundColor = new RGBColor(0.5);
+        w.tracer = new RayCast(w);
 
-	// material:
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.85);
-	svMattePtr.setCd(texturePtr);
-	
-	// the sphere:
-	
-	Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0); 
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
-}
+        Pinhole pinholePtr = new Pinhole();
 
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(9500.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(10, 10, 20);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
 
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(8.0);
 
+        // texture:
+        FBmTexture texturePtr = new FBmTexture(noisePtr);
+        texturePtr.setColor(0.7, 1.0, 0.5);   // light green
+        texturePtr.setMinValue(0.0);
+        texturePtr.setMaxValue(1.0);
 
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.85);
+        svMattePtr.setCd(texturePtr);
+
+        // the sphere:
+        Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0);
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
+    }
 
 }

@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.image.Mapping;
 import com.matrixpeckham.raytracer.textures.image.TexelCoord;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Light probe mapping.
@@ -72,7 +73,7 @@ public class LightProbe implements Mapping {
      * @return
      */
     @Override
-    public Mapping clone() {
+    public Mapping cloneMapping() {
         return new LightProbe(lightProbe);
     }
 
@@ -114,5 +115,7 @@ public class LightProbe implements Mapping {
         int row = (int) ((yRes - 1) * v);
         return new TexelCoord(row, column);
     }
+    private static final Logger LOG
+            = Logger.getLogger(LightProbe.class.getName());
 
 }

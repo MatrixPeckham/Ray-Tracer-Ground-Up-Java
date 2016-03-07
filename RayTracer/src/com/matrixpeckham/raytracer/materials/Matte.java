@@ -18,13 +18,13 @@
 package com.matrixpeckham.raytracer.materials;
 
 import com.matrixpeckham.raytracer.brdfs.Lambertian;
-import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Perfectly Diffuse Matte Material.
@@ -36,12 +36,12 @@ public class Matte extends Material {
     /**
      * Ambient BRDF
      */
-    private Lambertian ambientBRDF;
+    private final Lambertian ambientBRDF;
 
     /**
      * Diffuse BRDF
      */
-    private Lambertian diffuseBRDF;
+    private final Lambertian diffuseBRDF;
 
     /**
      * default constructor
@@ -60,12 +60,12 @@ public class Matte extends Material {
     public Matte(Matte m) {
         super(m);
         if (m.ambientBRDF != null) {
-            ambientBRDF = m.ambientBRDF.clone();
+            ambientBRDF = m.ambientBRDF.cloneBRDF();
         } else {
             ambientBRDF = null;
         }
         if (m.diffuseBRDF != null) {
-            diffuseBRDF = m.diffuseBRDF.clone();
+            diffuseBRDF = m.diffuseBRDF.cloneBRDF();
         } else {
             diffuseBRDF = null;
         }
@@ -130,7 +130,7 @@ public class Matte extends Material {
         //sample pdf
         DoubleRef pdf = new DoubleRef();
 
-        //sample 
+        //sample
         RGBColor f = diffuseBRDF.sampleF(sr, wo, wi, pdf);
 
         //cos term
@@ -169,35 +169,64 @@ public class Matte extends Material {
     }
 
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new Matte(this);
     }
 
+    /**
+     *
+     * @param ka
+     */
     public void setKa(double ka) {
         ambientBRDF.setKd(ka);
     }
 
+    /**
+     *
+     * @param kd
+     */
     public void setKd(double kd) {
         diffuseBRDF.setKd(kd);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setCd(RGBColor c) {
         ambientBRDF.setCd(c);
         diffuseBRDF.setCd(c);
     }
 
+    /**
+     *
+     * @param r
+     * @param g
+     * @param b
+     */
     public void setCd(double r, double g, double b) {
         ambientBRDF.setCd(r, g, b);
         diffuseBRDF.setCd(r, g, b);
     }
 
+    /**
+     *
+     * @param c
+     */
     public void setCd(double c) {
         ambientBRDF.setCd(c);
         diffuseBRDF.setCd(c);
     }
 
+    /**
+     *
+     * @param sampler
+     */
     public void setSampler(Sampler sampler) {
         diffuseBRDF.setSampler(sampler);
 
     }
+
+    private static final Logger LOG = Logger.getLogger(Matte.class.getName());
+
 }

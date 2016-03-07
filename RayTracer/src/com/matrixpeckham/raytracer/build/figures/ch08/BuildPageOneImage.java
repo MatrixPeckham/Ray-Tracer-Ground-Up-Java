@@ -32,64 +32,61 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildPageOneImage implements BuildWorldFunction{
+public class BuildPageOneImage implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-	int numSamples = 1;
-	
-	w.vp.setHres(500);			
-	w.vp.setVres(500);
-	w.vp.setSamples(numSamples);
-	w.vp.setPixelSize(1.0);
-	
-	w.backgroundColor = Utility.BLACK;
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 2, 0); 
-	pinholePtr.setLookat(new Point3D(0));
-	pinholePtr.setViewDistance(73.0);
-	pinholePtr.computeUVW();
-	w.setCamera(pinholePtr);
-		
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(0, 1, 1);
-	lightPtr.scaleRadiance(3.0);
-	w.addLight(lightPtr);
-	
-	// construct the spheres
-	
-	double d = 2.0; 		// sphere center spacing 
-	double r = 0.75; 	// sphere radius
-	double xc, yc; 		// sphere center coordinates
-	int numRows = 5;
-	int numColumns = 5;
-	
-	Checker3D checkerPtr = new Checker3D();
-	checkerPtr.setSize(0.5);
-	checkerPtr.setColor1(0,0.4,0.8);
-	checkerPtr.setColor2(1,1,1);
-			
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.2);
-	svMattePtr.setKd(0.8);
-	svMattePtr.setCd(checkerPtr);
-	
-	for (int k = 0; k < numColumns; k++) { 		// up
-		for (int j = 0; j < numRows; j++) {	// across
-				Sphere	spherePtr = new Sphere();
-				xc = d * (j - (numColumns - 1) / 2.0);
-				yc = d * (k - (numRows - 1) / 2.0);
-				spherePtr.setCenter(new Point3D(xc, 0, yc));
-				spherePtr.setRadius(r);		
-				spherePtr.setMaterial(svMattePtr);
-				w.addObject(spherePtr);
-		}	
-	}
+        int numSamples = 1;
 
+        w.vp.setHres(500);
+        w.vp.setVres(500);
+        w.vp.setSamples(numSamples);
+        w.vp.setPixelSize(1.0);
 
+        w.backgroundColor = Utility.BLACK;
+        w.tracer = new RayCast(w);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 2, 0);
+        pinholePtr.setLookat(new Point3D(0));
+        pinholePtr.setViewDistance(73.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(0, 1, 1);
+        lightPtr.scaleRadiance(3.0);
+        w.addLight(lightPtr);
+
+        // construct the spheres
+        double d = 2.0; 		// sphere center spacing
+        double r = 0.75; 	// sphere radius
+        double xc, yc; 		// sphere center coordinates
+        int numRows = 5;
+        int numColumns = 5;
+
+        Checker3D checkerPtr = new Checker3D();
+        checkerPtr.setSize(0.5);
+        checkerPtr.setColor1(0, 0.4, 0.8);
+        checkerPtr.setColor2(1, 1, 1);
+
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.2);
+        svMattePtr.setKd(0.8);
+        svMattePtr.setCd(checkerPtr);
+
+        for (int k = 0; k < numColumns; k++) { 		// up
+            for (int j = 0; j < numRows; j++) {	// across
+                Sphere spherePtr = new Sphere();
+                xc = d * (j - (numColumns - 1) / 2.0);
+                yc = d * (k - (numRows - 1) / 2.0);
+                spherePtr.setCenter(new Point3D(xc, 0, yc));
+                spherePtr.setRadius(r);
+                spherePtr.setMaterial(svMattePtr);
+                w.addObject(spherePtr);
+            }
+        }
 
     }
-    
+
 }

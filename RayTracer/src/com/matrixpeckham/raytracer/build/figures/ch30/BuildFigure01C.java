@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.build.figures.ch30;
 
-import com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConcavePartSphere;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.CutCube;
@@ -25,11 +24,7 @@ import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.TInstance;
-import com.matrixpeckham.raytracer.textures.image.Image;
-import com.matrixpeckham.raytracer.textures.procedural.CubicNoise;
-import com.matrixpeckham.raytracer.textures.procedural.RampFBmTexture;
 import com.matrixpeckham.raytracer.textures.procedural.Wood;
-import com.matrixpeckham.raytracer.textures.procedural.WrappedFBmTexture;
 import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -37,10 +32,6 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -77,7 +68,7 @@ public class BuildFigure01C implements BuildWorldFunction {
 // and the marble texture in Figure 30.1(b) are discussed in Chapter 31. The wood texture in
 // Figure 30.1(c) isn't discussed in Chapter 31, but I've included the Wood class and some
 // sample images in the Chapter 31 download.
-// As I have had to re-render these three images from scatch, the texture's details are 
+// As I have had to re-render these three images from scatch, the texture's details are
 // different, as are the box, the lighting, and the viewing.
         int numSamples = 16;
 
@@ -105,9 +96,9 @@ public class BuildFigure01C implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// cut cube
-	// wood texture
-	// This Wood constructor just specifies the light and dark colors.
+        // cut cube
+        // wood texture
+        // This Wood constructor just specifies the light and dark colors.
         // The other parameters are defaults.
         // There are also other constructors for the Wood class.
         Wood woodPtr = new Wood(new RGBColor(0.5, 0.2, 0.067), Utility.BLACK);
@@ -117,13 +108,13 @@ public class BuildFigure01C implements BuildWorldFunction {
         transformedWoodPtr.rotateX(3);
         transformedWoodPtr.translate(0.0, 0.0, 0.05);
 
-	// material
+        // material
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.75);
         svMattePtr.setKd(0.85);
         svMattePtr.setCd(transformedWoodPtr);
 
-	// cut cube parameters
+        // cut cube parameters
         Point3D p0 = new Point3D(-1.0);
         Point3D p1 = new Point3D(1.0);
         double sphereRadius = 1.5;
@@ -132,7 +123,7 @@ public class BuildFigure01C implements BuildWorldFunction {
         cutCubePtr.setMaterial(svMattePtr);
         w.addObject(cutCubePtr);
 
-	// concave part sphere parameters
+        // concave part sphere parameters
         Point3D center = new Point3D(p1);
         double radius = sphereRadius;
         double phiMin = 180.0;

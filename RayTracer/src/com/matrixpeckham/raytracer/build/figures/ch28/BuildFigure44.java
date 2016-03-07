@@ -78,7 +78,7 @@ public class BuildFigure44 implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// reflective sphere inside cube
+        // reflective sphere inside cube
         Reflective reflectivePtr = new Reflective();
         reflectivePtr.setKa(0.3);
         reflectivePtr.setKd(0.25);
@@ -89,7 +89,7 @@ public class BuildFigure44 implements BuildWorldFunction {
         spherePtr1.setMaterial(reflectivePtr);
         w.addObject(spherePtr1);
 
-	// transparent cube
+        // transparent cube
         RGBColor glassColor = new RGBColor(0.64, 0.98, 0.88);	// light cyan
 
         Dielectric glassPtr = new Dielectric();
@@ -104,7 +104,7 @@ public class BuildFigure44 implements BuildWorldFunction {
         boxPtr.setMaterial(glassPtr);
         w.addObject(boxPtr);
 
-	// plane
+        // plane
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(4.0);
         checkerPtr.setColor1(1, 1, 0.4);    		// yellow

@@ -51,86 +51,77 @@ public class BuildFigure04 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 29.4
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(400);
+        w.vp.setVres(400);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(0);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(400);
-	w.vp.setVres(400); 
-	w.vp.setSamples(numSamples);
-	w.vp.setMaxDepth(0);
-		
-	w.backgroundColor = new RGBColor(0.0);
-	
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(5, 1.5, 8);
-	pinholePtr.setLookat(0.25, 0.0, 0.0); 
-	pinholePtr.setViewDistance(1000.0);
-	pinholePtr.computeUVW();
-	w.setCamera(pinholePtr);
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(-15, 20, 25);  
-	lightPtr.scaleRadiance(2.5);  
-	lightPtr.setShadows(true);
-	w.addLight(lightPtr);
-	
-	// image:
+        w.backgroundColor = new RGBColor(0.0);
 
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        w.tracer = new RayCast(w);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(5, 1.5, 8);
+        pinholePtr.setLookat(0.25, 0.0, 0.0);
+        pinholePtr.setViewDistance(1000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(-15, 20, 25);
+        lightPtr.scaleRadiance(2.5);
+        lightPtr.setShadows(true);
+        w.addLight(lightPtr);
+
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"Lightlace.ppm"));
+            imagePtr.loadPPMFile(new File(path + "Lightlace.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	
-	// mapping:
-	
-	SquareMap mapPtr = new SquareMap();   
-	
-	// image texture:
-	
-	ImageTexture texturePtr = new ImageTexture(imagePtr); 
-	texturePtr.setMapping(mapPtr);
-	
-	// spatially varying material:
-		
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.40);
-	svMattePtr.setKd(0.95);
-	svMattePtr.setCd(texturePtr);
-	
-	// generic rectangle:
-	
-	Rectangle rectanglePtr = new Rectangle();
-	rectanglePtr.setMaterial(svMattePtr);
-	
-	// transformed rectangle:
-	
-	Instance lightlacePtr = new Instance(rectanglePtr);  
-	lightlacePtr.scale(1.0, 1.0, 1.5);
-	lightlacePtr.rotateZ(90);
-	lightlacePtr.rotateY(90);
-	w.addObject(lightlacePtr);
-	
-	// ground plane
-	
-	Matte mattePtr1 = new Matte();		
-	mattePtr1.setKa(0.25);
-	mattePtr1.setKd(0.5);
-	mattePtr1.setCd(1.0);
-	 
-	Plane planePtr = new Plane(new Point3D(0.0, -1.0, 0.0),new Normal(0.0, 1.0, 0.0));
-	planePtr.setMaterial(mattePtr1);
-	w.addObject(planePtr);
+
+        // mapping:
+        SquareMap mapPtr = new SquareMap();
+
+        // image texture:
+        ImageTexture texturePtr = new ImageTexture(imagePtr);
+        texturePtr.setMapping(mapPtr);
+
+        // spatially varying material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.40);
+        svMattePtr.setKd(0.95);
+        svMattePtr.setCd(texturePtr);
+
+        // generic rectangle:
+        Rectangle rectanglePtr = new Rectangle();
+        rectanglePtr.setMaterial(svMattePtr);
+
+        // transformed rectangle:
+        Instance lightlacePtr = new Instance(rectanglePtr);
+        lightlacePtr.scale(1.0, 1.0, 1.5);
+        lightlacePtr.rotateZ(90);
+        lightlacePtr.rotateY(90);
+        w.addObject(lightlacePtr);
+
+        // ground plane
+        Matte mattePtr1 = new Matte();
+        mattePtr1.setKa(0.25);
+        mattePtr1.setKd(0.5);
+        mattePtr1.setCd(1.0);
+
+        Plane planePtr = new Plane(new Point3D(0.0, -1.0, 0.0), new Normal(0.0,
+                1.0, 0.0));
+        planePtr.setMaterial(mattePtr1);
+        w.addObject(planePtr);
     }
-    
+
 }

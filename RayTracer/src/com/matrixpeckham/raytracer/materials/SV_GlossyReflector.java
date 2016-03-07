@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.brdfs.GlossySpecular;
 import com.matrixpeckham.raytracer.brdfs.SV_GlossySpecular;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.DoubleRef;
@@ -25,6 +24,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Textured glossy reflector
@@ -52,7 +52,7 @@ public class SV_GlossyReflector extends SV_Phong {
     public SV_GlossyReflector(SV_GlossyReflector g) {
         super(g);
         if (g.glossySpecularBrdf != null) {
-            glossySpecularBrdf = g.glossySpecularBrdf.clone();
+            glossySpecularBrdf = g.glossySpecularBrdf.cloneBRDF();
         }
     }
 
@@ -162,8 +162,11 @@ public class SV_GlossyReflector extends SV_Phong {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new SV_GlossyReflector(this);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SV_GlossyReflector.class.getName());
 
 }

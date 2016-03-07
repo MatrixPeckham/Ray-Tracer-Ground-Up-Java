@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Turbulence noise texture for black to color.
@@ -110,7 +111,7 @@ public class TurbulenceTexture implements Texture {
         this.color.setTo(t.color);
         this.maxValue = t.maxValue;
         this.minValue = t.minValue;
-        this.noise = t.noise.clone();
+        this.noise = t.noise.cloneNoise();
     }
 
     /**
@@ -119,7 +120,7 @@ public class TurbulenceTexture implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new TurbulenceTexture(this);
     }
 
@@ -176,5 +177,8 @@ public class TurbulenceTexture implements Texture {
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(TurbulenceTexture.class.getName());
 
 }

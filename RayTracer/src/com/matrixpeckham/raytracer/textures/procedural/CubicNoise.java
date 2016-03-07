@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.textures.procedural;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Cubic interpolation implementation of lattice noise.
@@ -61,7 +62,7 @@ public class CubicNoise extends LatticeNoise {
      * @return
      */
     @Override
-    public LatticeNoise clone() {
+    public LatticeNoise cloneNoise() {
         return new CubicNoise(this);
     }
 
@@ -180,5 +181,8 @@ public class CubicNoise extends LatticeNoise {
 
         return (((c3.mul(x).add(c2).mul(x)).add(c1)).mul(x).add(c0));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(CubicNoise.class.getName());
 
 }

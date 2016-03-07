@@ -18,79 +18,95 @@
 package com.matrixpeckham.raytracer.util;
 
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 
 /**
  * Complex number class for the brute force solver of quartics. it's this class
- * and its use of BigDecimal that makes the solver so slow. 
+ * and its use of BigDecimal that makes the solver so slow.
+ *
  * @author William Matrix Peckham
  */
 public class ComplexNumber {
+
     /**
      * Precision used for all div calls, needed because of the exception thrown
      * when infinite precision is used and div causes repeating decimals
      */
     public static final int DIV_PRECISION = 50;
+
     /**
      * Resolution that we will try to get the square root to.
      */
     public static final BigDecimal ROOT_PRECISION = new BigDecimal(
             "0.0000001");
+
     /**
      * Maximum number of iterations through the root finding algorithm.
      */
     public static final int MAX_ROOT_ITERS = 100;
+
     /**
      * real component
      */
     public final BigDecimal real;
+
     /**
      * imaginary component
      */
     public final BigDecimal imaginary;
+
     /**
      * cache the absolute value, lazy initialized. found to be a bottleneck
      */
     private BigDecimal abs = null;
-    
+
     /**
      * Initialize with doubles
+     *
      * @param r
-     * @param i 
+     * @param i
      */
     public ComplexNumber(double r, double i) {
         real = new BigDecimal(r + "");
         imaginary = new BigDecimal(i + "");
     }
+
     /**
-     * Initialize  with big decimals
+     * Initialize with big decimals
+     *
      * @param r
-     * @param i 
+     * @param i
      */
     public ComplexNumber(BigDecimal r, BigDecimal i) {
         real = r;
         imaginary = i;
     }
-    
+
     /**
      * returns the negative of this number
-     * @return 
+     *
+     * @return
      */
     public ComplexNumber negate() {
         return new ComplexNumber(real.negate(), imaginary.negate());
     }
+
     /**
      * Multiply by a scalar.
+     *
      * @param d
-     * @return 
+     * @return
      */
     public ComplexNumber mult(double d) {
         return new ComplexNumber(real.multiply(new BigDecimal(d + "")),
                 imaginary.multiply(new BigDecimal(d + "")));
     }
+
     /**
      * Multiply by a scalar.
+     *
      * @param d
-     * @return 
+     * @return
      */
     public ComplexNumber mult(BigDecimal d) {
         return new ComplexNumber(real.multiply(d), imaginary.multiply(d));
@@ -98,8 +114,9 @@ public class ComplexNumber {
 
     /**
      * Multiply by another complex number.
+     *
      * @param o
-     * @return 
+     * @return
      */
     public ComplexNumber mult(ComplexNumber o) {
         BigDecimal rr = real.multiply(o.real);
@@ -110,34 +127,42 @@ public class ComplexNumber {
         BigDecimal i = ri.add(ir);
         return new ComplexNumber(r, i);
     }
+
     /**
      * add two complex numbers together
+     *
      * @param o
-     * @return 
+     * @return
      */
     public ComplexNumber add(ComplexNumber o) {
         return new ComplexNumber(real.add(o.real), imaginary.add(o.imaginary));
     }
+
     /**
      * subtract two real numbers
+     *
      * @param o
-     * @return 
+     * @return
      */
     public ComplexNumber sub(ComplexNumber o) {
         return new ComplexNumber(real.subtract(o.real), imaginary.subtract(
                 o.imaginary));
     }
+
     /**
      * Gets the congigate.
-     * @return 
+     *
+     * @return
      */
     public ComplexNumber congigate() {
         return new ComplexNumber(real, imaginary.negate());
     }
+
     /**
      * divide two complex numbers.
+     *
      * @param o
-     * @return 
+     * @return
      */
     public ComplexNumber div(ComplexNumber o) {
         BigDecimal x = real;
@@ -154,7 +179,8 @@ public class ComplexNumber {
 
     /**
      * Returns the absolute value of this complex number. caches it for later.
-     * @return 
+     *
+     * @return
      */
     public BigDecimal abs() {
         if (abs == null) {
@@ -164,94 +190,105 @@ public class ComplexNumber {
         return abs;
         //return Math.sqrt(real*real+imaginary*imaginary);
     }
-    
+
     /**
-     * Takes the root-th root of n. convenience for takeRoot(root,n,ROOT_PRECISION)
+     * Takes the root-th root of n. convenience for
+     * takeRoot(root,n,ROOT_PRECISION)
+     *
      * @param root
      * @param n
-     * @return 
+     * @return
      */
     public BigDecimal takeRoot(int root, BigDecimal n) {
         return takeRoot(root, n, ROOT_PRECISION);
     }
 
-/*    public static BigDecimal takeRoot(int root, BigDecimal n,
-            BigDecimal maxError) {
-        int MAXITER = MAX_ROOT_ITERS;
+    /*    public static BigDecimal takeRoot(int root, BigDecimal n,
+     BigDecimal maxError) {
+     int MAXITER = MAX_ROOT_ITERS;
 
-        // Specify the starting value in the search for the cube root.
-        BigDecimal x;
-        x = new BigDecimal("1");
+     // Specify the starting value in the search for the cube root.
+     BigDecimal x;
+     x = new BigDecimal("1");
 
-        BigDecimal prevX = null;
+     BigDecimal prevX = null;
 
-        BigDecimal rootBD = new BigDecimal(root);
-        // Search for the cube root via the Newton-Raphson loop. Output each successive iteration's value.
-        int i=0;
-        for (i = 0; i < MAXITER; ++i) {
-            x = x.subtract(x.pow(root)
-                    .subtract(n)
-                    .divide(rootBD.multiply(x.pow(root - 1)), DIV_PRECISION,
-                            BigDecimal.ROUND_HALF_UP));
-            if (prevX != null && prevX.subtract(x).abs().compareTo(maxError) < 0) {
-                break;
-            }
-            prevX = x;
-        }
+     BigDecimal rootBD = new BigDecimal(root);
+     // Search for the cube root via the Newton-Raphson loop. Output each successive iteration's value.
+     int i=0;
+     for (i = 0; i < MAXITER; ++i) {
+     x = x.subtract(x.pow(root)
+     .subtract(n)
+     .divide(rootBD.multiply(x.pow(root - 1)), DIV_PRECISION,
+     BigDecimal.ROUND_HALF_UP));
+     if (prevX != null && prevX.subtract(x).abs().compareTo(maxError) < 0) {
+     break;
+     }
+     prevX = x;
+     }
 
-        return x;
-    }
-*/
+     return x;
+     }
+     */
     /**
      * Takes the root-th root of a to at least eps precision.
+     *
      * @param root
      * @param a
      * @param eps
-     * @return 
+     * @return
      */
-    public static BigDecimal takeRoot(int root, BigDecimal a, BigDecimal eps){
-        BigDecimal nth = BigDecimal.ONE.divide(new BigDecimal(root+""),DIV_PRECISION,
+    public static BigDecimal takeRoot(int root, BigDecimal a, BigDecimal eps) {
+        BigDecimal nth = BigDecimal.ONE.divide(new BigDecimal(root + ""),
+                DIV_PRECISION,
                 BigDecimal.ROUND_HALF_UP);
         BigDecimal x = BigDecimal.ONE;
-        int i =0;
-        for( i = 0; i<MAX_ROOT_ITERS; i++){
-            BigDecimal err = nth.multiply(a.divide(x.pow(root-1),DIV_PRECISION,BigDecimal.ROUND_HALF_UP).subtract(x));
-            if(err.abs().compareTo(eps)<0){
+        int i;
+        for (i = 0; i < MAX_ROOT_ITERS; i++) {
+            BigDecimal err = nth.multiply(a.divide(x.pow(root - 1),
+                    DIV_PRECISION, BigDecimal.ROUND_HALF_UP).subtract(x));
+            if (err.abs().compareTo(eps) < 0) {
                 return x;
             }
-            x=x.add(err);
+            x = x.add(err);
         }
         return x;
-        
+
     }
-    
+
     /**
      * cache for sqrt of this number
      */
     private ComplexNumber sqrt = null;
+
     /**
      * Sqrt of a complex number, caches for later.
-     * @return 
+     *
+     * @return
      */
     public ComplexNumber sqrt() {
-        if(sqrt==null){
+        if (sqrt == null) {
             //general case, works as long as this does't represent a real negative
             if (real.compareTo(BigDecimal.ZERO) >= 0 || isImaginary()) {
                 ComplexNumber r = new ComplexNumber(abs(), BigDecimal.ZERO);
                 ComplexNumber numer = add(r);
                 BigDecimal denom = numer.abs();
-                sqrt = numer.mult(takeRoot(2, r.real).divide(denom, DIV_PRECISION,
-                    BigDecimal.ROUND_HALF_UP));
+                sqrt = numer.mult(takeRoot(2, r.real).divide(denom,
+                        DIV_PRECISION,
+                        BigDecimal.ROUND_HALF_UP));
             } else {
                 //real negative case
-                sqrt = new ComplexNumber(BigDecimal.ZERO, takeRoot(2, real.negate()));
+                sqrt = new ComplexNumber(BigDecimal.ZERO, takeRoot(2, real.
+                        negate()));
             }
         }
         return sqrt;
     }
+
     /**
      * Returns true if the imaginary component is ~0
-     * @return 
+     *
+     * @return
      */
     public boolean isImaginary() {
         return imaginary.abs().compareTo(new BigDecimal("0.0001")) > 0;
@@ -259,8 +296,9 @@ public class ComplexNumber {
 
     /**
      * Divides by scalar.
+     *
      * @param dd
-     * @return 
+     * @return
      */
     public ComplexNumber div(double dd) {
         BigDecimal d = new BigDecimal(dd + "");
@@ -268,86 +306,102 @@ public class ComplexNumber {
                 BigDecimal.ROUND_HALF_UP), imaginary.divide(d, DIV_PRECISION,
                         BigDecimal.ROUND_HALF_UP));
     }
+
     /**
      * cache cube root, probably not needed.
      */
-    private ComplexNumber cbrt=null;
+    private ComplexNumber cbrt = null;
+
     /**
      * Calculate primary cube root.
-     * @return 
+     *
+     * @return
      */
     public ComplexNumber cbrt() {
-        if(cbrt==null){
-            cbrt=cbrt(0);
+        if (cbrt == null) {
+            cbrt = cbrt(0);
         }
         return cbrt;
     }
 
     /**
      * Sin method for big decimal.
+     *
      * @param bd
-     * @return 
+     * @return
      */
     public static BigDecimal sin(BigDecimal bd) {
         double d = bd.doubleValue();
         BigDecimal ret = new BigDecimal(Math.sin(d) + "");
         return ret.setScale(bd.scale(), BigDecimal.ROUND_HALF_EVEN);
     }
+
     /**
      * cos method for big decimal.
+     *
      * @param bd
-     * @return 
+     * @return
      */
     public static BigDecimal cos(BigDecimal bd) {
         double d = bd.doubleValue();
         BigDecimal ret = new BigDecimal(Math.cos(d) + "");
         return ret.setScale(bd.scale(), BigDecimal.ROUND_HALF_EVEN);
     }
+
     /**
      * tan method for big decimal.
+     *
      * @param bd
-     * @return 
+     * @return
      */
     public static BigDecimal tan(BigDecimal bd) {
         double d = bd.doubleValue();
         BigDecimal ret = new BigDecimal(Math.tan(d) + "");
         return ret.setScale(bd.scale(), BigDecimal.ROUND_HALF_EVEN);
     }
+
     /**
      * asin for big decimal
+     *
      * @param bd
-     * @return 
+     * @return
      */
     public static BigDecimal asin(BigDecimal bd) {
         double d = bd.doubleValue();
         BigDecimal ret = new BigDecimal(Math.asin(d) + "");
         return ret.setScale(bd.scale(), BigDecimal.ROUND_HALF_EVEN);
     }
+
     /**
      * acos for big decimal
+     *
      * @param bd
-     * @return 
+     * @return
      */
     public static BigDecimal acos(BigDecimal bd) {
         double d = bd.doubleValue();
         BigDecimal ret = new BigDecimal(Math.acos(d) + "");
         return ret.setScale(bd.scale(), BigDecimal.ROUND_HALF_EVEN);
     }
+
     /**
      * atan for big decimal
+     *
      * @param bd
-     * @return 
+     * @return
      */
     public static BigDecimal atan(BigDecimal bd) {
         double d = bd.doubleValue();
         BigDecimal ret = new BigDecimal(Math.atan(d) + "");
         return ret.setScale(bd.scale(), BigDecimal.ROUND_HALF_EVEN);
     }
+
     /**
      * atan2 for big decimals
+     *
      * @param bd1
      * @param bd2
-     * @return 
+     * @return
      */
     public static BigDecimal atan2(BigDecimal bd1, BigDecimal bd2) {
         double d1 = bd1.doubleValue();
@@ -356,12 +410,13 @@ public class ComplexNumber {
         return ret.setScale(bd1.scale() > bd2.scale() ? bd1.scale() : bd2
                 .scale(), BigDecimal.ROUND_HALF_EVEN);
     }
-    
+
     /**
      * calculates cube root for this number there are three possible roots inum
      * chooses which.
+     *
      * @param inum
-     * @return 
+     * @return
      */
     public ComplexNumber cbrt(int inum) {
         BigDecimal num = new BigDecimal(inum);
@@ -380,7 +435,8 @@ public class ComplexNumber {
 
     /**
      * for debugging.
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {
@@ -390,4 +446,8 @@ public class ComplexNumber {
         }
         return real + "" + add + "" + imaginary.abs() + "i";
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ComplexNumber.class.getName());
+
 }

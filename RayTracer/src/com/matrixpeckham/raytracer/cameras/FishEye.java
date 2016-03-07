@@ -34,6 +34,7 @@ import com.matrixpeckham.raytracer.world.World;
 public class FishEye extends Camera {
 
     private double psiMax = 90;//view angle
+
     private boolean rectangular = false;//circle or square
 
     /**
@@ -76,7 +77,7 @@ public class FishEye extends Camera {
 
         for (int r = 0; r < vres; r++) // up
         {
-            for (int c = 0; c < hres; c++) {	// across 					
+            for (int c = 0; c < hres; c++) {	// across
                 L.setTo(Utility.BLACK);
 
                 for (int j = 0; j < vp.numSamples; j++) {
@@ -121,7 +122,7 @@ public class FishEye extends Camera {
 
         for (int r = 0; r < vres; r++) // up
         {
-            for (int c = 0; c < hres; c++) {	// across 					
+            for (int c = 0; c < hres; c++) {	// across
                 L.setTo(Utility.BLACK);
 
                 for (int j = 0; j < vp.numSamples; j++) {
@@ -148,7 +149,7 @@ public class FishEye extends Camera {
      * @return
      */
     @Override
-    public Camera clone() {
+    public Camera cloneCamera() {
         return new FishEye(this);
     }
 

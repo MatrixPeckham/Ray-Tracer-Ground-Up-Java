@@ -60,13 +60,13 @@ public class BuildFigure24 implements BuildWorldFunction {
 
         Directional lightPtr = new Directional();
         lightPtr.setDirection(200, 250, 300);
-	lightPtr.setColor(Utility.WHITE);  			// for Figure 14.24(a)
+        lightPtr.setColor(Utility.WHITE);  			// for Figure 14.24(a)
         //lightPtr.setColor(0, 0, 1);  		// for Figure 14.24(b)
         lightPtr.scaleRadiance(3.0);
         lightPtr.setShadows(true);    // see Chapter 16
         w.addLight(lightPtr);
 
-	// four spheres centered on the x axis
+        // four spheres centered on the x axis
         double radius = 1.0;
         double gap = 0.2;	 // gap between spheres
 
@@ -110,7 +110,7 @@ public class BuildFigure24 implements BuildWorldFunction {
         spherePtr4.setMaterial(mattePtr4);
         w.addObject(spherePtr4);
 
-	// ground plane
+        // ground plane
         Matte mattePtr5 = new Matte();
         mattePtr5.setKa(0.25);
         mattePtr5.setKd(0.5);

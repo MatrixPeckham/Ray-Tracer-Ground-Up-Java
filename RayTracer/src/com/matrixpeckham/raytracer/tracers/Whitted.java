@@ -23,16 +23,18 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.logging.Logger;
 
 /**
- * Whitted tracer, pretty much the same as raycast tracer. Overrides method 
- * that is needed for dielectric.  
+ * Whitted tracer, pretty much the same as raycast tracer. Overrides method that
+ * is needed for dielectric.
+ *
  * @author William Matrix Peckham
  */
-public class Whitted extends Tracer{
+public class Whitted extends Tracer {
 
     /**
-     * default 
+     * default
      */
     public Whitted() {
         super();
@@ -40,39 +42,41 @@ public class Whitted extends Tracer{
 
     /**
      * for world
-     * @param w 
+     *
+     * @param w
      */
     public Whitted(World w) {
         super(w);
     }
 
-    
     /**
-     * Traces a ray and returns the ray parameter in the double reference parameter
+     * Traces a ray and returns the ray parameter in the double reference
+     * parameter
+     *
      * @param ray
      * @param t
      * @param depth
-     * @return 
+     * @return
      */
     @Override
-    public RGBColor traceRay(Ray ray,DoubleRef t, int depth) {
+    public RGBColor traceRay(Ray ray, DoubleRef t, int depth) {
         //bail out for depth
-        if(depth>world.vp.maxDepth){
+        if (depth > world.vp.maxDepth) {
             return Utility.BLACK;
         } else {
             //get the shaderec from the nearest hit object
             ShadeRec sr = new ShadeRec(world.hitObjects(ray));
             //book keep the shaderec for shading, updates
             //ray, depth, and edits the reference parameter.
-            if(sr.hitAnObject){
-                sr.depth=depth;
+            if (sr.hitAnObject) {
+                sr.depth = depth;
                 sr.ray.setTo(ray);
-                t.d=sr.lastT;
+                t.d = sr.lastT;
                 //shade point
                 return sr.material.shade(sr);
             } else {
                 //no hit
-                t.d=Utility.HUGE_VALUE;
+                t.d = Utility.HUGE_VALUE;
                 return world.backgroundColor;
             }
         }
@@ -80,13 +84,14 @@ public class Whitted extends Tracer{
 
     @Override
     public RGBColor traceRay(Ray ray, int depth) {
-        return traceRay(ray,new DoubleRef(), depth); //To change body of generated methods, choose Tools | Templates.
+        return traceRay(ray, new DoubleRef(), depth); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public RGBColor traceRay(Ray ray) {
-        return traceRay(ray,0); //To change body of generated methods, choose Tools | Templates.
+        return traceRay(ray, 0); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
+    private static final Logger LOG = Logger.getLogger(Whitted.class.getName());
+
 }

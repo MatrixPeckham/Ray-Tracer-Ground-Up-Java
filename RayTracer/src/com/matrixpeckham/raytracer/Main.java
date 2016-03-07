@@ -17,11 +17,6 @@
  */
 package com.matrixpeckham.raytracer;
 
-import com.matrixpeckham.raytracer.textures.procedural.FBMBump;
-import com.matrixpeckham.raytracer.util.BruteForceSolver;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.BorderLayout;
@@ -35,10 +30,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
@@ -46,7 +38,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,86 +59,105 @@ public class Main extends JFrame implements ActionListener {
      * Menu bar.
      */
     JMenuBar bar;
+
     /**
      * Start button for starting render.
      */
     JMenuItem startButton;
+<<<<<<< HEAD
     
     /**
      * Checkbox for multithreading.
      */
     JCheckBoxMenuItem multiBox;
     
+=======
+
+>>>>>>> refs/remotes/origin/master
     /**
      * Open button, for opening an image file.
      */
     JMenuItem openButton;
+
     /**
      * Save button for saving a rendered image to PNG file.
      */
     JMenuItem saveButton;
+
     /**
      * Exit Button.
      */
     JMenuItem quitButton;
+
     /**
      * Zoom 1x button.
      */
     JMenuItem z1Button;
+
     /**
      * Zoom 2x button.
      */
     JMenuItem z2Button;
+
     /**
      * Zoom 4x button.
      */
     JMenuItem z4Button;
+
     /**
      * Zoom 8x button.
      */
     JMenuItem z8Button;
+
     /**
      * Zoom 16x button.
      */
     JMenuItem z16Button;
+
     /**
      * Status bar for the bottom of the pane.
      */
     JLabel statusBar;
+
     /**
      * Image to show.
      */
-    BufferedImage image;
+    transient BufferedImage image;
+
     /**
      * Component to show.
      */
     ImageViewComponent imageComponent;
-    /**
-     * Thread synch queue for rendering. Holds the pixels.
-     */
-    private BlockingQueue<RenderPixel> queue
-            = new LinkedBlockingQueue<RenderPixel>();
+
+    private final transient BlockingQueue<RenderPixel> queue
+            = new LinkedBlockingQueue<>();
+
     /**
      * Swing timer for updating the image often.
      */
     public Timer updateTimer;
+
     /**
      * Thread for rendering.
      */
-    public RayTraceThread thread = null;
+    public transient RayTraceThread thread = null;
+
     /**
      * The builder that will create the scene we render.
      */
 //    BuildWorldFunction builder = new com.matrixpeckham.raytracer.build.figures.ch14.BuildFigure15();
-    BuildWorldFunction builder = null;//new com.matrixpeckham.raytracer.build.figures.ch27.BuildFigure32();
+    transient BuildWorldFunction builder = null;//new com.matrixpeckham.raytracer.build.figures.ch27.BuildFigure32();
+
     /**
      * Number of pixels that have been rendered.
      */
     int pixelsRendered = 0;
+
     /**
      * Number of pixels that we need to render in total.
      */
     int pixelsToRender = 0;
+
     /**
      * Time we started rendering.
      */
@@ -155,6 +165,8 @@ public class Main extends JFrame implements ActionListener {
 
     /**
      * Default constructor.
+     *
+     * @throws java.net.URISyntaxException
      */
     public Main() throws URISyntaxException {
         //make the menu bar
@@ -199,59 +211,32 @@ public class Main extends JFrame implements ActionListener {
         multiBox = new JCheckBoxMenuItem("Multithread enabled",true);
 
         //standard action listeners simply call appropriate methods
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                start();
-            }
+        startButton.addActionListener((ActionEvent e) -> {
+            start();
         });
-        openButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                open();
-            }
+        openButton.addActionListener((ActionEvent e) -> {
+            open();
         });
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                save();
-            }
+        saveButton.addActionListener((ActionEvent e) -> {
+            save();
         });
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                quit();
-            }
+        quitButton.addActionListener((ActionEvent e) -> {
+            quit();
         });
-        z1Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                imageComponent.setZoomLevel(1);
-            }
+        z1Button.addActionListener((ActionEvent e) -> {
+            imageComponent.setZoomLevel(1);
         });
-        z2Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                imageComponent.setZoomLevel(2);
-            }
+        z2Button.addActionListener((ActionEvent e) -> {
+            imageComponent.setZoomLevel(2);
         });
-        z4Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                imageComponent.setZoomLevel(4);
-            }
+        z4Button.addActionListener((ActionEvent e) -> {
+            imageComponent.setZoomLevel(4);
         });
-        z8Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                imageComponent.setZoomLevel(8);
-            }
+        z8Button.addActionListener((ActionEvent e) -> {
+            imageComponent.setZoomLevel(8);
         });
-        z16Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                imageComponent.setZoomLevel(16);
-            }
+        z16Button.addActionListener((ActionEvent e) -> {
+            imageComponent.setZoomLevel(16);
         });
 
         //standard menu bar creation.
@@ -367,6 +352,7 @@ public class Main extends JFrame implements ActionListener {
      * Main Method for the program, creates and displays the window.
      *
      * @param args the command line arguments
+     * @throws java.net.URISyntaxException
      */
     public static void main(String[] args) throws URISyntaxException {
         Main m = new Main();
@@ -392,11 +378,11 @@ public class Main extends JFrame implements ActionListener {
         }
         //compute the completed ratio.
         double completed = (double) pixelsRendered / (double) pixelsToRender;
-        if (completed == 1) {
+        if (completed >= 1) {
             updateTimer.stop();
         }
 
-        //update the status bar for the percent complete and timing. 
+        //update the status bar for the percent complete and timing.
         String str = "Rendering... " + ((int) (completed * 100)) + "%";
 
         long time = System.currentTimeMillis();
@@ -409,7 +395,7 @@ public class Main extends JFrame implements ActionListener {
         String timeremStr = msRemain / 1000f + " seconds remain ";
         String timeStr = diff / 1000f + " seconds done ";
 
-        //set the status. 
+        //set the status.
         if (msRemain >= 0) {
             statusBar.setText(str + timeStr + timeremStr);
         } else {
@@ -420,9 +406,10 @@ public class Main extends JFrame implements ActionListener {
     }
 
     //class for either a treemap or a class, inner or leaf nodes of a tree
-    class TreeOrClass {
+    static class TreeOrClass {
 
         Class<? extends BuildWorldFunction> asClass = null;
+
         TreeMap<String, TreeOrClass> asTree = null;
 
         @Override
@@ -443,7 +430,6 @@ public class Main extends JFrame implements ActionListener {
     }
 
     //populates build functions
-
     private void populateBuildFunctions(String packName, JMenu menu) throws
             URISyntaxException {
         //use reflections api to get all buildworldfunction implementations
@@ -453,53 +439,56 @@ public class Main extends JFrame implements ActionListener {
 
         //we build a tree from the packages of of the classes, we remove the original package name
         TreeMap<String, TreeOrClass> fullList = new TreeMap<>();
-        for (Class<? extends BuildWorldFunction> clazz : clss) {
-            String name = clazz.getName().substring(clazz.getName().lastIndexOf(
-                    ".") + 1);
-            String pack = clazz.getName().replace("." + name, "");
-            String packEnd = pack.replace(packName, "");
-            String[] packages = packEnd.split("\\.");
-            TreeMap<String, TreeOrClass> tempList = fullList;
-            int i = 0;
-            do {
-                String tPack = packages[i];
-                if (tempList.get(tPack) != null) {
-                    TreeOrClass entry = tempList.get(tPack);
-                    if (entry.asClass != null) {
-                        //this is unlikely, class with the same name as the package
-                        //the current class is supposed to be in
-                        Class<? extends BuildWorldFunction> oldClass
+        clss.stream().
+                forEach((clazz) -> {
+                    String name = clazz.getName().substring(clazz.getName().
+                            lastIndexOf(
+                                    '.') + 1);
+                    String pack = clazz.getName().replace("." + name, "");
+                    String packEnd = pack.replace(packName, "");
+                    String[] packages = packEnd.split("\\.");
+                    TreeMap<String, TreeOrClass> tempList = fullList;
+                    int i = 0;
+                    do {
+                        String tPack = packages[i];
+                        if (tempList.get(tPack) != null) {
+                            TreeOrClass entry = tempList.get(tPack);
+                            if (entry.asClass != null) {
+                                //this is unlikely, class with the same name as the package
+                                //the current class is supposed to be in
+                                Class<? extends BuildWorldFunction> oldClass
                                 = entry.asClass;
-                        entry.asClass = null;
-                        TreeMap<String, TreeOrClass> nTree = new TreeMap<>();
-                        TreeOrClass oldEntry = new TreeOrClass();
-                        oldEntry.asClass = oldClass;
-                        nTree.put(oldClass.getName(), oldEntry);
-                        entry.asTree = nTree;
-                        tempList = nTree;
-                    } else {
-                        if (entry.asTree != null) {
-                            tempList = entry.asTree;
+                                entry.asClass = null;
+                                TreeMap<String, TreeOrClass> nTree
+                                = new TreeMap<>();
+                                TreeOrClass oldEntry = new TreeOrClass();
+                                oldEntry.asClass = oldClass;
+                                nTree.put(oldClass.getName(), oldEntry);
+                                entry.asTree = nTree;
+                                tempList = nTree;
+                            } else {
+                                if (entry.asTree != null) {
+                                    tempList = entry.asTree;
+                                } else {
+                                    //unlikely to happen
+                                    TreeOrClass nentry = new TreeOrClass();
+                                    nentry.asTree = new TreeMap<>();
+                                    tempList.put(packages[i], nentry);
+                                    tempList = nentry.asTree;
+                                }
+                            }
                         } else {
-                            //unlikely to happen
                             TreeOrClass nentry = new TreeOrClass();
                             nentry.asTree = new TreeMap<>();
                             tempList.put(packages[i], nentry);
                             tempList = nentry.asTree;
                         }
-                    }
-                } else {
+                        i++;
+                    } while (i < packages.length);
                     TreeOrClass nentry = new TreeOrClass();
-                    nentry.asTree = new TreeMap<>();
-                    tempList.put(packages[i], nentry);
-                    tempList = nentry.asTree;
-                }
-                i++;
-            } while (i < packages.length);
-            TreeOrClass nentry = new TreeOrClass();
-            nentry.asClass = clazz;
-            tempList.put(name, nentry);
-        }
+                    nentry.asClass = clazz;
+                    tempList.put(name, nentry);
+                });
         //after filling the tree we call this function to traverse it and make menu items
         fillMenu(fullList, menu);
     }
@@ -507,52 +496,46 @@ public class Main extends JFrame implements ActionListener {
     //fills a jmenu with items recursivly
     private void fillMenu(TreeMap<String, TreeOrClass> map, JMenuItem jmenu) {
         ArrayList<JMenuItem> menu = new ArrayList<>();
-        for (Map.Entry<String, TreeOrClass> entry : map.entrySet()) {
-            String name = entry.getKey();
-            TreeOrClass val = entry.getValue();
-            if (val.asTree != null && val.asClass != null) {
-                //should not happen
-            } else if (val.asTree != null) {
-                //special case prevents initial menu
-                if (!name.equals("")) {
-                    JMenu sub = new JMenu(name);
-                    menu.add(sub);
-                    fillMenu(val.asTree, sub);
-                } else {
-                    fillMenu(val.asTree, jmenu);
-                }
-            } else if (val.asClass != null) {
-                JMenuItem item = new JMenuItem(name);
-                final Class<? extends BuildWorldFunction> cls = val.asClass;
-                //action listener takes the current class and creates a new instance and builds a world
-                item.addActionListener(new ActionListener() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
+        map.entrySet().stream().
+                forEach((entry) -> {
+                    String name = entry.getKey();
+                    TreeOrClass val = entry.getValue();
+                    if (val.asTree != null && val.asClass != null) {
+                        //should not happen
+                    } else if (val.asTree != null) {
+                        //special case prevents initial menu
+                        if (!name.isEmpty()) {
+                            JMenu sub = new JMenu(name);
+                            menu.add(sub);
+                            fillMenu(val.asTree, sub);
+                        } else {
+                            fillMenu(val.asTree, jmenu);
+                        }
+                    } else if (val.asClass != null) {
+                        JMenuItem item = new JMenuItem(name);
+                        final Class<? extends BuildWorldFunction> cls
+                        = val.asClass;
+                        //action listener takes the current class and creates a new instance and builds a world
+                        item.addActionListener((ActionEvent e) -> {
+                            try {
+                                builder = cls.newInstance();
+                            } catch (InstantiationException |
+                            IllegalAccessException ex) {
+                                Logger.getLogger(Main.class.getName()).
+                                log(Level.SEVERE, null, ex);
+                            }
+                        });
+                        menu.add(item);
+                        //sets the current class to the builder, this makes the last class the new one
                         try {
                             builder = cls.newInstance();
-                        } catch (InstantiationException ex) {
+                        } catch (InstantiationException |
+                        IllegalAccessException ex) {
                             Logger.getLogger(Main.class.getName()).
-                                    log(Level.SEVERE, null, ex);
-                        } catch (IllegalAccessException ex) {
-                            Logger.getLogger(Main.class.getName()).
-                                    log(Level.SEVERE, null, ex);
+                            log(Level.SEVERE, null, ex);
                         }
                     }
                 });
-                menu.add(item);
-                //sets the current class to the builder, this makes the last class the new one
-                try {
-                    builder = cls.newInstance();
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(Main.class.getName()).
-                            log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(Main.class.getName()).
-                            log(Level.SEVERE, null, ex);
-                }
-            }
-        }
         //breaks menus into smaller menus, because some packages were larger than screen allowed.
         if (menu.size() > 20) {
             int numSubs = (int) Math.ceil(menu.size() / 10.0);
@@ -570,9 +553,10 @@ public class Main extends JFrame implements ActionListener {
                 jmenu.add(subMenu);
             }
         } else {
-            for (JMenuItem item : menu) {
-                jmenu.add(item);
-            }
+            menu.stream().
+                    forEach((item) -> {
+                        jmenu.add(item);
+                    });
         }
     }
 }

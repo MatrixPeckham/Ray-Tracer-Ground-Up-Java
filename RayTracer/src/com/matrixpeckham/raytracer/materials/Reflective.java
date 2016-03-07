@@ -22,6 +22,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Reflective class, for perfectly reflective surfaces
@@ -33,7 +34,7 @@ public class Reflective extends Phong {
     /**
      * perfect reflecting BRDF
      */
-    private PerfectSpecular perfectBRDF;
+    private final PerfectSpecular perfectBRDF;
 
     /**
      * default constructor
@@ -50,14 +51,16 @@ public class Reflective extends Phong {
      */
     public Reflective(Reflective r) {
         super(r);
-        perfectBRDF = r.perfectBRDF.clone();
+        perfectBRDF = r.perfectBRDF.cloneBRDF();
     }
 
     /**
      * clone
+     *
+     * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new Reflective(this);
     }
 
@@ -88,7 +91,7 @@ public class Reflective extends Phong {
     @Override
     public RGBColor shade(ShadeRec sr) {
 
-        //phong 
+        //phong
         RGBColor L = super.shade(sr);
 
         //camera direction
@@ -174,8 +177,17 @@ public class Reflective extends Phong {
         return L;
     }
 
+    /**
+     *
+     * @param d
+     * @param d0
+     * @param d1
+     */
     public void setCr(double d, double d0, double d1) {
         setCr(new RGBColor(d, d0, d1));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(Reflective.class.getName());
 
 }

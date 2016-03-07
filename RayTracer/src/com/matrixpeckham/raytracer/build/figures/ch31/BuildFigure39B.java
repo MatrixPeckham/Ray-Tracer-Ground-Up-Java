@@ -23,7 +23,6 @@ import com.matrixpeckham.raytracer.lights.PointLight;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.CubicNoise;
 import com.matrixpeckham.raytracer.textures.procedural.WrappedThreeColors;
-import com.matrixpeckham.raytracer.textures.procedural.WrappedTwoColors;
 import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -43,83 +42,66 @@ public class BuildFigure39B implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.39(b)
-
 // The following code is from WrappedThreeColors::getColor:
 
-/*
+        /*
 
-if (noise < 1.35) {
-		return (value * color1);  
-	}
-	else if (noise < 2.0) {
-		return (value * color2);  
-	}
-	else {
-		return (value * color3);   
-	}
-	
-*/
+         if (noise < 1.35) {
+         return (value * color1);
+         }
+         else if (noise < 2.0) {
+         return (value * color2);
+         }
+         else {
+         return (value * color3);
+         }
 
+         */
 // The threshold values should be built in as data members of WrappedThreeColors
+        int numSamples = 1;
 
- 												
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 1;
-	
-	w.vp.setHres(600);     
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = new RGBColor(0.5);
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(9600.0);
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(20, 20, 40);
-	lightPtr.scaleRadiance(3.0);
-	w.addLight(lightPtr);
+        w.backgroundColor = new RGBColor(0.5);
+        w.tracer = new RayCast(w);
 
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();	
-	noisePtr.setNumOctaves(6);
-	noisePtr.setGain(0.5);	
-	noisePtr.setLacunarity(4.0);		
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(9600.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
-	// texture:
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(20, 20, 40);
+        lightPtr.scaleRadiance(3.0);
+        w.addLight(lightPtr);
 
-	WrappedThreeColors texturePtr = new WrappedThreeColors(noisePtr);	
-	texturePtr.setColor1(1.0, 0.8, 0.0);		// gold
-	texturePtr.setColor2(0.7, 1.0, 0.5);		// light green
-	texturePtr.setColor3(0.5, 0.75, 1.0);  	// light blue  
-	texturePtr.setExpansionNumber(3.25);	
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(4.0);
 
+        // texture:
+        WrappedThreeColors texturePtr = new WrappedThreeColors(noisePtr);
+        texturePtr.setColor1(1.0, 0.8, 0.0);		// gold
+        texturePtr.setColor2(0.7, 1.0, 0.5);		// light green
+        texturePtr.setColor3(0.5, 0.75, 1.0);  	// light blue
+        texturePtr.setExpansionNumber(3.25);
 
-	// material:
-		
-	SV_Matte svMattePtr = new SV_Matte();	 
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.9);
-	svMattePtr.setCd(texturePtr);
-	
-	
-	Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0);
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
-}
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.9);
+        svMattePtr.setCd(texturePtr);
 
-
-
-
+        Sphere spherePtr = new Sphere(new Point3D(0.0), 3.0);
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
+    }
 
 }

@@ -57,12 +57,14 @@ public abstract class BTDF {
      * clone function
      *
      * @return
+     *
      */
-    public abstract BTDF clone();
+    public abstract BTDF cloneBTDF();
 
     /**
-     * Function for getting the color of this point in direction wo, as illuminated from wi. Not used for transparent
-     * objects, most likely will return black.
+     * Function for getting the color of this point in direction wo, as
+     * illuminated from wi. Not used for transparent objects, most likely will
+     * return black.
      *
      * @param sr
      * @param wo

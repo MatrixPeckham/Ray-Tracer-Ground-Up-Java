@@ -22,6 +22,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * This texture is a noise texture that differs to another texture as the second
@@ -39,7 +40,7 @@ public class NestedNoisesTexture implements Texture {
     /**
      * black to this color
      */
-    private RGBColor color1 = new RGBColor();
+    private final RGBColor color1 = new RGBColor();
 
     /**
      * Secondary color, this is another texture
@@ -78,6 +79,13 @@ public class NestedNoisesTexture implements Texture {
         this(col, col2, 0.0, 1.0);
     }
 
+    /**
+     *
+     * @param col
+     * @param col2
+     * @param min
+     * @param max
+     */
     public NestedNoisesTexture(RGBColor col, Texture col2, double min,
             double max) {
         this(col, col2, min, max, 2, new LinearNoise());
@@ -96,7 +104,7 @@ public class NestedNoisesTexture implements Texture {
     public NestedNoisesTexture(RGBColor col, Texture col2, double min,
             double max, double num, LatticeNoise n) {
         color1.setTo(col);
-        color2 = col2.clone();
+        color2 = col2.cloneTexture();
         minValue = min;
         maxValue = max;
         noise = n;
@@ -111,12 +119,12 @@ public class NestedNoisesTexture implements Texture {
     public NestedNoisesTexture(NestedNoisesTexture t) {
         this.color1.setTo(t.color1);
         if (t.color2 != null) {
-            this.color2 = t.color2.clone();
+            this.color2 = t.color2.cloneTexture();
         }
         this.maxValue = t.maxValue;
         this.minValue = t.minValue;
-        if (noise != null) {
-            this.noise = t.noise.clone();
+        if (t.noise != null) {
+            this.noise = t.noise.cloneNoise();
         }
         this.expansionNumber = t.expansionNumber;
     }
@@ -136,7 +144,7 @@ public class NestedNoisesTexture implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new NestedNoisesTexture(this);
     }
 
@@ -179,7 +187,7 @@ public class NestedNoisesTexture implements Texture {
      * @param c2
      */
     public void setTexture(Texture c2) {
-        color2 = c2.clone();
+        color2 = c2.cloneTexture();
     }
 
     /**
@@ -217,5 +225,8 @@ public class NestedNoisesTexture implements Texture {
     public void setMaxValue(double maxValue) {
         this.maxValue = maxValue;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(NestedNoisesTexture.class.getName());
 
 }

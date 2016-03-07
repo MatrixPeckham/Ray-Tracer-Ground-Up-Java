@@ -44,24 +44,37 @@ public abstract class Camera {
      * perspective.
      */
     protected Point3D eye;
+
     /**
      * Point for the camera to look at.
      */
     protected Point3D lookat;
+
     /**
      * Roll angle along look direction.
      */
     protected double rollAngle;
+
     /**
      * Three unit vectors for every camera.
      */
     protected Vector3D u;
+
+    /**
+     *
+     */
     protected Vector3D v;
+
+    /**
+     *
+     */
     protected Vector3D w;
+
     /**
      * Up vector for the camera
      */
     protected Vector3D up;
+
     /**
      * Exposure time.
      */
@@ -223,7 +236,7 @@ public abstract class Camera {
      *
      * @return
      */
-    public abstract Camera clone();
+    public abstract Camera cloneCamera();
 
     /**
      * Render stereo, x is an offset for frustum, i is a raster offset.

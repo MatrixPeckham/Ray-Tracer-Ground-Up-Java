@@ -47,7 +47,7 @@ import static java.lang.Math.sin;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure52 implements BuildWorldFunction{
+public class BuildFigure52 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -56,187 +56,151 @@ public class BuildFigure52 implements BuildWorldFunction{
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.52
-
 // The object is a transparent cube with spherical caps cut from four faces
 // There is a reflective sphere at the center
 // The class CutFace is in the Chapter 28 download
 // The cube has edge length 4. This should be defined as a variable
-
 // This build function (deliberately) renders a bit darker than the image in the book
-
-// The inspiration came from the acrylic sculpures "Titiopoli's Ligththouse" and "Dodecker" by the American 
+// The inspiration came from the acrylic sculpures "Titiopoli's Ligththouse" and "Dodecker" by the American
 // sculptor Bruce Beasley
+        int numSamples = 25;
 
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(12);
 
-	int numSamples = 25;
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	w.vp.setMaxDepth(12);    
+        w.backgroundColor = new RGBColor(0.8, 0.9, 1);
 
-	w.backgroundColor = new RGBColor(0.8, 0.9, 1);
-	
-	w.tracer = new Whitted(w);
-	
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.5);
-	w.setAmbient(ambientPtr);
+        w.tracer = new Whitted(w);
 
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(10, -1, 4);     
-	pinholePtr.setLookat(0, 0, 0);    
-	pinholePtr.setViewDistance(700.0);	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(10, 30, 30); 
-	lightPtr.scaleRadiance(3.0);        
-	lightPtr.setShadows(true);
-	w.addLight(lightPtr);
-	
-	
-	// reflective unit sphere
-	
-	Reflective reflectivePtr = new Reflective();
-	reflectivePtr.setKa(1.0);	
-	reflectivePtr.setKd(0.5);  
-	reflectivePtr.setCd(1, 0.5, 0);			// orange
-	reflectivePtr.setKs(0.5);
-	reflectivePtr.setExp(500.0);
-	reflectivePtr.setKr(0.5);
-	reflectivePtr.setShadows(false);
-		
-	Sphere spherePtr = new Sphere();
-	spherePtr.setMaterial(reflectivePtr);
-	
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.5);
+        w.setAmbient(ambientPtr);
 
-	Dielectric glassPtr = new Dielectric();
-	glassPtr.setIorIn(1.5);
-	glassPtr.setIorOut(1.0);
-	double c = 0.9;
-	glassPtr.setCfIn(0.9 * c, 1 * c, 0.85 * c);
-	glassPtr.setCfOut(Utility.WHITE);
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(10, -1, 4);
+        pinholePtr.setLookat(0, 0, 0);
+        pinholePtr.setViewDistance(700.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(10, 30, 30);
+        lightPtr.scaleRadiance(3.0);
+        lightPtr.setShadows(true);
+        w.addLight(lightPtr);
 
-	// concave cap
-	
-	double radius 			= 1.5;									
-	double minAngle 		= 115;  			
-	double maxAngle 		= 180;
-	double displacement 	= -radius * cos(minAngle * PI_ON_180);
-	double rimRadius 		= radius * sin(minAngle * PI_ON_180);
-	Point3D center=new Point3D(0.0);
-		
-	ConcavePartSphere partSpherePtr = new ConcavePartSphere(center, radius, 0, 360, minAngle, maxAngle); 
-	
-	Instance concaveCapPtr = new Instance (partSpherePtr); 
-	concaveCapPtr.translate(0, displacement, 0);
+        // reflective unit sphere
+        Reflective reflectivePtr = new Reflective();
+        reflectivePtr.setKa(1.0);
+        reflectivePtr.setKd(0.5);
+        reflectivePtr.setCd(1, 0.5, 0);			// orange
+        reflectivePtr.setKs(0.5);
+        reflectivePtr.setExp(500.0);
+        reflectivePtr.setKr(0.5);
+        reflectivePtr.setShadows(false);
 
+        Sphere spherePtr = new Sphere();
+        spherePtr.setMaterial(reflectivePtr);
 
-	CutFace cutFacePtr = new CutFace(4.0, rimRadius);
-	
-	
-	// put these two objects in a compound object so that they can be transformed together
-	
-	Compound facetPtr = new Compound();
-	facetPtr.addObject(concaveCapPtr);
-	facetPtr.addObject(cutFacePtr);
-	facetPtr.setMaterial(glassPtr);
+        Dielectric glassPtr = new Dielectric();
+        glassPtr.setIorIn(1.5);
+        glassPtr.setIorOut(1.0);
+        double c = 0.9;
+        glassPtr.setCfIn(0.9 * c, 1 * c, 0.85 * c);
+        glassPtr.setCfOut(Utility.WHITE);
+
+        // concave cap
+        double radius = 1.5;
+        double minAngle = 115;
+        double maxAngle = 180;
+        double displacement = -radius * cos(minAngle * PI_ON_180);
+        double rimRadius = radius * sin(minAngle * PI_ON_180);
+        Point3D center = new Point3D(0.0);
+
+        ConcavePartSphere partSpherePtr = new ConcavePartSphere(center, radius,
+                0, 360, minAngle, maxAngle);
+
+        Instance concaveCapPtr = new Instance(partSpherePtr);
+        concaveCapPtr.translate(0, displacement, 0);
+
+        CutFace cutFacePtr = new CutFace(4.0, rimRadius);
+
+        // put these two objects in a compound object so that they can be transformed together
+        Compound facetPtr = new Compound();
+        facetPtr.addObject(concaveCapPtr);
+        facetPtr.addObject(cutFacePtr);
+        facetPtr.setMaterial(glassPtr);
 
 	// define the six cube faces
+        // front face (+ve z)
+        Instance frontPtr = new Instance(facetPtr);
+        frontPtr.rotateX(90);
+        frontPtr.translate(0, 0, 2);
 
-	// front face (+ve z)
-	
-	Instance frontPtr = new Instance(facetPtr); 
-	frontPtr.rotateX(90);
-	frontPtr.translate(0, 0, 2);	
-	
-	
-	// back face (-ve z)
-	
-	Instance backPtr = new Instance(facetPtr); 
-	backPtr.rotateX(-90);
-	backPtr.translate(0, 0, -2);
-	
-		
-	// bottom face (-ve y)
-	
-	Instance bottomPtr = new Instance(facetPtr); 
-	bottomPtr.rotateZ(180);
-	bottomPtr.translate(0, -2, 0);
-	
-	
-	// top face (+ve y)
-	
-	Instance topPtr = new Instance(facetPtr); 
-	topPtr.translate(0, 2, 0);
-	
-	
-	
-	
-	// a rectangle for the left and right cube faces
+        // back face (-ve z)
+        Instance backPtr = new Instance(facetPtr);
+        backPtr.rotateX(-90);
+        backPtr.translate(0, 0, -2);
 
-	Point3D p0=new Point3D(-2.0, 0.0, -2.0);
-	Vector3D a=new Vector3D(0.0, 0.0, 4.0);
-	Vector3D b=new Vector3D(4.0, 0.0, 0.0);
-	Rectangle rect = new Rectangle(p0, a, b);  
-	rect.setMaterial(glassPtr);
-	
-	
-	// left face (-ve x)
-	
-	Instance leftPtr = new Instance(rect); 
-	leftPtr.rotateZ(90);
-	leftPtr.translate(-2, 0, 0);
-	
-	
-	// right face (+ve x)
-	
-	Instance rightPtr = new Instance(rect); 
-	rightPtr.rotateZ(-90);
-	rightPtr.translate(2, 0, 0);
-	
-	
-	// put all six faces into a compound object so we can rotate it
-	
-	Compound cubePtr = new Compound();
-	cubePtr.addObject(frontPtr);			// facet
-	cubePtr.addObject(backPtr);				// facet
-	cubePtr.addObject(topPtr);				// facet
-	cubePtr.addObject(bottomPtr);			// facet
-	cubePtr.addObject(leftPtr);				// rectangle
-	cubePtr.addObject(rightPtr);			// rectangle
-	cubePtr.addObject(spherePtr);
-	
-	Instance cubePtr2 = new Instance(cubePtr);
-	cubePtr2.rotateZ(45);
-	cubePtr2.rotateX(35);
-	w.addObject(cubePtr2);
-	
-	
-	
-	// ground plane with checker
-		
-	Checker3D checkerPtr = new Checker3D();
-	checkerPtr.setSize(1.0);
-	checkerPtr.setColor1(Utility.WHITE);  
-	checkerPtr.setColor2(0.5);
-		
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.5);
-	svMattePtr.setKd(0.75);
-	svMattePtr.setCd(checkerPtr);
+        // bottom face (-ve y)
+        Instance bottomPtr = new Instance(facetPtr);
+        bottomPtr.rotateZ(180);
+        bottomPtr.translate(0, -2, 0);
 
-	Plane planePtr1 = new Plane(new Point3D(0, -4.01, 0), new Normal(0, 1, 0));  
-	planePtr1.setMaterial(svMattePtr);
-	w.addObject(planePtr1);	
-}
+        // top face (+ve y)
+        Instance topPtr = new Instance(facetPtr);
+        topPtr.translate(0, 2, 0);
 
-	
-    
+        // a rectangle for the left and right cube faces
+        Point3D p0 = new Point3D(-2.0, 0.0, -2.0);
+        Vector3D a = new Vector3D(0.0, 0.0, 4.0);
+        Vector3D b = new Vector3D(4.0, 0.0, 0.0);
+        Rectangle rect = new Rectangle(p0, a, b);
+        rect.setMaterial(glassPtr);
+
+        // left face (-ve x)
+        Instance leftPtr = new Instance(rect);
+        leftPtr.rotateZ(90);
+        leftPtr.translate(-2, 0, 0);
+
+        // right face (+ve x)
+        Instance rightPtr = new Instance(rect);
+        rightPtr.rotateZ(-90);
+        rightPtr.translate(2, 0, 0);
+
+        // put all six faces into a compound object so we can rotate it
+        Compound cubePtr = new Compound();
+        cubePtr.addObject(frontPtr);			// facet
+        cubePtr.addObject(backPtr);				// facet
+        cubePtr.addObject(topPtr);				// facet
+        cubePtr.addObject(bottomPtr);			// facet
+        cubePtr.addObject(leftPtr);				// rectangle
+        cubePtr.addObject(rightPtr);			// rectangle
+        cubePtr.addObject(spherePtr);
+
+        Instance cubePtr2 = new Instance(cubePtr);
+        cubePtr2.rotateZ(45);
+        cubePtr2.rotateX(35);
+        w.addObject(cubePtr2);
+
+        // ground plane with checker
+        Checker3D checkerPtr = new Checker3D();
+        checkerPtr.setSize(1.0);
+        checkerPtr.setColor1(Utility.WHITE);
+        checkerPtr.setColor2(0.5);
+
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.5);
+        svMattePtr.setKd(0.75);
+        svMattePtr.setCd(checkerPtr);
+
+        Plane planePtr1 = new Plane(new Point3D(0, -4.01, 0),
+                new Normal(0, 1, 0));
+        planePtr1.setMaterial(svMattePtr);
+        w.addObject(planePtr1);
+    }
+
 }

@@ -29,9 +29,9 @@ import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
+import static com.matrixpeckham.raytracer.util.Utility.randDouble;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import static com.matrixpeckham.raytracer.util.Utility.randDouble;
 import static java.lang.Math.abs;
 
 /**
@@ -47,7 +47,7 @@ public class BuildFigure13 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-// This builds the scene for Figure 17.13 
+// This builds the scene for Figure 17.13
 // This is the city scene without the checker textures and rendered with
 // an orthographoc camera
         int numSamples = 64;
@@ -61,7 +61,7 @@ public class BuildFigure13 implements BuildWorldFunction {
         AmbientOccluder ambientOccluderPtr = new AmbientOccluder();
         ambientOccluderPtr.setSampler(new MultiJittered(numSamples));
 //        ambientOccluderPtr.setMinAmount(1.0);   	// for Figure 17.13(a)
-	ambientOccluderPtr.setMinAmount(0.25);		// for Figure 17.13(b)
+        ambientOccluderPtr.setMinAmount(0.25);		// for Figure 17.13(b)
         w.setAmbient(ambientOccluderPtr);
 
         Orthographic orthographicPtr = new Orthographic();
@@ -77,13 +77,13 @@ public class BuildFigure13 implements BuildWorldFunction {
         lightPtr.setShadows(true);
         w.addLight(lightPtr);
 
-	// city parameters
+        // city parameters
         double a = 10;   // city block width:  xw extent
         double b = 12;	// city block length:  yw extent
         int numRows = 10;  	// number of blocks in the xw direction
         int numColumns = 12; 	// number of blocks in the zw direction
-        double width = 7;	// building width: xw extent in range [min, a - offset]
-        double length = 7;	// building length: zw extent in range [min, b - offset]
+        double width;	// building width: xw extent in range [min, a - offset]
+        double length;	// building length: zw extent in range [min, b - offset]
         double minSize = 6;	// mininum building extent in xw and yw directions
         double offset = 1.0;	// half the minimum distance between buildings
         double minHeight = 0.0; 	// minimum building height
@@ -96,12 +96,12 @@ public class BuildFigure13 implements BuildWorldFunction {
         double minColor = 0.1;  // prevents black buildings
         double maxColor = 0.9;	// prevents white buildings
 
-        Utility.setRandSeed(15);  				// as the buildings' dimensions and colors are random, it's necessary to 
+        Utility.setRandSeed(15);  				// as the buildings' dimensions and colors are random, it's necessary to
         // seed rand to keep these quantities the same at each run
         // if you leave this out, and change the number of samples per pixel,
         // these will change
 
-	// the buildings are stored in a grid
+        // the buildings are stored in a grid
         Grid gridPtr = new Grid();
 
         for (int r = 0; r < numRows; r++) // xw direction
@@ -132,23 +132,23 @@ public class BuildFigure13 implements BuildWorldFunction {
                             minColor + randDouble() * (maxColor - minColor),
                             minColor + randDouble() * (maxColor - minColor));
 
-				// block center coordinates
+                    // block center coordinates
                     double xc = a * (r - numRows / 2.0 + 0.5);
                     double zc = b * (c - numColumns / 2.0 + 0.5);
 
                     width = minSize + randDouble() * (a - 2 * offset - minSize);
                     length = minSize + randDouble() * (b - 2 * offset - minSize);
 
-				// minimum building coordinates
+                    // minimum building coordinates
                     double xmin = xc - width / 2.0;
                     double ymin = 0.0;
                     double zmin = zc - length / 2.0;
 
-				// maximum building coordinates
+                    // maximum building coordinates
                     height = minHeight + randDouble() * (maxHeight - minHeight);
 
-				// The following is a hack to make the middle row and column of buildings higher
-                    // on average than the other buildings. 
+                    // The following is a hack to make the middle row and column of buildings higher
+                    // on average than the other buildings.
                     // This only works properly when there are three rows and columns of buildings
                     if (r == 1 || r == numRows - 2 || c == 1 || c == numColumns
                             - 2) {
@@ -169,11 +169,11 @@ public class BuildFigure13 implements BuildWorldFunction {
         gridPtr.setupCells();
         w.addObject(gridPtr);
 
-	// render the park green
+        // render the park green
         Matte mattePtr1 = new Matte();
         mattePtr1.setKa(0.4);
         mattePtr1.setKd(0.5);
-        mattePtr1.setCd(0.3, 0.5, 0.3);     // green 
+        mattePtr1.setCd(0.3, 0.5, 0.3);     // green
 
         Box parkPtr = new Box(new Point3D(-a * numParkRows / 2, 0.0, -b
                 * numParkColumns / 2),
@@ -181,7 +181,7 @@ public class BuildFigure13 implements BuildWorldFunction {
         parkPtr.setMaterial(mattePtr1);
         w.addObject(parkPtr);
 
-	// ground plane 
+        // ground plane
         Matte mattePtr2 = new Matte();
         mattePtr2.setKa(0.3);
         mattePtr2.setKd(0.5);

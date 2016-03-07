@@ -17,12 +17,12 @@
  */
 package com.matrixpeckham.raytracer.textures.procedural;
 
-import com.matrixpeckham.raytracer.materials.*;
 import com.matrixpeckham.raytracer.textures.ConstantColor;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * This is the sphere checkers that has textures as its checkers.
@@ -86,13 +86,13 @@ public class SphereTextures implements Texture {
         horizontalLineWidth = c.horizontalLineWidth;
         verticalLineWidth = c.verticalLineWidth;
         if (c.color1 != null) {
-            color1 = c.color1.clone();
+            color1 = c.color1.cloneTexture();
         }
         if (c.color2 != null) {
-            color2 = c.color2.clone();
+            color2 = c.color2.cloneTexture();
         }
         if (c.lineColor != null) {
-            lineColor = c.lineColor.clone();
+            lineColor = c.lineColor.cloneTexture();
         }
     }
 
@@ -138,7 +138,7 @@ public class SphereTextures implements Texture {
      * @param color1
      */
     public void setTexture1(Texture color1) {
-        this.color1 = color1.clone();
+        this.color1 = color1.cloneTexture();
     }
 
     /**
@@ -147,7 +147,7 @@ public class SphereTextures implements Texture {
      * @param color2
      */
     public void setTexture2(Texture color2) {
-        this.color2 = color2.clone();
+        this.color2 = color2.cloneTexture();
     }
 
     /**
@@ -156,7 +156,7 @@ public class SphereTextures implements Texture {
      * @param lineColor
      */
     public void setLineColor(Texture lineColor) {
-        this.lineColor = lineColor.clone();
+        this.lineColor = lineColor.cloneTexture();
     }
 
     /**
@@ -165,7 +165,7 @@ public class SphereTextures implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new SphereTextures(this);
     }
 
@@ -214,7 +214,6 @@ public class SphereTextures implements Texture {
     public void setNumVertical(int i) {
         setNumVerticalCheckers(i);
     }
-
 
     /**
      * setter
@@ -297,5 +296,8 @@ public class SphereTextures implements Texture {
         }
         return lineColor.getColor(sr);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SphereTextures.class.getName());
 
 }

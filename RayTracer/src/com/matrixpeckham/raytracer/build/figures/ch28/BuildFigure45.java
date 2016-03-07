@@ -93,17 +93,17 @@ public class BuildFigure45 implements BuildWorldFunction {
 
         for (int j = 0; j < numBoxes; j++) {
             double length = thickness + j * delta;
-            Point3D p0=new Point3D(xMin + j * (thickness + gap), 0.0, -length
+            Point3D p0 = new Point3D(xMin + j * (thickness + gap), 0.0, -length
             );
-            Point3D p1=new Point3D(xMin + j * (thickness + gap) + thickness, height
-            , 0.0);
-		
-		Box boxPtr = new Box(p0, p1);
+            Point3D p1 = new Point3D(xMin + j * (thickness + gap) + thickness,
+                    height, 0.0);
+
+            Box boxPtr = new Box(p0, p1);
             boxPtr.setMaterial(glassPtr);
             w.addObject(boxPtr);
         }
 
-	// plane
+        // plane
         Matte mattePtr = new Matte();
         mattePtr.setKa(0.5);
         mattePtr.setKd(0.65);

@@ -23,8 +23,8 @@ import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Cone class.
@@ -54,7 +54,7 @@ public class OpenCone extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new OpenCone();
     }
 
@@ -71,7 +71,7 @@ public class OpenCone extends GeometricObject {
         //book didn't include this, only the implicit equation, I derived these
         // and it works, but I doubt it's as good as it could be.
         //param
-        double t = Utility.HUGE_VALUE;
+        double t;
 
         //location
         double x = ray.o.x;
@@ -152,7 +152,7 @@ public class OpenCone extends GeometricObject {
         if (!shadows) {
             return false;
         }
-        double t = Utility.HUGE_VALUE;
+        double t;
         double x = ray.o.x;
         double y = ray.o.y;
         double z = ray.o.z;
@@ -211,5 +211,7 @@ public class OpenCone extends GeometricObject {
         n.normalize();
         return n;
     }
+
+    private static final Logger LOG = Logger.getLogger(OpenCone.class.getName());
 
 }

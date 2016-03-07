@@ -17,10 +17,8 @@
  */
 package com.matrixpeckham.raytracer.build.figures.ch28;
 
-import com.matrixpeckham.raytracer.build.figures.ch23.BuildFigure12;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
 import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.materials.Dielectric;
@@ -75,7 +73,7 @@ public class BuildFigure12C implements BuildWorldFunction {
         pinholePtr.computeUVW();
         w.setCamera(pinholePtr);
 
-	// transparent horse
+        // transparent horse
         Dielectric dielectricPtr = new Dielectric();
         dielectricPtr.setKa(0.0);
         dielectricPtr.setKd(0.0);
@@ -85,17 +83,18 @@ public class BuildFigure12C implements BuildWorldFunction {
         dielectricPtr.setIorOut(1.0);
         dielectricPtr.setCfIn(0.65, 0.65, 0.1);   // orange
         dielectricPtr.setCfOut(Utility.WHITE);
-        
+
         String fileName = "Horse97K.ply"; 	// 69000 triangles
-	String path="C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
 
         TriangleMesh bunnyPtr = new TriangleMesh(new Mesh());
-        try{
+        try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
-//	bunnyPtr.readFlatTriangles(fileName);	
-        
-        bunnyPtr.readSmoothTriangles(new File(path+fileName));
-        } catch(IOException ex){
+//	bunnyPtr.readFlatTriangles(fileName);
+
+            bunnyPtr.readSmoothTriangles(new File(path + fileName));
+        } catch (IOException ex) {
             Logger.getLogger(BuildFigure12C.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);

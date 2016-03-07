@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.util;
 
 import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,90 +30,95 @@ public class ShadeRec {
     /**
      * did we hit something
      */
-    public boolean hitAnObject=false;
-    
+    public boolean hitAnObject = false;
+
     /**
      * world point hit
      */
     public final Point3D hitPoint = new Point3D();
-    
+
     /**
      * local hit point
      */
-    public final Point3D localHitPosition=new Point3D();
-    
+    public final Point3D localHitPosition = new Point3D();
+
     /**
      * normal at hit point
      */
-    public final Normal normal=new Normal();
-    
+    public final Normal normal = new Normal();
+
     /**
      * color, used only in skeleton tracer
      */
-    public final RGBColor color=new RGBColor(Utility.BLACK);
-    
+    public final RGBColor color = new RGBColor(Utility.BLACK);
+
     /**
      * world reference
      */
     public final World w;
-    
+
     /**
      * last hit point
      */
     public double lastT = Double.POSITIVE_INFINITY;
-    
+
     /**
      * texture coordinate u
      */
     public double u = 0;
-    
+
     /**
      * texture coordinate v
      */
     public double v = 0;
-    
+
     /**
      * depth
      */
-    public int depth=0;
-    
+    public int depth = 0;
+
     /**
      * ray
      */
     public final Ray ray = new Ray();
-    
+
     /**
      * material at hit point
      */
     public Material material = null;
-    
+
     /**
      * Usual constructor with world.
-     * @param w 
+     *
+     * @param w
      */
-    public ShadeRec(World w){
-        this.w=w;
+    public ShadeRec(World w) {
+        this.w = w;
     }
-    
+
     /**
      * Copy constructor.
-     * @param r 
+     *
+     * @param r
      */
-    public ShadeRec(ShadeRec r){
-        hitAnObject=r.hitAnObject;
+    public ShadeRec(ShadeRec r) {
+        hitAnObject = r.hitAnObject;
         localHitPosition.setTo(r.localHitPosition);
         hitPoint.setTo(r.hitPoint);
         color.setTo(r.color);
-        w=r.w;
+        w = r.w;
         ray.setTo(r.ray);
         //t=r.t;
-        lastT=r.lastT;
-        depth=r.depth;
-        if(r.material!=null)
-            material=r.material;
+        lastT = r.lastT;
+        depth = r.depth;
+        if (r.material != null) {
+            material = r.material;
+        }
         normal.setTo(r.normal);
-        this.u=r.u;
-        this.v=r.v;
+        this.u = r.u;
+        this.v = r.v;
     }
-    
+
+    private static final Logger LOG = Logger.getLogger(ShadeRec.class.getName());
+
 }

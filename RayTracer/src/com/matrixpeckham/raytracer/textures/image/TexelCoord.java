@@ -28,6 +28,7 @@ public class TexelCoord {
      * row, or y coord
      */
     public int row;
+
     /**
      * col, or x coord
      */

@@ -18,18 +18,19 @@
 package com.matrixpeckham.raytracer.textures.procedural;
 
 import com.matrixpeckham.raytracer.textures.Texture;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import static com.matrixpeckham.raytracer.util.Utility.clamp;
-import com.matrixpeckham.raytracer.util.Vector3D;
-import com.matrixpeckham.raytracer.util.Point3D;
 import static com.matrixpeckham.raytracer.util.Utility.mixColor;
 import static com.matrixpeckham.raytracer.util.Utility.mixDouble;
 import static com.matrixpeckham.raytracer.util.Utility.smoothStep;
+import com.matrixpeckham.raytracer.util.Vector3D;
 import static java.lang.Math.max;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+import java.util.logging.Logger;
 
 /**
  * This class defines a procedural texture based on the Larry Gritz Renderman
@@ -67,7 +68,7 @@ public class Wood implements Texture {
      * default constructor
      */
     public Wood() {
-        noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain 
+        noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain
         lightColor = Utility.WHITE;
         darkColor = Utility.BLACK;
         ringFrequency = 4.0;
@@ -85,9 +86,12 @@ public class Wood implements Texture {
 
     /**
      * Specifies the two colors and uses default values for everything else
+     *
+     * @param light
+     * @param dark
      */
     public Wood(RGBColor light, RGBColor dark) {
-        noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain 
+        noisePtr = new CubicNoise(2, 4.0, 0.5); // this specifies numOctaves, lacunarity, and gain
         lightColor = light;
         darkColor = dark;
         ringFrequency = 4.0;
@@ -175,7 +179,7 @@ public class Wood implements Texture {
         grainy = wood.grainy;
         ringy = wood.ringy;
         if (wood.noisePtr != null) {
-            noisePtr = wood.noisePtr.clone();
+            noisePtr = wood.noisePtr.cloneNoise();
         } else {
             noisePtr = null;
         }
@@ -192,7 +196,7 @@ public class Wood implements Texture {
             return this;
         }
         if (rhs.noisePtr != null) {
-            noisePtr = rhs.noisePtr.clone();
+            noisePtr = rhs.noisePtr.cloneNoise();
         }
 
         lightColor = rhs.lightColor;
@@ -210,21 +214,23 @@ public class Wood implements Texture {
         ringy = rhs.ringy;
 
         return this;
-    } 
+    }
 
     /**
      * clone
-     * @return 
+     *
+     * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new Wood(this);
     }
 
     /**
      * sample texture
+     *
      * @param sr
-     * @return 
+     * @return
      */
     @Override
     public RGBColor getColor(ShadeRec sr
@@ -260,7 +266,6 @@ public class Wood implements Texture {
         // add some noise so that the rings are not equally spaced and have different thicknesses
         r += ringUneveness * noisePtr.valueNoise(new Point3D(r));
 
-        double temp = r;
         double inRing = Utility.smoothPulseTrain(0.1, 0.55, 0.7, 0.95, 1.0, r);
 
         // the grain
@@ -297,7 +302,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param NoisePtr 
+     *
+     * @param NoisePtr
      */
     public void setNoise(LatticeNoise NoisePtr
     ) {
@@ -306,7 +312,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param NumOctaves 
+     *
+     * @param NumOctaves
      */
     public void setNumOctaves(int NumOctaves
     ) {
@@ -315,7 +322,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param Lacunarity 
+     *
+     * @param Lacunarity
      */
     public void setLacunarity(double Lacunarity
     ) {
@@ -323,8 +331,8 @@ public class Wood implements Texture {
     }
 
     /**
-     * 
-     * @param Gain 
+     *
+     * @param Gain
      */
     public void setGain(double Gain
     ) {
@@ -333,7 +341,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param c 
+     *
+     * @param c
      */
     public void setLightColor(RGBColor c
     ) {
@@ -342,9 +351,10 @@ public class Wood implements Texture {
 
     /**
      * setter
+     *
      * @param r
      * @param g
-     * @param b 
+     * @param b
      */
     public void setLightColor(double r, double g, double b
     ) {
@@ -355,7 +365,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param c 
+     *
+     * @param c
      */
     public void setLightColor(double c
     ) {
@@ -364,7 +375,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param c 
+     *
+     * @param c
      */
     public void setDarkColor(RGBColor c
     ) {
@@ -373,9 +385,10 @@ public class Wood implements Texture {
 
     /**
      * setter
+     *
      * @param r
      * @param g
-     * @param b 
+     * @param b
      */
     public void setDarkColor(double r, double g, double b
     ) {
@@ -386,7 +399,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param c 
+     *
+     * @param c
      */
     public void setDarkColor(double c
     ) {
@@ -395,7 +409,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param RingFrequency 
+     *
+     * @param RingFrequency
      */
     public void setRingFrequency(double RingFrequency
     ) {
@@ -404,7 +419,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param RingUneveness 
+     *
+     * @param RingUneveness
      */
     public void setRingUneveness(double RingUneveness
     ) {
@@ -413,7 +429,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param RingNoise 
+     *
+     * @param RingNoise
      */
     public void setRingNoise(double RingNoise
     ) {
@@ -422,7 +439,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param RingNoiseFrequency 
+     *
+     * @param RingNoiseFrequency
      */
     public void setRingNoiseFrequency(double RingNoiseFrequency
     ) {
@@ -431,7 +449,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param TrunkWobble 
+     *
+     * @param TrunkWobble
      */
     public void setTrunkWobble(double TrunkWobble
     ) {
@@ -440,7 +459,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param TrunkWobbleFrequency 
+     *
+     * @param TrunkWobbleFrequency
      */
     public void setTrunkWobbleFrequency(double TrunkWobbleFrequency
     ) {
@@ -449,7 +469,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param AngularWobble 
+     *
+     * @param AngularWobble
      */
     public void setAngularWobble(double AngularWobble
     ) {
@@ -458,7 +479,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param AngularWobbleFrequency 
+     *
+     * @param AngularWobbleFrequency
      */
     public void setAngularWobbleFrequency(double AngularWobbleFrequency
     ) {
@@ -467,7 +489,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param GrainFrequency 
+     *
+     * @param GrainFrequency
      */
     public void setGrainFrequency(double GrainFrequency
     ) {
@@ -476,7 +499,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param Grainy 
+     *
+     * @param Grainy
      */
     public void setGrainy(double Grainy
     ) {
@@ -485,7 +509,8 @@ public class Wood implements Texture {
 
     /**
      * setter
-     * @param Ringy 
+     *
+     * @param Ringy
      */
     public void setRingy(double Ringy) {
         ringy = Ringy;
@@ -493,18 +518,33 @@ public class Wood implements Texture {
 
     //see class comment
     LatticeNoise noisePtr;
+
     RGBColor lightColor;
+
     RGBColor darkColor;
+
     double ringFrequency;
+
     double ringUneveness;
+
     double ringNoise;
+
     double ringNoiseFrequency;
+
     double trunkWobble;
+
     double trunkWobbleFrequency;
+
     double angularWobble;
+
     double angularWobbleFrequency;
+
     double grainFrequency;
+
     double grainy;
+
     double ringy;
+
+    private static final Logger LOG = Logger.getLogger(Wood.class.getName());
 
 }

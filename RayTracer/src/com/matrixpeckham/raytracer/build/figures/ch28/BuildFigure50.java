@@ -35,7 +35,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure50 implements BuildWorldFunction{
+public class BuildFigure50 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -44,71 +44,62 @@ public class BuildFigure50 implements BuildWorldFunction{
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.50
+        int numSamples = 16;
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	w.vp.setMaxDepth(15);
-	
-	w.tracer = new Whitted(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(1, 0.5, 4);      
-	pinholePtr.setLookat(-3, -10, 0); 	   
-	pinholePtr.setViewDistance(200.0);  
-	pinholePtr.setExposureTime(0.17);
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
-	
-	// transparent sphere
-	
-	Dielectric dielectricPtr = new Dielectric();
-	dielectricPtr.setIorIn(2.42);		// diamond
-	dielectricPtr.setIorOut(1.0);		// air
-	dielectricPtr.setCfIn(Utility.WHITE);
-	dielectricPtr.setCfOut(Utility.WHITE); 
-		
-	Sphere spherePtr1 = new Sphere(new Point3D(0.0), 4.0);
-	spherePtr1.setMaterial(dielectricPtr);
-		
-	
-	// scale the sphere into an ellipsoid
-	
-	Instance ellipsoidPtr = new Instance(spherePtr1);
-	ellipsoidPtr.scale(1.0, 0.75, 2.0);
-	w.addObject(ellipsoidPtr);
-		
-	
-	// emissive concave sphere with checkers
-	
-	RGBColor c1=new RGBColor(0, 0.25, 0.35);
-	RGBColor c2=new RGBColor(1, 1, 0.5);
-	
-	SphereChecker checkerPtr = new SphereChecker();
-	checkerPtr.setNumHorizontal(12);  
-	checkerPtr.setNumVertical(6);    
-	checkerPtr.setHorizontalLineWidth(0.0);
-	checkerPtr.setVerticalLineWidth(0.0);
-	checkerPtr.setColor1(c1);   
-	checkerPtr.setColor2(c2); 
-	checkerPtr.setLineColor(Utility.BLACK);  
-		
-	SV_Emissive svEmissivePtr = new SV_Emissive();
-	svEmissivePtr.scaleRadiance(1.0);
-	svEmissivePtr.setCe(checkerPtr);
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(15);
 
-	ConcaveSphere spherePtr2 = new ConcaveSphere();  // you will have to implement w
-	spherePtr2.setMaterial(svEmissivePtr);		 // or use a default ConcavePartSphere
-	
-	Instance spherePtr3 = new Instance(spherePtr2);
-	spherePtr3.scale(100.0);
-	w.addObject(spherePtr3);
-}
+        w.tracer = new Whitted(w);
 
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(1, 0.5, 4);
+        pinholePtr.setLookat(-3, -10, 0);
+        pinholePtr.setViewDistance(200.0);
+        pinholePtr.setExposureTime(0.17);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        // transparent sphere
+        Dielectric dielectricPtr = new Dielectric();
+        dielectricPtr.setIorIn(2.42);		// diamond
+        dielectricPtr.setIorOut(1.0);		// air
+        dielectricPtr.setCfIn(Utility.WHITE);
+        dielectricPtr.setCfOut(Utility.WHITE);
+
+        Sphere spherePtr1 = new Sphere(new Point3D(0.0), 4.0);
+        spherePtr1.setMaterial(dielectricPtr);
+
+        // scale the sphere into an ellipsoid
+        Instance ellipsoidPtr = new Instance(spherePtr1);
+        ellipsoidPtr.scale(1.0, 0.75, 2.0);
+        w.addObject(ellipsoidPtr);
+
+        // emissive concave sphere with checkers
+        RGBColor c1 = new RGBColor(0, 0.25, 0.35);
+        RGBColor c2 = new RGBColor(1, 1, 0.5);
+
+        SphereChecker checkerPtr = new SphereChecker();
+        checkerPtr.setNumHorizontal(12);
+        checkerPtr.setNumVertical(6);
+        checkerPtr.setHorizontalLineWidth(0.0);
+        checkerPtr.setVerticalLineWidth(0.0);
+        checkerPtr.setColor1(c1);
+        checkerPtr.setColor2(c2);
+        checkerPtr.setLineColor(Utility.BLACK);
+
+        SV_Emissive svEmissivePtr = new SV_Emissive();
+        svEmissivePtr.scaleRadiance(1.0);
+        svEmissivePtr.setCe(checkerPtr);
+
+        ConcaveSphere spherePtr2 = new ConcaveSphere();  // you will have to implement w
+        spherePtr2.setMaterial(svEmissivePtr);		 // or use a default ConcavePartSphere
+
+        Instance spherePtr3 = new Instance(spherePtr2);
+        spherePtr3.scale(100.0);
+        w.addObject(spherePtr3);
+    }
 
 }

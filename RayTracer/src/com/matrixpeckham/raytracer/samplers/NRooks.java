@@ -19,6 +19,7 @@ package com.matrixpeckham.raytracer.samplers;
 
 import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Generates an NRooks distribution of samples.
@@ -58,7 +59,7 @@ public class NRooks extends Sampler {
      * generate the NRooks samples
      */
     @Override
-    public void generateSamples() {
+    public final void generateSamples() {
         for (int p = 0; p < numSets; p++) {
             for (int j = 0; j < numSamples; j++) {
                 Point2D sp
@@ -78,8 +79,14 @@ public class NRooks extends Sampler {
      * @return
      */
     @Override
+<<<<<<< HEAD
     public Sampler protclone() {
+=======
+    public Sampler cloneSampler() {
+>>>>>>> refs/remotes/origin/master
         return new NRooks(this);
     }
+
+    private static final Logger LOG = Logger.getLogger(NRooks.class.getName());
 
 }

@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Wraps two colors from black... n &lt; 0 black-&gt color1 and for &gt;thresh1
@@ -34,35 +35,43 @@ public class WrappedThreeColors implements Texture {
      * noise to use
      */
     private LatticeNoise noise = null;
+
     /**
      * first color
      */
     private final RGBColor color1 = new RGBColor();
+
     /**
      * second color
      */
     private final RGBColor color2 = new RGBColor();
+
     /**
      * third color
      */
     private final RGBColor color3 = new RGBColor();
+
     /**
      * min value to use for color ramping (should be 0-1)
      */
     private double minValue;
+
     /**
      * max value to use for color ramping (should be 0-1(
      */
     private double maxValue;
+
     /**
      * multiplies noise value before wrapping and normalization (should be
      * positive)
      */
     private double expansionNumber;
+
     /**
      * first threshold
      */
     private double thresh1 = 1.35;
+
     /**
      * second threshold
      */
@@ -129,7 +138,7 @@ public class WrappedThreeColors implements Texture {
         this.color3.setTo(t.color3);
         this.maxValue = t.maxValue;
         this.minValue = t.minValue;
-        this.noise = t.noise.clone();
+        this.noise = t.noise.cloneNoise();
         this.expansionNumber = t.expansionNumber;
     }
 
@@ -148,8 +157,98 @@ public class WrappedThreeColors implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new WrappedThreeColors(this);
+    }
+
+    /**
+     * getter
+     *
+     * @return
+     */
+    public LatticeNoise getNoise() {
+        return noise;
+    }
+
+    /**
+     * setter
+     *
+     * @param noise
+     */
+    public void setNoise(LatticeNoise noise) {
+        this.noise = noise;
+    }
+
+    /**
+     * getter
+     *
+     * @return
+     */
+    public double getMinValue() {
+        return minValue;
+    }
+
+    /**
+     * setter
+     *
+     * @param minValue
+     */
+    public void setMinValue(double minValue) {
+        this.minValue = minValue;
+    }
+
+    /**
+     * getter
+     *
+     * @return
+     */
+    public double getMaxValue() {
+        return maxValue;
+    }
+
+    /**
+     * setter
+     *
+     * @param maxValue
+     */
+    public void setMaxValue(double maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    /**
+     * getter
+     *
+     * @return
+     */
+    public double getThresh1() {
+        return thresh1;
+    }
+
+    /**
+     * setter
+     *
+     * @param thresh1
+     */
+    public void setThresh1(double thresh1) {
+        this.thresh1 = thresh1;
+    }
+
+    /**
+     * getter
+     *
+     * @return
+     */
+    public double getThresh2() {
+        return thresh2;
+    }
+
+    /**
+     * setter
+     *
+     * @param thresh2
+     */
+    public void setThresh2(double thresh2) {
+        this.thresh2 = thresh2;
     }
 
     /**
@@ -216,4 +315,8 @@ public class WrappedThreeColors implements Texture {
     public void setExpansionNumber(double d) {
         expansionNumber = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(WrappedThreeColors.class.getName());
+
 }

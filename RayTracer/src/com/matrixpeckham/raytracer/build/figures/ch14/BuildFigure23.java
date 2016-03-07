@@ -37,15 +37,13 @@ public class BuildFigure23 implements BuildWorldFunction {
     public void build(World w) {
 
 // This builds the scene for Figure 14.23
-
 // The max_to_one tone mapping operator is applied by default in the function
-// World::display_pixel, because the Viewplane default constructor sets 
+// World::display_pixel, because the Viewplane default constructor sets
 // the boolean data member show_out_of_gamut to false
 // This can be set to true with the function ViewPlane::set_gamut_display
 // The default out-of-gamut color is red        int numSamples = 16;
-
         int numSamples = 16;
-        
+
         w.vp.setHres(600);
         w.vp.setVres(600);
         w.vp.setPixelSize(0.5);
@@ -65,37 +63,25 @@ public class BuildFigure23 implements BuildWorldFunction {
         lightPtr.setColor(1.0, 1.0, 1.0);
         lightPtr.setShadows(false);
 //        lightPtr.scaleRadiance(3.0);        	// for Figure 14.22 (a)
-	lightPtr.scaleRadiance(4.5); 	  	// for Figure 14.22 (b)		
+        lightPtr.scaleRadiance(4.5); 	  	// for Figure 14.22 (b)
         w.addLight(lightPtr);
 
-	// colors
-        RGBColor yellow=new RGBColor
-        (1, 1, 0);										// yellow
-	RGBColor brown=new RGBColor
-        (0.71, 0.40, 0.16);								// brown
-	RGBColor darkGreen=new RGBColor
-        (0.0, 0.41, 0.41);							// darkGreen
-	RGBColor orange=new RGBColor
-        (1, 0.75, 0);									// orange
-	RGBColor green=new RGBColor
-        (0, 0.6, 0.3);									// green
-	RGBColor lightGreen=new RGBColor
-        (0.65, 1, 0.30);							// light green
-	RGBColor darkYellow=new RGBColor
-        (0.61, 0.61, 0);							// dark yellow
-	RGBColor lightPurple=new RGBColor
-        (0.65, 0.3, 1);							// light purple
-	RGBColor darkPurple=new RGBColor
-                
-        (0.5, 0, 1);								// dark purple
-	
-	
-	// Matt material reflection coefficients
-	
-	double ka = 0.25;
+        // colors
+        RGBColor yellow = new RGBColor(1, 1, 0);										// yellow
+        RGBColor brown = new RGBColor(0.71, 0.40, 0.16);								// brown
+        RGBColor darkGreen = new RGBColor(0.0, 0.41, 0.41);							// darkGreen
+        RGBColor orange = new RGBColor(1, 0.75, 0);									// orange
+        RGBColor green = new RGBColor(0, 0.6, 0.3);									// green
+        RGBColor lightGreen = new RGBColor(0.65, 1, 0.30);							// light green
+        RGBColor darkYellow = new RGBColor(0.61, 0.61, 0);							// dark yellow
+        RGBColor lightPurple = new RGBColor(0.65, 0.3, 1);							// light purple
+        RGBColor darkPurple = new RGBColor(0.5, 0, 1);								// dark purple
+
+        // Matt material reflection coefficients
+        double ka = 0.25;
         double kd = 0.75;
 
-	// spheres
+        // spheres
         Matte mattePtr1 = new Matte();
         mattePtr1.setKa(ka);
         mattePtr1.setKd(kd);
@@ -357,7 +343,7 @@ public class BuildFigure23 implements BuildWorldFunction {
         mattePtr33.setKd(kd);
         mattePtr33.setCd(green);
         Sphere spherePtr33 = new Sphere(new Point3D(-63, -39, -180), 11);
-        spherePtr33.setMaterial(mattePtr33);							// green 
+        spherePtr33.setMaterial(mattePtr33);							// green
         w.addObject(spherePtr33);
 
         Matte mattePtr34 = new Matte();

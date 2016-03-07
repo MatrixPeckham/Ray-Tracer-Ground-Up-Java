@@ -65,7 +65,7 @@ public class BuildFigure01A implements BuildWorldFunction {
 // and the marble texture in Figure 30.1(b) are discussed in Chapter 31. The wood texture in
 // Figure 30.1(c) isn't discussed in Chapter 31, but I've included the Wood class and some
 // sample images in the Chapter 31 download.
-// As I have had to re-render these three images from scatch, the texture's details are 
+// As I have had to re-render these three images from scatch, the texture's details are
 // different, as are the box, the lighting, and the viewing.
         int numSamples = 16;
 
@@ -94,14 +94,14 @@ public class BuildFigure01A implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// wrapped noise texture
-	// noise
+        // wrapped noise texture
+        // noise
         CubicNoise noisePtr = new CubicNoise();
         noisePtr.setNumOctaves(4);
         noisePtr.setGain(0.5);
         noisePtr.setLacunarity(2.0);
 
-	// texture
+        // texture
         WrappedFBmTexture wrappedTexturePtr = new WrappedFBmTexture(noisePtr);
         wrappedTexturePtr.setColor(1.0, 0.85, 0.0);   // yellow
         wrappedTexturePtr.setExpansionNumber(10.0);
@@ -109,13 +109,13 @@ public class BuildFigure01A implements BuildWorldFunction {
         TInstance scaledTexturePtr = new TInstance(wrappedTexturePtr);
         scaledTexturePtr.scale(new Vector3D(0.75));
 
-	// material:
+        // material:
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.5);
         svMattePtr.setKd(0.85);
         svMattePtr.setCd(scaledTexturePtr);
 
-	// cut cube parameters
+        // cut cube parameters
         Point3D p0 = new Point3D(-1.0);
         Point3D p1 = new Point3D(1.0);
         double sphereRadius = 1.5;
@@ -124,7 +124,7 @@ public class BuildFigure01A implements BuildWorldFunction {
         cutCubePtr.setMaterial(svMattePtr);
         w.addObject(cutCubePtr);
 
-	// concave part sphere parameters
+        // concave part sphere parameters
         Point3D center = new Point3D(p1);
         double radius = sphereRadius;
         double phiMin = 180.0;

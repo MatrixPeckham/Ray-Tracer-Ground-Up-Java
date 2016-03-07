@@ -20,10 +20,11 @@ package com.matrixpeckham.raytracer.brdfs;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Lambertian class, for matte shading.
@@ -40,7 +41,7 @@ public class Lambertian extends BRDF {
     /**
      * color
      */
-    private RGBColor cd;
+    private final RGBColor cd;
 
     /**
      * sampler for direction sampling
@@ -66,7 +67,7 @@ public class Lambertian extends BRDF {
         kd = lamb.kd;
         cd = new RGBColor(lamb.cd);
         if (lamb.sampler != null) {
-            sampler = lamb.sampler.clone();
+            sampler = lamb.sampler.cloneSampler();
         }
     }
 
@@ -75,7 +76,8 @@ public class Lambertian extends BRDF {
      *
      * @return
      */
-    public Lambertian clone() {
+    @Override
+    public Lambertian cloneBRDF() {
         return new Lambertian(this);
     }
 
@@ -157,7 +159,7 @@ public class Lambertian extends BRDF {
      * @param clone
      */
     public void setSampler(Sampler clone) {
-        this.sampler = clone.clone();
+        this.sampler = clone.cloneSampler();
         this.sampler.mapSamplesToHemisphere(1);
 
     }
@@ -188,5 +190,8 @@ public class Lambertian extends BRDF {
 
         return (cd.mul(kd).mul(Utility.INV_PI));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(Lambertian.class.getName());
 
 }

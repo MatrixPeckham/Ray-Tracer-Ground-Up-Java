@@ -41,7 +41,7 @@ public class BuildFigure14 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-// This builds the scene for Figure 30.14 
+// This builds the scene for Figure 30.14
 // With the value of eps in Listing 30.2, there are minor shading anomalies
 // particularly in Figure 30.14(c). Making eps smaller, eg eps = 0.0000001,
 // fixes these, but re-introduces the shading problems in Figure 30.3.
@@ -69,7 +69,7 @@ public class BuildFigure14 implements BuildWorldFunction {
         Checker3D checkerPtr = new Checker3D();
 //        checkerPtr.setSize(0.6708);	// For Figure 30.14(a)
 //	checkerPtr.setSize(0.416);	// For Figure 30.14(b)
-	checkerPtr.setSize(0.3);		// For Figure 30.14(c)
+        checkerPtr.setSize(0.3);		// For Figure 30.14(c)
         checkerPtr.setColor1(Utility.WHITE);
         checkerPtr.setColor2(Utility.BLACK);
 

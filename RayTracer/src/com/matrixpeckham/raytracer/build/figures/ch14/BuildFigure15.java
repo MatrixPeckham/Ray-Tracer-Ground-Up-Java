@@ -30,54 +30,54 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure15 implements BuildWorldFunction{
+public class BuildFigure15 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
 
-	int numSamples = 1;
-	
-	w.vp.setHres(650);	  		
-	w.vp.setVres(300);
-	w.vp.setSamples(numSamples);
-	
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinhole = new Pinhole();
-	pinhole.setEye(0, 0, 100);
-	pinhole.setLookat(0, 0, 0);
-	pinhole.setViewDistance(6000); 
-	pinhole.computeUVW();
-	w.setCamera(pinhole);
-	
-	Directional light2 = new Directional();
-	light2.setDirection(20, 0, 20);
-	light2.scaleRadiance(3.0);
-	w.addLight(light2);
-	
-	// beveled cylinder
-	
-	double bottom 		= -2.0;
-	double top 			= 2.0;
-	double radius 		= 1.0;
-	double bevelRadius 	= 0.2;
-	
-	BeveledCylinder cylinder1 = new BeveledCylinder(bottom, top, radius, bevelRadius);
-	
-	for (int j = 0; j < 4; j++) {
-	
-		Matte matte = new Matte();
-		matte.setKa(0.25); 					
-		matte.setKd(0.1 + 0.3 * j);
-		matte.setCd(0.5);
-	
-		Instance cylinder2 = new Instance(cylinder1);
-		cylinder2.translate(-3.75 + 2.5 * j, 0, 0);
-		cylinder2.setMaterial(matte);
-                cylinder2.setShadows(false);
-		w.addObject(cylinder2);
-	}
+        int numSamples = 1;
+
+        w.vp.setHres(650);
+        w.vp.setVres(300);
+        w.vp.setSamples(numSamples);
+
+        w.tracer = new RayCast(w);
+
+        Pinhole pinhole = new Pinhole();
+        pinhole.setEye(0, 0, 100);
+        pinhole.setLookat(0, 0, 0);
+        pinhole.setViewDistance(6000);
+        pinhole.computeUVW();
+        w.setCamera(pinhole);
+
+        Directional light2 = new Directional();
+        light2.setDirection(20, 0, 20);
+        light2.scaleRadiance(3.0);
+        w.addLight(light2);
+
+        // beveled cylinder
+        double bottom = -2.0;
+        double top = 2.0;
+        double radius = 1.0;
+        double bevelRadius = 0.2;
+
+        BeveledCylinder cylinder1 = new BeveledCylinder(bottom, top, radius,
+                bevelRadius);
+
+        for (int j = 0; j < 4; j++) {
+
+            Matte matte = new Matte();
+            matte.setKa(0.25);
+            matte.setKd(0.1 + 0.3 * j);
+            matte.setCd(0.5);
+
+            Instance cylinder2 = new Instance(cylinder1);
+            cylinder2.translate(-3.75 + 2.5 * j, 0, 0);
+            cylinder2.setMaterial(matte);
+            cylinder2.setShadows(false);
+            w.addObject(cylinder2);
+        }
 
     }
-    
+
 }

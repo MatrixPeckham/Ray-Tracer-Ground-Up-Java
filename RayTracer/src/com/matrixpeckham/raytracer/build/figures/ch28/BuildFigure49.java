@@ -32,7 +32,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure49 implements BuildWorldFunction{
+public class BuildFigure49 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -41,49 +41,44 @@ public class BuildFigure49 implements BuildWorldFunction{
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.49
+        int numSamples = 16;
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(350);
-	w.vp.setSamples(numSamples);	
-	w.vp.setMaxDepth(6);		
-	
-	w.backgroundColor = Utility.WHITE;
-	
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.5);
-	w.setAmbient(ambientPtr);
-	
-	w.tracer = new Whitted(w);
-	
-	Pinhole pinholePtr = new Pinhole();	
-	pinholePtr.setEye(0, 0, 1000);    
-	pinholePtr.setLookat(0, 0, 0);
-	pinholePtr.setViewDistance(35000.0);	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
-	
-	Dielectric dielectricPtr = new Dielectric();
-	dielectricPtr.setIorIn(1.5);   
-	dielectricPtr.setIorOut(1.0);
-	dielectricPtr.setCfIn(0.9, 0.7, 0);   // orange
-	dielectricPtr.setCfOut(1.0);
+        w.vp.setHres(600);
+        w.vp.setVres(350);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(6);
 
-	Instance spherePtr1 = new Instance(new Sphere());
-	spherePtr1.setMaterial(dielectricPtr);
-	spherePtr1.scale(4.0);
-	spherePtr1.translate(-4.2, 0.0, 0.0);
-	w.addObject(spherePtr1);
-	
-	Sphere spherePtr2 = new Sphere(new Point3D(4.2, 0, 0), 4);
-	spherePtr2.setMaterial(dielectricPtr);
-	w.addObject(spherePtr2);
-}
+        w.backgroundColor = Utility.WHITE;
 
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.5);
+        w.setAmbient(ambientPtr);
 
-    
+        w.tracer = new Whitted(w);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 1000);
+        pinholePtr.setLookat(0, 0, 0);
+        pinholePtr.setViewDistance(35000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Dielectric dielectricPtr = new Dielectric();
+        dielectricPtr.setIorIn(1.5);
+        dielectricPtr.setIorOut(1.0);
+        dielectricPtr.setCfIn(0.9, 0.7, 0);   // orange
+        dielectricPtr.setCfOut(1.0);
+
+        Instance spherePtr1 = new Instance(new Sphere());
+        spherePtr1.setMaterial(dielectricPtr);
+        spherePtr1.scale(4.0);
+        spherePtr1.translate(-4.2, 0.0, 0.0);
+        w.addObject(spherePtr1);
+
+        Sphere spherePtr2 = new Sphere(new Point3D(4.2, 0, 0), 4);
+        spherePtr2.setMaterial(dielectricPtr);
+        w.addObject(spherePtr2);
+    }
+
 }

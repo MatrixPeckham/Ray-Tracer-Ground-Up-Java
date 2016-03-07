@@ -50,90 +50,74 @@ public class BuildFigure34D implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.34(d)
-
-// The perturbation amounts (values of a) are different from those used in 
+// The perturbation amounts (values of a) are different from those used in
 // Figure 31.34 in the book. The original images used a fractal sum function whose
 // output was not normalised to the range [0, 1]. In the original function,
-// w.adding more octaves produced a larger range. Because the noise used here 
+// w.adding more octaves produced a larger range. Because the noise used here
 // has 6 octaves, larger perturbation amounts are needed to produce similar
 // results.
-
 // The texture is scaled by (2.0, 0.2, 2.0), not by (0.2, 2.0, 0.2) as stated
 // in the Figure 31.34 caption.
+        int numSamples = 16;
 
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
- 												
+        w.backgroundColor = Utility.BLACK;
+        w.tracer = new RayCast(w);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);     
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = Utility.BLACK;
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(10000.0);
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(20, 20, 40);
-	lightPtr.scaleRadiance(2.5);
-	w.addLight(lightPtr);
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(10000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
-	
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();	
-	noisePtr.setNumOctaves(6);
-	noisePtr.setGain(0.5);	
-	noisePtr.setLacunarity(2.0);		
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(20, 20, 40);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
+
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(2.0);
 
 	// ramp image:
-	
-	// ramp image:
-	
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        // ramp image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"BlueMarbleRamp.ppm"));
+            imagePtr.loadPPMFile(new File(path + "BlueMarbleRamp.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	
-	
-	// marble texture:	
-		
-	RampFBmTexture marblePtr = new RampFBmTexture(imagePtr);
-	marblePtr.setNoise(noisePtr);
-	marblePtr.setPerturbation(8.0);
-	
-	TInstance transformedMarblePtr = new TInstance(marblePtr);
-	transformedMarblePtr.scale(2.0, 0.2, 2.0);
-	transformedMarblePtr.rotateY(45);
 
-	// material:
-		
-	SV_Matte svMattePtr = new SV_Matte();	 
-	svMattePtr.setKa(0.25);
-	svMattePtr.setKd(0.9);
-	svMattePtr.setCd(transformedMarblePtr);
-	
-	
-	Instance spherePtr1 = new Instance(new Sphere(new Point3D(0.0), 5.0));
-	spherePtr1.setMaterial(svMattePtr);
-	spherePtr1.rotateY(180);
-	w.addObject(spherePtr1);
-}
+        // marble texture:
+        RampFBmTexture marblePtr = new RampFBmTexture(imagePtr);
+        marblePtr.setNoise(noisePtr);
+        marblePtr.setPerturbation(8.0);
 
+        TInstance transformedMarblePtr = new TInstance(marblePtr);
+        transformedMarblePtr.scale(2.0, 0.2, 2.0);
+        transformedMarblePtr.rotateY(45);
+
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.25);
+        svMattePtr.setKd(0.9);
+        svMattePtr.setCd(transformedMarblePtr);
+
+        Instance spherePtr1 = new Instance(new Sphere(new Point3D(0.0), 5.0));
+        spherePtr1.setMaterial(svMattePtr);
+        spherePtr1.rotateY(180);
+        w.addObject(spherePtr1);
+    }
 
 }

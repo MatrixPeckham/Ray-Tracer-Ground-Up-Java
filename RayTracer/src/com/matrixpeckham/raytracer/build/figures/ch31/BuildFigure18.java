@@ -66,19 +66,19 @@ public class BuildFigure18 implements BuildWorldFunction {
         lightPtr.scaleRadiance(2.5);
         w.addLight(lightPtr);
 
-	// noise:
+        // noise:
         CubicNoise noisePtr = new CubicNoise();
         noisePtr.setNumOctaves(1);
         noisePtr.setGain(0.5);			// not relevant for one octave
-        noisePtr.setLacunarity(2.0);		// not relevant for one octave	
+        noisePtr.setLacunarity(2.0);		// not relevant for one octave
 
-	// texture:
+        // texture:
         FBmTexture texturePtr = new FBmTexture(noisePtr);
         texturePtr.setColor(Utility.WHITE);
         texturePtr.setMinValue(0.0);
         texturePtr.setMaxValue(1.0);
 
-	// material:
+        // material:
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.25);
         svMattePtr.setKd(0.85);
