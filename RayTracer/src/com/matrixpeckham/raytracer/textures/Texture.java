@@ -32,7 +32,7 @@ public interface Texture {
      *
      * @return
      */
-    public Texture clone();
+    public Texture cloneTexture();
 
     /**
      * return the color at the location represented by the shaderec.

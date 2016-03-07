@@ -27,6 +27,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Concave Sphere class is the same as Sphere, but normals always point inwards.
@@ -38,7 +39,7 @@ public class ConcaveSphere extends GeometricObject {
     /**
      * center
      */
-    private Point3D center;
+    private final Point3D center;
 
     /**
      * radius
@@ -101,7 +102,7 @@ public class ConcaveSphere extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new ConcaveSphere(this);
     }
 
@@ -236,7 +237,7 @@ public class ConcaveSphere extends GeometricObject {
      * @param sampler
      */
     public void setSampler(Sampler sampler) {
-        this.sampler = sampler.clone();
+        this.sampler = sampler.cloneSampler();
         this.sampler.mapSamplesToSphere();
     }
 
@@ -271,5 +272,8 @@ public class ConcaveSphere extends GeometricObject {
     public double pdf(ShadeRec sr) {
         return invSurfaceArea;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ConcaveSphere.class.getName());
 
 }

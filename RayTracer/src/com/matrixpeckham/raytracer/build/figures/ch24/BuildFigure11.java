@@ -87,13 +87,13 @@ public class BuildFigure11 implements BuildWorldFunction {
         lightPtr2.setShadows(true);
         w.addLight(lightPtr2);
 
-	// city parameters
+        // city parameters
         double a = 10;   // city block width:  xw extent
         double b = 12;	// city block length:  yw extent
         int numRows = 10;  	// number of blocks in the xw direction
         int numColumns = 12; 	// number of blocks in the zw direction
-        double width = 7;	// building width: xw extent in range [min, a - offset]
-        double length = 7;	// building length: zw extent in range [min, b - offset]
+        double width;	// building width: xw extent in range [min, a - offset]
+        double length;	// building length: zw extent in range [min, b - offset]
         double minSize = 6;	// mininum building extent in xw and yw directions
         double offset = 1.0;	// half the minimum distance between buildings
         double minHeight = 0.0; 	// minimum building height
@@ -106,12 +106,12 @@ public class BuildFigure11 implements BuildWorldFunction {
         double minColor = 0.5;  // prevents black buildings
         double maxColor = 0.9;	// prevents white buildings
 
-        Utility.setRandSeed(15);  				// as the buildings' dimensions and colors are Utility.random, it's necessary to 
+        Utility.setRandSeed(15);  				// as the buildings' dimensions and colors are Utility.random, it's necessary to
         // seed Utility.rand to keep these quantities the same at each run
         // if you leave w out, and change the number of samples per pixel,
         // these will change
 
-	// the buildings are stored in a grid
+        // the buildings are stored in a grid
         Grid gridPtr = new Grid();
 
         for (int r = 0; r < numRows; r++) // xw direction
@@ -147,7 +147,7 @@ public class BuildFigure11 implements BuildWorldFunction {
                             minColor + Utility.randDouble() * (maxColor
                             - minColor)));
 
-				// block center coordinates
+                    // block center coordinates
                     double xc = a * (r - numRows / 2.0 + 0.5);
                     double zc = b * (c - numColumns / 2.0 + 0.5);
 
@@ -156,17 +156,17 @@ public class BuildFigure11 implements BuildWorldFunction {
                     length = minSize + Utility.randDouble() * (b - 2 * offset
                             - minSize);
 
-				// minimum building coordinates
+                    // minimum building coordinates
                     double xmin = xc - width / 2.0;
                     double ymin = 0.0;
                     double zmin = zc - length / 2.0;
 
-				// maximum building coordinates
+                    // maximum building coordinates
                     height = minHeight + Utility.randDouble() * (maxHeight
                             - minHeight);
 
-				// The following is a hack to make the middle row and column of buildings higher
-                    // on average than the other buildings. 
+                    // The following is a hack to make the middle row and column of buildings higher
+                    // on average than the other buildings.
                     // This only works properly when there are three rows and columns of buildings
                     if (r == 1 || r == numRows - 2 || c == 1 || c == numColumns
                             - 2) {
@@ -190,7 +190,7 @@ public class BuildFigure11 implements BuildWorldFunction {
         gridPtr.setupCells();
         w.addObject(gridPtr);
 
-	// render the park with small green checkers
+        // render the park with small green checkers
         Checker3D checker3DPtr1 = new Checker3D();
         checker3DPtr1.setSize(5);
         checker3DPtr1.setColor1(0.35, 0.75, 0.35);
@@ -207,7 +207,7 @@ public class BuildFigure11 implements BuildWorldFunction {
         parkPtr.setMaterial(svMattePtr1);
         w.addObject(parkPtr);
 
-	// ground plane with checkers:
+        // ground plane with checkers:
         Checker3D checker3DPtr2 = new Checker3D();
         checker3DPtr2.setSize(50);
         checker3DPtr2.setColor1(new RGBColor(0.7));
@@ -223,9 +223,10 @@ public class BuildFigure11 implements BuildWorldFunction {
         w.addObject(planePtr);
 
         Image imagePtr = new Image();
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"CloudsLowRes.ppm"));
+            imagePtr.loadPPMFile(new File(path + "CloudsLowRes.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11.class.getName()).
                     log(Level.SEVERE, null, ex);

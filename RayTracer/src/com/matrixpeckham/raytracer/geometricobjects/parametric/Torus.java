@@ -62,8 +62,8 @@ public class Torus extends ParametricObject {
     protected static class TorusParametric implements ParametricEquation {
 
         //large radius
-
         double a = 0;
+
         //small radius
         double b = 0;
 
@@ -79,7 +79,6 @@ public class Torus extends ParametricObject {
         }
 
         //bounds of u and v are both 0-2pi
-
         @Override
         public double getMinU() {
             return 0;
@@ -100,7 +99,7 @@ public class Torus extends ParametricObject {
             return Utility.TWO_PI;
         }
 
-            //steps are arbitrarily 0.1
+        //steps are arbitrarily 0.1
         @Override
         public double getUStep() {
             return 0.1;
@@ -111,7 +110,7 @@ public class Torus extends ParametricObject {
             return 0.1;
         }
 
-            //most important two methods here do the actual work
+        //most important two methods here do the actual work
         @Override
         public Point3D getPointAt(double u, double v) {
             //direct implementation of torus parametric equation
@@ -129,9 +128,9 @@ public class Torus extends ParametricObject {
 
         @Override
         public Normal getNormalAt(double u, double v) {
-                //not the parametric normal equation 
+            //not the parametric normal equation
             //wikipedia gave, that didn't work
-            //this is a manual differentiation 
+            //this is a manual differentiation
             //and cross produc implementation
 
             double cosu = Math.cos(u);

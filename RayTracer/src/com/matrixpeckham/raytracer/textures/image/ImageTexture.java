@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.textures.image;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import java.util.logging.Logger;
 
 /**
  * Image based texture.
@@ -81,7 +82,7 @@ public class ImageTexture implements Texture {
         }
 
         if (i.mapping != null) {
-            mapping = i.mapping.clone();
+            mapping = i.mapping.cloneMapping();
         }
     }
 
@@ -111,7 +112,7 @@ public class ImageTexture implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new ImageTexture(this);
     }
 
@@ -136,4 +137,8 @@ public class ImageTexture implements Texture {
         }
         return image.getColor(point.row, point.col);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ImageTexture.class.getName());
+
 }

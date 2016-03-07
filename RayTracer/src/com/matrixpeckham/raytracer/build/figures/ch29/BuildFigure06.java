@@ -47,59 +47,55 @@ public class BuildFigure06 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This biuilds the scene for Figure 29.6
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(400);
+        w.vp.setVres(400);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(0);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(400);
-	w.vp.setVres(400); 
-	w.vp.setSamples(numSamples);
-	w.vp.setMaxDepth(0);
-	
-	w.backgroundColor = new RGBColor(0.5);
-	
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(2, 3.5, 5);
-	pinholePtr.setLookat(new Point3D(0)); 
-	pinholePtr.setViewDistance(800.0);
-	pinholePtr.computeUVW();
-	w.setCamera(pinholePtr);
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(14, 20, 25);  
-	lightPtr.scaleRadiance(1.75);  
-	lightPtr.setShadows(true);
-	w.addLight(lightPtr);
+        w.backgroundColor = new RGBColor(0.5);
 
-	// image:
+        w.tracer = new RayCast(w);
 
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(2, 3.5, 5);
+        pinholePtr.setLookat(new Point3D(0));
+        pinholePtr.setViewDistance(800.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(14, 20, 25);
+        lightPtr.scaleRadiance(1.75);
+        lightPtr.setShadows(true);
+        w.addLight(lightPtr);
+
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"CountryScene.ppm"));
+            imagePtr.loadPPMFile(new File(path + "CountryScene.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure06.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
-	CylindricalMap mapPtr = new CylindricalMap();   
-	ImageTexture texturePtr = new ImageTexture(imagePtr); 
-	texturePtr.setMapping(mapPtr);
+        CylindricalMap mapPtr = new CylindricalMap();
+        ImageTexture texturePtr = new ImageTexture(imagePtr);
+        texturePtr.setMapping(mapPtr);
 
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.40);
-	svMattePtr.setKd(0.95);
-	svMattePtr.setCd(texturePtr);
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.40);
+        svMattePtr.setKd(0.95);
+        svMattePtr.setCd(texturePtr);
 
-	OpenCylinder cylinderPtr = new OpenCylinder();
-	cylinderPtr.setMaterial(svMattePtr); 
-	w.addObject(cylinderPtr);
-	
+        OpenCylinder cylinderPtr = new OpenCylinder();
+        cylinderPtr.setMaterial(svMattePtr);
+        w.addObject(cylinderPtr);
+
     }
-    
+
 }

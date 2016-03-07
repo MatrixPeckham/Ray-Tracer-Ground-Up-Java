@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Wraps two colors from black... n &lt; 0 black-&gt color1 and for &gt;1 black
@@ -34,22 +35,27 @@ public class WrappedTwoColors implements Texture {
      * noise to use
      */
     private LatticeNoise noise = null;
+
     /**
      * first color
      */
-    private RGBColor color1 = new RGBColor();
+    private final RGBColor color1 = new RGBColor();
+
     /**
      * second color
      */
-    private RGBColor color2 = new RGBColor();
+    private final RGBColor color2 = new RGBColor();
+
     /**
      * min value to use for color ramping (should be 0-1)
      */
     private double minValue;
+
     /**
      * max value to use for color ramping (should be 0-1(
      */
     private double maxValue;
+
     /**
      * multiplies noise value before wrapping and normalization (should be
      * positive)
@@ -115,7 +121,7 @@ public class WrappedTwoColors implements Texture {
         this.color2.setTo(t.color2);
         this.maxValue = t.maxValue;
         this.minValue = t.minValue;
-        this.noise = t.noise.clone();
+        this.noise = t.noise.cloneNoise();
         this.expansionNumber = t.expansionNumber;
     }
 
@@ -134,7 +140,7 @@ public class WrappedTwoColors implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new WrappedTwoColors(this);
     }
 
@@ -189,4 +195,8 @@ public class WrappedTwoColors implements Texture {
     public void setExpansionNumber(double d) {
         expansionNumber = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(WrappedTwoColors.class.getName());
+
 }

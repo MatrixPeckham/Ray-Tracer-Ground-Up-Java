@@ -39,7 +39,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure05 implements BuildWorldFunction{
+public class BuildFigure05 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -48,109 +48,95 @@ public class BuildFigure05 implements BuildWorldFunction{
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.5
+        int numSamples = 16;
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);		
-	w.vp.setMaxDepth(5);		
-	
-	w.backgroundColor = new RGBColor(0.0, 0.3, 0.25);
-	
-	w.tracer = new Whitted(w);
-	
-	Ambient ambient = new Ambient();
-	ambient.scaleRadiance(0.25);
-	w.setAmbient(ambient);
-		
-	Pinhole pinhole = new Pinhole();
-	pinhole.setEye(-8, 5.5, 40);   
-	pinhole.setLookat(1, 4, 0);    
-	pinhole.setViewDistance(2400.0);  
-	pinhole.computeUVW();     
-	w.setCamera(pinhole);
-	
-	
-	// point light 
-	
-	PointLight light1 = new PointLight();
-	light1.setLocation(40, 50, 0); 
-	light1.scaleRadiance(4.5);
-	light1.setShadows(true);
-	w.addLight(light1);
-	
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(5);
 
-	// point light 
-	
-	PointLight light2 = new PointLight();
-	light2.setLocation(-10, 20, 10); 
-	light2.scaleRadiance(4.5);
-	light2.setShadows(true);
-	w.addLight(light2);
-	
-	
-	// directional light 
-	
-	Directional light3 = new Directional();
-	light3.setDirection(-1, 0, 0); 
-	light3.scaleRadiance(4.5);
-	light3.setShadows(true);
-	w.addLight(light3);
-	
-	
-	// transparent sphere
-	
-	Dielectric dielectic = new Dielectric();
-	dielectic.setKs(0.2);
-	dielectic.setExp(2000.0);
+        w.backgroundColor = new RGBColor(0.0, 0.3, 0.25);
+
+        w.tracer = new Whitted(w);
+
+        Ambient ambient = new Ambient();
+        ambient.scaleRadiance(0.25);
+        w.setAmbient(ambient);
+
+        Pinhole pinhole = new Pinhole();
+        pinhole.setEye(-8, 5.5, 40);
+        pinhole.setLookat(1, 4, 0);
+        pinhole.setViewDistance(2400.0);
+        pinhole.computeUVW();
+        w.setCamera(pinhole);
+
+        // point light
+        PointLight light1 = new PointLight();
+        light1.setLocation(40, 50, 0);
+        light1.scaleRadiance(4.5);
+        light1.setShadows(true);
+        w.addLight(light1);
+
+        // point light
+        PointLight light2 = new PointLight();
+        light2.setLocation(-10, 20, 10);
+        light2.scaleRadiance(4.5);
+        light2.setShadows(true);
+        w.addLight(light2);
+
+        // directional light
+        Directional light3 = new Directional();
+        light3.setDirection(-1, 0, 0);
+        light3.scaleRadiance(4.5);
+        light3.setShadows(true);
+        w.addLight(light3);
+
+        // transparent sphere
+        Dielectric dielectic = new Dielectric();
+        dielectic.setKs(0.2);
+        dielectic.setExp(2000.0);
 //	dielectic.setIorIn(1.5);		// for Figure 28.5(a)
-	dielectic.setIorIn(0.75);	// for Figure 28.5(b)
-	dielectic.setIorOut(1.0);
-	dielectic.setCfIn(Utility.WHITE);
-	dielectic.setCfOut(Utility.WHITE);
-	
-	Sphere sphere1 = new Sphere(new Point3D(0.0, 4.5, 0.0), 3.0);
-	sphere1.setMaterial(dielectic);
-	w.addObject(sphere1);
-	
-	
-	// red sphere
-		
-	Reflective reflective = new Reflective();
-	reflective.setKa(0.3);
-	reflective.setKd(0.3); 
-	reflective.setCd(Utility.RED); 
-	reflective.setKs(0.2);
-	reflective.setExp(2000.0);
-	reflective.setKr(0.25);
-	
-	Sphere sphere2 = new Sphere(new Point3D(4, 4, -6), 3);
-	sphere2.setMaterial(reflective);
-	w.addObject(sphere2);
+        dielectic.setIorIn(0.75);	// for Figure 28.5(b)
+        dielectic.setIorOut(1.0);
+        dielectic.setCfIn(Utility.WHITE);
+        dielectic.setCfOut(Utility.WHITE);
 
-		
-	Checker3D checker = new Checker3D();
-	checker.setSize(4);
-	checker.setColor1(0.75);  
-	checker.setColor2(Utility.WHITE);	
-	
-	SV_Matte svMatte = new SV_Matte();		
-	svMatte.setKa(0.5);
-	svMatte.setKd(0.35);
-	svMatte.setCd(checker);	
-	
-	// rectangle
-	
-	Point3D p0=new Point3D(-20, 0, -100);
-	Vector3D a=new Vector3D(0, 0, 120);
-	Vector3D b=new Vector3D(40, 0, 0);
-	
-	Rectangle rectangle = new Rectangle(p0, a, b); 
-	rectangle.setMaterial(svMatte);
-	w.addObject(rectangle);		
+        Sphere sphere1 = new Sphere(new Point3D(0.0, 4.5, 0.0), 3.0);
+        sphere1.setMaterial(dielectic);
+        w.addObject(sphere1);
+
+        // red sphere
+        Reflective reflective = new Reflective();
+        reflective.setKa(0.3);
+        reflective.setKd(0.3);
+        reflective.setCd(Utility.RED);
+        reflective.setKs(0.2);
+        reflective.setExp(2000.0);
+        reflective.setKr(0.25);
+
+        Sphere sphere2 = new Sphere(new Point3D(4, 4, -6), 3);
+        sphere2.setMaterial(reflective);
+        w.addObject(sphere2);
+
+        Checker3D checker = new Checker3D();
+        checker.setSize(4);
+        checker.setColor1(0.75);
+        checker.setColor2(Utility.WHITE);
+
+        SV_Matte svMatte = new SV_Matte();
+        svMatte.setKa(0.5);
+        svMatte.setKd(0.35);
+        svMatte.setCd(checker);
+
+        // rectangle
+        Point3D p0 = new Point3D(-20, 0, -100);
+        Vector3D a = new Vector3D(0, 0, 120);
+        Vector3D b = new Vector3D(40, 0, 0);
+
+        Rectangle rectangle = new Rectangle(p0, a, b);
+        rectangle.setMaterial(svMatte);
+        w.addObject(rectangle);
     }
-    
+
 }

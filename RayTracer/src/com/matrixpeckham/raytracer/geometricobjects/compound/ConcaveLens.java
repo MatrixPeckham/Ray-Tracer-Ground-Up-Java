@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Concave Lens class, makes convex lens for use with dielectric.
@@ -85,7 +86,7 @@ public class ConcaveLens extends Compound {
 
         center = new Point3D(0.0, sphere_radius + minDistance / 2.0, 0.0);
         theta_min = 90.0 + Math.acos(lensRadius / sphere_radius) * 180.0
-                / Utility.PI;  // in degrees 
+                / Utility.PI;  // in degrees
         theta_max = 180.0;
         this.addObject(new ConcavePartSphere(center, sphere_radius, phi_min,
                 phi_max, theta_min, theta_max));
@@ -94,7 +95,7 @@ public class ConcaveLens extends Compound {
         center = new Point3D(0.0, -(sphere_radius + minDistance / 2.0), 0.0);
         theta_min = 0.0;
         theta_max = 90.0 - Math.acos(lensRadius / sphere_radius) * 180.0
-                / Utility.PI;  // in degrees 
+                / Utility.PI;  // in degrees
         this.addObject(new ConcavePartSphere(center, sphere_radius, phi_min,
                 phi_max, theta_min, theta_max));
 
@@ -131,7 +132,7 @@ public class ConcaveLens extends Compound {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new ConcaveLens(this);
     }
 
@@ -162,5 +163,8 @@ public class ConcaveLens extends Compound {
         }
         return false;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ConcaveLens.class.getName());
 
 }

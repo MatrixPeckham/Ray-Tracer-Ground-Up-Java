@@ -58,7 +58,7 @@ public class BuildFigure47 implements BuildWorldFunction {
 //        w.vp.setMaxDepth(3);		// for Figure 28.47(a)
 //	w.vp.setMaxDepth(4);		// for Figure 28.47(b)
 //	w.vp.setMaxDepth(6);		// for Figure 28.47(c)
-	w.vp.setMaxDepth(8);		// for Figure 28.47(d)
+        w.vp.setMaxDepth(8);		// for Figure 28.47(d)
 
         w.backgroundColor = new RGBColor(0.0, 0.13, 0.1);
 
@@ -69,7 +69,7 @@ public class BuildFigure47 implements BuildWorldFunction {
         ambientPtr.scaleRadiance(0.25);
         w.setAmbient(ambientPtr);
 
-	// zoomed view of reflective sphere rotated 164 degrees
+        // zoomed view of reflective sphere rotated 164 degrees
         Pinhole pinholePtr = new Pinhole();
         pinholePtr.setEye(0, 0, 10);
         pinholePtr.setLookat(0.5, 0.0, 0.0);
@@ -89,7 +89,7 @@ public class BuildFigure47 implements BuildWorldFunction {
         lightPtr2.setShadows(false);
         w.addLight(lightPtr2);
 
-	// transparent unit sphere at the origin
+        // transparent unit sphere at the origin
         Dielectric dielectricPtr = new Dielectric();
         dielectricPtr.setIorIn(1.5);		// glass
         dielectricPtr.setIorOut(1.0);		// air
@@ -99,8 +99,8 @@ public class BuildFigure47 implements BuildWorldFunction {
         Sphere spherePtr1 = new Sphere();
         spherePtr1.setMaterial(dielectricPtr);
 
-	// Utility.RED reflective sphere inside the transparent sphere
-	// the Reflective parameters below are for the reflective sphere in a glass sphere
+        // Utility.RED reflective sphere inside the transparent sphere
+        // the Reflective parameters below are for the reflective sphere in a glass sphere
         // they are too dark for the diamond sphere because of the etas
         Reflective reflectivePtr = new Reflective();
         reflectivePtr.setKa(0.1);
@@ -112,22 +112,22 @@ public class BuildFigure47 implements BuildWorldFunction {
         reflectivePtr.setCr(Utility.WHITE);
 
         double radius = 0.1;
-        double distance = 0.8;   // from center of transparent sphere 
+        double distance = 0.8;   // from center of transparent sphere
 
         Sphere spherePtr2 = new Sphere(new Point3D(0, 0, distance), radius);
         spherePtr2.setMaterial(reflectivePtr);
 
-	// store the spheres in a compound object
+        // store the spheres in a compound object
         Compound spheresPtr = new Compound();
         spheresPtr.addObject(spherePtr1);
         spheresPtr.addObject(spherePtr2);
 
-	// now store compound object in an instance so that we can rotate it
+        // now store compound object in an instance so that we can rotate it
         Instance rotatedSpheresPtr = new Instance(spheresPtr);
         rotatedSpheresPtr.rotateY(164.0);
         w.addObject(rotatedSpheresPtr);
 
-	// ground plane
+        // ground plane
         Checker3D checker3DPtr = new Checker3D();
         checker3DPtr.setSize(50.0);
         checker3DPtr.setColor1(0.5);

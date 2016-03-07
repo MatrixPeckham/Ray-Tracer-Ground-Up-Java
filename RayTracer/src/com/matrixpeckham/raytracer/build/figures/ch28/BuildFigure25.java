@@ -34,7 +34,7 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure25 implements BuildWorldFunction{
+public class BuildFigure25 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
@@ -43,60 +43,52 @@ public class BuildFigure25 implements BuildWorldFunction{
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 28.25
+        int numSamples = 1;  // w figure does not need antialiasing
 
-	int numSamples = 1;  // w figure does not need antialiasing
-	
-	w.vp.setHres(600);	  		
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);	
-	w.vp.setMaxDepth(10);		
-	
-	w.backgroundColor = Utility.BLACK;
-	
-	w.tracer = new Whitted(w);
-	
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.25);
-	w.setAmbient(ambientPtr);
-	
-		
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 1000, 0);   
-	pinholePtr.setLookat(new Point3D(0));    
-	pinholePtr.setViewDistance(200000.0);	
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr);
-	
-		
-	// transparent box
-		
-	Dielectric dielectricPtr = new Dielectric();
-	dielectricPtr.setIorIn(1.5);   
-	dielectricPtr.setIorOut(1.0);
-	dielectricPtr.setCfIn(Utility.WHITE);
-	dielectricPtr.setCfOut(Utility.WHITE);
-	
-	Point3D p0=new Point3D(-1.0, 0.0, -1.0);
-	Point3D p1=new Point3D(1.0, 0.1, 1.0);
-	
-	Box boxPtr1 = new Box(p0, p1);
-	boxPtr1.setMaterial(dielectricPtr);
-	w.addObject(boxPtr1);
-	
-	
-	// plane
-		
-	Emissive emissivePtr = new Emissive();
-	emissivePtr.setCe(Utility.WHITE);
-	emissivePtr.scaleRadiance(1.0);
-	
-	Plane planePtr = new Plane(new Point3D(0.0, -4.0, 0.0), new Normal(0, 1, 0));
-	planePtr.setMaterial(emissivePtr);
-	w.addObject(planePtr);
-}
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
+        w.vp.setMaxDepth(10);
 
+        w.backgroundColor = Utility.BLACK;
 
-    
+        w.tracer = new Whitted(w);
+
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.25);
+        w.setAmbient(ambientPtr);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 1000, 0);
+        pinholePtr.setLookat(new Point3D(0));
+        pinholePtr.setViewDistance(200000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        // transparent box
+        Dielectric dielectricPtr = new Dielectric();
+        dielectricPtr.setIorIn(1.5);
+        dielectricPtr.setIorOut(1.0);
+        dielectricPtr.setCfIn(Utility.WHITE);
+        dielectricPtr.setCfOut(Utility.WHITE);
+
+        Point3D p0 = new Point3D(-1.0, 0.0, -1.0);
+        Point3D p1 = new Point3D(1.0, 0.1, 1.0);
+
+        Box boxPtr1 = new Box(p0, p1);
+        boxPtr1.setMaterial(dielectricPtr);
+        w.addObject(boxPtr1);
+
+        // plane
+        Emissive emissivePtr = new Emissive();
+        emissivePtr.setCe(Utility.WHITE);
+        emissivePtr.scaleRadiance(1.0);
+
+        Plane planePtr = new Plane(new Point3D(0.0, -4.0, 0.0), new Normal(0, 1,
+                0));
+        planePtr.setMaterial(emissivePtr);
+        w.addObject(planePtr);
+    }
+
 }

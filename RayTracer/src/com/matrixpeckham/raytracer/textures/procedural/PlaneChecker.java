@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.textures.procedural;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import java.util.logging.Logger;
 
 /**
  * Checker texture for planes.
@@ -141,7 +142,7 @@ public class PlaneChecker implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new PlaneChecker(this);
     }
 
@@ -193,5 +194,8 @@ public class PlaneChecker implements Texture {
     public void setColor1(double d, double d0, double d1) {
         color1.setTo(d, d0, d1);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(PlaneChecker.class.getName());
 
 }

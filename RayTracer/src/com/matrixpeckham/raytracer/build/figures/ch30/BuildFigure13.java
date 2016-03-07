@@ -50,7 +50,7 @@ public class BuildFigure13 implements BuildWorldFunction {
 //	See the file COPYING.txt for the full license.
 
 // This builds the scene for Figures 30.13(a) and 30.13(b).
-// The build function is the same for both figures. 
+// The build function is the same for both figures.
 // The difference is in the BeveledCylinder contructor, as discussed on page 685.
         int numSamples = 16;
 
@@ -73,29 +73,31 @@ public class BuildFigure13 implements BuildWorldFunction {
         lightPtr1.setShadows(true);
         w.addLight(lightPtr1);
 
-	// image:
-
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"BlueMarbleRamp.ppm"));
+            imagePtr.loadPPMFile(new File(path + "BlueMarbleRamp.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04.class.getName()).
+            Logger.getLogger(
+                    com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04.class.
+                    getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
 
-	// marble parameters
+        // marble parameters
         int numOctaves = 6;
         double fbmAmount = 6.0;
         RampFBmTexture rampMarblePtr = new RampFBmTexture(imagePtr, numOctaves,
                 fbmAmount);
 
-	// transformed marble texture
-	// These intrinsic texture transformations are only to make the marble look "good"
-        // on the cylinder.	
-        // They are unrelated to the translation in the y direction that's applied to the 
-        // marble on the top and bottom cylinder bevels in Figure 30.13(a).	
+        // transformed marble texture
+        // These intrinsic texture transformations are only to make the marble look "good"
+        // on the cylinder.
+        // They are unrelated to the translation in the y direction that's applied to the
+        // marble on the top and bottom cylinder bevels in Figure 30.13(a).
         TInstance marblePtr = new TInstance();
         marblePtr.setTexture(rampMarblePtr);
         marblePtr.scale(0.4);
@@ -108,7 +110,7 @@ public class BuildFigure13 implements BuildWorldFunction {
         svMattePtr.setKd(0.85);
         svMattePtr.setCd(marblePtr);
 
-	// cylinder parameters
+        // cylinder parameters
         double bottom = 0.0;
         double top = 2.0;
         double radius = 1.0;
@@ -119,7 +121,7 @@ public class BuildFigure13 implements BuildWorldFunction {
         cylinderPtr.setMaterial(svMattePtr);
         w.addObject(cylinderPtr);
 
-	// ground plane
+        // ground plane
         Matte mattePtr1 = new Matte();
         mattePtr1.setKa(0.3);
         mattePtr1.setKd(0.85);
@@ -130,7 +132,7 @@ public class BuildFigure13 implements BuildWorldFunction {
         planePtr1.setMaterial(mattePtr1);
         w.addObject(planePtr1);
 
-	// plane perpendicular to x axis
+        // plane perpendicular to x axis
         Matte mattePtr2 = new Matte();
         mattePtr2.setKa(0.25);
         mattePtr2.setKd(0.75);
@@ -141,7 +143,7 @@ public class BuildFigure13 implements BuildWorldFunction {
         planePtr2.setMaterial(mattePtr2);
         w.addObject(planePtr2);
 
-	// plane perpendicular to z axis
+        // plane perpendicular to z axis
         Matte mattePtr3 = new Matte();
         mattePtr3.setCd(0.6);
         mattePtr3.setKa(0.25);

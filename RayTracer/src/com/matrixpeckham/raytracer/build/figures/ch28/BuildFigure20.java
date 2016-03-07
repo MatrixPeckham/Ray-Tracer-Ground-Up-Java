@@ -48,9 +48,9 @@ public class BuildFigure20 implements BuildWorldFunction {
 
 // This builds the scene for Figure 28.20
 // The filter color, light brightness, and plane diffuse reflection coefficient
-// are a little different from those used in the book. This to make a faint 
-// reflection of the plane visible just under its reflection on the inside 
-// top surface of the box. 
+// are a little different from those used in the book. This to make a faint
+// reflection of the plane visible just under its reflection on the inside
+// top surface of the box.
 // You can just see w in part (c), but it's clearer in a contrast enhanced
 // version in the Chapter 28 dowmload.
         int numSamples = 25;
@@ -60,7 +60,7 @@ public class BuildFigure20 implements BuildWorldFunction {
         w.vp.setSamples(numSamples);
 //        w.vp.setMaxDepth(2);				// for Figure 28.20(a)
 //	w.vp.setMaxDepth(3);				// for Figure 28.20(b)
-	w.vp.setMaxDepth(4);				// for Figure 28.20(c)
+        w.vp.setMaxDepth(4);				// for Figure 28.20(c)
 
         w.backgroundColor = new RGBColor(0.9, 0.9, 1);  // pale blue
 
@@ -82,10 +82,10 @@ public class BuildFigure20 implements BuildWorldFunction {
         lightPtr.scaleRadiance(15.0);
         w.addLight(lightPtr);
 
-	// transparent cube
-        RGBColor glassColor=new RGBColor(0.64, 0.98, 0.88);	// light cyan
-	
-	Dielectric glassPtr = new Dielectric();
+        // transparent cube
+        RGBColor glassColor = new RGBColor(0.64, 0.98, 0.88);	// light cyan
+
+        Dielectric glassPtr = new Dielectric();
         glassPtr.setExp(2000.0);
         glassPtr.setIorIn(1.5);					// glass
         glassPtr.setIorOut(1.0);				// air
@@ -97,7 +97,7 @@ public class BuildFigure20 implements BuildWorldFunction {
         boxPtr.setMaterial(glassPtr);
         w.addObject(boxPtr);
 
-	// plane
+        // plane
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(4.0);
         checkerPtr.setColor1(1, 1, 0.4);    		// yellow

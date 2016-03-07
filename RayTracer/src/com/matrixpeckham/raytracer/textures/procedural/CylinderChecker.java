@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Checker for a generic cylinder
@@ -154,7 +155,7 @@ public class CylinderChecker implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new CylinderChecker(this);
     }
 
@@ -283,5 +284,8 @@ public class CylinderChecker implements Texture {
     public void setColor2(double d, double d0, double d1) {
         setColor2(new RGBColor(d, d0, d1));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(CylinderChecker.class.getName());
 
 }

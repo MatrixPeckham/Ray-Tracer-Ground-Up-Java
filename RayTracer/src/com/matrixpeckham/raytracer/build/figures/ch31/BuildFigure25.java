@@ -48,8 +48,8 @@ public class BuildFigure25 implements BuildWorldFunction {
 // The noise details are different from the images in the book.
 // The noise is also lighter because the original noise functions didn't
 // scale the values to lie in the interval [0,1].
-// This build function renders them at 600 x 600 pixels, instead of the 
-// original 150 x 150 pixels. 
+// This build function renders them at 600 x 600 pixels, instead of the
+// original 150 x 150 pixels.
 // There is no antialiasing.
         int numSamples = 1;
 
@@ -73,7 +73,7 @@ public class BuildFigure25 implements BuildWorldFunction {
         lightPtr.scaleRadiance(2.5);
         w.addLight(lightPtr);
 
-	// noise:
+        // noise:
         CubicNoise noisePtr = new CubicNoise();
         noisePtr.setNumOctaves(6);
 //        noisePtr.setGain(0.0);				// for Figure 31.25(a) cubic noise - identical to Figure 31.21(a)
@@ -81,22 +81,22 @@ public class BuildFigure25 implements BuildWorldFunction {
 //	noisePtr.setGain(0.5);				// for Figure 31.25(c) fractal sum - similar to Figure 31.21(d)
 //	noisePtr.setGain(0.75);				// for Figure 31.25(d)
 //	noisePtr.setGain(1.0);				// for Figure 31.25(e)
-	noisePtr.setGain(2.0);				// for Figure 31.25(f) new image - not in book
+        noisePtr.setGain(2.0);				// for Figure 31.25(f) new image - not in book
         noisePtr.setLacunarity(2.0);
 
-	// texture:
+        // texture:
         FBmTexture texturePtr = new FBmTexture(noisePtr);
         texturePtr.setColor(Utility.WHITE);
         texturePtr.setMinValue(0.0);
         texturePtr.setMaxValue(1.0);
 
-	// material:
+        // material:
         SV_Matte svMattePtr = new SV_Matte();
         svMattePtr.setKa(0.25);
         svMattePtr.setKd(0.85);
         svMattePtr.setCd(texturePtr);
 
-        Plane planePtr1 = new Plane(new Point3D(0.0),new Normal(0, 0, 1));
+        Plane planePtr1 = new Plane(new Point3D(0.0), new Normal(0, 0, 1));
         planePtr1.setMaterial(svMattePtr);
         w.addObject(planePtr1);
     }

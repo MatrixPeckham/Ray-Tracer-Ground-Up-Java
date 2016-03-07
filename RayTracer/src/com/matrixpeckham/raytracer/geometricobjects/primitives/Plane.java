@@ -24,6 +24,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Plane class, models an infinite plane, that goes through a point and has a
@@ -36,12 +37,12 @@ public class Plane extends GeometricObject {
     /**
      * Point that the plane will go through
      */
-    private Point3D a;
+    private final Point3D a;
 
     /**
      * normal
      */
-    private Normal n;
+    private final Normal n;
 
     //epsilon
     private static final double EPSILON = 0.001;
@@ -85,7 +86,7 @@ public class Plane extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Plane(this);
     }
 
@@ -124,10 +125,9 @@ public class Plane extends GeometricObject {
             return false;
         }
         t.d = a.sub(ray.o).dot(new Vector3D(n)) / (ray.d.dot(new Vector3D(n)));
-        if (t.d > EPSILON) {
-            return true;
-        }
-        return false;
+        return t.d > EPSILON;
     }
+
+    private static final Logger LOG = Logger.getLogger(Plane.class.getName());
 
 }

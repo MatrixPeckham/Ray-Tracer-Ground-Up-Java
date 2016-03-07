@@ -17,8 +17,6 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.brdfs.GlossySpecular;
-import com.matrixpeckham.raytracer.brdfs.Lambertian;
 import com.matrixpeckham.raytracer.brdfs.SV_GlossySpecular;
 import com.matrixpeckham.raytracer.brdfs.SV_Lambertian;
 import com.matrixpeckham.raytracer.textures.Texture;
@@ -27,6 +25,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  *
@@ -65,9 +64,9 @@ public class SV_Phong extends Material {
      */
     public SV_Phong(SV_Phong p) {
         super(p);
-        ambientBRDF = p.ambientBRDF.clone();
-        diffuseBRDF = p.diffuseBRDF.clone();
-        specularBRDF = p.specularBRDF.clone();
+        ambientBRDF = p.ambientBRDF.cloneBRDF();
+        diffuseBRDF = p.diffuseBRDF.cloneBRDF();
+        specularBRDF = p.specularBRDF.cloneBRDF();
     }
 
     /**
@@ -76,7 +75,7 @@ public class SV_Phong extends Material {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new SV_Phong(this);
     }
 
@@ -235,5 +234,7 @@ public class SV_Phong extends Material {
         L.addLocal(Lspec);
         return L;
     }
+
+    private static final Logger LOG = Logger.getLogger(SV_Phong.class.getName());
 
 }

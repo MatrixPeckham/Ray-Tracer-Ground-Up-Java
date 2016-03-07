@@ -17,58 +17,75 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import java.util.logging.Logger;
+
 /**
  * Ray class.
+ *
  * @author William Matrix Peckham
  */
 public class Ray {
+
     /**
      * origin
      */
     public final Point3D o;
+
     /**
      * direction
-     */ 
+     */
     public final Vector3D d;
+
     /**
      * for debugging
-     * @return 
+     *
+     * @return
      */
     @Override
-    public String toString(){
-        return "("+o+","+d+")Ray";
+    public String toString() {
+        return "(" + o + "," + d + ")Ray";
     }
+
     /**
      * Defualt constructor, ray at origin pointing in positive z direction.
      */
-    public Ray(){
-        o=new Point3D(0);
-        d=new Vector3D(0,0,1);
+    public Ray() {
+        o = new Point3D(0);
+        d = new Vector3D(0, 0, 1);
     }
+
     /**
      * initialize ray
+     *
      * @param p origin
      * @param v direction
      */
-    public Ray(Point3D p, Vector3D v){
-        o=new Point3D(p);
-        d=new Vector3D(v);
+    public Ray(Point3D p, Vector3D v) {
+        o = new Point3D(p);
+        d = new Vector3D(v);
     }
+
     /**
      * copy constructor
-     * @param r 
+     *
+     * @param r
      */
-    public Ray(Ray r){
-        this(r.o,r.d);
+    public Ray(Ray r) {
+        this(r.o, r.d);
     }
+
     /**
      * equals replacement
+     *
      * @param r
-     * @return 
+     * @return
      */
-    public Ray setTo(Ray r){
+    public Ray setTo(Ray r) {
         o.setTo(r.o);
         d.setTo(r.d);
         return this;
     }
+
+    private static final Logger LOG = Logger.getLogger(Ray.class.getName());
+
 }

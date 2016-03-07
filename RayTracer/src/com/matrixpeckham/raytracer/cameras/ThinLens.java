@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.cameras;
 
-import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.Point2D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -35,11 +34,14 @@ import com.matrixpeckham.raytracer.world.World;
 public class ThinLens extends Camera {
 
     //radius of lens
-
     private double lensRadius = 1;
+
     private double d = 1;//view dist
+
     private double f = 10;//focal dist
+
     private double zoom = 1;//zoom
+
     private Sampler sampler;//sampler for lens
 
     /**
@@ -224,7 +226,7 @@ public class ThinLens extends Camera {
      * @return
      */
     @Override
-    public Camera clone() {
+    public Camera cloneCamera() {
         return new ThinLens(this);
     }
 

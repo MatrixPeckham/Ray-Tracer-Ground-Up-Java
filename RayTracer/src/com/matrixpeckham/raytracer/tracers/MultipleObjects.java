@@ -21,52 +21,64 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.logging.Logger;
 
 /**
- * Tracer for multiple objects that only have color and no lighting. 
- * Second simplest implementation available. only tracer that uses 
+ * Tracer for multiple objects that only have color and no lighting. Second
+ * simplest implementation available. only tracer that uses
  * GeometricObject.color.
+ *
  * @author William Matrix Peckham
  */
-public class MultipleObjects extends Tracer{
+public class MultipleObjects extends Tracer {
+
     /**
      * default constructor
      */
     public MultipleObjects() {
     }
+
     /**
      * World setting constructor
-     * @param w 
+     *
+     * @param w
      */
     public MultipleObjects(World w) {
         super(w);
     }
+
     /**
      * Second simplest implementation of traceRay.
+     *
      * @param ray
-     * @return 
+     * @return
      */
     @Override
     public RGBColor traceRay(Ray ray) {
         ShadeRec sr = world.hitBareBonesObjects(ray);
-        if(sr.hitAnObject){
-            return sr.color;
-        }
-        return world.backgroundColor;
-    }
-    /**
-     * Second simplest implementation of traceRay.
-     * @param ray
-     * @return 
-     */
-    @Override
-    public RGBColor traceRay(Ray ray, int d) {
-        ShadeRec sr = world.hitBareBonesObjects(ray);
-        if(sr.hitAnObject){
+        if (sr.hitAnObject) {
             return sr.color;
         }
         return world.backgroundColor;
     }
 
+    /**
+     * Second simplest implementation of traceRay.
+     *
+     * @param ray
+     * @param d
+     * @return
+     */
+    @Override
+    public RGBColor traceRay(Ray ray, int d) {
+        ShadeRec sr = world.hitBareBonesObjects(ray);
+        if (sr.hitAnObject) {
+            return sr.color;
+        }
+        return world.backgroundColor;
+    }
+
+    private static final Logger LOG
+            = Logger.getLogger(MultipleObjects.class.getName());
 
 }

@@ -23,6 +23,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Smooth triangle for meshes.
@@ -64,7 +65,7 @@ public class SmoothMeshTriangle extends MeshTriangle {
      * @return
      */
     @Override
-    public SmoothMeshTriangle clone() {
+    public SmoothMeshTriangle cloneGeometry() {
         return new SmoothMeshTriangle(this);
     }
 
@@ -142,5 +143,8 @@ public class SmoothMeshTriangle extends MeshTriangle {
 
         return (true);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SmoothMeshTriangle.class.getName());
 
 }

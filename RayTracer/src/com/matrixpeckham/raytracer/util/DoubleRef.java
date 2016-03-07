@@ -17,16 +17,36 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import java.util.logging.Logger;
+
 /**
  * Class for passing a double by reference, used in shadow hit functions.
+ *
  * @author William Matrix Peckham
  */
 public class DoubleRef {
-    /**payload*/
-    public double d=0;
-    /**zero default*/
-    public DoubleRef(){}
-    /**simple setting constructor
-     * @param d init value*/
-    public DoubleRef(double d){this.d=d;}
+
+    /**
+     * payload
+     */
+    public double d = 0;
+
+    /**
+     * zero default
+     */
+    public DoubleRef() {
+    }
+
+    /**
+     * simple setting constructor
+     *
+     * @param d init value
+     */
+    public DoubleRef(double d) {
+        this.d = d;
+    }
+
+    private static final Logger LOG
+            = Logger.getLogger(DoubleRef.class.getName());
+
 }

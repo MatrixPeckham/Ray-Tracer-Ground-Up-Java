@@ -27,6 +27,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Sphere primitive class.
@@ -38,7 +39,7 @@ public class Sphere extends GeometricObject {
     /**
      * sphere center
      */
-    private Point3D center;
+    private final Point3D center;
 
     /**
      * sphere radius
@@ -102,7 +103,7 @@ public class Sphere extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Sphere(this);
     }
 
@@ -238,8 +239,12 @@ public class Sphere extends GeometricObject {
         return false;
     }
 
+    /**
+     *
+     * @param sampler
+     */
     public void setSampler(Sampler sampler) {
-        this.sampler = sampler.clone();
+        this.sampler = sampler.cloneSampler();
         this.sampler.mapSamplesToSphere();
     }
 
@@ -258,5 +263,7 @@ public class Sphere extends GeometricObject {
     public double pdf(ShadeRec sr) {
         return invSurfaceArea;
     }
+
+    private static final Logger LOG = Logger.getLogger(Sphere.class.getName());
 
 }

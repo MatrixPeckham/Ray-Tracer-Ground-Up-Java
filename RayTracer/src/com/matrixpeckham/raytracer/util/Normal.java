@@ -2,7 +2,7 @@
  * Copyright (C) 2015 William Matrix Peckham
  *
  * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License 
+ * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
  *
@@ -17,8 +17,11 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import java.util.logging.Logger;
+
 /**
  * Class to represent normals
+ *
  * @author William Matrix Peckham
  */
 public class Normal {
@@ -27,12 +30,12 @@ public class Normal {
      * x
      */
     public double x;
-    
+
     /**
      * y
      */
     public double y;
-    
+
     /**
      * z
      */
@@ -40,11 +43,12 @@ public class Normal {
 
     /**
      * string rep of normal useful for debugging
-     * @return 
+     *
+     * @return
      */
     @Override
-    public String toString(){
-        return "("+x+","+y+","+z+")Normal";
+    public String toString() {
+        return "(" + x + "," + y + "," + z + ")Normal";
     }
 
     /**
@@ -56,7 +60,8 @@ public class Normal {
 
     /**
      * normal (a,a,a)
-     * @param a 
+     *
+     * @param a
      */
     public Normal(double a) {
         this(a, a, a);
@@ -64,21 +69,23 @@ public class Normal {
 
     /**
      * set normal to (x,y,z)
+     *
      * @param x
      * @param y
-     * @param z 
+     * @param z
      */
-    public void setTo(double x, double y, double z){
-        this.x=x;
-        this.y=y;
-        this.z=z;
+    public void setTo(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     /**
      * new normal (x,y,z)
+     *
      * @param _x
      * @param _y
-     * @param _z 
+     * @param _z
      */
     public Normal(double _x, double _y, double _z) {
         x = _x;
@@ -86,19 +93,19 @@ public class Normal {
         z = _z;
     }
 
-
     /**
      * copy constructor
-     * @param n 
+     *
+     * @param n
      */
     public Normal(Normal n) {
         this(n.x, n.y, n.z);
     }
 
-
     /**
      * construct normal from vector
-     * @param v 
+     *
+     * @param v
      */
     public Normal(Vector3D v) {
         this(v.x, v.y, v.z);
@@ -106,8 +113,9 @@ public class Normal {
 
     /**
      * java equals operator
+     *
      * @param rhs
-     * @return 
+     * @return
      */
     public Normal setTo(Normal rhs) {
         x = rhs.x;
@@ -118,8 +126,9 @@ public class Normal {
 
     /**
      * copys vector into this normal
+     *
      * @param rhs
-     * @return 
+     * @return
      */
     public Normal setTo(Vector3D rhs) {
         x = rhs.x;
@@ -130,8 +139,9 @@ public class Normal {
 
     /**
      * sets this normal to point
+     *
      * @param rhs
-     * @return 
+     * @return
      */
     public Normal setTo(
             Point3D rhs) {
@@ -143,7 +153,8 @@ public class Normal {
 
     /**
      * negation, returns new vector
-     * @return 
+     *
+     * @return
      */
     public Normal neg() {
         return new Normal(-x, -y, -z);
@@ -151,8 +162,9 @@ public class Normal {
 
     /**
      * add two normals returns new vector
+     *
      * @param n
-     * @return 
+     * @return
      */
     public Normal add(Normal n) {
         return new Normal(x + n.x, y + n.y, z + n.z);
@@ -160,8 +172,9 @@ public class Normal {
 
     /**
      * add a vector to this one return this one
+     *
      * @param n
-     * @return 
+     * @return
      */
     public Normal addLocal(Normal n) {
         x += n.x;
@@ -172,8 +185,9 @@ public class Normal {
 
     /**
      * dot product
+     *
      * @param v
-     * @return 
+     * @return
      */
     public double dot(Vector3D v) {
         return x * v.x + y * v.y + z * v.z;
@@ -181,8 +195,9 @@ public class Normal {
 
     /**
      * scale normal
+     *
      * @param a
-     * @return 
+     * @return
      */
     public Vector3D mul(double a) {
         return new Vector3D(x * a, y * a, z * a);
@@ -200,9 +215,10 @@ public class Normal {
 
     /**
      * static method to left multiply normal and scalar
+     *
      * @param a
      * @param n
-     * @return 
+     * @return
      */
     public static Normal mul(double a, Normal n) {
         return new Normal(a * n.x, a * n.y, a * n.z);
@@ -210,19 +226,21 @@ public class Normal {
 
     /**
      * adds a vector to a normal.
+     *
      * @param v
      * @param n
-     * @return 
+     * @return
      */
     public static Vector3D add(Vector3D v, Normal n) {
         return new Vector3D(v.x + n.x, v.y + n.y, v.z + n.z);
     }
-    
+
     /**
      * subtracts a normal from a vector.
+     *
      * @param v
      * @param n
-     * @return 
+     * @return
      */
     public static Vector3D sub(Vector3D v, Normal n) {
         return new Vector3D(v.x - n.x, v.y - n.y, v.z - n.z);
@@ -230,19 +248,21 @@ public class Normal {
 
     /**
      * dot product of two normals.
+     *
      * @param v
      * @param n
-     * @return 
+     * @return
      */
     public static double dot(Vector3D v, Normal n) {
         return v.x * n.x + v.y * n.y + v.z * n.z;
     }
-    
+
     /**
      * transforms a normal by a matrix.
+     *
      * @param mat
      * @param n
-     * @return 
+     * @return
      */
     public static Normal mul(Matrix mat, Normal n) {
         return new Normal(
@@ -250,5 +270,7 @@ public class Normal {
                 mat.m[0][1] * n.x + mat.m[1][1] * n.y + mat.m[2][1] * n.z,
                 mat.m[0][2] * n.x + mat.m[1][2] * n.y + mat.m[2][2] * n.z);
     }
+
+    private static final Logger LOG = Logger.getLogger(Normal.class.getName());
 
 }

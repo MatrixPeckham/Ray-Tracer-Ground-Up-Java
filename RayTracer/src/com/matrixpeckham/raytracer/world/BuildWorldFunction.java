@@ -19,21 +19,24 @@ package com.matrixpeckham.raytracer.world;
 
 /**
  * Because java lacks the ability to selectively include a function body, I use
- * this interface.  In the C++ code World.build() is left undefined, and is defined
- * in many different files, only one of which is #include-ed in the main method.
- * This is not easy in java, so instead I created this interface and it builds
- * the world that is passed to it. In the main class we simply create an instance
- * of the one we wish to create. <br/> Later this will make it possible to
- * choose which world to build from within the GUI, it shouldn't be hard
- * to add.  
+ * this interface. In the C++ code World.build() is left undefined, and is
+ * defined in many different files, only one of which is #include-ed in the main
+ * method. This is not easy in java, so instead I created this interface and it
+ * builds the world that is passed to it. In the main class we simply create an
+ * instance of the one we wish to create. <br/> Later this will make it possible
+ * to choose which world to build from within the GUI, it shouldn't be hard to
+ * add.
+ *
  * @author William Matrix Peckham
  */
 public interface BuildWorldFunction {
+
     /**
-     * This function will build the scene by adding objects to the passed in world.
-     * It should throw runtime exceptions when things fail, but this may change,
-     * if we make it more interactive. 
-     * @param w world to build. 
+     * This function will build the scene by adding objects to the passed in
+     * world. It should throw runtime exceptions when things fail, but this may
+     * change, if we make it more interactive.
+     *
+     * @param w world to build.
      */
     public void build(World w);
 }

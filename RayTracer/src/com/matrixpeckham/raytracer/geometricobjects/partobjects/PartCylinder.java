@@ -19,11 +19,11 @@ package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
-import com.matrixpeckham.raytracer.util.Normal;
 
 /**
  * Part Cylinder
@@ -114,7 +114,7 @@ public class PartCylinder extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new PartCylinder(this);
     }
 

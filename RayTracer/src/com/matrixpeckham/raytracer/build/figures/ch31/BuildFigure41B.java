@@ -51,9 +51,7 @@ public class BuildFigure41B implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.41(b)
-
 // The box with the curved surface cut from it is modeled as follows:
 // A CutCube object is defined, which is an axis aligned cube where a hit is only recorded
 // when a ray hits the cube AND the hit point is outside a sphere centered on p1 -
@@ -67,56 +65,46 @@ public class BuildFigure41B implements BuildWorldFunction {
 // independent of the radius.
 // A more flexible way to render w type of object is with constructive solid
 // geometry (CSG), where you just subtract a sphere from a cube.
-
 // The three textures in Figure 30.1 are noise based. The wrapped texture in Figure 30.1(a)
 // and the marble texture in Figure 30.1(b) are discussed in Chapter 31. The wood texture in
 // Figure 30.1(c) isn't discussed in Chapter 31, but I've included the Wood class and some
 // sample images in the Chapter 31 download.
-
-// As I have had to re-render these three images from scatch, the texture's details are 
+// As I have had to re-render these three images from scatch, the texture's details are
 // different, as are the box, the lighting, and the viewing.
+        int numSamples = 16;
 
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
+        w.tracer = new RayCast(w);
+        w.backgroundColor = Utility.BLACK;
 
- 												
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.5);
+        w.setAmbient(ambientPtr);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.tracer = new RayCast(w);
-	w.backgroundColor = Utility.BLACK;
-			
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.5);    
-	w.setAmbient(ambientPtr);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(6, 8, 12);         
-	pinholePtr.setLookat(0.0, -0.1, 0.0); 
-	pinholePtr.setViewDistance(2850.0);  
-	pinholePtr.computeUVW(); 
-	w.setCamera(pinholePtr);
-		
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(-2, 4, 10);  
-	lightPtr.scaleRadiance(4.5);   
-	lightPtr.setShadows(false);
-	w.addLight(lightPtr);
-	
-		
-	// noise:
-	
-	CubicNoise noisePtr = new CubicNoise();
-	noisePtr.setNumOctaves(6);
-	noisePtr.setGain(0.5);
-	noisePtr.setLacunarity(2.0);	
-	
-	// image:
-		
-	// image:
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(6, 8, 12);
+        pinholePtr.setLookat(0.0, -0.1, 0.0);
+        pinholePtr.setViewDistance(2850.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
+
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(-2, 4, 10);
+        lightPtr.scaleRadiance(4.5);
+        lightPtr.setShadows(false);
+        w.addLight(lightPtr);
+
+        // noise:
+        CubicNoise noisePtr = new CubicNoise();
+        noisePtr.setNumOctaves(6);
+        noisePtr.setGain(0.5);
+        noisePtr.setLacunarity(2.0);
+
+        // image:
+        // image:
         Image imagePtr = new Image();
         String path
                 = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
@@ -128,57 +116,47 @@ public class BuildFigure41B implements BuildWorldFunction {
             throw new RuntimeException(ex);
         }
 
-	
-	// sandstone texture:
-	
-	RampFBmTexture sandstonePtr = new RampFBmTexture(imagePtr);
-	sandstonePtr.setNoise(noisePtr);
-	sandstonePtr.setPerturbation(6.0);
-	
-	TInstance transformedSandstonePtr = new TInstance(sandstonePtr);
-	transformedSandstonePtr.rotateZ(90);
-	transformedSandstonePtr.rotateY(45);
-	transformedSandstonePtr.translate(-6.0, 0.0, 1.0);
-	
-		
-	// material:
-		
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.5);
-	svMattePtr.setKd(0.85);
-	svMattePtr.setCd(transformedSandstonePtr);
-	
-	
-	
-	// cut cube parameters:
-	
-	Point3D p0=new Point3D(-1.0);
-	Point3D p1=new Point3D(1.0);
-	double sphereRadius = 1.5;
-	
-	CutCube cutCubePtr = new CutCube(p0, p1, sphereRadius); 
-	cutCubePtr.setMaterial(svMattePtr);
-	w.addObject(cutCubePtr);
-	
-	
-	// concave part sphere parameters:
-	
-	Point3D center=new Point3D(p1);
-	double radius 		= sphereRadius;
-	double phiMin 		= 180.0;
-	double phiMax 		= 270.0;
-	double thetaMin	= 90.0;
-	double thetaMax 	= 180.0;
-	
-	ConcavePartSphere partSpherePtr = new ConcavePartSphere(	center, 
-																radius, 
-																phiMin, 
-																phiMax, 
-																thetaMin, 
-																thetaMax);
-	partSpherePtr.setMaterial(svMattePtr);
-	w.addObject(partSpherePtr);
-}
+        // sandstone texture:
+        RampFBmTexture sandstonePtr = new RampFBmTexture(imagePtr);
+        sandstonePtr.setNoise(noisePtr);
+        sandstonePtr.setPerturbation(6.0);
 
+        TInstance transformedSandstonePtr = new TInstance(sandstonePtr);
+        transformedSandstonePtr.rotateZ(90);
+        transformedSandstonePtr.rotateY(45);
+        transformedSandstonePtr.translate(-6.0, 0.0, 1.0);
+
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.5);
+        svMattePtr.setKd(0.85);
+        svMattePtr.setCd(transformedSandstonePtr);
+
+        // cut cube parameters:
+        Point3D p0 = new Point3D(-1.0);
+        Point3D p1 = new Point3D(1.0);
+        double sphereRadius = 1.5;
+
+        CutCube cutCubePtr = new CutCube(p0, p1, sphereRadius);
+        cutCubePtr.setMaterial(svMattePtr);
+        w.addObject(cutCubePtr);
+
+        // concave part sphere parameters:
+        Point3D center = new Point3D(p1);
+        double radius = sphereRadius;
+        double phiMin = 180.0;
+        double phiMax = 270.0;
+        double thetaMin = 90.0;
+        double thetaMax = 180.0;
+
+        ConcavePartSphere partSpherePtr = new ConcavePartSphere(center,
+                radius,
+                phiMin,
+                phiMax,
+                thetaMin,
+                thetaMax);
+        partSpherePtr.setMaterial(svMattePtr);
+        w.addObject(partSpherePtr);
+    }
 
 }

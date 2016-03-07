@@ -72,7 +72,7 @@ public class BuildFigure08 implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// the spheres
+        // the spheres
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(1.0);
         checkerPtr.setColor1(Utility.BLACK);
@@ -80,7 +80,7 @@ public class BuildFigure08 implements BuildWorldFunction {
 
         double radius;
 
-	// sphere 1
+        // sphere 1
         TInstance transformedCheckerPtr1 = new TInstance(checkerPtr);
         transformedCheckerPtr1.translate(0.5, 0.5, 0.0);
 
@@ -96,7 +96,7 @@ public class BuildFigure08 implements BuildWorldFunction {
         spherePtr1.translate(-6.25, 0.0, 0.0);
         w.addObject(spherePtr1);
 
-	// sphere 2
+        // sphere 2
         TInstance transformedCheckerPtr2 = new TInstance(checkerPtr);
         transformedCheckerPtr2.scale(0.75);
         transformedCheckerPtr2.translate(0.375, 0.375, 0.0);
@@ -113,7 +113,7 @@ public class BuildFigure08 implements BuildWorldFunction {
         spherePtr2.translate(-1.0, 0.0, 0.0);
         w.addObject(spherePtr2);
 
-	// sphere 3
+        // sphere 3
         TInstance transformedCheckerPtr3 = new TInstance(checkerPtr);
         transformedCheckerPtr3.scale(0.5833333);
         transformedCheckerPtr3.translate(0.29166, 0.29166, 0.0);
@@ -130,7 +130,7 @@ public class BuildFigure08 implements BuildWorldFunction {
         spherePtr3.translate(3.0, 0.0, 0.0);
         w.addObject(spherePtr3);
 
-	// sphere 4
+        // sphere 4
         TInstance transformedCheckerPtr4 = new TInstance(checkerPtr);
         transformedCheckerPtr4.scale(0.3333333);
         transformedCheckerPtr4.translate(0.166666, 0.166666, 0.0);
@@ -147,7 +147,7 @@ public class BuildFigure08 implements BuildWorldFunction {
         spherePtr4.translate(5.75, 0.0, 0.0);
         w.addObject(spherePtr4);
 
-	// sphere 5
+        // sphere 5
         TInstance transformedCheckerPtr5 = new TInstance(checkerPtr);
         transformedCheckerPtr5.scale(0.25);
         transformedCheckerPtr5.translate(0.125, 0.125, 0.0);
@@ -164,7 +164,7 @@ public class BuildFigure08 implements BuildWorldFunction {
         spherePtr5.translate(7.5, 0.0, 0.0);
         w.addObject(spherePtr5);
 
-	// sphere 6
+        // sphere 6
         TInstance transformedCheckerPtr6 = new TInstance(checkerPtr);
         transformedCheckerPtr6.scale(0.166666);
         transformedCheckerPtr6.translate(0.083333, 0.083333, 0.0);

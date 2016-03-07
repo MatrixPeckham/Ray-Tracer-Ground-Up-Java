@@ -22,6 +22,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Directional light class. Light from a direction with no location.
@@ -38,7 +39,7 @@ public class Directional extends Light {
     /**
      * color
      */
-    private RGBColor color;
+    private final RGBColor color;
 
     /**
      * direction of light
@@ -135,7 +136,7 @@ public class Directional extends Light {
      * @return
      */
     @Override
-    public Light clone() {
+    public Light cloneLight() {
         return new Directional(this);
     }
 
@@ -181,5 +182,8 @@ public class Directional extends Light {
         }
         return false;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(Directional.class.getName());
 
 }

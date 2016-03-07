@@ -19,7 +19,6 @@ package com.matrixpeckham.raytracer.build.figures.ch03;
 
 import com.matrixpeckham.raytracer.cameras.Camera;
 import com.matrixpeckham.raytracer.cameras.Orthographic;
-import com.matrixpeckham.raytracer.tracers.MultipleObjects;
 import com.matrixpeckham.raytracer.tracers.SingleSphere;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;

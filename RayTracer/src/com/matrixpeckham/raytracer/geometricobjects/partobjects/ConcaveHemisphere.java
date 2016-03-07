@@ -21,15 +21,16 @@ import com.matrixpeckham.raytracer.util.Point3D;
 
 /**
  * ConcaveHemisphere, zero centered upper hemisphere with inward facing normals
+ *
  * @author William Matrix Peckham
  */
 public class ConcaveHemisphere extends ConcavePartSphere {
+
     /**
      * constructor
      */
     public ConcaveHemisphere() {
-        super(new Point3D(0,0,0), 1, 0, 360, 0, 90);
+        super(new Point3D(0, 0, 0), 1, 0, 360, 0, 90);
     }
-    
-    
+
 }

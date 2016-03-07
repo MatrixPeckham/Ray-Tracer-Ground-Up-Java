@@ -21,7 +21,6 @@ import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
-import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.materials.Reflective;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.image.Image;

@@ -17,8 +17,11 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import java.util.logging.Logger;
+
 /**
  * Holds double values for RGB colors
+ *
  * @author William Matrix Peckham
  */
 public class RGBColor {
@@ -27,24 +30,25 @@ public class RGBColor {
      * red
      */
     public double r;
-    
+
     /**
      * green
      */
     public double g;
-    
+
     /**
      * blue
      */
     public double b;
-    
+
     /**
      * string rep of this color, useful for debugging
-     * @return 
+     *
+     * @return
      */
     @Override
-    public String toString(){
-        return "("+r+","+g+","+b+")RGBColor";
+    public String toString() {
+        return "(" + r + "," + g + "," + b + ")RGBColor";
     }
 
     /**
@@ -56,29 +60,32 @@ public class RGBColor {
 
     /**
      * constructor gray of c intensity
-     * @param c 
+     *
+     * @param c
      */
     public RGBColor(double c) {
         this(c, c, c);
     }
-    
+
     /**
      * sets the components
+     *
      * @param x
      * @param y
-     * @param z 
+     * @param z
      */
-    public void setTo(double x, double y, double z){
-        this.r=x;
-        this.g=y;
-        this.b=z;
+    public void setTo(double x, double y, double z) {
+        this.r = x;
+        this.g = y;
+        this.b = z;
     }
 
     /**
      * initializes components
+     *
      * @param _r
      * @param _g
-     * @param _b 
+     * @param _b
      */
     public RGBColor(double _r, double _g, double _b) {
         r = _r;
@@ -88,7 +95,8 @@ public class RGBColor {
 
     /**
      * copy constructor
-     * @param c 
+     *
+     * @param c
      */
     public RGBColor(
             RGBColor c) {
@@ -99,8 +107,9 @@ public class RGBColor {
 
     /**
      * java equals operator
+     *
      * @param rhs
-     * @return 
+     * @return
      */
     public RGBColor setTo(RGBColor rhs) {
         r = rhs.r;
@@ -111,8 +120,9 @@ public class RGBColor {
 
     /**
      * adds colors and returns new
+     *
      * @param c
-     * @return 
+     * @return
      */
     public RGBColor add(RGBColor c) {
         return new RGBColor(r + c.r, g + c.g, b + c.b);
@@ -120,8 +130,9 @@ public class RGBColor {
 
     /**
      * in place addition.
+     *
      * @param c
-     * @return 
+     * @return
      */
     public RGBColor addLocal(RGBColor c) {
         r += c.r;
@@ -132,8 +143,9 @@ public class RGBColor {
 
     /**
      * scale color
+     *
      * @param a
-     * @return 
+     * @return
      */
     public RGBColor mul(double a) {
         return new RGBColor(a * r, a * g, a * b);
@@ -141,8 +153,9 @@ public class RGBColor {
 
     /**
      * scales this color in place
+     *
      * @param a
-     * @return 
+     * @return
      */
     public RGBColor mulLocal(double a) {
         r *= a;
@@ -153,14 +166,20 @@ public class RGBColor {
 
     /**
      * divide color
+     *
      * @param a
-     * @return 
+     * @return
      */
     public RGBColor div(double a) {
         return new RGBColor(r / a, g / a, b / a);
     }
 
-    // compound division by a double
+    /**
+     * component division by a double
+     *
+     * @param a
+     * @return
+     */
     public RGBColor divLocal(double a) {
         r /= a;
         g /= a;
@@ -170,72 +189,84 @@ public class RGBColor {
 
     /**
      * component wise multiplication
+     *
      * @param c
-     * @return 
+     * @return
      */
     public RGBColor mul(RGBColor c) {
-        return new RGBColor(r*c.r, g*c.g, b*c.b);
+        return new RGBColor(r * c.r, g * c.g, b * c.b);
     }
 
     /**
      * equals override
+     *
      * @param o
-     * @return 
+     * @return
      */
     @Override
-    public boolean equals( Object o ) {
-        if(! (o instanceof RGBColor)) return false;
-        RGBColor c = (RGBColor)o;
-        return r==c.r&&g==c.g&&b==c.b;
-    }				
+    public boolean equals(Object o) {
+        if (!(o instanceof RGBColor)) {
+            return false;
+        }
+        RGBColor c = (RGBColor) o;
+        final float eps = 0.0001f;
+        if (Math.abs(r - c.r) > eps) {
+            return false;
+        }
+        if (Math.abs(g - c.g) > eps) {
+            return false;
+        }
+        return !(Math.abs(b - c.b) > eps);
+    }
 
     /**
      * hashcode override, for equals contract
-     * @return 
+     *
+     * @return
      */
     @Override
     public int hashCode() {
         int hash = 3;
         hash
-                = 83 * hash +
-                (int) (Double.doubleToLongBits(this.r) ^
-                (Double.doubleToLongBits(this.r) >>> 32));
+                = 83 * hash + (int) (Double.doubleToLongBits(this.r) ^ (Double.
+                doubleToLongBits(this.r) >>> 32));
         hash
-                = 83 * hash +
-                (int) (Double.doubleToLongBits(this.g) ^
-                (Double.doubleToLongBits(this.g) >>> 32));
+                = 83 * hash + (int) (Double.doubleToLongBits(this.g) ^ (Double.
+                doubleToLongBits(this.g) >>> 32));
         hash
-                = 83 * hash +
-                (int) (Double.doubleToLongBits(this.b) ^
-                (Double.doubleToLongBits(this.b) >>> 32));
+                = 83 * hash + (int) (Double.doubleToLongBits(this.b) ^ (Double.
+                doubleToLongBits(this.b) >>> 32));
         return hash;
     }
 
-    
-
     /**
      * raises components to power
+     *
      * @param p
-     * @return 
+     * @return
      */
-    public RGBColor powc(double p){
+    public RGBColor powc(double p) {
         return new RGBColor(Math.pow(r, p), Math.pow(g, p), Math.pow(b, p));
     }
 
     /**
      * averages components
-     * @return 
+     *
+     * @return
      */
-    public double average(){
-        return 0.33333333333333333333333333333333d *(r+g+b);
+    public double average() {
+        return 0.33333333333333333333333333333333d * (r + g + b);
     }
 
     /**
      * sets color to gray of d intensity.
-     * @param d 
+     *
+     * @param d
      */
     public void setTo(double d) {
         setTo(d, d, d);
     }
+
+    private static final Logger LOG = Logger.getLogger(RGBColor.class.getName());
 
 }

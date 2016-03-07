@@ -17,6 +17,8 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import java.util.logging.Logger;
+
 /**
  * Point3D class.
  *
@@ -28,10 +30,12 @@ public class Point3D {
      * X
      */
     public double x;
+
     /**
      * Y
      */
     public double y;
+
     /**
      * Z
      */
@@ -65,6 +69,10 @@ public class Point3D {
 
     /**
      * Constructor (a,b,c)
+     *
+     * @param a
+     * @param b
+     * @param c
      */
     public Point3D(double a, double b, double c) {
         x = a;
@@ -101,7 +109,7 @@ public class Point3D {
      * @param p
      * @return
      */
-    public Point3D setTo(Point3D p) {
+    public final Point3D setTo(Point3D p) {
         x = p.x;
         y = p.y;
         z = p.z;
@@ -170,19 +178,20 @@ public class Point3D {
 
     /**
      * get the distance between this and the other point.
+     *
      * @param p
-     * @return 
+     * @return
      */
     public double distance(Point3D p) {
         return Math.sqrt(distSquared(p));
     }
 
     /**
-     * Static point scaling, for left multiplication.
-     *  returns new point
+     * Static point scaling, for left multiplication. returns new point
+     *
      * @param a
      * @param p
-     * @return 
+     * @return
      */
     public static Point3D mul(double a, Point3D p) {
         return new Point3D(a * p.x, a * p.y, a * p.z);
@@ -190,9 +199,10 @@ public class Point3D {
 
     /**
      * Multiply the point by the matrix. returns transformed point
+     *
      * @param mat
      * @param p
-     * @return 
+     * @return
      */
     public static Point3D mul(Matrix mat, Point3D p) {
         return new Point3D(
@@ -203,5 +213,7 @@ public class Point3D {
                 mat.m[2][0] * p.x + mat.m[2][1] * p.y + mat.m[2][2] * p.z
                 + mat.m[2][3]);
     }
+
+    private static final Logger LOG = Logger.getLogger(Point3D.class.getName());
 
 }

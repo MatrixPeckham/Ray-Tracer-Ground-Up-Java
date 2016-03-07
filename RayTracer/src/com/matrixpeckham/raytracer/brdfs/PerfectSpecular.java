@@ -38,7 +38,7 @@ public class PerfectSpecular extends BRDF {
     /**
      * color
      */
-    private RGBColor cr = new RGBColor(1);
+    private final RGBColor cr = new RGBColor(1);
 
     /**
      * default constructor
@@ -101,7 +101,8 @@ public class PerfectSpecular extends BRDF {
      *
      * @return
      */
-    public PerfectSpecular clone() {
+    @Override
+    public PerfectSpecular cloneBRDF() {
         return new PerfectSpecular(this);
     }
 

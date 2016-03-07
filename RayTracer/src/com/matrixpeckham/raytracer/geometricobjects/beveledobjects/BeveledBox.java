@@ -30,6 +30,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Beveled box that uses full cylinders and spheres, doesn't play well with
@@ -43,12 +44,12 @@ public class BeveledBox extends Compound {
     /**
      * low point
      */
-    private Point3D p0 = new Point3D(-1);
+    private final Point3D p0 = new Point3D(-1);
 
     /**
      * high point
      */
-    private Point3D p1 = new Point3D(1);
+    private final Point3D p1 = new Point3D(1);
 
     /**
      * bevel radius
@@ -103,7 +104,7 @@ public class BeveledBox extends Compound {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new BeveledBox(this);
     }
 
@@ -187,7 +188,7 @@ public class BeveledBox extends Compound {
         top_left_edge.setTransformTexture(false);
         objects.add(top_left_edge);
 
-	// bottom edges  (-ve y)
+        // bottom edges  (-ve y)
         // bottom front  (+ve z)
         Instance bottom_front_edge = new Instance(new OpenCylinder(-(p1.x - p0.x
                 - 2 * rb) / 2, (p1.x - p0.x - 2 * rb) / 2, rb));	// bottom fromt edge
@@ -220,7 +221,7 @@ public class BeveledBox extends Compound {
         bottom_left_edge.setTransformTexture(false);
         objects.add(bottom_left_edge);
 
-	// vertical edges
+        // vertical edges
         // vertical right front  (+ve x, +ve z)
         Instance vertical_right_front_edge = new Instance(new OpenCylinder(p0.y
                 + rb, p1.y - rb, rb));
@@ -249,7 +250,7 @@ public class BeveledBox extends Compound {
         vertical_right_back_edge.setTransformTexture(false);
         objects.add(vertical_right_back_edge);
 
-	// corner spheres
+        // corner spheres
         // top right front
         Sphere top_right_front_corner = new Sphere(new Point3D(p1.x - rb, p1.y
                 - rb, p1.z - rb), rb);
@@ -340,4 +341,8 @@ public class BeveledBox extends Compound {
         objects.add(right_face);
 
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(BeveledBox.class.getName());
+
 }

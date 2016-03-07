@@ -29,7 +29,6 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import static java.awt.Color.white;
 
 /**
  *
@@ -66,7 +65,7 @@ public class BuildFigure12 implements BuildWorldFunction {
         lightPtr.scaleRadiance(4.5);
         w.addLight(lightPtr);
 
-	// middle cylinder (generic)
+        // middle cylinder (generic)
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(1.02);
         checkerPtr.setColor1(Utility.BLACK);
@@ -81,14 +80,14 @@ public class BuildFigure12 implements BuildWorldFunction {
         cylinderPtr1.setMaterial(svMattePtr);
         w.addObject(cylinderPtr1);
 
-	// right cylinder (cylinder and checkers are transformed)
+        // right cylinder (cylinder and checkers are transformed)
         Instance transformedCylinderPtr1 = new Instance(new SolidCylinder());
         transformedCylinderPtr1.setMaterial(svMattePtr);
         transformedCylinderPtr1.scale(10.0, 0.5, 10.0);
         transformedCylinderPtr1.translate(13, 0, 0);
         w.addObject(transformedCylinderPtr1);
 
-	// left cylinder (only the cylinder is transformed)
+        // left cylinder (only the cylinder is transformed)
         Instance transformedCylinderPtr2 = new Instance(new SolidCylinder());
         transformedCylinderPtr2.setMaterial(svMattePtr);
         transformedCylinderPtr2.scale(10.0, 0.5, 10.0);

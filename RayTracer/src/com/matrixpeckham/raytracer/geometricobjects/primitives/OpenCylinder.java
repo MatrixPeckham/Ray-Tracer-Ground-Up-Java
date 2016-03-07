@@ -20,11 +20,12 @@ package com.matrixpeckham.raytracer.geometricobjects.primitives;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
-import com.matrixpeckham.raytracer.util.Normal;
+import java.util.logging.Logger;
 
 /**
  * Cylinder class, makes a cylinder centered at the origin with y extents.
@@ -98,7 +99,7 @@ public class OpenCylinder extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new OpenCylinder(this);
     }
 
@@ -253,5 +254,8 @@ public class OpenCylinder extends GeometricObject {
     public BBox getBoundingBox() {
         return new BBox(-radius, radius, y0, y1, -radius, radius);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(OpenCylinder.class.getName());
 
 }

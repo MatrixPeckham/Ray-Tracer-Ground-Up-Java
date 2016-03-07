@@ -20,6 +20,7 @@ package com.matrixpeckham.raytracer.materials;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Class for two sided emissive materials. created for use in the 28.46. That
@@ -38,7 +39,7 @@ public class DoubleSidedEmissive extends Material {
     /**
      * color
      */
-    private RGBColor ce = new RGBColor(1);
+    private final RGBColor ce = new RGBColor(1);
 
     /**
      * default constructor
@@ -148,8 +149,11 @@ public class DoubleSidedEmissive extends Material {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new DoubleSidedEmissive(this);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(DoubleSidedEmissive.class.getName());
 
 }

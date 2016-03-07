@@ -34,7 +34,6 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import static java.awt.Color.black;
 import static java.lang.Math.pow;
 
 /**
@@ -83,7 +82,7 @@ int numSamples = 25;
 	
 	int numSpheres = 25;
 	double volume = 0.1 / numSpheres;
-	double radius = 2.5 * pow(0.75 * volume / 3.14159, 0.333333);
+	double radius = 2.5 * pow(0.75 * volume / Math.PI, 0.333333);
 	
 	Utility.setRandSeed(15);  
 	

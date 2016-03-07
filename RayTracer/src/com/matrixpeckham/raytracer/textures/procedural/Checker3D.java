@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer.textures.procedural;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * 3D checker class. 3D checkers don't have lines between them
@@ -33,10 +33,12 @@ public class Checker3D implements Texture {
      * size of checker
      */
     private double size = 1;
+
     /**
      * color 1
      */
     private final RGBColor color1 = new RGBColor();
+
     /**
      * color 2
      */
@@ -52,7 +54,7 @@ public class Checker3D implements Texture {
 
     /**
      * copy constructor
-     * @param c 
+     * @param c
      */
     public Checker3D(Checker3D c) {
         color1.setTo(c.color1);
@@ -120,7 +122,7 @@ public class Checker3D implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new Checker3D(this);
     }
 
@@ -184,5 +186,8 @@ public class Checker3D implements Texture {
     public void setColor2(double d) {
         color2.setTo(d);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(Checker3D.class.getName());
 
 }

@@ -21,8 +21,8 @@ import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
-import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartSphere;
+import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
@@ -41,15 +41,18 @@ public class BeveledBoxShell extends Compound {
     /**
      * low point of box
      */
-    private Point3D p0 = new Point3D(-1);
+    private final Point3D p0 = new Point3D(-1);
+
     /**
      * high point of box
      */
-    private Point3D p1 = new Point3D(1);
+    private final Point3D p1 = new Point3D(1);
+
     /**
      * bevel radius
      */
     private double rb = 0.1;
+
     //bounding box
     private BBox bBox = new BBox(p0, p1);
 
@@ -97,7 +100,7 @@ public class BeveledBoxShell extends Compound {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new BeveledBoxShell(this);
     }
 

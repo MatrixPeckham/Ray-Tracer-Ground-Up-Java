@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Axis Aligned Box class.
@@ -260,7 +261,7 @@ public class Box extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Box(this);
     }
 
@@ -376,5 +377,7 @@ public class Box extends GeometricObject {
         y1 = d0;
         z1 = d1;
     }
+
+    private static final Logger LOG = Logger.getLogger(Box.class.getName());
 
 }

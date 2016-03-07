@@ -54,7 +54,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         w.vp.setMaxDepth(3);
         w.vp.setSamples(numSamples);
 
-        w.backgroundColor =new RGBColor(0.5, 0.6666, 0.5);  // light green
+        w.backgroundColor = new RGBColor(0.5, 0.6666, 0.5);  // light green
 
         w.tracer = new Whitted(w);
 
@@ -93,21 +93,21 @@ public class BuildFigure07 implements BuildWorldFunction {
         double top = 10.1;
         SolidCylinder cylinderPtr = new SolidCylinder(bottom, top, radius);
 //        cylinderPtr.setMaterial(glassPtr);				// for Figure 28.7(a)
-	cylinderPtr.setMaterial(dielectricPtr);			// for Figure 28.7(b)
+        cylinderPtr.setMaterial(dielectricPtr);			// for Figure 28.7(b)
         w.addObject(cylinderPtr);
 
-	// plane with checker
+        // plane with checker
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(10.0);
         checkerPtr.setColor1(Utility.BLACK);
-        checkerPtr.setColor2(1.0, 0.7, 0.2);  // orange	
+        checkerPtr.setColor2(1.0, 0.7, 0.2);  // orange
 
         SV_Matte svMattePtr5 = new SV_Matte();
         svMattePtr5.setKa(0.25);
         svMattePtr5.setKd(0.5);
         svMattePtr5.setCd(checkerPtr);
 
-        Plane planePtr2 = new Plane(new Point3D(0.0),new Normal(0, 1, 0));
+        Plane planePtr2 = new Plane(new Point3D(0.0), new Normal(0, 1, 0));
         planePtr2.setMaterial(svMattePtr5);
         planePtr2.setShadows(false);
         w.addObject(planePtr2);

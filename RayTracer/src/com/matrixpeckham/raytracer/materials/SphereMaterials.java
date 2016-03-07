@@ -17,10 +17,10 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Sphere checkers which differs to three materials as checkers.
@@ -91,13 +91,13 @@ public class SphereMaterials extends Material {
         horizontalLineWidth = c.horizontalLineWidth;
         verticalLineWidth = c.verticalLineWidth;
         if (c.color1 != null) {
-            color1 = c.color1.clone();
+            color1 = c.color1.cloneMaterial();
         }
         if (c.color2 != null) {
-            color2 = c.color2.clone();
+            color2 = c.color2.cloneMaterial();
         }
         if (c.lineColor != null) {
-            lineColor = c.lineColor.clone();
+            lineColor = c.lineColor.cloneMaterial();
         }
     }
 
@@ -143,7 +143,7 @@ public class SphereMaterials extends Material {
      * @param color1
      */
     public void setColor1(Material color1) {
-        this.color1 = color1.clone();
+        this.color1 = color1.cloneMaterial();
     }
 
     /**
@@ -152,7 +152,7 @@ public class SphereMaterials extends Material {
      * @param color2
      */
     public void setColor2(Material color2) {
-        this.color2 = color2.clone();
+        this.color2 = color2.cloneMaterial();
     }
 
     /**
@@ -161,7 +161,7 @@ public class SphereMaterials extends Material {
      * @param lineColor
      */
     public void setLineColor(Material lineColor) {
-        this.lineColor = lineColor.clone();
+        this.lineColor = lineColor.cloneMaterial();
     }
 
     /**
@@ -170,7 +170,7 @@ public class SphereMaterials extends Material {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new SphereMaterials(this);
     }
 
@@ -390,5 +390,8 @@ public class SphereMaterials extends Material {
         }
         return lineColor.globalShade(sr);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SphereMaterials.class.getName());
 
 }

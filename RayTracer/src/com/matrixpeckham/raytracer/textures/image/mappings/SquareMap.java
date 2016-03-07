@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer.textures.image.mappings;
 import com.matrixpeckham.raytracer.textures.image.Mapping;
 import com.matrixpeckham.raytracer.textures.image.TexelCoord;
 import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Mapping for generic rectangle to full image
@@ -35,7 +35,7 @@ public class SquareMap implements Mapping {
      * @return
      */
     @Override
-    public Mapping clone() {
+    public Mapping cloneMapping() {
         return new SquareMap();
     }
 
@@ -59,5 +59,7 @@ public class SquareMap implements Mapping {
         p.row = (int) ((yRes - 1) * v);
         return p;
     }
+    private static final Logger LOG
+            = Logger.getLogger(SquareMap.class.getName());
 
 }

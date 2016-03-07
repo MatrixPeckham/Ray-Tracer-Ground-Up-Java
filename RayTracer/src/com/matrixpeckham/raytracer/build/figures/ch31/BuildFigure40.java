@@ -44,103 +44,87 @@ public class BuildFigure40 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 31.40
-
 // The class NestedNoisesTexture is just a wrapped fBm texture class like WrappedTwoColors,
 // except that it stores one color and a texture pointer, instead of two colors. As such, it's
-// not particularly interesting. 
+// not particularly interesting.
 // A better design would store two texture pointers.
 // Here is the getColor function, where wrapFactor is the same as expansionNumber.
 
-/*
+        /*
 
-RGBColor														
-NestedNoisesTexture::getColor(const ShadeRec& sr) const {
-	float noise = wrapFactor * noisePtr.valueFbm(sr.localHitPoint);
-	float value = noise - floor(noise);
-	value = (maxValue - minValue) * value + minValue;
-	
-	if (noise < 1.0)
-		return (value * color);
-	else
-		return (value * texturePtr.getColor(sr));
-}
+         RGBColor
+         NestedNoisesTexture::getColor(const ShadeRec& sr) const {
+         float noise = wrapFactor * noisePtr.valueFbm(sr.localHitPoint);
+         float value = noise - floor(noise);
+         value = (maxValue - minValue) * value + minValue;
 
-*/
+         if (noise < 1.0)
+         return (value * color);
+         else
+         return (value * texturePtr.getColor(sr));
+         }
 
- 												
+         */
+        int numSamples = 16;
 
-	int numSamples = 16;
-	
-	w.vp.setHres(600);    
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = new RGBColor(0.5);
-	w.tracer = new RayCast(w);
-	
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(0, 0, 100);
-	pinholePtr.setLookat(new Point3D(0.0));
-	pinholePtr.setViewDistance(9500);  
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	
-	PointLight lightPtr2 = new PointLight();
-	lightPtr2.setLocation(5, 5, 20);		
-	lightPtr2.scaleRadiance(3.0);
-	w.addLight(lightPtr2);
-	
-	
-	// noise 1:
-	
-	CubicNoise noisePtr1 = new CubicNoise();	
-	noisePtr1.setNumOctaves(6);
-	noisePtr1.setGain(0.5);	
-	noisePtr1.setLacunarity(4.0);		
-	
-	WrappedTwoColors texturePtr = new WrappedTwoColors(noisePtr1);	
-	texturePtr.setColor1(1.0, 0.8, 0.0);		// gold
-	texturePtr.setColor2(0.5, 0.75, 1.0);  	// light blue  
-	texturePtr.setExpansionNumber(2.0);	
-	
-	TInstance transformedWrappedPtr = new TInstance(texturePtr);
-	transformedWrappedPtr.scale(0.25);
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
+        w.backgroundColor = new RGBColor(0.5);
+        w.tracer = new RayCast(w);
 
-	// noise 2:
-	
-	CubicNoise noisePtr2 = new CubicNoise();	
-	noisePtr2.setNumOctaves(3);
-	noisePtr2.setGain(0.5);	
-	noisePtr2.setLacunarity(5.0);
-	
-	
-	// nested noises texture:	
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(0, 0, 100);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(9500);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
-	NestedNoisesTexture nestedTexturesPtr = new NestedNoisesTexture(noisePtr2);	
-	nestedTexturesPtr.setColor(0.25, 1.0, 0.1);   // bright green		
-	nestedTexturesPtr.setTexture(transformedWrappedPtr);
-	nestedTexturesPtr.setMinValue(0.0);  
-	nestedTexturesPtr.setMaxValue(1.0);
-	nestedTexturesPtr.setWrapFactor(3.0);    
+        PointLight lightPtr2 = new PointLight();
+        lightPtr2.setLocation(5, 5, 20);
+        lightPtr2.scaleRadiance(3.0);
+        w.addLight(lightPtr2);
 
-	
-	// material:
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.35);
-	svMattePtr.setKd(1.0);
-	svMattePtr.setCd(nestedTexturesPtr);
+        // noise 1:
+        CubicNoise noisePtr1 = new CubicNoise();
+        noisePtr1.setNumOctaves(6);
+        noisePtr1.setGain(0.5);
+        noisePtr1.setLacunarity(4.0);
 
-	
-	Sphere spherePtr1 = new Sphere(new Point3D(0.0), 3); 
-	spherePtr1.setMaterial(svMattePtr);
-	w.addObject(spherePtr1);
-}
+        WrappedTwoColors texturePtr = new WrappedTwoColors(noisePtr1);
+        texturePtr.setColor1(1.0, 0.8, 0.0);		// gold
+        texturePtr.setColor2(0.5, 0.75, 1.0);  	// light blue
+        texturePtr.setExpansionNumber(2.0);
 
+        TInstance transformedWrappedPtr = new TInstance(texturePtr);
+        transformedWrappedPtr.scale(0.25);
 
+        // noise 2:
+        CubicNoise noisePtr2 = new CubicNoise();
+        noisePtr2.setNumOctaves(3);
+        noisePtr2.setGain(0.5);
+        noisePtr2.setLacunarity(5.0);
+
+        // nested noises texture:
+        NestedNoisesTexture nestedTexturesPtr = new NestedNoisesTexture(
+                noisePtr2);
+        nestedTexturesPtr.setColor(0.25, 1.0, 0.1);   // bright green
+        nestedTexturesPtr.setTexture(transformedWrappedPtr);
+        nestedTexturesPtr.setMinValue(0.0);
+        nestedTexturesPtr.setMaxValue(1.0);
+        nestedTexturesPtr.setWrapFactor(3.0);
+
+        // material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.35);
+        svMattePtr.setKd(1.0);
+        svMattePtr.setCd(nestedTexturesPtr);
+
+        Sphere spherePtr1 = new Sphere(new Point3D(0.0), 3);
+        spherePtr1.setMaterial(svMattePtr);
+        w.addObject(spherePtr1);
+    }
 
 }

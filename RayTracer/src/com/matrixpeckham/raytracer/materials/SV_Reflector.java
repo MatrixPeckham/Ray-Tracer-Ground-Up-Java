@@ -17,13 +17,13 @@
  */
 package com.matrixpeckham.raytracer.materials;
 
-import com.matrixpeckham.raytracer.brdfs.PerfectSpecular;
 import com.matrixpeckham.raytracer.brdfs.SV_PerfectSpecular;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Reflector that uses textures for reflection color.
@@ -35,7 +35,7 @@ public class SV_Reflector extends Phong {
     /**
      * texture BRDF
      */
-    private SV_PerfectSpecular perfectBRDF;
+    private final SV_PerfectSpecular perfectBRDF;
 
     /**
      * default constructor
@@ -52,7 +52,7 @@ public class SV_Reflector extends Phong {
      */
     public SV_Reflector(SV_Reflector r) {
         super(r);
-        perfectBRDF = r.perfectBRDF.clone();
+        perfectBRDF = r.perfectBRDF.cloneBRDF();
     }
 
     /**
@@ -61,7 +61,7 @@ public class SV_Reflector extends Phong {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new SV_Reflector(this);
     }
 
@@ -159,7 +159,7 @@ public class SV_Reflector extends Phong {
 
         RGBColor fr = perfectBRDF.sampleF(sr, wo, wi);
         Ray reflectedRay = new Ray(sr.hitPoint, wi);
-        //hack mentioned in book, because area lights have special case for 
+        //hack mentioned in book, because area lights have special case for
         //depth 1, we don't let depth one happen here
         if (sr.depth == 0) {
             L.addLocal(fr.mul(sr.w.tracer.traceRay(reflectedRay, sr.depth + 2).
@@ -171,5 +171,8 @@ public class SV_Reflector extends Phong {
 
         return L;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SV_Reflector.class.getName());
 
 }

@@ -83,7 +83,7 @@ public class BuildFigure11B implements BuildWorldFunction {
         lightPtr2.setShadows(true);
         w.addLight(lightPtr2);
 
-	// archway parameters
+        // archway parameters
         double width = 20.0;
         double height = 25.0;
         double depth = 3.0;
@@ -96,13 +96,13 @@ public class BuildFigure11B implements BuildWorldFunction {
                 numBlocks, numWedges, bevelRadius);
 
 	// put a different random sandstone texture on each archway component
-	// sandstone parameters
+        // sandstone parameters
         int numOctaves = 4;
         double lacunarity = 2.0;
         double gain = 0.5;
         double perturbation = 0.1;
 
-	// sandstone ramp image
+        // sandstone ramp image
         Image imagePtr1 = new Image();
         String filename1
                 = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\Sandstone_ramp1.ppm";
@@ -124,9 +124,9 @@ public class BuildFigure11B implements BuildWorldFunction {
             marblePtr.setGain(gain);
             marblePtr.setPerturbation(perturbation);
 
-		// transformed marble texture
+            // transformed marble texture
             TInstance wedgeMarblePtr = new TInstance(marblePtr);
-            Utility.setRandSeed(j * 10);
+            Utility.setRandSeed(j * 10L);
             wedgeMarblePtr.scale(0.5, 0.5, 0.5);
             wedgeMarblePtr.rotateX(20.0 * (2.0 * Utility.randDouble() - 1.0));
             wedgeMarblePtr.rotateY(30.0 * (2.0 * Utility.randDouble() - 1.0));
@@ -135,7 +135,7 @@ public class BuildFigure11B implements BuildWorldFunction {
                     20.0 * (2.0 * Utility.randDouble() - 1.0),
                     30.0 * (2.0 * Utility.randDouble() - 1.0));
 
-		// marble material
+            // marble material
             SV_Matte svMattePtr = new SV_Matte();
             svMattePtr.setKa(0.35);
             svMattePtr.setKd(0.85);
@@ -152,8 +152,8 @@ public class BuildFigure11B implements BuildWorldFunction {
         doorPtr.translate(0.0, height - width / 2.0, 0.0);
         w.addObject(doorPtr);
 
-	// build a wall of blocks that has the archway going through it 
-	// wall parameters
+	// build a wall of blocks that has the archway going through it
+        // wall parameters
         double wallHeight = 40;   // x direction
         double wallLength = 100; 	// z direction
         double wallThickness = 3;	// y direction
@@ -180,7 +180,7 @@ public class BuildFigure11B implements BuildWorldFunction {
                         -wallLength / 2.0 + (j + 1) * blockLength);
                 BeveledBox blockPtr = new BeveledBox(p0, p1, bevelRadius);
 
-			// only w.add the block to the wall if it isn't inside the archway
+                // only w.add the block to the wall if it isn't inside the archway
                 BBox bbox = blockPtr.getBoundingBox();
 
                 boolean inRectangle = bbox.z0 < (width / 2.0 - columnWidth
@@ -192,8 +192,8 @@ public class BuildFigure11B implements BuildWorldFunction {
                         * (width / 2.0 - columnWidth + bevelRadius);
                 double d0 = bbox.x0 * bbox.x0 + bbox.z0 * bbox.z0;	// lower left
                 double d1 = bbox.x0 * bbox.x0 + bbox.z1 * bbox.z1;	// lower right
-                double d2 = bbox.x1 * bbox.x1 + bbox.z1 * bbox.z1;	// upper right	
-                double d3 = bbox.x1 * bbox.x1 + bbox.z0 * bbox.z0;	// upper left	
+                double d2 = bbox.x1 * bbox.x1 + bbox.z1 * bbox.z1;	// upper right
+                double d3 = bbox.x1 * bbox.x1 + bbox.z0 * bbox.z0;	// upper left
 
                 boolean inCircle = d0 < rSquared || d1 < rSquared || d2
                         < rSquared || d3 < rSquared && bbox.x0 > blockHeight;
@@ -215,7 +215,7 @@ public class BuildFigure11B implements BuildWorldFunction {
                         -wallLength / 2.0 + (j + 1) * blockLength + blockOffset);
                 BeveledBox blockPtr = new BeveledBox(p0, p1, bevelRadius);
 
-			// only w.add the block to the wall if it isn't inside the archway
+                // only w.add the block to the wall if it isn't inside the archway
                 BBox bbox = blockPtr.getBoundingBox();
 
                 boolean inRectangle = bbox.z0 < (width / 2.0 - columnWidth
@@ -227,8 +227,8 @@ public class BuildFigure11B implements BuildWorldFunction {
                         * (width / 2.0 - columnWidth + bevelRadius);
                 double d0 = bbox.x0 * bbox.x0 + bbox.z0 * bbox.z0;	// lower left
                 double d1 = bbox.x0 * bbox.x0 + bbox.z1 * bbox.z1;	// lower right
-                double d2 = bbox.x1 * bbox.x1 + bbox.z1 * bbox.z1;	// upper right	
-                double d3 = bbox.x1 * bbox.x1 + bbox.z0 * bbox.z0;	// upper left	
+                double d2 = bbox.x1 * bbox.x1 + bbox.z1 * bbox.z1;	// upper right
+                double d3 = bbox.x1 * bbox.x1 + bbox.z0 * bbox.z0;	// upper left
 
                 boolean inCircle = d0 < rSquared || d1 < rSquared || d2
                         < rSquared || d3 < rSquared && bbox.x0 > blockHeight;
@@ -239,11 +239,11 @@ public class BuildFigure11B implements BuildWorldFunction {
             }
         }
 
-	// use a different random marble texture on each block
+        // use a different random marble texture on each block
         // the marble paramters are the same as the sandstone's, except for the perturbation:
         perturbation = 3.0;
 
-	// gray marble ramp image
+        // gray marble ramp image
         Image imagePtr2 = new Image();
         String filename2
                 = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\GrayMarbleRamp.ppm";
@@ -265,7 +265,7 @@ public class BuildFigure11B implements BuildWorldFunction {
             marblePtr.setGain(gain);
             marblePtr.setPerturbation(perturbation);
 
-		// transformed marble texture
+            // transformed marble texture
             TInstance wedgeMarblePtr = new TInstance(marblePtr);
             Utility.setRandSeed(j * 10);
             wedgeMarblePtr.scale(0.25, 0.25, 0.25);
@@ -276,7 +276,7 @@ public class BuildFigure11B implements BuildWorldFunction {
                     20.0 * (2.0 * Utility.randDouble() - 1.0),
                     30.0 * (2.0 * Utility.randDouble() - 1.0));
 
-		// marble material
+            // marble material
             SV_Matte svMattePtr = new SV_Matte();
             svMattePtr.setKa(0.25);
             svMattePtr.setKd(0.5);
@@ -293,7 +293,7 @@ public class BuildFigure11B implements BuildWorldFunction {
         verticalWallPtr.translate(0.0, height - width / 2.0, 0.0);
         w.addObject(verticalWallPtr);
 
-	// ground plane
+        // ground plane
         Matte mattePtr = new Matte();
         mattePtr.setKa(0.25);
         mattePtr.setKd(0.5);
@@ -304,5 +304,8 @@ public class BuildFigure11B implements BuildWorldFunction {
         w.addObject(planePtr);
 
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(BuildFigure11B.class.getName());
 
 }

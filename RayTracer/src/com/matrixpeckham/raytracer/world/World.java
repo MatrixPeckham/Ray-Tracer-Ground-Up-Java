@@ -24,99 +24,115 @@ import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Light;
 import com.matrixpeckham.raytracer.tracers.Tracer;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Logger;
 
 /**
  * Class that represents the world to render.
+ *
  * @author William Matrix Peckham
  */
 public class World {
+
     /**
-     * View Plane for the world. Starts as default. 
+     * View Plane for the world. Starts as default.
      */
-    public ViewPlane vp=new ViewPlane();
+    public ViewPlane vp = new ViewPlane();
+
     /**
      * Color to render when nothing has been hit. Default: Black.
      */
     public RGBColor backgroundColor;
+
     /**
      * Tracer for the rays, determines what happens when rays hit things.
      */
     public Tracer tracer;
+
     /**
-     * Ambient lighting for the scene.  
+     * Ambient lighting for the scene.
      */
     public Light ambient;
+
     /**
-     * Camera for the scene. 
+     * Camera for the scene.
      */
     public Camera camera;
+
     /**
-     * Lights for the scene. 
+     * Lights for the scene.
      */
     public ArrayList<Light> lights = new ArrayList<>();
+
     /**
-     * Single sphere for the initial test image from the first working example from the book. 
-     * used only in the first figure, and SingleSphereTracer.
+     * Single sphere for the initial test image from the first working example
+     * from the book. used only in the first figure, and SingleSphereTracer.
      */
-    public Sphere sphere=new Sphere();
+    public Sphere sphere = new Sphere();
+
     /**
      * List of objects in the scene.
      */
-    public ArrayList<GeometricObject> objects=new ArrayList<>();
+    public ArrayList<GeometricObject> objects = new ArrayList<>();
+
     /**
-     * Queue for thread synchronization.  Set before starting render, and used
-     * to push finished pixels to the GUI.
+     * Queue for thread synchronization. Set before starting render, and used to
+     * push finished pixels to the GUI.
      */
     private BlockingQueue<RenderPixel> paintArea = null;
-    
+
     /**
-     * Default constructor. 
+     * Default constructor.
      */
     public World() {
         backgroundColor = Utility.BLACK;
         tracer = null;
-        ambient=new Ambient();
+        ambient = new Ambient();
     }
-    
+
     /**
      * Setter for the render queue.
-     * @param paintArea 
+     *
+     * @param paintArea
      */
-    public void setQueue(BlockingQueue<RenderPixel> paintArea){
-        this.paintArea=paintArea;
+    public void setQueue(BlockingQueue<RenderPixel> paintArea) {
+        this.paintArea = paintArea;
     }
-    
+
     /**
      * Adds a light to the scene.
-     * @param light 
+     *
+     * @param light
      */
-    public void addLight(Light light){
+    public void addLight(Light light) {
         lights.add(light);
     }
-    
+
     /**
      * set ambient light
-     * @param light 
+     *
+     * @param light
      */
-    public void setAmbient(Light light){
-        ambient=light;
+    public void setAmbient(Light light) {
+        ambient = light;
     }
+
     /**
      * set camera
-     * @param cam 
+     *
+     * @param cam
      */
-    public void setCamera(Camera cam){
+    public void setCamera(Camera cam) {
         camera = cam;
     }
-    
+
     /**
      * Render scene function. For use without cameras, orthographic projection,
      * down the z axis.
@@ -146,10 +162,12 @@ public class World {
             }
         }
     }
+
     /**
-     * Normalizes color based on the largest component. 
+     * Normalizes color based on the largest component.
+     *
      * @param c
-     * @return 
+     * @return
      */
     public RGBColor maxToOne(RGBColor c) {
         double maxVal = Math.max(c.r, Math.max(c.g, c.b));
@@ -158,10 +176,12 @@ public class World {
         }
         return c;
     }
+
     /**
      * Changes a color to red if it is out of gamut
+     *
      * @param rawColor
-     * @return 
+     * @return
      */
     public RGBColor clampToColor(RGBColor rawColor) {
         RGBColor c = new RGBColor(rawColor);
@@ -175,6 +195,7 @@ public class World {
 
     /**
      * Sends a pixel to the GUI through the threading queue.
+     *
      * @param row pixel x component
      * @param column pixel y component
      * @param rawColor color to send, may be changed if out of gamut
@@ -194,25 +215,32 @@ public class World {
         }
 
         //converts row/column to x,y image coordinates, flip y coordinate because
-        //image has top left origin, and row/col is bottom left origin. 
+        //image has top left origin, and row/col is bottom left origin.
         int x = column;
         int y = vp.vRes - row - 1;
 
         //make sure we have a valid queue and send pixel.
-        if(paintArea!=null){
-            paintArea.offer(new RenderPixel(x, y, (int)(mappedColor.r*255), (int)(mappedColor.g*255), (int)(mappedColor.b*255)));
+        if (paintArea != null) {
+            boolean accepted;
+            do {
+                accepted = paintArea.offer(new RenderPixel(x, y,
+                        (int) (mappedColor.r * 255), (int) (mappedColor.g * 255),
+                        (int) (mappedColor.b * 255)));
+            } while (!accepted);
         }
     }
-    
+
     /**
-     * Intersects a ray with the objects in the scene, and gets the nearest one hit.
+     * Intersects a ray with the objects in the scene, and gets the nearest one
+     * hit.
+     *
      * @param ray ray to trace
      * @return ShadeRec of the nearest hit.
      */
-    public ShadeRec hitObjects(Ray ray){
+    public ShadeRec hitObjects(Ray ray) {
         //creates a new shaderec.
-        ShadeRec sr=new ShadeRec(this);
-        //these hold some things temporarily for the 
+        ShadeRec sr = new ShadeRec(this);
+        //these hold some things temporarily for the
         //normal reference
         Normal normal = new Normal();
         //local hit position.
@@ -221,10 +249,10 @@ public class World {
         int numObjects = objects.size();
         //test the ray with all objects store values in temporary variables when they
         //are the lowest
-        for(int j = 0; j<numObjects; j++){
-            if(objects.get(j).hit(ray, sr)&&sr.lastT<tmin){
-                sr.hitAnObject=true;
-                tmin=sr.lastT;//changes at call to hit, so we must preserve lowest
+        for (int j = 0; j < numObjects; j++) {
+            if (objects.get(j).hit(ray, sr) && sr.lastT < tmin) {
+                sr.hitAnObject = true;
+                tmin = sr.lastT;//changes at call to hit, so we must preserve lowest
                 sr.material = objects.get(j).getMaterial();
                 sr.hitPoint.setTo(ray.o.add(ray.d.mul(sr.lastT)));//only calculated at this point
                 normal.setTo(sr.normal);//ditto
@@ -232,42 +260,49 @@ public class World {
             }
         }
         //restore the saved lowest values
-        if(sr.hitAnObject){
+        if (sr.hitAnObject) {
             //sr.t=tmin;
-            sr.lastT=tmin;
+            sr.lastT = tmin;
             sr.normal.setTo(normal);
             sr.localHitPosition.setTo(localHitPoint);
         }
-        
+
         return sr;
     }
+
     /**
-     * Simplistic hit function, no normals no local position, pretty much just color. 
+     * Simplistic hit function, no normals no local position, pretty much just
+     * color.
+     *
      * @param ray
-     * @return 
+     * @return
      */
-    public ShadeRec hitBareBonesObjects(Ray ray){
+    public ShadeRec hitBareBonesObjects(Ray ray) {
         ShadeRec sr = new ShadeRec(this);
         double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
         //intersect each object with ray, and keep the color from the closest.
-        for(int j=0; j<numObjects; j++){
+        for (int j = 0; j < numObjects; j++) {
             GeometricObject ob = objects.get(j);
-            if(ob.hit(ray,sr)&&(sr.lastT<tmin)){
-                sr.hitAnObject=true;
-                tmin=sr.lastT;
+            if (ob.hit(ray, sr) && (sr.lastT < tmin)) {
+                sr.hitAnObject = true;
+                tmin = sr.lastT;
                 sr.color.setTo(ob.getColor());
             }
         }
-        
+
         return sr;
     }
+
     /**
      * add an object to the scene.
-     * @param obj 
+     *
+     * @param obj
      */
     public void addObject(GeometricObject obj) {
         objects.add(obj);
     }
+
+    private static final Logger LOG = Logger.getLogger(World.class.getName());
 
 }

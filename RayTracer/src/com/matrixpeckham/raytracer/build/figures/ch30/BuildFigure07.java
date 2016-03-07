@@ -72,7 +72,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         lightPtr.setShadows(false);
         w.addLight(lightPtr);
 
-	// the spheres
+        // the spheres
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(1.0);
         checkerPtr.setColor1(Utility.BLACK);
@@ -88,7 +88,7 @@ public class BuildFigure07 implements BuildWorldFunction {
 
         double radius;
 
-	// sphere 1	
+        // sphere 1
         radius = 3.0;
         Instance spherePtr1 = new Instance(new Sphere(new Point3D(
                 0.0), radius));
@@ -96,7 +96,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         spherePtr1.translate(-6.25, 0.0, 0.0);
         w.addObject(spherePtr1);
 
-	// sphere 2
+        // sphere 2
         radius = 2.25;
         Instance spherePtr2 = new Instance(new Sphere(new Point3D(
                 0.0), radius));
@@ -104,7 +104,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         spherePtr2.translate(-1.0, 0.0, 0.0);
         w.addObject(spherePtr2);
 
-	// sphere 3
+        // sphere 3
         radius = 1.75;
         Instance spherePtr3 = new Instance(new Sphere(new Point3D(
                 0.0), radius));
@@ -112,7 +112,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         spherePtr3.translate(3.0, 0.0, 0.0);
         w.addObject(spherePtr3);
 
-	// sphere 4
+        // sphere 4
         radius = 1.0;
         Instance spherePtr4 = new Instance(new Sphere(new Point3D(
                 0.0), radius));
@@ -120,7 +120,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         spherePtr4.translate(5.75, 0.0, 0.0);
         w.addObject(spherePtr4);
 
-	// sphere 5
+        // sphere 5
         radius = 0.75;
         Instance spherePtr5 = new Instance(new Sphere(new Point3D(
                 0.0), radius));
@@ -128,7 +128,7 @@ public class BuildFigure07 implements BuildWorldFunction {
         spherePtr5.translate(7.5, 0.0, 0.0);
         w.addObject(spherePtr5);
 
-	// sphere 6
+        // sphere 6
         radius = 0.5;
         Instance spherePtr6 = new Instance(new Sphere(new Point3D(
                 0.0), radius));

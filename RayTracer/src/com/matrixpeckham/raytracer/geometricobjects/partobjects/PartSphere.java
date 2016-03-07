@@ -66,6 +66,7 @@ public class PartSphere extends GeometricObject {
      * cached cosines
      */
     double cosThetaMin = 1;
+
     double cosThetaMax = -1;
 
     /**
@@ -120,7 +121,7 @@ public class PartSphere extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new PartSphere(this);
     }
 
@@ -133,7 +134,7 @@ public class PartSphere extends GeometricObject {
      */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
-        double t = Utility.HUGE_VALUE;
+        double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);

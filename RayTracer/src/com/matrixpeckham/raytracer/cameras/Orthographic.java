@@ -53,7 +53,7 @@ public class Orthographic extends Camera {
      * @return
      */
     @Override
-    public Camera clone() {
+    public Camera cloneCamera() {
         return new Orthographic(this);
     }
 

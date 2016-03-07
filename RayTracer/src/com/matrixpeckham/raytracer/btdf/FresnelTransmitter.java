@@ -22,6 +22,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * More realistic transmission, with color filtering.
@@ -95,7 +96,7 @@ public class FresnelTransmitter extends BTDF {
         }
 
         double cos_thiori = normal.neg().dot(sr.ray.d);
-        double temp = 1.0 - (1.0 - cos_thiori * cos_thiori) / (eta * eta);
+        //double temp = 1.0 - (1.0 - cos_thiori * cos_thiori) / (eta * eta);
         double cos_thiort = Math.sqrt(1.0 - (1.0 - cos_thiori * cos_thiori)
                 / (eta * eta));
         double r_parallel = (eta * cos_thiori - cos_thiort) / (eta * cos_thiori
@@ -144,7 +145,7 @@ public class FresnelTransmitter extends BTDF {
      * @return
      */
     @Override
-    public BTDF clone() {
+    public BTDF cloneBTDF() {
         return new FresnelTransmitter(this);
     }
 
@@ -165,5 +166,8 @@ public class FresnelTransmitter extends BTDF {
     public void setIorIn(double d) {
         iorIn = d;
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(FresnelTransmitter.class.getName());
 
 }

@@ -23,6 +23,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Material class for perfect transmission. Extends Phong to allow specular
@@ -35,12 +36,12 @@ public class Transparent extends Phong {
     /**
      * reflective BRDF for doing reflections
      */
-    private PerfectSpecular reflectiveBRDF;
-    
+    private final PerfectSpecular reflectiveBRDF;
+
     /**
      * perfect transmission BTDF for refraction
      */
-    private PerfectTransmitter specularBTDF;
+    private final PerfectTransmitter specularBTDF;
 
     /**
      * Default constructor.
@@ -52,27 +53,30 @@ public class Transparent extends Phong {
 
     /**
      * copy constructor
-     * @param t 
+     *
+     * @param t
      */
     public Transparent(Transparent t) {
         super(t);
-        reflectiveBRDF = t.reflectiveBRDF.clone();
-        specularBTDF = t.specularBTDF.clone();
+        reflectiveBRDF = t.reflectiveBRDF.cloneBRDF();
+        specularBTDF = t.specularBTDF.cloneBTDF();
     }
 
     /**
      * clone method
-     * @return 
+     *
+     * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new Transparent(this);
     }
 
     /**
      * Shade function to implement transparency.
+     *
      * @param sr
-     * @return 
+     * @return
      */
     @Override
     public RGBColor shade(ShadeRec sr) {
@@ -100,7 +104,8 @@ public class Transparent extends Phong {
 
     /**
      * sets index of refraction
-     * @param d 
+     *
+     * @param d
      */
     public void setIor(double d) {
         specularBTDF.setIor(d);
@@ -108,7 +113,8 @@ public class Transparent extends Phong {
 
     /**
      * sets the reflective multiplier
-     * @param d 
+     *
+     * @param d
      */
     public void setKr(double d) {
         reflectiveBRDF.setKr(d);
@@ -116,12 +122,15 @@ public class Transparent extends Phong {
 
     /**
      * sets the transmissive multiplier
-     * @param d 
+     *
+     * @param d
      */
     public void setKt(double d) {
         specularBTDF.setKt(d);
     }
-    
+
     //TODO: this class does not yet implement path/global tracing
+    private static final Logger LOG
+            = Logger.getLogger(Transparent.class.getName());
 
 }

@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Checkers for spheres.
@@ -33,26 +34,32 @@ public class SphereChecker implements Texture {
      * number of horizontal checkers for full sphere
      */
     private int numHorizontalCheckers = 20;
+
     /**
      * number of vertical checkers for full sphere
      */
     private int numVerticalCheckers = 10;
+
     /**
      * horizontal line width
      */
     private double horizontalLineWidth = 0;
+
     /**
      * vertical line width
      */
     private double verticalLineWidth = 0;
+
     /**
      * one color
      */
     private RGBColor color1 = new RGBColor(1);
+
     /**
      * other color
      */
     private RGBColor color2 = new RGBColor(0.5);
+
     /**
      * line color
      */
@@ -148,7 +155,7 @@ public class SphereChecker implements Texture {
      * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new SphereChecker(this);
     }
 
@@ -195,7 +202,7 @@ public class SphereChecker implements Texture {
         boolean inOutline = (fphi < phiLineWidth || fphi > 1.0 - phiLineWidth)
                 || (ftheta < thetaLineWidth || ftheta > 1.0 - thetaLineWidth);
 
-        //return the proper color. 
+        //return the proper color.
         if ((iphi + itheta) % 2 == 0) {
             if (!inOutline) {
                 return color1;
@@ -254,7 +261,6 @@ public class SphereChecker implements Texture {
         setNumVerticalCheckers(i);
     }
 
-
     /**
      * setter
      *
@@ -276,5 +282,8 @@ public class SphereChecker implements Texture {
     public void setColor2(double d, double d0, double d1) {
         setColor2(new RGBColor(d, d0, d1));
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SphereChecker.class.getName());
 
 }

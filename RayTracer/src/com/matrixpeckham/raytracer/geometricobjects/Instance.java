@@ -105,7 +105,7 @@ public class Instance extends GeometricObject {
         invMatrix.setTo(i.invMatrix);
         transformTexture = i.transformTexture;
         if (i.object != null) {
-            object = i.object.clone();
+            object = i.object.cloneGeometry();
         }
         forwardMatrix.setTo(i.forwardMatrix);
         bbox = new BBox(i.bbox);
@@ -255,7 +255,7 @@ public class Instance extends GeometricObject {
      * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new Instance(this);
     }
 

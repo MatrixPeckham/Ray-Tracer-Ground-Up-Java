@@ -27,6 +27,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Class represents an area light, it samples its object for some values.
@@ -49,19 +50,19 @@ public class AreaLight extends Light {
      * sample point that was chosen last, stored between calls to the other
      * methods
      */
-    private Point3D samplePoint = new Point3D();
+    private final Point3D samplePoint = new Point3D();
 
     /**
      * normal at the sampled light point, stored between calls to the other
      * methods.
      */
-    private Normal lightNormal = new Normal();
+    private final Normal lightNormal = new Normal();
 
     /**
      * the direction vector from the hit point to the light sample point, stored
      * between calls to methods
      */
-    private Vector3D wi = new Vector3D();
+    private final Vector3D wi = new Vector3D();
 
     /**
      * default constructor
@@ -78,10 +79,10 @@ public class AreaLight extends Light {
     public AreaLight(AreaLight a) {
         super(a);
         if (a.obj != null) {
-            obj = a.obj.clone();
+            obj = a.obj.cloneGeometry();
         }
         if (a.material != null) {
-            material = a.material.clone();
+            material = a.material.cloneMaterial();
         }
     }
 
@@ -101,7 +102,7 @@ public class AreaLight extends Light {
      * @return
      */
     @Override
-    public Light clone() {
+    public Light cloneLight() {
         return new AreaLight(this);
     }
 
@@ -116,9 +117,9 @@ public class AreaLight extends Light {
     public Vector3D getDirection(ShadeRec sr) {
         //sample object and store point for later use
         samplePoint.setTo(obj.sample());
-        //gets the objects normal from the sample point and stores for later use 
+        //gets the objects normal from the sample point and stores for later use
         lightNormal.setTo(obj.getNormal(samplePoint));
-        //calculates the direction from the sample point to the hit point and 
+        //calculates the direction from the sample point to the hit point and
         //keeps it in a member variable for later use, also returned
         wi.setTo(samplePoint.sub(sr.hitPoint));
         wi.normalize();
@@ -196,5 +197,8 @@ public class AreaLight extends Light {
     public double pdf(ShadeRec sr) {
         return obj.pdf(sr);
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(AreaLight.class.getName());
 
 }

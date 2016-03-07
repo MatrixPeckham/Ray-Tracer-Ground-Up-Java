@@ -24,10 +24,10 @@ import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.tracers.RayCast;
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 
@@ -41,7 +41,7 @@ public class BuildShadedObjects implements BuildWorldFunction {
     public void build(World w) {
         int num_samples = 1;
 
-        // view plane  
+        // view plane
         w.vp.setHres(400);
         w.vp.setVres(400);
         w.vp.setPixelSize(0.5);
@@ -83,7 +83,7 @@ public class BuildShadedObjects implements BuildWorldFunction {
         RGBColor darkPurple = new RGBColor(0.5, 0, 1);									// dark purple
         RGBColor grey = new RGBColor(0.25);											// grey
 
-	// Matte material reflection coefficients - common to all materials
+        // Matte material reflection coefficients - common to all materials
         double ka = 0.25;
         double kd = 0.75;
 
@@ -349,7 +349,7 @@ public class BuildShadedObjects implements BuildWorldFunction {
         matte33.setKd(kd);
         matte33.setCd(green);
         Sphere sphere33 = new Sphere(new Point3D(-63, -39, -180), 11);
-        sphere33.setMaterial(matte33);							// green 
+        sphere33.setMaterial(matte33);							// green
         w.addObject(sphere33);
 
         Matte matte34 = new Matte();

@@ -17,10 +17,10 @@
  */
 package com.matrixpeckham.raytracer.lights;
 
-import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
@@ -55,7 +55,7 @@ public abstract class Light {
      *
      * @return
      */
-    public abstract Light clone();
+    public abstract Light cloneLight();
 
     /**
      * Gets the direction from the hit point to this light. For area lights this

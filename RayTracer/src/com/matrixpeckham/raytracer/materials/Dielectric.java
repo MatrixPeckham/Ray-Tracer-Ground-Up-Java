@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Realistic transparency with color filtering.
@@ -36,11 +37,12 @@ public class Dielectric extends Phong {
     /**
      * inside color
      */
-    private RGBColor cfIn = new RGBColor(1);
+    private final RGBColor cfIn = new RGBColor(1);
+
     /**
      * outside color
      */
-    private RGBColor cfOut = new RGBColor(1);
+    private final RGBColor cfOut = new RGBColor(1);
 
     /**
      * reflective BRDF
@@ -79,7 +81,7 @@ public class Dielectric extends Phong {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new Dielectric(this);
     }
 
@@ -256,4 +258,7 @@ public class Dielectric extends Phong {
     }
 
     //TODO: this class does not yet implement path/global tracing
+    private static final Logger LOG
+            = Logger.getLogger(Dielectric.class.getName());
+
 }

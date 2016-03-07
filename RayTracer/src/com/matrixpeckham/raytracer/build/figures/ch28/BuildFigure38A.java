@@ -79,32 +79,32 @@ public class BuildFigure38A implements BuildWorldFunction {
         lightPtr1.setShadows(false);
         w.addLight(lightPtr1);
 
-	// materials for the glass of water
-	// glass-air boundary
+        // materials for the glass of water
+        // glass-air boundary
         RGBColor glassColor = new RGBColor(0.65, 1, 0.75);
         RGBColor waterColor = new RGBColor(1, 0.25, 1);
 
         Dielectric glassPtr = new Dielectric();
-        glassPtr.setIorIn(1.50);			// glass  
+        glassPtr.setIorIn(1.50);			// glass
         glassPtr.setIorOut(1.0);			// air
         glassPtr.setCfIn(glassColor);
         glassPtr.setCfOut(Utility.WHITE);
 
-	// water-air boundary
+        // water-air boundary
         Dielectric waterPtr = new Dielectric();
         waterPtr.setIorIn(1.33);			// water
         waterPtr.setIorOut(1.0);			// air
         waterPtr.setCfIn(waterColor);
         waterPtr.setCfOut(Utility.WHITE);
 
-	// water-glass boundary
+        // water-glass boundary
         Dielectric dielectricPtr = new Dielectric();
         dielectricPtr.setIorIn(1.33); 		// water
         dielectricPtr.setIorOut(1.50); 		// glass
         dielectricPtr.setCfIn(waterColor);
         dielectricPtr.setCfOut(glassColor);
 
-	// Define the GlassOfWater object
+        // Define the GlassOfWater object
         // The parameters below are the default values, but using the constructor that
         // takes these as arguments makes it easier to experiment with different values
         double height = 2.0;
@@ -126,7 +126,7 @@ public class BuildFigure38A implements BuildWorldFunction {
         glassOfWaterPtr.setWaterGlassMaterial(dielectricPtr);
         w.addObject(glassOfWaterPtr);
 
-	// define the straw
+        // define the straw
         Matte mattePtr = new Matte();
         mattePtr.setCd(1, 1, 0);
         mattePtr.setKa(0.25);
@@ -139,7 +139,7 @@ public class BuildFigure38A implements BuildWorldFunction {
         strawPtr.translate(0, 1.25, 0);
         w.addObject(strawPtr);
 
-	// ground plane
+        // ground plane
         Checker3D checkerPtr = new Checker3D();
         checkerPtr.setSize(0.5);
         checkerPtr.setColor1(0.75);

@@ -18,7 +18,6 @@
 package com.matrixpeckham.raytracer.geometricobjects;
 
 import com.matrixpeckham.raytracer.materials.Material;
-import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Normal;
@@ -65,7 +64,7 @@ public abstract class GeometricObject {
     public GeometricObject(GeometricObject object) {
         shadows = object.shadows;
         if (object.material != null) {
-            material = object.material.clone();
+            material = object.material.cloneMaterial();
         }
         color.setTo(object.color);
     }
@@ -75,7 +74,7 @@ public abstract class GeometricObject {
      *
      * @return
      */
-    public abstract GeometricObject clone();
+    public abstract GeometricObject cloneGeometry();
 
     /**
      * Hit function. All objects must override this. Implementing methods need
@@ -129,7 +128,7 @@ public abstract class GeometricObject {
      * @param mat
      */
     public void setMaterial(Material mat) {
-        material = mat.clone();
+        material = mat.cloneMaterial();
     }
 
     /**

@@ -22,55 +22,70 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.logging.Logger;
 
 /**
  * Holds the specification for an element and implements the means to read it.
+ *
  * @author William Matrix Peckham
  */
 class ElementType {
+
     /**
      * Property name to index
      */
     TreeMap<String, Integer> props = new TreeMap<>();
+
     /**
      * whether the property at the index is a list
      */
     ArrayList<Boolean> isList = new ArrayList<>();
+
     /**
      * Type of the property
      */
     ArrayList<Type> propType = new ArrayList<>();
+
     /**
-     * If property at index is a list, this will hold the type that the 
-     * count of the list will be
+     * If property at index is a list, this will hold the type that the count of
+     * the list will be
      */
     ArrayList<Type> listCountType = new ArrayList<>();
+
     /**
-     * element type name 
+     * element type name
      */
     String name;
 
     /**
      * Constructor
-     * @param name 
+     *
+     * @param name
      */
     public ElementType(String name) {
         this.name = name;
     }
-    
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
     /**
      * This reads a single element of this element type from a stream.
+     *
      * @param in stream to read from
      * @param binary true if the file is binary, false if ascii
      * @param littleEndian flag for endianness if binary, igored otherwise
-     * @return element 
+     * @return element
      * @throws IOException required for reading from stream
      */
     PLYElement readFrom(BufferedInputStream inl, boolean binary,
             boolean littleEndian) throws IOException {
         PLYElement element = new PLYElement(this);
         String line = PLYFile.readLine(inl);
-        BufferedInputStream in = new BufferedInputStream(new ByteArrayInputStream(line.getBytes()));
+        BufferedInputStream in = new BufferedInputStream(
+                new ByteArrayInputStream(line.getBytes("UTF-8")));
         //for every property
         for (int i = 0; i < propType.size(); i++) {
             //if it's a list, read list count
@@ -93,22 +108,13 @@ class ElementType {
         //alleviates the problem of undeclared properties in elements.
         return element;
     }
-    /**
-     * reads to the next line in an ascii file. 
-     * @param in
-     * @throws IOException 
-     */
-    private void readToNewline(BufferedInputStream in) throws IOException {
-        char c = (char)in.read();
-        while(c!='\n'&&c!='\r'&&c!='\uFFFF'){
-            c=(char)in.read();
-        }
-    }
+
     /**
      * Enum for the possible types in a ply file, knows how to read itself from
-     * a stream. 
+     * a stream.
      */
     public enum Type {
+
         /**
          * Character/Byte
          */
@@ -141,26 +147,32 @@ class ElementType {
          * Double
          */
         DOUBLE(8, "double"),;
+
         /**
          * name of this type
          */
         public final String name;
+
         /**
          * number of bytes in the binary file
          */
         public final int bytes;
+
         /**
          * Constructor
+         *
          * @param bytes
-         * @param name 
+         * @param name
          */
         private Type(int bytes, String name) {
             this.bytes = bytes;
             this.name = name;
         }
+
         /**
          * Reads an integer from the file and returns it. only works for integer
          * types.
+         *
          * @param in stream to read from
          * @param binary if the file is binary
          * @param littleEndian endian-ness of binary file, ignored if not binary
@@ -248,8 +260,11 @@ class ElementType {
                     }
             }
         }
+
         /**
-         * Reads an double from the file and returns it. will convert ints to double
+         * Reads an double from the file and returns it. will convert ints to
+         * double
+         *
          * @param in stream to read from
          * @param binary if the file is binary
          * @param littleEndian endian-ness of binary file, ignored if not binary
@@ -307,4 +322,8 @@ class ElementType {
         }
 
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(ElementType.class.getName());
+
 }

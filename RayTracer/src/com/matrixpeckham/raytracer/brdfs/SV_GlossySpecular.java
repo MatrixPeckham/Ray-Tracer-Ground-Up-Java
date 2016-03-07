@@ -21,12 +21,12 @@ import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.DoubleRef;
+import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Glossy Specular that uses a texture for color. same as glossy specular, but
@@ -72,11 +72,11 @@ public class SV_GlossySpecular extends BRDF {
         super(gs);
         ks = gs.ks;
         if (gs.cs != null) {
-            cs = gs.cs.clone();
+            cs = gs.cs.cloneTexture();
         }
         exp = gs.exp;
         if (gs.sampler != null) {
-            sampler = gs.sampler.clone();
+            sampler = gs.sampler.cloneSampler();
         }
     }
 
@@ -85,7 +85,8 @@ public class SV_GlossySpecular extends BRDF {
      *
      * @return
      */
-    public SV_GlossySpecular clone() {
+    @Override
+    public SV_GlossySpecular cloneBRDF() {
         return new SV_GlossySpecular(this);
     }
 
@@ -195,7 +196,10 @@ public class SV_GlossySpecular extends BRDF {
      * @param c
      */
     public void setCs(Texture c) {
-        cs = c.clone();
+        cs = c.cloneTexture();
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(SV_GlossySpecular.class.getName());
 
 }

@@ -18,7 +18,6 @@
 package com.matrixpeckham.raytracer.build.figures.ch29;
 
 import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
@@ -48,83 +47,62 @@ public class BuildFigure13 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
 // This builds the scene for Figure 29.13
+        int numSamples = 16;
 
- 												
+        w.vp.setHres(700);
+        w.vp.setVres(700);
+        w.vp.setSamples(numSamples);
 
-	int numSamples = 16;
-	
-	w.vp.setHres(700);      
-	w.vp.setVres(700);    
-	w.vp.setSamples(numSamples);
-	
-	w.backgroundColor = Utility.BLACK;
-	
-	w.tracer = new RayCast(w);
-	
-	Pinhole cameraPtr = new Pinhole();
-	cameraPtr.setEye(0, 65, 0); 				
-	cameraPtr.setLookat(new Point3D(0.0)); 
-	cameraPtr.setViewDistance(21000.0); 
-	cameraPtr.computeUVW();     
-	w.setCamera(cameraPtr); 
-	
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(0, 1, 0);		
-	lightPtr.scaleRadiance(2.5);  
-	w.addLight(lightPtr);
-	
-	
-	// image:					
+        w.backgroundColor = Utility.BLACK;
 
-	
-	// image:					
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        w.tracer = new RayCast(w);
+
+        Pinhole cameraPtr = new Pinhole();
+        cameraPtr.setEye(0, 65, 0);
+        cameraPtr.setLookat(new Point3D(0.0));
+        cameraPtr.setViewDistance(21000.0);
+        cameraPtr.computeUVW();
+        w.setCamera(cameraPtr);
+
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(0, 1, 0);
+        lightPtr.scaleRadiance(2.5);
+        w.addLight(lightPtr);
+
+        // image:
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
 //            imagePtr.loadPPMFile(new File(path+"EarthLowRes.ppm"));
-            imagePtr.loadPPMFile(new File(path+"EarthHighRes.ppm"));
+            imagePtr.loadPPMFile(new File(path + "EarthHighRes.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure13.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
 
-	
-	
-	// mapping:
-	
-	SphericalMap mapPtr = new SphericalMap(); 
-	
-	
-	// image based texture:  
-	
-	ImageTexture texturePtr = new ImageTexture(); 
-	texturePtr.setImage(imagePtr); 
-	texturePtr.setMapping(mapPtr);
-	
-	
-	// textured material:
+        // mapping:
+        SphericalMap mapPtr = new SphericalMap();
 
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.2);
-	svMattePtr.setKd(0.8);
-	svMattePtr.setCd(texturePtr);
-	
-	
-	// generic sphere:
-	
-	Sphere spherePtr = new Sphere(); 
-	spherePtr.setMaterial(svMattePtr);
-	w.addObject(spherePtr);
+        // image based texture:
+        ImageTexture texturePtr = new ImageTexture();
+        texturePtr.setImage(imagePtr);
+        texturePtr.setMapping(mapPtr);
 
+        // textured material:
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.2);
+        svMattePtr.setKd(0.8);
+        svMattePtr.setCd(texturePtr);
 
+        // generic sphere:
+        Sphere spherePtr = new Sphere();
+        spherePtr.setMaterial(svMattePtr);
+        w.addObject(spherePtr);
 
-	
-
-	
     }
-    
+
 }

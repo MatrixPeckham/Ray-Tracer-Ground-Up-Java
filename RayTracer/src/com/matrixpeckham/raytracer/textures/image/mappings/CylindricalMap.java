@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.textures.image.Mapping;
 import com.matrixpeckham.raytracer.textures.image.TexelCoord;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
  * Mapping for generic cylinder
@@ -35,7 +36,7 @@ public class CylindricalMap implements Mapping {
      * @return
      */
     @Override
-    public Mapping clone() {
+    public Mapping cloneMapping() {
         return new CylindricalMap();
     }
 
@@ -68,5 +69,7 @@ public class CylindricalMap implements Mapping {
         p.row = (int) ((yRes - 1) * v);
         return p;
     }
+    private static final Logger LOG
+            = Logger.getLogger(CylindricalMap.class.getName());
 
 }

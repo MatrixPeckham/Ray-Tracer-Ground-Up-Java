@@ -38,32 +38,32 @@ import java.util.logging.Logger;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure13 implements BuildWorldFunction{
+public class BuildFigure13 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
 
-	int numSamples = 16;
-	
-	w.vp.setHres(800);			
-	w.vp.setVres(400); 
-	w.vp.setSamples(numSamples);
-	w.vp.setPixelSize(1.0);
-	
-	w.tracer = new RayCast(w);	
-	
-	Spherical spherical = new Spherical();
-	spherical.setEye(new Point3D(0));     
-	spherical.setLookat(0, 0, -100);
-	spherical.setHorizontalFov(360);  
-	spherical.setVerticalFov(180);  
-	spherical.computeUVW();
-	w.setCamera(spherical);
-	
-	
-	Image image = new Image();
+        int numSamples = 16;
+
+        w.vp.setHres(800);
+        w.vp.setVres(400);
+        w.vp.setSamples(numSamples);
+        w.vp.setPixelSize(1.0);
+
+        w.tracer = new RayCast(w);
+
+        Spherical spherical = new Spherical();
+        spherical.setEye(new Point3D(0));
+        spherical.setLookat(0, 0, -100);
+        spherical.setHorizontalFov(360);
+        spherical.setVerticalFov(180);
+        spherical.computeUVW();
+        w.setCamera(spherical);
+
+        Image image = new Image();
         try {
-            image.loadPPMFile(new File("C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\uffizi_probe_small.ppm"));   // for development
+            image.loadPPMFile(new File(
+                    "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\uffizi_probe_small.ppm"));   // for development
 //	image.loadPPMFile(new File("C:\\Users\Owner\\Documents\\Ground Up raytracer\\Textures\ppm\\uffizi_probe_large.ppm"));   // for production
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure08.class.getName()).
@@ -71,28 +71,25 @@ public class BuildFigure13 implements BuildWorldFunction{
             throw new RuntimeException(ex);
         }
 
-	LightProbe lightProbe = new LightProbe();     	
-	lightProbe.makePanoramic();
-	
-	ImageTexture imageTexture = new ImageTexture(image); 
-	imageTexture.setMapping(lightProbe);
-	
-	SV_Matte svMatte = new SV_Matte();	// ka + kd > 1
-	svMatte.setKa(1.0);
-	svMatte.setKd(0.85); 	
-	svMatte.setCd(imageTexture);
-	
-	Sphere unitSphere = new Sphere();
-	unitSphere.setShadows(false);	
-	
-	Instance sphere = new Instance(unitSphere); 
-	sphere.scale(new Vector3D(1000000));
-	sphere.setMaterial(svMatte);
-	w.addObject(sphere);
+        LightProbe lightProbe = new LightProbe();
+        lightProbe.makePanoramic();
 
+        ImageTexture imageTexture = new ImageTexture(image);
+        imageTexture.setMapping(lightProbe);
 
+        SV_Matte svMatte = new SV_Matte();	// ka + kd > 1
+        svMatte.setKa(1.0);
+        svMatte.setKd(0.85);
+        svMatte.setCd(imageTexture);
 
+        Sphere unitSphere = new Sphere();
+        unitSphere.setShadows(false);
+
+        Instance sphere = new Instance(unitSphere);
+        sphere.scale(new Vector3D(1000000));
+        sphere.setMaterial(svMatte);
+        w.addObject(sphere);
 
     }
-    
+
 }

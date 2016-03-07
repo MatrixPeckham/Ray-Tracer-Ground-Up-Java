@@ -18,7 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects.beveledobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.compound.*;
+import com.matrixpeckham.raytracer.geometricobjects.compound.Compound;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConcavePartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartCylinder;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.ConvexPartTorus;
@@ -28,7 +28,6 @@ import com.matrixpeckham.raytracer.geometricobjects.primitives.Rectangle;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -36,6 +35,7 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import java.util.logging.Logger;
 
 /**
  * Beveled Wedge is a class for a wedge. does not play well with transparency
@@ -59,7 +59,7 @@ public class BeveledWedge extends Compound {
 
     /**
      * constructor that initializes everything defaults wedge angles to 30
-     * degrees 
+     * degrees
      *
      * @param bottom
      * @param top
@@ -118,7 +118,7 @@ public class BeveledWedge extends Compound {
         double xc4 = (r1 - rb) * (sinPhi1 * cosBeta - cosPhi1 * sinBeta);
         double zc4 = (r1 - rb) * (cosPhi1 * cosBeta + sinPhi1 * sinBeta);
 
-        // corner spheres 
+        // corner spheres
         // bottom spheres
         Sphere bottomC1 = new Sphere(new Point3D(xc1, y0 + rb, zc1), rb);
         objects.add(bottomC1);
@@ -132,7 +132,7 @@ public class BeveledWedge extends Compound {
         Sphere bottomC4 = new Sphere(new Point3D(xc4, y0 + rb, zc4), rb);
         objects.add(bottomC4);
 
-        // top spheres 
+        // top spheres
         Sphere topC1 = new Sphere(new Point3D(xc1, y1 - rb, zc1), rb);
         objects.add(topC1);
 
@@ -284,7 +284,7 @@ public class BeveledWedge extends Compound {
         // top flat surface -----------------------------------------------------------------------------------
         // main part
         Point3D center = new Point3D(0, y1, 0);
-        Normal normal = new Normal(0, 1, 0);
+        //Normal normal = new Normal(0, 1, 0);
         double rMin = r0 + rb;
         double rMax = r1 - rb;
         phiMin = phi0 + alpha * 180.0 / Math.PI;
@@ -321,7 +321,7 @@ public class BeveledWedge extends Compound {
         // bottom flat surface ---------------------------------------------------------------------------------
         // main part
         center = new Point3D(0, y0, 0);
-        normal = new Normal(0, -1, 0);
+        //normal = new Normal(0, -1, 0);
         rMin = r0 + rb;
         rMax = r1 - rb;
         phiMin = phi0 + alpha * 180.0 / Math.PI;
@@ -467,7 +467,7 @@ public class BeveledWedge extends Compound {
      * hit function overrides to use cached bounding box for early out
      *
      * @param ray
-     * @param sr
+     * @param r
      * @return
      */
     @Override
@@ -478,5 +478,8 @@ public class BeveledWedge extends Compound {
             return (false);
         }
     }
+
+    private static final Logger LOG
+            = Logger.getLogger(BeveledWedge.class.getName());
 
 }

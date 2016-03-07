@@ -32,8 +32,6 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import static java.awt.Color.black;
-import static java.awt.Color.white;
 
 /**
  *

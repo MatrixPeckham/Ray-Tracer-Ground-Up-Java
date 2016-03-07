@@ -20,15 +20,17 @@ package com.matrixpeckham.raytracer.textures;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.logging.Logger;
 
 /**
- * Texture that does not actually vary spatially.  Useful for debugging and 
- * for  use as an interior texture for nested textures with more than one
- * inner texture. 
+ * Texture that does not actually vary spatially. Useful for debugging and for
+ * use as an interior texture for nested textures with more than one inner
+ * texture.
+ *
  * @author William Matrix Peckham
  */
 public class ConstantColor implements Texture {
-    
+
     /**
      * color
      */
@@ -37,51 +39,59 @@ public class ConstantColor implements Texture {
     /**
      * white default
      */
-    public ConstantColor(){
+    public ConstantColor() {
         this(Utility.WHITE);
     }
-    
+
     /**
      * initialize to color
-     * @param color 
+     *
+     * @param color
      */
-    public ConstantColor(RGBColor color){
+    public ConstantColor(RGBColor color) {
         col.setTo(color);
     }
-    
+
     /**
      * sets the color
-     * @param col 
+     *
+     * @param col
      */
-    public void setColor(RGBColor col){
+    public void setColor(RGBColor col) {
         this.col.setTo(col);
     }
-    
+
     /**
      * getter for color
-     * @return 
+     *
+     * @return
      */
-    public RGBColor getColor(){
+    public RGBColor getColor() {
         return col;
     }
 
     /**
      * clone
-     * @return 
+     *
+     * @return
      */
     @Override
-    public Texture clone() {
+    public Texture cloneTexture() {
         return new ConstantColor(col);
     }
 
     /**
      * sample texture, return color
+     *
      * @param sr
-     * @return 
+     * @return
      */
     @Override
     public RGBColor getColor(ShadeRec sr) {
         return col;
     }
-    
+
+    private static final Logger LOG
+            = Logger.getLogger(ConstantColor.class.getName());
+
 }

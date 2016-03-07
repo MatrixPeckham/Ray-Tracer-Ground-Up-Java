@@ -51,105 +51,90 @@ public class BuildFigure16 implements BuildWorldFunction {
 //	This C++ code is licensed under the GNU General Public License Version 2.
 //	See the file COPYING.txt for the full license.
 
-
-// This builds the scene for Figure 30.16 
-
+// This builds the scene for Figure 30.16
 // You will need to implement the SphereTextures material that allows checkers with two
 // different textures to be rendered on a sphere.
 // You will also need to implement a spatially varying Phong material. My implementation
 // has textures for the diffuse and specular colors. In w figure the specular color is white.
 // A slightly simpler implementation would keep the specular color as a RGBColor.
-
 // Note that the RampFBmTexture is constructed using access functions for the parameters.
 // Also note that the marble and wood textures are continuous across the checkers.
-
 // Finally, I've changed the w.background to gray to make it easier to see the sphere.
+        int numSamples = 16;
 
+        w.vp.setHres(600);
+        w.vp.setVres(600);
+        w.vp.setSamples(numSamples);
 
+        w.tracer = new RayCast(w);
+        w.backgroundColor = new RGBColor(0.5);
 
-	int numSamples = 16;
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(3, 9, 25);
+        pinholePtr.setLookat(new Point3D(0.0));
+        pinholePtr.setViewDistance(7000.0);
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
-	w.vp.setHres(600);
-	w.vp.setVres(600);
-	w.vp.setSamples(numSamples);
-	
-	w.tracer = new RayCast(w);
-	w.backgroundColor = new RGBColor(0.5);
-		
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(3, 9, 25); 
-	pinholePtr.setLookat(new Point3D(0.0));  
-	pinholePtr.setViewDistance(7000.0); 
-	pinholePtr.computeUVW();     
-	w.setCamera(pinholePtr); 
-	
-	Directional lightPtr = new Directional();
-	lightPtr.setDirection(0.6, 1.1, 1);   
-	lightPtr.scaleRadiance(3.0);
-	w.addLight(lightPtr);
-	
-	
-	// blue marble ramp image
-		// image:
+        Directional lightPtr = new Directional();
+        lightPtr.setDirection(0.6, 1.1, 1);
+        lightPtr.scaleRadiance(3.0);
+        w.addLight(lightPtr);
 
-	Image imagePtr = new Image();			
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        // blue marble ramp image
+        // image:
+        Image imagePtr = new Image();
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
         try {
-            imagePtr.loadPPMFile(new File(path+"BlueMarbleRamp.ppm"));
+            imagePtr.loadPPMFile(new File(path + "BlueMarbleRamp.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04.class.getName()).
+            Logger.getLogger(
+                    com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04.class.
+                    getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
 
-	
-	
-	int 	numOctaves 	= 4;
-	double 	lacunarity 		= 2.0;
-	double 	gain 			= 0.5;
-	double 	perturbation	= 5.0;   // fbm amount
-	
-	RampFBmTexture marblePtr = new RampFBmTexture(imagePtr); 
-	marblePtr.setNumOctaves(numOctaves);
-	marblePtr.setLacunarity(lacunarity);
-	marblePtr.setGain(gain);
-	marblePtr.setPerturbation(perturbation);
-	
-	TInstance scaledMarblePtr = new TInstance(marblePtr);
-	scaledMarblePtr.scale(0.1);
-	
-	
-	// wood
+        int numOctaves = 4;
+        double lacunarity = 2.0;
+        double gain = 0.5;
+        double perturbation = 5.0;   // fbm amount
 
-	TInstance woodPtr = new TInstance(new Wood(new RGBColor(0.5, 0.3, 0.1), Utility.BLACK));
-	woodPtr.scale(0.2);
-	woodPtr.rotateX(45);
-	
-	
-	// texture to hold the marble and wood textures	
-	
-	SphereTextures sphereTexturesPtr = new SphereTextures();
-	sphereTexturesPtr.setNumHorizontalCheckers(12); 
-	sphereTexturesPtr.setNumVerticalCheckers(6);   
-	sphereTexturesPtr.setTexture1(scaledMarblePtr);
-	sphereTexturesPtr.setTexture2(woodPtr);
-	
-	
-	// spatially varying Phong material	
-		
-	SV_Phong svPhongPtr = new SV_Phong();		
-	svPhongPtr.setKa(0.25);  
-	svPhongPtr.setKd(0.75);
-	svPhongPtr.setCd(sphereTexturesPtr);
-	svPhongPtr.setKs(0.25);  
-	svPhongPtr.setExp(20.0);
-	svPhongPtr.setCs(new ConstantColor(Utility.WHITE));
-	
-	
-	Sphere spherePtr = new Sphere();
-	spherePtr.setMaterial(svPhongPtr);
-	w.addObject(spherePtr);
-}
+        RampFBmTexture marblePtr = new RampFBmTexture(imagePtr);
+        marblePtr.setNumOctaves(numOctaves);
+        marblePtr.setLacunarity(lacunarity);
+        marblePtr.setGain(gain);
+        marblePtr.setPerturbation(perturbation);
 
+        TInstance scaledMarblePtr = new TInstance(marblePtr);
+        scaledMarblePtr.scale(0.1);
+
+        // wood
+        TInstance woodPtr = new TInstance(new Wood(new RGBColor(0.5, 0.3, 0.1),
+                Utility.BLACK));
+        woodPtr.scale(0.2);
+        woodPtr.rotateX(45);
+
+        // texture to hold the marble and wood textures
+        SphereTextures sphereTexturesPtr = new SphereTextures();
+        sphereTexturesPtr.setNumHorizontalCheckers(12);
+        sphereTexturesPtr.setNumVerticalCheckers(6);
+        sphereTexturesPtr.setTexture1(scaledMarblePtr);
+        sphereTexturesPtr.setTexture2(woodPtr);
+
+        // spatially varying Phong material
+        SV_Phong svPhongPtr = new SV_Phong();
+        svPhongPtr.setKa(0.25);
+        svPhongPtr.setKd(0.75);
+        svPhongPtr.setCd(sphereTexturesPtr);
+        svPhongPtr.setKs(0.25);
+        svPhongPtr.setExp(20.0);
+        svPhongPtr.setCs(new ConstantColor(Utility.WHITE));
+
+        Sphere spherePtr = new Sphere();
+        spherePtr.setMaterial(svPhongPtr);
+        w.addObject(spherePtr);
+    }
 
 }

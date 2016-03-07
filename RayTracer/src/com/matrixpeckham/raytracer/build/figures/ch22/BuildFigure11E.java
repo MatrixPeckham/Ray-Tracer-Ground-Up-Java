@@ -64,7 +64,7 @@ public class BuildFigure11E implements BuildWorldFunction{
 //	int numSpheres = 1000000;		// for Figure 22.11(d)			
 	
 	double volume = 0.1 / numSpheres;
-	double radius = Math.pow(0.75 * volume / 3.14159, 0.333333);
+	double radius = Math.pow(0.75 * volume / Math.PI, 0.333333);
 	
 	setRandSeed(15);
 	

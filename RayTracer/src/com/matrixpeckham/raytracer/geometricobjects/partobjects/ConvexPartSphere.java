@@ -27,17 +27,26 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 
 /**
  * Convex Part Sphere. Same as PartSphere, but always returns outward normal
+ *
  * @author William Matrix Peckham
  */
 public class ConvexPartSphere extends GeometricObject {
+
     //for comments see PartSphere
     Point3D center = new Point3D();
+
     double radius = 1;
+
     double phiMin = 0;
+
     double phiMax = Utility.TWO_PI;
+
     double thetaMin = 0;
+
     double thetaMax = Utility.PI;
+
     double cosThetaMin = 1;
+
     double cosThetaMax = -1;
 
     /**
@@ -71,7 +80,8 @@ public class ConvexPartSphere extends GeometricObject {
 
     /**
      * copy constructor
-     * @param o 
+     *
+     * @param o
      */
     public ConvexPartSphere(ConvexPartSphere o) {
         super(o);
@@ -87,22 +97,24 @@ public class ConvexPartSphere extends GeometricObject {
 
     /**
      * clone
-     * @return 
+     *
+     * @return
      */
     @Override
-    public GeometricObject clone() {
+    public GeometricObject cloneGeometry() {
         return new ConvexPartSphere(this);
     }
 
     /**
      * hit function
+     *
      * @param ray
      * @param s
-     * @return 
+     * @return
      */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
-        double t = Utility.HUGE_VALUE;
+        double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
         double b = 2.0 * temp.dot(ray.d);
@@ -149,13 +161,16 @@ public class ConvexPartSphere extends GeometricObject {
 
     /**
      * shadow hit function
+     *
      * @param ray
      * @param tr
-     * @return 
+     * @return
      */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef tr) {
-        if(!shadows)return false;
+        if (!shadows) {
+            return false;
+        }
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);

@@ -48,13 +48,21 @@ public abstract class MeshTriangle extends GeometricObject {
      * mesh indices
      */
     public int index0 = 0;
+
+    /**
+     *
+     */
     public int index1 = 0;
+
+    /**
+     *
+     */
     public int index2 = 0;
 
     /**
      * normal of triangle plane
      */
-    public Normal normal = new Normal();
+    public final Normal normal = new Normal();
 
     /**
      * area of triangle, not used yet, could be used for making meshes area

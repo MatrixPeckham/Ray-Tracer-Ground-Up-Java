@@ -24,6 +24,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.logging.Logger;
 
 /**
  * Phong material, has specular highlights. Usually makes surfaces appear
@@ -64,9 +65,9 @@ public class Phong extends Material {
      */
     public Phong(Phong p) {
         super(p);
-        ambientBRDF = p.ambientBRDF.clone();
-        diffuseBRDF = p.diffuseBRDF.clone();
-        specularBRDF = p.specularBRDF.clone();
+        ambientBRDF = p.ambientBRDF.cloneBRDF();
+        diffuseBRDF = p.diffuseBRDF.cloneBRDF();
+        specularBRDF = p.specularBRDF.cloneBRDF();
     }
 
     /**
@@ -75,7 +76,7 @@ public class Phong extends Material {
      * @return
      */
     @Override
-    public Material clone() {
+    public Material cloneMaterial() {
         return new Phong(this);
     }
 
@@ -113,7 +114,7 @@ public class Phong extends Material {
                     inShadow = sr.w.lights.get(j).inShadow(shadowRay, sr);
                 }
                 //if we are not in shadow, or the material can't have shadows
-                //cast on it. 
+                //cast on it.
                 if (!inShadow || !shadow) {
                     RGBColor diffuseColor = diffuseBRDF.f(sr, wo, wi);
                     RGBColor specularColor = specularBRDF.f(sr, wo, wi);
@@ -280,7 +281,7 @@ public class Phong extends Material {
         Vector3D wo = sr.ray.d.neg();
         RGBColor L = new RGBColor();
 
-        //if depth is zero we direct shade the object, otherwise method is 
+        //if depth is zero we direct shade the object, otherwise method is
         //identical to pathshade
         if (sr.depth == 0) {
             L.setTo(shade(sr));
@@ -306,4 +307,7 @@ public class Phong extends Material {
         L.addLocal(Lspec);
         return L;
     }
+
+    private static final Logger LOG = Logger.getLogger(Phong.class.getName());
+
 }

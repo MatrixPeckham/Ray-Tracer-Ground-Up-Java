@@ -31,7 +31,7 @@ public interface Mapping {
      *
      * @return
      */
-    public Mapping clone();
+    public Mapping cloneMapping();
 
     /**
      * return a texture coordinate based on the point3d and the size of the

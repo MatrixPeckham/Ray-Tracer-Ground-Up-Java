@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 /**
  * Class for images. Holds float RGB color pixels.
@@ -47,7 +48,7 @@ public class Image {
     /**
      * pixels
      */
-    private ArrayList<RGBColor> pixels = new ArrayList<>();
+    private final ArrayList<RGBColor> pixels = new ArrayList<>();
 
     /**
      * default constructor (blank image, size (100,100) returns all RED.
@@ -92,8 +93,7 @@ public class Image {
      *
      * @return
      */
-    @Override
-    public Image clone() {
+    public Image cloneImage() {
         return new Image(this);
     }
 
@@ -306,5 +306,7 @@ public class Image {
     public int getVres() {
         return vres;
     }
+
+    private static final Logger LOG = Logger.getLogger(Image.class.getName());
 
 }

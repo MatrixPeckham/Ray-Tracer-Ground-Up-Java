@@ -20,7 +20,6 @@ package com.matrixpeckham.raytracer.build.figures.ch28;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.FishBowl;
-import com.matrixpeckham.raytracer.geometricobjects.compound.Grid;
 import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.PointLight;
@@ -80,8 +79,8 @@ public class BuildFigure41A implements BuildWorldFunction {
         lightPtr1.setShadows(true);
         w.addLight(lightPtr1);
 
-	// fishbowl
-	// glass-air interface
+        // fishbowl
+        // glass-air interface
         double c = 2;
         RGBColor glassColor = new RGBColor(0.27 * c, 0.49 * c, 0.42 * c);
         RGBColor waterColor = new RGBColor(0.75, 1, 0.75);
@@ -94,7 +93,7 @@ public class BuildFigure41A implements BuildWorldFunction {
         glassPtr.setCfIn(glassColor);
         glassPtr.setCfOut(Utility.WHITE);
 
-	// water-air interface
+        // water-air interface
         Dielectric waterPtr = new Dielectric();
         waterPtr.setKs(0.5);
         waterPtr.setExp(8000);
@@ -103,7 +102,7 @@ public class BuildFigure41A implements BuildWorldFunction {
         waterPtr.setCfIn(waterColor);
         waterPtr.setCfOut(Utility.WHITE);
 
-	// water-glass interface
+        // water-glass interface
         Dielectric dielectricPtr = new Dielectric();
         dielectricPtr.setKs(0.5);
         dielectricPtr.setExp(8000);
@@ -112,7 +111,7 @@ public class BuildFigure41A implements BuildWorldFunction {
         dielectricPtr.setCfIn(waterColor);
         dielectricPtr.setCfOut(glassColor);
 
-	// physical bowl parameters (also the defaults)
+        // physical bowl parameters (also the defaults)
         double innerRadius = 1.0;
         double glassThickness = 0.1;
         double waterDepth = 1.25;
@@ -129,24 +128,25 @@ public class BuildFigure41A implements BuildWorldFunction {
         fishbowlPtr.setWaterGlassMaterial(dielectricPtr);
         w.addObject(fishbowlPtr);
 
-	// goldfish
+        // goldfish
         Phong phongPtr = new Phong();
         phongPtr.setKa(0.4);
         phongPtr.setKd(0.8);
-        phongPtr.setCd(1.0, 0.15, 0.0);   	// orange 
+        phongPtr.setCd(1.0, 0.15, 0.0);   	// orange
         phongPtr.setKs(0.5);
         phongPtr.setCs(1.0, 0.35, 0.0);		// orange
         phongPtr.setExp(50.0);
         phongPtr.setShadows(false);
         //	String fileName = "goldfish_low_res.ply";		// for scene design
         String fileName = "goldfish_high_res.ply";  // for production
-	String path="C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
+        String path
+                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
-        try{
-        
-            gridPtr.readSmoothTriangles(new File(path+fileName));
-        } catch(IOException ex){
+        try {
+
+            gridPtr.readSmoothTriangles(new File(path + fileName));
+        } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -159,7 +159,7 @@ public class BuildFigure41A implements BuildWorldFunction {
         goldFishPtr.translate(0.5, 0.0, 0.0);
         w.addObject(goldFishPtr);
 
-	// plane
+        // plane
         PlaneChecker checkerPtr = new PlaneChecker();
         checkerPtr.setSize(0.5);
         checkerPtr.setOutlineWidth(0.05);
