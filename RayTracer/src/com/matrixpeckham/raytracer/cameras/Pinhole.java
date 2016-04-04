@@ -144,16 +144,6 @@ public class Pinhole extends Camera {
         this.zoom = zoom;
     }
 
-    /**
-     * sets the up vector
-     *
-     * @param i
-     * @param i0
-     * @param i1
-     */
-    public void setUpVector(int i, int i0, int i1) {
-        up.setTo(i, i0, i1);
-    }
 
     /**
      * render stereo function
