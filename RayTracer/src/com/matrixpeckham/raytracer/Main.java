@@ -29,6 +29,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
@@ -44,6 +46,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 import org.reflections.Reflections;
@@ -290,6 +293,19 @@ public class Main extends JFrame implements ActionListener {
 
         //create and start thread and timer
         thread = new RayTraceThread(w);
+        thread.setUncaughtExceptionHandler((Thread t, Throwable e) -> {
+            LOG.log(Level.SEVERE,
+                    "An Error Occered", e);
+            StringWriter strOut = new StringWriter();
+            PrintWriter str = new PrintWriter(strOut);
+            str.write(e.getMessage() + "");
+            str.write("\n");
+            e.printStackTrace(str);
+            JOptionPane.showMessageDialog(Main.this, "Error: " + strOut.
+                    toString(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            Main.this.updateTimer.stop();
+        });
 
         updateTimer.start();
 
@@ -544,4 +560,7 @@ public class Main extends JFrame implements ActionListener {
                     });
         }
     }
+
+    private static final Logger LOG = Logger.getLogger(Main.class.getName());
+
 }

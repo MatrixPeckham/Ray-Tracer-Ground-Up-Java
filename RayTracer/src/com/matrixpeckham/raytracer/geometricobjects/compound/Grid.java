@@ -64,16 +64,28 @@ public class Grid extends Compound {
     protected ArrayList<GeometricObject> cells = new ArrayList<>();
 
     //num cells in each direction
-
     /**
      *
      */
-        protected int nx = 0;
+    protected int nx = 0;
 
     /**
      *
      */
     protected int ny = 0;
+
+    /**
+     *
+     */
+    protected double multiplier = 2;
+
+    public double getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(double multiplier) {
+        this.multiplier = multiplier;
+    }
 
     /**
      *
@@ -391,7 +403,7 @@ public class Grid extends Compound {
         double wx = p1.x - p0.x;
         double wy = p1.y - p0.y;
         double wz = p1.z - p0.z;
-        double multiplier = 2.0; // multiplyer scales the number of grid cells relative to the number of objects
+        multiplier = 2.0; // multiplyer scales the number of grid cells relative to the number of objects
         double s = Math.pow(wx * wy * wz / numObjects, 0.3333333);
         nx = (int) (multiplier * wx / s + 1);
         ny = (int) (multiplier * wy / s + 1);

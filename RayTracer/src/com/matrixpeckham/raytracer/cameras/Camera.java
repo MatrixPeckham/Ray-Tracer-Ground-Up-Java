@@ -229,4 +229,15 @@ public abstract class Camera {
      */
     public abstract void renderStereo(World w, double x, int i);
 
+    /**
+     * sets the up vector
+     *
+     * @param i
+     * @param i0
+     * @param i1
+     */
+    public void setUpVector(int i, int i0, int i1) {
+        up.setTo(i, i0, i1);
+    }
+
 }

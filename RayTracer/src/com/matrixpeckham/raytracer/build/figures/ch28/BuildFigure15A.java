@@ -51,7 +51,7 @@ public class BuildFigure15A implements BuildWorldFunction {
 // of the image changes with maxDepth = 7.
 // There is also the issue of rays that are reflected off the interior spheres.
 // The opical environment inside the spheres is quite complex.
-        int numSamples = 1;
+        int numSamples = 25;
 
         w.vp.setHres(600);
         w.vp.setVres(600);
