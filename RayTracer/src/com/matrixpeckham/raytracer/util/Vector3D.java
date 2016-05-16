@@ -312,6 +312,27 @@ public class Vector3D {
     }
 
     /**
+     * Function returns a new vector that is the first argument rotated around
+     * the second argument by the third argument in radians.
+     *
+     * @param a vector to rotate
+     * @param b vector to rotate around
+     * @param angle angle to rotate
+     * @return new vector
+     */
+    public static Vector3D rotateAAroundB(Vector3D a, Vector3D b, double angle) {
+        Vector3D aParB = b.mul(a.dot(b) / (b.dot(b)));
+        Vector3D aPerpB = a.sub(aParB);
+        Vector3D w = b.cross(aPerpB);
+        double x1 = Math.cos(angle) / aPerpB.length();
+        double x2 = Math.sin(angle) / w.length();
+        Vector3D aPerpBAngle = aPerpB.mul(x1).add(w.mul(x2)).
+                mul(aPerpB.length());
+
+        return aPerpBAngle.add(aParB);
+    }
+
+    /**
      * dot product with normal
      *
      * @param v

@@ -32,12 +32,12 @@ public abstract class Camera {
      * Eye Point of the camera, center of ortho view, or focal point of
      * perspective.
      */
-    protected Point3D eye;
+    protected final Point3D eye;
 
     /**
      * Point for the camera to look at.
      */
-    protected Point3D lookat;
+    protected final Point3D lookat;
 
     /**
      * Roll angle along look direction.
@@ -47,22 +47,22 @@ public abstract class Camera {
     /**
      * Three unit vectors for every camera.
      */
-    protected Vector3D u;
+    protected final Vector3D u;
 
     /**
      *
      */
-    protected Vector3D v;
+    protected final Vector3D v;
 
     /**
      *
      */
-    protected Vector3D w;
+    protected final Vector3D w;
 
     /**
      * Up vector for the camera
      */
-    protected Vector3D up;
+    protected final Vector3D up;
 
     /**
      * Exposure time.
@@ -105,9 +105,10 @@ public abstract class Camera {
     public void computeUVW() {
         w.setTo(eye.sub(lookat));
         w.normalize();
-        u = up.cross(w);
+        up.setTo(Vector3D.rotateAAroundB(up, w, rollAngle));
+        u.setTo(up.cross(w));
         u.normalize();
-        v = w.cross(u);
+        v.setTo(w.cross(u));
 
         //special cases for strait up and down view.
         if (eye.x == lookat.x && eye.z == lookat.z && eye.y > lookat.y) {
@@ -164,6 +165,27 @@ public abstract class Camera {
         lookat.x = x;
         lookat.y = y;
         lookat.z = z;
+    }
+
+    /**
+     * Sets the look at vector to point in the direction of view direction.
+     *
+     * @param vd view direction
+     */
+    public void setViewDirection(Vector3D vd) {
+        lookat.setTo(eye.add(vd));
+    }
+
+    /**
+     * Sets the look at vector to point in the direction specified by the three
+     * parameters.
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void setViewDirection(double x, double y, double z) {
+        lookat.setTo(eye.add(new Vector3D(x, y, z)));
     }
 
     /**
