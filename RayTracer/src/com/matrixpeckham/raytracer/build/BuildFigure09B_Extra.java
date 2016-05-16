@@ -51,12 +51,12 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-        int numSamples = 16;
+        int numSamples = 1;
 
         w.vp.setHres(600);
         w.vp.setVres(600);
         w.vp.setSamples(numSamples);
-        w.vp.setMaxDepth(5);
+        w.vp.setMaxDepth(1);
 
         w.tracer = new Whitted(w);
         w.backgroundColor = Utility.BLACK;
@@ -75,6 +75,7 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
         Pinhole pinhole = new Pinhole();
         pinhole.setEye(-6, 5, 11);
         pinhole.setLookat(-0.009, 0.11, 0);
+        pinhole.setRoll(30.0 * Utility.PI_ON_180);
         pinhole.setViewDistance(37500);
         pinhole.computeUVW();
         w.setCamera(pinhole);

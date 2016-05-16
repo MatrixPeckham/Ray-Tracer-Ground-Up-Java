@@ -21,6 +21,7 @@ import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.Matte;
+import com.matrixpeckham.raytracer.tonemapping.ClampToColor;
 import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
@@ -55,7 +56,7 @@ public class BuildFigure22 implements BuildWorldFunction {
         w.vp.setVres(600);
         w.vp.setPixelSize(0.5);
         w.vp.setSamples(numSamples);
-        w.vp.setGamutDisplay(false);
+        w.vp.setToneMapper(new ClampToColor());
         w.tracer = new RayCast(w);
 
         Pinhole pinholePtr = new Pinhole();

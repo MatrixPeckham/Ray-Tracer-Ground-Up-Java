@@ -20,6 +20,8 @@ package com.matrixpeckham.raytracer.world;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Regular;
 import com.matrixpeckham.raytracer.samplers.Sampler;
+import com.matrixpeckham.raytracer.tonemapping.MaxToOne;
+import com.matrixpeckham.raytracer.tonemapping.ToneMapper;
 import java.util.logging.Logger;
 
 /**
@@ -65,11 +67,9 @@ public class ViewPlane {
     public double invGamma;
 
     /**
-     * Flag to show out of gamut colors as a solid known color. If true shows as
-     * red otherwise normalizes color, third option of clamping color is not
-     * implemented, but would be trivial to add.
+     * Tone mapper.
      */
-    public boolean showOutOfGamut;//TODO: implement color clamping as well.
+    public ToneMapper toneMapper = null;
 
     /**
      * Maximum recursion depth for rays.
@@ -96,7 +96,7 @@ public class ViewPlane {
         numSamples = 1;
         gamma = 1;
         invGamma = 1;
-        showOutOfGamut = false;
+        toneMapper = new MaxToOne();
     }
 
     /**
@@ -112,7 +112,7 @@ public class ViewPlane {
         sampler = vp.sampler.cloneSampler();
         gamma = vp.gamma;
         invGamma = vp.invGamma;
-        showOutOfGamut = vp.showOutOfGamut;
+        toneMapper = vp.toneMapper;
     }
 
     /**
@@ -128,7 +128,7 @@ public class ViewPlane {
         numSamples = vp.numSamples;
         gamma = vp.gamma;
         invGamma = vp.invGamma;
-        showOutOfGamut = vp.showOutOfGamut;
+        toneMapper = vp.toneMapper;
         return this;
     }
 
@@ -174,8 +174,8 @@ public class ViewPlane {
      *
      * @param show
      */
-    public void setGamutDisplay(boolean show) {
-        showOutOfGamut = show;
+    public void setToneMapper(ToneMapper show) {
+        toneMapper = show;
     }
 
     /**

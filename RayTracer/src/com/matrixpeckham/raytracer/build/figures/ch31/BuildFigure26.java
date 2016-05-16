@@ -23,6 +23,7 @@ import com.matrixpeckham.raytracer.lights.Directional;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.CubicNoise;
 import com.matrixpeckham.raytracer.textures.procedural.FBmTexture;
+import com.matrixpeckham.raytracer.tonemapping.ClampToColor;
 import com.matrixpeckham.raytracer.tracers.RayCast;
 import com.matrixpeckham.raytracer.util.Normal;
 import com.matrixpeckham.raytracer.util.Point3D;
@@ -60,7 +61,7 @@ public class BuildFigure26 implements BuildWorldFunction {
         w.vp.setHres(600);
         w.vp.setVres(600);
         w.vp.setSamples(numSamples);
-        w.vp.setGamutDisplay(true);
+        w.vp.setToneMapper(new ClampToColor());
 
         w.backgroundColor = Utility.BLACK;
         w.tracer = new RayCast(w);

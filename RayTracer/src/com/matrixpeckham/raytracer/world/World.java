@@ -164,36 +164,6 @@ public class World {
     }
 
     /**
-     * Normalizes color based on the largest component.
-     *
-     * @param c
-     * @return
-     */
-    public RGBColor maxToOne(RGBColor c) {
-        double maxVal = Math.max(c.r, Math.max(c.g, c.b));
-        if (maxVal > 1) {
-            return c.div(maxVal);
-        }
-        return c;
-    }
-
-    /**
-     * Changes a color to red if it is out of gamut
-     *
-     * @param rawColor
-     * @return
-     */
-    public RGBColor clampToColor(RGBColor rawColor) {
-        RGBColor c = new RGBColor(rawColor);
-        if (c.r > 1 || c.g > 1 || c.b > 1) {
-            c.r = 1;
-            c.g = 0;
-            c.b = 0;
-        }
-        return c;
-    }
-
-    /**
      * Sends a pixel to the GUI through the threading queue.
      *
      * @param row pixel x component
@@ -203,11 +173,7 @@ public class World {
     public void displayPixel(int row, int column, RGBColor rawColor) {
         RGBColor mappedColor;
         //fix out of gamut colors
-        if (vp.showOutOfGamut) {
-            mappedColor = clampToColor(rawColor);
-        } else {
-            mappedColor = maxToOne(rawColor);
-        }
+        mappedColor = vp.toneMapper.map(rawColor);
 
         //gamma correction
         if (vp.gamma != 1.0) {
