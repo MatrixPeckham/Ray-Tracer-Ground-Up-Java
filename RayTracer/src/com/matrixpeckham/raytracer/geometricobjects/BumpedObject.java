@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects;
 
-import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.textures.Texture;
 import com.matrixpeckham.raytracer.util.BBox;
 import com.matrixpeckham.raytracer.util.DoubleRef;
@@ -152,11 +151,11 @@ public class BumpedObject extends GeometricObject {
         return n;
     }
 
-    @Override
-    public Material getMaterial() {
-        return obj.getMaterial(); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    /*    @Override
+     public Material getMaterial() {
+     return obj.getMaterial(); //To change body of generated methods, choose Tools | Templates.
+     }
+     */
     @Override
     public BBox getBoundingBox() {
         return obj.getBoundingBox(); //To change body of generated methods, choose Tools | Templates.

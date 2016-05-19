@@ -31,8 +31,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.BlockingQueue;
@@ -49,7 +53,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
+import org.reflections.Configuration;
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 /**
  * Main class for the ray tracer program, contains the swing code for the GUI.
@@ -162,7 +169,7 @@ public class Main extends JFrame implements ActionListener {
      *
      * @throws java.net.URISyntaxException
      */
-    public Main() throws URISyntaxException {
+    public Main() throws URISyntaxException, MalformedURLException {
         //make the menu bar
         menuBar();
 
@@ -183,7 +190,7 @@ public class Main extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    private void menuBar() throws URISyntaxException {
+    private void menuBar() throws URISyntaxException, MalformedURLException {
         //standard swing menu bar generation.
         bar = new JMenuBar();
         JMenu file = new JMenu("File");
@@ -356,7 +363,8 @@ public class Main extends JFrame implements ActionListener {
      * @param args the command line arguments
      * @throws java.net.URISyntaxException
      */
-    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) throws URISyntaxException,
+            MalformedURLException {
         Main m = new Main();
         m.setVisible(true);
     }
@@ -432,9 +440,42 @@ public class Main extends JFrame implements ActionListener {
 
     //populates build functions
     private void populateBuildFunctions(String packName, JMenu menu) throws
-            URISyntaxException {
+            URISyntaxException, MalformedURLException {
         //use reflections api to get all buildworldfunction implementations
-        Reflections refl = new Reflections(packName);
+        File external = new File("./builders/");
+        ArrayList<URL> jars = new ArrayList<>();
+        jars.addAll(ClasspathHelper.forPackage(packName));
+        jars.add(external.toURL());
+        if (!(external.exists() && external.isDirectory())) {
+            external.mkdir();
+        } else {
+            File[] files = external.listFiles((File f) -> {
+                return f.getName().endsWith(".jar");
+            });
+            Arrays.stream(files).forEach((File f) -> {
+                try {
+                    jars.add(f.toURL());
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(Main.class.getName()).
+                            log(Level.SEVERE, null, ex);
+                }
+            });
+        }
+        ClassLoader currentThreadClassLoader
+                = Thread.currentThread().getContextClassLoader();
+
+        // Add the conf dir to the classpath
+        // Chain the current thread classloader
+        URLClassLoader urlClassLoader
+                = new URLClassLoader(jars.toArray(new URL[]{}),
+                        currentThreadClassLoader);
+
+        // Replace the thread classloader - assumes
+        // you have permissions to do so
+        Thread.currentThread().setContextClassLoader(urlClassLoader);
+        Configuration config = ConfigurationBuilder.build(jars.toArray());
+        Reflections refl = new Reflections(config);
+
         Set<Class<? extends BuildWorldFunction>> clss = refl.getSubTypesOf(
                 BuildWorldFunction.class);
 
