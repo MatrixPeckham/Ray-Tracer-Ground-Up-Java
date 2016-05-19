@@ -34,7 +34,7 @@ public class WrappedThreeColors implements Texture {
     /**
      * noise to use
      */
-    private LatticeNoise noise = null;
+    private Noise noise = null;
 
     /**
      * first color
@@ -166,7 +166,7 @@ public class WrappedThreeColors implements Texture {
      *
      * @return
      */
-    public LatticeNoise getNoise() {
+    public Noise getNoise() {
         return noise;
     }
 

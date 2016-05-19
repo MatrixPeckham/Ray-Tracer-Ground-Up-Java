@@ -33,7 +33,7 @@ public class FBmTexture implements Texture {
     /**
      * noise
      */
-    private LatticeNoise noise = null;
+    private Noise noise = null;
 
     /**
      * color
@@ -82,7 +82,7 @@ public class FBmTexture implements Texture {
      *
      * @param n
      */
-    public FBmTexture(LatticeNoise n) {
+    public FBmTexture(Noise n) {
         this(Utility.WHITE, 0, 1, n);
     }
 
@@ -94,7 +94,7 @@ public class FBmTexture implements Texture {
      * @param max
      * @param n
      */
-    public FBmTexture(RGBColor col, double min, double max, LatticeNoise n) {
+    public FBmTexture(RGBColor col, double min, double max, Noise n) {
         color.setTo(col);
         minValue = min;
         maxValue = max;

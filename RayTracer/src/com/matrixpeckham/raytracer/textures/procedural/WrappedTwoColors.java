@@ -34,7 +34,7 @@ public class WrappedTwoColors implements Texture {
     /**
      * noise to use
      */
-    private LatticeNoise noise = null;
+    private Noise noise = null;
 
     /**
      * first color

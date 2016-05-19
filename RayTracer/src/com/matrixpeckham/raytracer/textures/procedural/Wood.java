@@ -517,7 +517,7 @@ public class Wood implements Texture {
     }
 
     //see class comment
-    LatticeNoise noisePtr;
+    Noise noisePtr;
 
     RGBColor lightColor;
 

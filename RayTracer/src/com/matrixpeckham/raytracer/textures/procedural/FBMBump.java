@@ -33,7 +33,7 @@ public class FBMBump implements Texture {
     /**
      * noise value to use
      */
-    private LatticeNoise noise = null;
+    private Noise noise = null;
 
     /**
      * perturbation value (scales noise vectors)

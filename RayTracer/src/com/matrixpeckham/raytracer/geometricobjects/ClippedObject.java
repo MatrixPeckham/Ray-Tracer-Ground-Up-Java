@@ -29,11 +29,10 @@ import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
 
 /**
- * Special class for an object that will be bump mapped.
  *
  * @author William Matrix Peckham
  */
-public class BumpedObject extends GeometricObject {
+public class ClippedObject extends GeometricObject {
 
     /**
      * object to bump map
@@ -49,7 +48,12 @@ public class BumpedObject extends GeometricObject {
     /**
      * default constructor
      */
-    public BumpedObject() {
+    public ClippedObject() {
+    }
+
+    public ClippedObject(GeometricObject o, Texture t) {
+        obj = o;
+        bumpMap = t;
     }
 
     /**
@@ -57,7 +61,7 @@ public class BumpedObject extends GeometricObject {
      *
      * @param aThis
      */
-    private BumpedObject(BumpedObject aThis) {
+    private ClippedObject(ClippedObject aThis) {
         super(aThis);
         obj = aThis.obj.cloneGeometry();
         bumpMap = aThis.bumpMap.cloneTexture();
@@ -88,7 +92,7 @@ public class BumpedObject extends GeometricObject {
      */
     @Override
     public GeometricObject cloneGeometry() {
-        return new BumpedObject(this);
+        return new ClippedObject(this);
     }
 
     /**
@@ -104,17 +108,10 @@ public class BumpedObject extends GeometricObject {
         boolean hit = obj.hit(ray, s);
         //if we have a hit we need to augment the normal
         if (hit) {
-            //we get the color from the texture and the default normal
-            Normal n = new Normal(s.normal);
             RGBColor c = bumpMap.getColor(s);
-            //now we add the offset.
-            n.addLocal(new Normal(c.r, c.g, c.b));
-            //offset in range -1-1 so in theory we could double the normal so we average it then renormalize
-            n.x /= 2;
-            n.y /= 2;
-            n.z /= 2;
-            n.normalize();
-            s.normal.setTo(n);
+            if (c.average() > 0.5) {
+                return false;
+            }
         }
         return hit;
     }
@@ -129,7 +126,10 @@ public class BumpedObject extends GeometricObject {
      */
     @Override
     public boolean shadowHit(Ray ray, DoubleRef t) {
-        return obj.shadowHit(ray, t);
+        ShadeRec rec = new ShadeRec((World) null);
+        boolean hit = hit(ray, rec);
+        t.d = rec.lastT;
+        return hit;
     }
 
     /**
@@ -140,16 +140,7 @@ public class BumpedObject extends GeometricObject {
      */
     @Override
     public Normal getNormal(Point3D p) {
-        Normal n = new Normal(obj.getNormal(p));
-        ShadeRec r = new ShadeRec((World) null);
-        r.localHitPosition.setTo(p);
-        RGBColor c = bumpMap.getColor(r);
-        n.addLocal(new Normal(c.r, c.g, c.b));
-        n.x /= 2;
-        n.y /= 2;
-        n.z /= 2;
-        n.normalize();
-        return n;
+        return obj.getNormal(p);
     }
 
     @Override

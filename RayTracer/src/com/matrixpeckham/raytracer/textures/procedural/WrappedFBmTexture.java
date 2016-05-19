@@ -33,7 +33,7 @@ public class WrappedFBmTexture implements Texture {
     /**
      * noise
      */
-    private LatticeNoise noise = null;
+    private Noise noise = null;
 
     /**
      *

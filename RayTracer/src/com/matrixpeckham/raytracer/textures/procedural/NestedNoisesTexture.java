@@ -35,7 +35,7 @@ public class NestedNoisesTexture implements Texture {
     /**
      * noise to use
      */
-    private LatticeNoise noise = null;
+    private Noise noise = null;
 
     /**
      * black to this color

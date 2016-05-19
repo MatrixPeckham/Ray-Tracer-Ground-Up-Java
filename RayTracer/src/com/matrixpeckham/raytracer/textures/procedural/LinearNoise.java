@@ -72,7 +72,7 @@ public class LinearNoise extends LatticeNoise {
      * @return
      */
     @Override
-    public LatticeNoise setTo(LatticeNoise n) {
+    public Noise setTo(Noise n) {
         return super.setTo(n); //To change body of generated methods, choose Tools | Templates.
     }
 
