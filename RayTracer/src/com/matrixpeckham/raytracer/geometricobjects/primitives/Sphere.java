@@ -27,6 +27,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -148,6 +149,40 @@ public class Sphere extends GeometricObject {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr1) {
+        //intersect ray param
+        double t;
+
+        //set up the quadratic for ray parameter
+        Vector3D temp = ray.o.sub(center);
+        double a = ray.d.dot(ray.d);
+        double b = 2.0 * temp.dot(ray.d);
+        double c = temp.dot(temp) - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+
+        //solves the quadratic equation and sets all the ShadeRec fields
+        if (disc < 0) {
+            return false;
+        } else {
+            double e = Math.sqrt(disc);
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;
+            ShadeRec sr = new ShadeRec(sr1);
+            sr.lastT = t;
+            sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
+            sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+            hits.add(sr);
+            t = (-b + e) / denom;
+            sr = new ShadeRec(sr1);
+            sr.lastT = t;
+            sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
+            sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+            hits.add(sr);
+            return true;
+        }
     }
 
     /**

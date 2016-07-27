@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.ArrayList;
 
 /**
  * Part of a ring.
@@ -203,13 +204,56 @@ public class PartRing extends GeometricObject {
             phi += Utility.TWO_PI;
         }
 
-        //checks location ray parameter and distance and angle for hit 
+        //checks location ray parameter and distance and angle for hit
         if (phi >= phiMin && phi <= phiMax) {
             if (center.distSquared(p) < outerRadius * outerRadius) {
                 if (center.distSquared(p) > innerRadius * innerRadius) {
                     s.lastT = t;
                     s.normal.setTo(normal);
                     s.localHitPosition.setTo(p);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+        //plane hit
+        double dot = ray.d.dot(normal);
+        if (dot == 0) {
+            return false;
+        }
+        double t = (center.sub(ray.o).dot(normal) / (ray.d.dot(normal)));
+
+        //location of plane hit
+        Point3D p = ray.o.add(ray.d.mul(t));
+
+        //angle of point
+        double phi = Math.atan2(p.x, p.z);
+
+        //resets angle
+        if (phi < 0) {
+            phi += Utility.TWO_PI;
+        }
+
+        //checks location ray parameter and distance and angle for hit
+        if (phi >= phiMin && phi <= phiMax) {
+            if (center.distSquared(p) < outerRadius * outerRadius) {
+                if (center.distSquared(p) > innerRadius * innerRadius) {
+                    ShadeRec s = new ShadeRec(sr);
+                    s.lastT = t;
+                    s.normal.setTo(normal);
+                    s.localHitPosition.setTo(p);
+                    hits.add(s);
                     return true;
                 }
             }

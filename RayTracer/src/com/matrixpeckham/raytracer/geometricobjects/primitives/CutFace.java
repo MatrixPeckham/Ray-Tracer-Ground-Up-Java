@@ -22,6 +22,7 @@ import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -158,6 +159,45 @@ public class CutFace extends GeometricObject {
     }
 
     /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec s) {
+        //because we're on the xz plane we only need the y intercept as the t param
+        if (ray.d.y == 0) {
+            return false;
+        }
+        double t = -ray.o.y / ray.d.y;
+
+        //we do hit the plane
+        //x and y coordinates of hit point
+        double xi = ray.o.x + t * ray.d.x;
+        double zi = ray.o.z + t * ray.d.z;
+        //distance on plane
+        double d = xi * xi + zi * zi;
+        //half width of square
+        double size_on_two = 0.5 * size;
+
+        //checks for inside square and outside circle.
+        if ((-size_on_two <= xi && xi <= size_on_two) && (-size_on_two <= zi
+                && zi <= size_on_two) // inside square
+                && d >= radius * radius) // outside circle
+        {
+            ShadeRec sr = new ShadeRec(s);
+            sr.lastT = t;
+            sr.normal.setTo(0.0, 1.0, 0.0);
+            sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+            hit.add(sr);
+            return (true);
+        }
+        return false;
+    }
+
+    /**
      * shadow function works the same way as hit function
      *
      * @param ray
@@ -188,6 +228,7 @@ public class CutFace extends GeometricObject {
         return (false);
     }
 
-    private static final Logger LOG = Logger.getLogger(CutFace.class.getName());
+    private static final Logger LOG = Logger.getLogger(CutFace.class
+            .getName());
 
 }

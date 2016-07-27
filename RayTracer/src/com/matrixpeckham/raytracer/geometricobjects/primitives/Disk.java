@@ -28,6 +28,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -206,6 +207,35 @@ public class Disk extends GeometricObject {
             s.lastT = t;
             s.normal.setTo(normal);
             s.localHitPosition.setTo(p);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec sr) {
+        //get the intersection of the ray with the plane
+        double dot = ray.d.dot(normal);
+        if (dot == 0) {
+            return false;
+        }
+        double t = (center.sub(ray.o).dot(normal) / (ray.d.dot(normal)));
+        //find point on plane and check it for distance from center point
+        Point3D p = ray.o.add(ray.d.mul(t));
+        if (center.distSquared(p) < radius * radius) {
+            ShadeRec s = new ShadeRec(sr);
+            s.lastT = t;
+            s.normal.setTo(normal);
+            s.localHitPosition.setTo(p);
+            hit.add(s);
             return true;
         } else {
             return false;

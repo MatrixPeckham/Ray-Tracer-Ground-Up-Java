@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
+import java.util.ArrayList;
 
 /**
  * NOT PUBLIC UNTIL I CAN SPEED UP HIT FUNCTION This class should be the torus
@@ -151,6 +152,76 @@ class Torus extends GeometricObject {
         s.lastT = t;
         s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
         s.normal.setTo(computeNormal(s.localHitPosition));
+
+        return (true);
+    }
+
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+        if (!bbox.hit(ray)) {
+            return (false);
+        }
+
+        double x1 = ray.o.x;
+        double y1 = ray.o.y;
+        double z1 = ray.o.z;
+        double d1 = ray.d.x;
+        double d2 = ray.d.y;
+        double d3 = ray.d.z;
+
+        //double[] coeffs = new double[5];	// coefficient array for the quartic equation
+        double[] roots = new double[4];	// solution array for the quartic equation
+
+        // define the coefficients of the quartic equation
+        double sum_d_sqrd = d1 * d1 + d2 * d2 + d3 * d3;
+        double e = x1 * x1 + y1 * y1 + z1 * z1 - a * a - b * b;
+        double f = x1 * d1 + y1 * d2 + z1 * d3;
+        double four_a_sqrd = 4.0 * a * a;
+
+        double E = e * e - four_a_sqrd * (b * b - y1 * y1); 	// constant term
+        double D = 4.0 * f * e + 2.0 * four_a_sqrd * y1 * d2;
+        double C = 2.0 * sum_d_sqrd * e + 4.0 * f * f + four_a_sqrd * d2 * d2;
+        double B = 4.0 * sum_d_sqrd * f;
+        double A = sum_d_sqrd * sum_d_sqrd; // coefficient of t^4
+        /*coeffs[0] = E;
+         coeffs[1] = D;
+         coeffs[2] = C;
+         coeffs[3] = B;
+         coeffs[4] = A;
+         */
+        boolean intersected = false;
+
+        // find roots of the quartic equation
+        //int num_real_roots = Utility.solveQuartic(coeffs, roots);
+        //QuarticAnswer qa = Utility.solveQuartic(A, B,C,D,E);
+        BruteForceSolver solver = new BruteForceSolver(A, B, C, D, E);
+        int num_real_roots = solver.solveQuartic(roots);
+
+        double t = Utility.HUGE_VALUE;
+
+        //        if (qa.numRealRoots == 0) // ray misses the torus
+        if (num_real_roots == 0) {
+            return (false);
+        }
+
+        // find the smallest root greater than kEpsilon, if any
+        // the roots array is not sorted
+        //        for (int j = 0; j < qa.numRealRoots; j++) {
+        for (int j = 0; j < num_real_roots; j++) {
+            intersected = true;
+            ShadeRec s = new ShadeRec(sr);
+            s.lastT = t;
+            s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+            s.normal.setTo(computeNormal(s.localHitPosition));
+            hits.add(s);
+        }
+        hits.sort((ShadeRec s1, ShadeRec s2) -> {
+            return (int) (s1.lastT - s2.lastT);
+        });
+
+        if (!intersected) {
+            return (false);
+        }
 
         return (true);
     }

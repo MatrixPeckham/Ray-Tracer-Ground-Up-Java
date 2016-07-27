@@ -24,6 +24,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -110,6 +111,30 @@ public class Plane extends GeometricObject {
             return true;
         }
         return false;
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+        //intersection point with plane
+        double dot = (ray.d.dot(new Vector3D(n)));
+        if (dot == 0) {
+            return false;
+        }
+        double t = a.sub(ray.o).dot(new Vector3D(n)) / dot;
+        //t is greater than eps
+        ShadeRec s = new ShadeRec(sr);
+        s.lastT = t;
+        s.normal.setTo(n);
+        s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+        hits.add(s);
+        return true;
     }
 
     /**

@@ -27,6 +27,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.ArrayList;
 
 /**
  *
@@ -111,6 +112,30 @@ public class ClippedObject extends GeometricObject {
             RGBColor c = bumpMap.getColor(s);
             if (c.average() > 0.5) {
                 return false;
+            }
+        }
+        return hit;
+    }
+
+    /**
+     * Hit function this is where we augment the normal before returning.
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+        //differ to sub object
+        boolean hit = obj.hit(ray, hits, sr);
+        //if we have a hit we need to augment the normal
+        if (hit) {
+            for (int i = hits.size() - 1; i >= 0; i--) {
+                ShadeRec s = hits.get(i);
+                RGBColor c = bumpMap.getColor(s);
+                if (c.average() > 0.5) {
+                    hits.remove(i);
+                }
             }
         }
         return hit;

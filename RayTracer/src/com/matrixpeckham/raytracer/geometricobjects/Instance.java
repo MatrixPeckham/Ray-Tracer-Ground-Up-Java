@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 
 /**
  * Instance class. Useful for transforming generic primitives and for creating
@@ -292,6 +293,33 @@ public class Instance extends GeometricObject {
         return false;
     }
 
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+        //we transform the ray by the inverse transform matrix, then differ to original object's hit function
+        Ray invRay = new Ray(ray);
+        invRay.o.setTo(Point3D.mul(invMatrix, invRay.o));
+        invRay.d.setTo(Vector3D.mul(invMatrix, invRay.d));
+
+        if (object.hit(invRay, hits, s)) {
+            for (ShadeRec s2 : hits) {
+                //we have to transform the hit normal to world coordinates
+                s2.normal.setTo(Normal.mul(invMatrix, s2.normal));
+                s2.normal.normalize();
+                //use object material
+                if (object.getMaterial() != null) {
+                    material = object.getMaterial();
+                }
+
+                //if we don't transform the texture we use world texture coordinates, otherwise use local texture coordinates
+                if (!transformTexture) {
+                    s2.localHitPosition.setTo(ray.o.add(ray.d.mul(s.lastT)));
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * shadow hit function
      *
@@ -379,7 +407,7 @@ public class Instance extends GeometricObject {
      */
     public void translate(Vector3D trans) {
 
-        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix	
+        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix
 
         inv_translation_matrix.m[0][3] = -trans.x;
         inv_translation_matrix.m[1][3] = -trans.y;
@@ -387,7 +415,7 @@ public class Instance extends GeometricObject {
 
         invMatrix = invMatrix.mul(inv_translation_matrix);
 
-        Matrix translation_matrix = new Matrix();// temporary translation matrix	
+        Matrix translation_matrix = new Matrix();// temporary translation matrix
 
         translation_matrix.m[0][3] = trans.x;
         translation_matrix.m[1][3] = trans.y;
@@ -405,7 +433,7 @@ public class Instance extends GeometricObject {
      */
     public void translate(double dx, double dy, double dz) {
 
-        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix	
+        Matrix inv_translation_matrix = new Matrix();// temporary inverse translation matrix
 
         inv_translation_matrix.m[0][3] = -dx;
         inv_translation_matrix.m[1][3] = -dy;
@@ -413,7 +441,7 @@ public class Instance extends GeometricObject {
 
         invMatrix = invMatrix.mul(inv_translation_matrix);
 
-        Matrix translation_matrix = new Matrix();// temporary translation matrix	
+        Matrix translation_matrix = new Matrix();// temporary translation matrix
 
         translation_matrix.m[0][3] = dx;
         translation_matrix.m[1][3] = dy;
@@ -489,7 +517,7 @@ public class Instance extends GeometricObject {
         double sin_theta = Math.sin(theta * Utility.PI / 180.0);
         double cos_theta = Math.cos(theta * Utility.PI / 180.0);
 
-        Matrix inv_z_rotation_matrix = new Matrix();// temporary inverse rotation matrix about y axis	
+        Matrix inv_z_rotation_matrix = new Matrix();// temporary inverse rotation matrix about y axis
 
         inv_z_rotation_matrix.m[0][0] = cos_theta;
         inv_z_rotation_matrix.m[0][1] = sin_theta;

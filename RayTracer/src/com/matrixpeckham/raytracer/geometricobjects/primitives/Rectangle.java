@@ -28,6 +28,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -220,6 +221,50 @@ public class Rectangle extends GeometricObject {
         s.lastT = t;
         s.normal.setTo(normal);
         s.localHitPosition.setTo(p);
+        return true;
+    }
+
+    /**
+     * hit method
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec sr) {
+        //plane intersection parameter
+        double dot = ray.d.dot(normal);
+        if (dot == 0) {
+            return false;
+        }
+        double t = p0.sub(ray.o).dot(normal) / dot;
+
+        //hit point
+        Point3D p = ray.o.add(ray.d.mul(t));
+
+        //from point on plane to hit point
+        Vector3D d = p.sub(p0);
+
+        //project onto a
+        double ddota = d.dot(a);
+        //we're outside of the a direction
+        if (ddota < 0 || ddota > aLenSquared) {
+            return false;
+        }
+
+        //project onto b
+        double ddotb = d.dot(b);
+        //we're outside of the b direction
+        if (ddotb < 0 || ddotb > bLenSquared) {
+            return false;
+        }
+        //if we're here we hit and set shaderec up
+        ShadeRec s = new ShadeRec(sr);
+        s.lastT = t;
+        s.normal.setTo(normal);
+        s.localHitPosition.setTo(p);
+        hit.add(s);
         return true;
     }
 

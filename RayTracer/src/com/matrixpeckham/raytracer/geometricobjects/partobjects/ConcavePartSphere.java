@@ -24,6 +24,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 
 /**
  * Concave Part Sphere. Same as Convex part sphere but returns inward facing
@@ -158,6 +159,61 @@ public class ConcavePartSphere extends GeometricObject {
             }
         }
         return false;
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+        double t;
+        Vector3D temp = ray.o.sub(center);
+        double a = ray.d.dot(ray.d);
+        double b = 2.0 * temp.dot(ray.d);
+        double c = temp.dot(temp) - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+        if (disc < 0) {
+            return false;
+        } else {
+            boolean ret = false;
+            double e = Math.sqrt(disc);
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;
+            Vector3D hit = ray.o.add(ray.d.mul(t)).sub(center);
+            double phi = Math.atan2(hit.x, hit.z);
+            if (phi < 0) {
+                phi += Utility.TWO_PI;
+            }
+            if (hit.y <= radius * cosThetaMin && hit.y >= radius
+                    * cosThetaMax && phi >= phiMin && phi <= phiMax) {
+                ShadeRec s = new ShadeRec(sr);
+                s.lastT = t;
+                s.normal.setTo(temp.add(ray.d.mul(t)).div(radius).neg()); //points in
+                s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+                hits.add(s);
+                ret = true;
+            }
+            t = (-b + e) / denom;
+            hit = ray.o.add(ray.d.mul(t)).sub(center);
+            phi = Math.atan2(hit.x, hit.z);
+            if (phi < 0) {
+                phi += Utility.TWO_PI;
+            }
+            if (hit.y <= radius * cosThetaMin && hit.y >= radius
+                    * cosThetaMax && phi >= phiMin && phi <= phiMax) {
+                ShadeRec s = new ShadeRec(sr);
+                s.lastT = t;
+                s.normal.setTo(temp.add(ray.d.mul(t)).div(radius).neg()); //points in
+                s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
+                hits.add(s);
+                ret = true;
+            }
+            return ret;
+        }
     }
 
     /**

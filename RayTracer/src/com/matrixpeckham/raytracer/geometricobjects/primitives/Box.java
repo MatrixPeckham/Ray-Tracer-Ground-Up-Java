@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -224,6 +225,107 @@ public class Box extends GeometricObject {
             }
 
             sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
+            return (true);
+        } else {
+            return (false);
+        }
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec s) {
+
+        //convienence variables
+        double ox = ray.o.x;
+        double oy = ray.o.y;
+        double oz = ray.o.z;
+        double dx = ray.d.x;
+        double dy = ray.d.y;
+        double dz = ray.d.z;
+
+        //variables for ray parameters
+        double tx_min, ty_min, tz_min;
+        double tx_max, ty_max, tz_max;
+
+        //calculate slab intersection times
+        double a = 1.0 / dx;
+        if (a >= 0) {
+            tx_min = (x0 - ox) * a;
+            tx_max = (x1 - ox) * a;
+        } else {
+            tx_min = (x1 - ox) * a;
+            tx_max = (x0 - ox) * a;
+        }
+
+        double b = 1.0 / dy;
+        if (b >= 0) {
+            ty_min = (y0 - oy) * b;
+            ty_max = (y1 - oy) * b;
+        } else {
+            ty_min = (y1 - oy) * b;
+            ty_max = (y0 - oy) * b;
+        }
+
+        double c = 1.0 / dz;
+        if (c >= 0) {
+            tz_min = (z0 - oz) * c;
+            tz_max = (z1 - oz) * c;
+        } else {
+            tz_min = (z1 - oz) * c;
+            tz_max = (z0 - oz) * c;
+        }
+
+        //find the times for entering and exiting the box and the faces
+        double t0, t1;
+
+        int face_in, face_out;
+
+        // find largest entering t value
+        if (tx_min > ty_min) {
+            t0 = tx_min;
+            face_in = (a >= 0.0) ? 0 : 3;
+        } else {
+            t0 = ty_min;
+            face_in = (b >= 0.0) ? 1 : 4;
+        }
+
+        if (tz_min > t0) {
+            t0 = tz_min;
+            face_in = (c >= 0.0) ? 2 : 5;
+        }
+
+        // find smallest exiting t value
+        if (tx_max < ty_max) {
+            t1 = tx_max;
+            face_out = (a >= 0.0) ? 3 : 0;
+        } else {
+            t1 = ty_max;
+            face_out = (b >= 0.0) ? 4 : 1;
+        }
+
+        if (tz_max < t1) {
+            t1 = tz_max;
+            face_out = (c >= 0.0) ? 5 : 2;
+        }
+
+        //hit test and fills shaderec.
+        if (t0 < t1) {  // condition for a hit
+            ShadeRec sr = new ShadeRec(s);
+            sr.lastT = t0;  			// ray hits outside surface
+            sr.normal.setTo(getNormal(face_in));
+            sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
+            hit.add(sr);
+            sr = new ShadeRec(s);
+            sr.lastT = t1;				// ray hits inside surface
+            sr.normal.setTo(getNormal(face_out));
+            sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
+            hit.add(sr);
             return (true);
         } else {
             return (false);

@@ -24,6 +24,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 
 /**
  * Convex Part Cylinder. same as PartCylinder. but always returns an outward
@@ -34,11 +35,10 @@ import com.matrixpeckham.raytracer.util.Vector3D;
 public class ConvexPartCylinder extends GeometricObject {
 
     //for more comments please see PartCylinder
-
     /**
      *
      */
-        protected double y0;
+    protected double y0;
 
     /**
      *
@@ -203,6 +203,82 @@ public class ConvexPartCylinder extends GeometricObject {
         }
 
         return (false);
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param sr
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+        double t;
+        double ox = ray.o.x;
+        double oy = ray.o.y;
+        double oz = ray.o.z;
+        double dx = ray.d.x;
+        double dy = ray.d.y;
+        double dz = ray.d.z;
+
+        double a = dx * dx + dz * dz;
+        double b = 2.0 * (ox * dx + oz * dz);
+        double c = ox * ox + oz * oz - radius * radius;
+        double disc = b * b - 4.0 * a * c;
+
+        if (disc < 0.0) {
+            return (false);
+        } else {
+            double e = Math.sqrt(disc);
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;    // smaller root
+            boolean ret = false;
+            double yhit = oy + t * dy;
+            Vector3D hit = new Vector3D(ray.o.add(ray.d.mul(t)));
+            double phi = Math.atan2(hit.x, hit.z);
+            if (phi < 0) {
+                phi += Utility.TWO_PI;
+            }
+
+            if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
+                ShadeRec sr = new ShadeRec(s);
+                sr.lastT = t;
+                sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                        (oz + t * dz) * invRadius));
+
+                // test for hitting from inside
+                sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
+                        ray.d)));
+                hits.add(sr);
+                ret = true;
+            }
+
+            t = (-b + e) / denom;    // larger root
+
+            yhit = oy + t * dy;
+            hit = new Vector3D(ray.o.add(ray.d.mul(t)));
+            phi = Math.atan2(hit.x, hit.z);
+            if (phi < 0) {
+                phi += Utility.TWO_PI;
+            }
+
+            if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
+                ShadeRec sr = new ShadeRec(s);
+                sr.lastT = t;
+                sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                        (oz
+                        + t * dz) * invRadius));
+
+                // test for hitting inside surface
+                sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
+                        ray.d)));
+
+                ret = true;
+            }
+            return ret;
+        }
+
     }
 
     /**

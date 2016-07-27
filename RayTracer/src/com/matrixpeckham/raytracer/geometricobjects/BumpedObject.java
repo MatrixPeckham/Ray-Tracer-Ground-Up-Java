@@ -26,6 +26,7 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.ArrayList;
 
 /**
  * Special class for an object that will be bump mapped.
@@ -114,6 +115,36 @@ public class BumpedObject extends GeometricObject {
             n.z /= 2;
             n.normalize();
             s.normal.setTo(n);
+        }
+        return hit;
+    }
+
+    /**
+     * Hit function this is where we augment the normal before returning.
+     *
+     * @param ray
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+        //differ to sub object
+        boolean hit = obj.hit(ray, hits, sr);
+        //if we have a hit we need to augment the normal
+        if (hit) {
+            for (ShadeRec s : hits) {
+                //we get the color from the texture and the default normal
+                Normal n = new Normal(s.normal);
+                RGBColor c = bumpMap.getColor(s);
+                //now we add the offset.
+                n.addLocal(new Normal(c.r, c.g, c.b));
+                //offset in range -1-1 so in theory we could double the normal so we average it then renormalize
+                n.x /= 2;
+                n.y /= 2;
+                n.z /= 2;
+                n.normalize();
+                s.normal.setTo(n);
+            }
         }
         return hit;
     }

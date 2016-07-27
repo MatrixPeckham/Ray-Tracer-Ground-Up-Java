@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Point3D;
 import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
+import java.util.ArrayList;
 
 /**
  * Geometric Object abstract base class. This is the class all objects are based
@@ -92,6 +93,28 @@ public abstract class GeometricObject {
      * @return
      */
     public abstract boolean hit(Ray ray, ShadeRec s);
+
+    /**
+     * Hit function. All objects must override this. Implementing methods need
+     * to check the ray for a hit, compute the ray parameter at the
+     * intersection. find the normal at the intersection point for every ray
+     * intersection with the object. it should store one shaderec per hit sorted
+     * by shaderec.lastT
+     *
+     * each shaderec should be copied from the s parameter
+     *
+     * implementing functions store the hit ray parameter in ShadeRec.lastT
+     *
+     * they should store the normal in ShadeRec.normal
+     *
+     * they should store the hit point in ShadeRec.localHitPosition
+     *
+     * @param ray
+     * @param hits
+     * @param s
+     * @return
+     */
+    public abstract boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s);
 
     /**
      * sets the color of the object, only used for chapter five.

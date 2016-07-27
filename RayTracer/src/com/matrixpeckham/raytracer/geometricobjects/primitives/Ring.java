@@ -28,6 +28,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -242,6 +243,31 @@ public class Ring extends GeometricObject {
                 s.lastT = t;
                 s.normal.setTo(normal);
                 s.localHitPosition.setTo(p);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s1) {
+        //gets the ray/plane instersection point
+        double dot = (ray.d.dot(normal));
+        if (dot == 0) {
+            return false;
+        }
+        double t = (center.sub(ray.o).dot(normal) / dot);
+        //early out if we're too close, prevent self intersection noise
+        //gets the hit point for ray/plane
+        Point3D p = ray.o.add(ray.d.mul(t));
+        //only if the distance from the center to hit point  between inner and outer radius
+        if (center.distSquared(p) < outerRadius * outerRadius) {
+            if (center.distSquared(p) > innerRadius * innerRadius) {
+                ShadeRec s = new ShadeRec(s1);
+                s.lastT = t;
+                s.normal.setTo(normal);
+                s.localHitPosition.setTo(p);
+                hits.add(s);
                 return true;
             }
         }

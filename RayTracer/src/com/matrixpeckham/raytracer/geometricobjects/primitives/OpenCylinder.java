@@ -25,6 +25,7 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -186,6 +187,89 @@ public class OpenCylinder extends GeometricObject {
         }
 
         return (false);
+    }
+
+    /**
+     * hit function
+     *
+     * @param ray
+     * @param shr
+     * @param s
+     * @return
+     */
+    @Override
+    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+        //ray param
+        double t;
+
+        //convienence variables
+        double ox = ray.o.x;
+        double oy = ray.o.y;
+        double oz = ray.o.z;
+        double dx = ray.d.x;
+        double dy = ray.d.y;
+        double dz = ray.d.z;
+
+        //quadratic function coefficents
+        double a = dx * dx + dz * dz;
+        double b = 2.0 * (ox * dx + oz * dz);
+        double c = ox * ox + oz * oz - radius * radius;
+
+        //solves the quadratic.
+        double disc = b * b - 4.0 * a * c;
+
+        if (disc < 0.0) {
+            return (false);
+        } else {
+            boolean hit = false;
+            double e = Math.sqrt(disc);
+            double denom = 2.0 * a;
+            t = (-b - e) / denom;    // smaller root
+
+            ShadeRec sr = new ShadeRec(s);
+            //test height
+            double yhit = oy + t * dy;
+
+            if (yhit > y0 && yhit < y1) {
+                sr.lastT = t;
+                sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                        (oz + t * dz) * invRadius));
+
+                // test for hitting from inside
+                if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
+                    sr.normal.setTo(sr.normal.neg());
+                }
+
+                sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
+                        ray.d)));
+
+                hits.add(sr);
+                hit = true;
+            }
+
+            t = (-b + e) / denom;    // larger root
+
+            sr = new ShadeRec(s);
+            //test height
+            yhit = oy + t * dy;
+
+            if (yhit > y0 && yhit < y1) {
+                sr.lastT = t;
+                sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
+                        (oz + t * dz) * invRadius));
+
+                // test for hitting inside surface
+                if (ray.d.neg().dot(sr.normal) < 0.0) {
+                    sr.normal.setTo(sr.normal.neg());
+                }
+
+                sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT,
+                        ray.d)));
+                hit = true;
+            }
+            return hit;
+        }
+
     }
 
     /**
