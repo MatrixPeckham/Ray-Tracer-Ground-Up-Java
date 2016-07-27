@@ -74,6 +74,9 @@ public class FishEye extends Camera {
         DoubleRef r_squared = new DoubleRef();// sum of squares of normalised device coordinates
 
         ray.o.setTo(eye);
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
+        w.startRender(vp.hRes, vp.hRes);
 
         for (int r = 0; r < vres; r++) // up
         {
@@ -94,8 +97,11 @@ public class FishEye extends Camera {
                 L.divLocal(vp.numSamples);
                 L.mulLocal(exposureTime);
                 w.displayPixel(r, c, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
+        w.finishRender();
     }
 
     /**
@@ -119,6 +125,8 @@ public class FishEye extends Camera {
         DoubleRef r_squared = new DoubleRef();// sum of squares of normalised device coordinates
 
         ray.o.setTo(eye);
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
 
         for (int r = 0; r < vres; r++) // up
         {
@@ -139,7 +147,9 @@ public class FishEye extends Camera {
                 L.divLocal(vp.numSamples);
                 L.mulLocal(exposureTime);
                 w.displayPixel(r, c + i, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
     }
 

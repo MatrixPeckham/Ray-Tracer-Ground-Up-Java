@@ -89,6 +89,9 @@ public class Orthographic extends Camera {
         //normalized sample point
         Point2D sp = new Point2D();
         //loop through all pixels
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
+        w.startRender(vp.hRes, vp.hRes);
         for (int r = 0; r < vp.vRes; r++) {
             for (int c = 0; c < vp.hRes; c++) {
                 //initialize color
@@ -104,7 +107,7 @@ public class Orthographic extends Camera {
                     ray.d.setTo(getDirection(pp));
                     //set ray origin, eyepoint + pixel location
                     ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
-                    //sum up samples. 
+                    //sum up samples.
                     L.addLocal(w.tracer.traceRay(ray, depth));
                 }
                 //normalize and expose pixel
@@ -112,8 +115,11 @@ public class Orthographic extends Camera {
                 L.mulLocal(exposureTime);
                 //display
                 w.displayPixel(r, c, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
+        w.finishRender();
 
     }
 
@@ -138,6 +144,8 @@ public class Orthographic extends Camera {
         Point2D pp = new Point2D();
         //normalized sample point
         Point2D sp = new Point2D();
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
         //loop through all pixels
         for (int r = 0; r < vp.vRes; r++) {
             for (int c = 0; c < vp.hRes; c++) {
@@ -154,7 +162,7 @@ public class Orthographic extends Camera {
                     ray.d.setTo(getDirection(pp));
                     //set ray origin, eyepoint + pixel location
                     ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
-                    //sum up samples. 
+                    //sum up samples.
                     L.addLocal(w.tracer.traceRay(ray, depth));
                 }
                 //normalize and expose pixel
@@ -162,7 +170,9 @@ public class Orthographic extends Camera {
                 L.mulLocal(exposureTime);
                 //display, offset for stereo
                 w.displayPixel(r, c + i, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
 
     }

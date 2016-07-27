@@ -173,20 +173,61 @@ public class StereoCamera extends Camera {
     public void renderScene(World w) {
         ViewPlane vp = new ViewPlane(w.vp);
         int hres = vp.hRes;
-        //int vres = vp.vRes;
+        int vres = vp.vRes;
+
+        World temp = new World() {
+            boolean reset = false;
+
+            double progress = 0;
+
+            @Override
+            public void updateProgress(double progress) {
+                if (this.progress > progress) {
+                    reset = true;
+                }
+                if (!reset) {
+                    this.progress = progress;
+                } else {
+                    this.progress += progress;
+                }
+                super.updateProgress(this.progress / 2);
+            }
+
+            boolean finished = false;
+
+            @Override
+            public void finishRender() {
+                if (finished) {
+                    super.finishRender();
+                }
+                finished = true;
+            }
+
+        };
+
+        temp.vp = w.vp;
+        temp.ambient = w.ambient;
+        temp.backgroundColor = w.backgroundColor;
+        temp.lights = w.lights;
+        temp.objects = w.objects;
+        temp.tracer = w.tracer;
+        temp.sphere = w.sphere;
+        temp.setRenderListener(w.getRenderListener());
 
         double r = eye.distance(lookat);
         double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
 
+        w.startRender(hres * 2 + pixelGap, vres * 2 + pixelGap);
+
         if (viewingType == ViewingType.PARALLEL) {
-            leftCamera.renderStereo(w, x, 0);
-            rightCamera.renderStereo(w, -x, hres + pixelGap);
+            leftCamera.renderStereo(temp, x, 0);
+            rightCamera.renderStereo(temp, -x, hres + pixelGap);
         }
         if (viewingType == ViewingType.TRANSVERSE) {
-            leftCamera.renderStereo(w, -x, 0);
-            rightCamera.renderStereo(w, x, hres + pixelGap);
+            leftCamera.renderStereo(temp, -x, 0);
+            rightCamera.renderStereo(temp, x, hres + pixelGap);
         }
-
+        w.finishRender();
     }
 
     /**

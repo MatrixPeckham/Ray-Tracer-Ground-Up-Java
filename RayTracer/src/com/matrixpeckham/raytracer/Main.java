@@ -63,7 +63,7 @@ import org.reflections.util.ConfigurationBuilder;
  *
  * @author William Matrix Peckham
  */
-public class Main extends JFrame implements ActionListener {
+public class Main extends JFrame implements ActionListener, RenderListener {
 
     /**
      * Menu bar.
@@ -253,6 +253,29 @@ public class Main extends JFrame implements ActionListener {
         bar.add(zoom);
     }
 
+    @Override
+    public void newPixel(RenderPixel pixel) {
+        boolean accepted;
+        do {
+            accepted = queue.offer(pixel);
+        } while (!accepted);
+    }
+
+    @Override
+    public void progress(double progress) {
+        //TODO: perhaps use this instead of internal progress
+    }
+
+    @Override
+    public void renderFinished() {
+        //TODO: we don't do anything with the finished image
+    }
+
+    @Override
+    public void renderStarting(int width, int height) {
+        //TODO: we already do this and changing it would be pointless
+    }
+
     /**
      * called from the start menu button.
      */
@@ -263,7 +286,7 @@ public class Main extends JFrame implements ActionListener {
         //generate the world
         builder.build(w);
         //world needs a reference to the render queue
-        w.setQueue(queue);
+        w.setRenderListener(this);
         statusBar.setText("Rendering...");
 
         //sets up the pixel counts for this image

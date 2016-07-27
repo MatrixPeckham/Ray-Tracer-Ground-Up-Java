@@ -169,6 +169,7 @@ public class ThinLens extends Camera {
      */
     @Override
     public void renderScene(World w) {
+
         //color
         RGBColor L = new RGBColor();
         //ray
@@ -188,7 +189,9 @@ public class ThinLens extends Camera {
 
         //adjust size for zoom.
         vp.s /= zoom;
-
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
+        w.startRender(vp.hRes, vp.hRes);
         //loop through pixels
         for (int r = 0; r < vp.vRes; r++) {
             for (int c = 0; c < vp.hRes; c++) {
@@ -215,9 +218,11 @@ public class ThinLens extends Camera {
                 L.divLocal(vp.numSamples);
                 L.mulLocal(exposureTime);
                 w.displayPixel(r, c, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
-
+        w.finishRender();
     }
 
     /**
@@ -258,6 +263,8 @@ public class ThinLens extends Camera {
 
         //adjust size for zoom.
         vp.s /= zoom;
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
 
         //loop through pixels
         for (int r = 0; r < vp.vRes; r++) {
@@ -285,7 +292,9 @@ public class ThinLens extends Camera {
                 L.divLocal(vp.numSamples);
                 L.mulLocal(exposureTime);
                 w.displayPixel(r, c + i, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
     }
 

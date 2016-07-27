@@ -17,6 +17,7 @@
  */
 package com.matrixpeckham.raytracer.world;
 
+import com.matrixpeckham.raytracer.RenderListener;
 import com.matrixpeckham.raytracer.RenderPixel;
 import com.matrixpeckham.raytracer.cameras.Camera;
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
@@ -31,7 +32,6 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
 import com.matrixpeckham.raytracer.util.Utility;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
 import java.util.logging.Logger;
 
 /**
@@ -86,7 +86,7 @@ public class World {
      * Queue for thread synchronization. Set before starting render, and used to
      * push finished pixels to the GUI.
      */
-    private BlockingQueue<RenderPixel> paintArea = null;
+    private RenderListener paintArea = null;
 
     /**
      * Default constructor.
@@ -97,12 +97,16 @@ public class World {
         ambient = new Ambient();
     }
 
+    public RenderListener getRenderListener() {
+        return paintArea;
+    }
+
     /**
      * Setter for the render queue.
      *
      * @param paintArea
      */
-    public void setQueue(BlockingQueue<RenderPixel> paintArea) {
+    public void setRenderListener(RenderListener paintArea) {
         this.paintArea = paintArea;
     }
 
@@ -135,7 +139,8 @@ public class World {
 
     /**
      * Render scene function. For use without cameras, orthographic projection,
-     * down the z axis.
+     * down the z axis. Not used, was for initial bare-bones ray tracer,
+     * replaced with camera.renderScene.
      */
     public void renderScene() {
         //re-useabe color variable.
@@ -187,13 +192,22 @@ public class World {
 
         //make sure we have a valid queue and send pixel.
         if (paintArea != null) {
-            boolean accepted;
-            do {
-                accepted = paintArea.offer(new RenderPixel(x, y,
-                        (int) (mappedColor.r * 255), (int) (mappedColor.g * 255),
-                        (int) (mappedColor.b * 255)));
-            } while (!accepted);
+            paintArea.newPixel(new RenderPixel(x, y,
+                    (int) (mappedColor.r * 255), (int) (mappedColor.g * 255),
+                    (int) (mappedColor.b * 255)));
         }
+    }
+
+    public void updateProgress(double progress) {
+        paintArea.progress(progress);
+    }
+
+    public void startRender(int width, int height) {
+        paintArea.renderStarting(width, height);
+    }
+
+    public void finishRender() {
+        paintArea.renderFinished();
     }
 
     /**

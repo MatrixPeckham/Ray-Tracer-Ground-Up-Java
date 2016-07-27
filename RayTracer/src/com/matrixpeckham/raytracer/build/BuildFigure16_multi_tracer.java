@@ -72,6 +72,7 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         phong1.setExp(25);
 
         Sphere sphere1 = new Sphere(new Point3D(-45, 45, 40), 50);
+        sphere1.setColor(0.5, 0.6, 0);
         sphere1.setMaterial(phong1);
         w.addObject(sphere1);
 
@@ -84,6 +85,7 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         Box box1
                 = new Box(new Point3D(20, -101, -100), new Point3D(90, 100, 20));
         box1.setMaterial(matte);
+        box1.setColor(0.8, 0.5, 0);
         w.addObject(box1);
 
         // triangle
@@ -97,6 +99,7 @@ public class BuildFigure16_multi_tracer implements BuildWorldFunction {
         Triangle triangle1 = new Triangle(new Point3D(-110, -85, 80),
                 new Point3D(120, 10, 20), new Point3D(-40, 50, -30));
         triangle1.setMaterial(phong2);
+        triangle1.setColor(0, 0.5, 0.5);
         w.addObject(triangle1);
 
     }

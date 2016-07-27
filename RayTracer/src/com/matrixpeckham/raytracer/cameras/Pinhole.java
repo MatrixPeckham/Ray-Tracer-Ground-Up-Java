@@ -99,6 +99,9 @@ public class Pinhole extends Camera {
         vp.s /= zoom;
         //the origin of the ray will always be the eye point.
         ray.o.setTo(eye);
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
+        w.startRender(vp.hRes, vp.hRes);
 
         //loop through all pixels
         for (int r = 0; r < vp.vRes; r++) {
@@ -121,8 +124,11 @@ public class Pinhole extends Camera {
                 L.mulLocal(exposureTime);
                 //display
                 w.displayPixel(r, c, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
+        w.finishRender();
 
     }
 
@@ -143,7 +149,6 @@ public class Pinhole extends Camera {
     public void setZoom(double zoom) {
         this.zoom = zoom;
     }
-
 
     /**
      * render stereo function
@@ -168,6 +173,8 @@ public class Pinhole extends Camera {
         vp.s /= zoom;
         //the origin of the ray will always be the eye point.
         ray.o.setTo(eye);
+        int pixRendered = 0;
+        double pixToRender = vp.vRes * vp.hRes;
 
         //loop through all pixels
         for (int r = 0; r < vp.vRes; r++) {
@@ -191,7 +198,9 @@ public class Pinhole extends Camera {
                 L.mulLocal(exposureTime);
                 //display, offset for stereo
                 w.displayPixel(r, c + i, L);
+                pixRendered++;
             }
+            w.updateProgress(pixRendered / pixToRender);
         }
 
     }
