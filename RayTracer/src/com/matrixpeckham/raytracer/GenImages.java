@@ -89,18 +89,20 @@ public class GenImages {
         String prefix
                 = "C:/Users/Owner/Documents/GitHub/RayTracerWiki/Ray-Tracer-Ground-Up-Java.wiki/images/Samples/";
         int numDone = 0;
-        for (Class<? extends BuildWorldFunction> cls : clss) {
+        for (Class<? extends BuildWorldFunction> cls : clss2) {
             World w = new World();
             BuildWorldFunction bwf = cls.newInstance();
             bwf.build(w);
             String name = bwf.getClass().getName();
             name = name.replaceAll("\\.", "/");
             String fname = prefix + name + ".png";
-            double pH = 100.0 / w.vp.hRes;
-            double pV = 100.0 / w.vp.vRes;
+            int size = 200;
+            double sized = size;
+            double pH = sized / w.vp.hRes;
+            double pV = sized / w.vp.vRes;
             double s = 1 / (pH < pV ? pH : pV);
-            w.vp.hRes = 100;
-            w.vp.vRes = 100;
+            w.vp.hRes = size;
+            w.vp.vRes = size;
             w.vp.s *= s;
             w.vp.maxDepth = 5;
             w.setRenderListener(new CreateFileRnderListener(fname));
@@ -139,7 +141,7 @@ public class GenImages {
             synchronized (this) {
                 counter++;
                 counter = counter % 100;
-                if (counter % 100 == 50) {
+                if (counter % 100 == 25) {
                     System.out.println("File:" + filename + ": " + progress
                             * 100
                             + "%");

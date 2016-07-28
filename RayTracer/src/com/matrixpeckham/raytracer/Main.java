@@ -296,7 +296,8 @@ public class Main extends JFrame implements ActionListener, RenderListener {
         int iwidth = w.vp.imageWidth != null ? w.vp.imageWidth : w.vp.hRes;
         int iheight = w.vp.imageHeight != null ? w.vp.imageHeight : w.vp.vRes;
         //this is after we build the world so hRes and vRes will be set already.
-        pixelsToRender = iwidth * iheight;
+        pixelsToRender = (w.vp.imageWidth != null ? w.vp.hRes * 2 : iwidth)
+                * (w.vp.imageHeight != null ? w.vp.vRes : iheight);
 
         //creates the image and fills it with a grey checkerboard pattern.
         image = new BufferedImage(iwidth, iheight, BufferedImage.TYPE_INT_ARGB);
