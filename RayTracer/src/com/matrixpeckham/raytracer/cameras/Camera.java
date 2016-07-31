@@ -112,14 +112,22 @@ public abstract class Camera {
 
         //special cases for strait up and down view.
         if (eye.x == lookat.x && eye.z == lookat.z && eye.y > lookat.y) {
-            u.setTo(new Vector3D(0, 0, 1));
-            v.setTo(new Vector3D(1, 0, 0));
             w.setTo(new Vector3D(0, 1, 0));
+            u.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
+                                    rollAngle));
+            v.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
+                                    rollAngle));
         }
         if (eye.x == lookat.x && eye.z == lookat.z && eye.y < lookat.y) {
-            u.setTo(new Vector3D(1, 0, 0));
-            v.setTo(new Vector3D(0, 0, 1));
             w.setTo(new Vector3D(0, -1, 0));
+            u.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
+                                    rollAngle));
+            v.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
+                                    rollAngle));
         }
     }
 
