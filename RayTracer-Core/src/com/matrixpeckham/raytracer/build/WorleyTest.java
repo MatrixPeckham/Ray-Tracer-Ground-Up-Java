@@ -17,7 +17,6 @@
  */
 package com.matrixpeckham.raytracer.build;
 
-import com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.SolidCylinder;
@@ -98,7 +97,7 @@ public class WorleyTest implements BuildWorldFunction {
         try {
             imagePtr1.loadPPMFile(new File(path + "sandstone_ramp1.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(BuildFigure04.class.getName()).
+            Logger.getLogger(WorleyTest.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -129,7 +128,7 @@ public class WorleyTest implements BuildWorldFunction {
         try {
             imagePtr2.loadPPMFile(new File(path + "sandstone_ramp2.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(BuildFigure04.class.getName()).
+            Logger.getLogger(WorleyTest.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -156,7 +155,7 @@ public class WorleyTest implements BuildWorldFunction {
         try {
             imagePtr3.loadPPMFile(new File(path + "sandstone_ramp3.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(BuildFigure04.class.getName()).
+            Logger.getLogger(WorleyTest.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
@@ -184,7 +183,7 @@ public class WorleyTest implements BuildWorldFunction {
         try {
             imagePtr4.loadPPMFile(new File(path + "sandstone_ramp4.ppm"));
         } catch (IOException ex) {
-            Logger.getLogger(BuildFigure04.class.getName()).
+            Logger.getLogger(WorleyTest.class.getName()).
                     log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
