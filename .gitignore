@@ -46,3 +46,8 @@ Temporary Items
 /RayTracer/dist/
 RayTracer/store/
 /RayTracer-Core/nbproject/private/
+/RayTracer-BookBuild/nbproject/private/
+/RayTracer-Core/build/
+/RayTracer-BookBuild/build/
+/RayTracer-Core/dist/
+/RayTracer-BookBuild/dist/
