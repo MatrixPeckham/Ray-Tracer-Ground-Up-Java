@@ -45,7 +45,7 @@ public class EnvironmentLight extends Light {
      */
     Material material;
 
-    //uvw coordinate system at hit point 
+    //uvw coordinate system at hit point
     private ThreadLocal<Vector3D> u = new ThreadLocal<Vector3D>() {
 
         @Override
@@ -54,6 +54,7 @@ public class EnvironmentLight extends Light {
         }
 
     };
+
     private ThreadLocal<Vector3D> v = new ThreadLocal<Vector3D>() {
 
         @Override
@@ -62,6 +63,7 @@ public class EnvironmentLight extends Light {
         }
 
     };
+
     private ThreadLocal<Vector3D> w = new ThreadLocal<Vector3D>() {
 
         @Override
@@ -86,8 +88,8 @@ public class EnvironmentLight extends Light {
      * @param l
      */
     public EnvironmentLight(EnvironmentLight l) {
-        sampler = l.sampler.clone();
-        material = l.material.clone();
+        sampler = l.sampler.cloneSampler();
+        material = l.material.cloneMaterial();
         u.get().setTo(l.u.get());
         v.get().setTo(l.v.get());
         w.get().setTo(l.w.get());
@@ -127,7 +129,9 @@ public class EnvironmentLight extends Light {
         v.get().normalize();
         u.get().setTo(v.get().cross(w.get()));
         Point3D sp = sampler.sampleHemisphere();
-        wi.setTo(u.get().mul(sp.x).add(v.get().mul(sp.y)).add(w.get().mul(sp.z)));
+        wi.
+                setTo(u.get().mul(sp.x).add(v.get().mul(sp.y)).add(w.get().mul(
+                                        sp.z)));
         return wi;
     }
 
