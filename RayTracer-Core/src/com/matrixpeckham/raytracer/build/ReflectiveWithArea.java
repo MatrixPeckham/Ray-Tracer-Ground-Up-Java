@@ -48,13 +48,13 @@ public class ReflectiveWithArea implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-        int numSamples = 256;
+        int numSamples = 16;
 
         w.vp.setHres(4800);
         w.vp.setVres(3200);
         w.vp.setSamples(numSamples);
         //w.vp.setMaxDepth(0);			// for Figure 24.6(a)
-        w.vp.setMaxDepth(400);			// for Figure 24.6(b)
+        w.vp.setMaxDepth(100);			// for Figure 24.6(b)
 
         w.tracer = new RayCast(w);
         w.backgroundColor = new RGBColor(0.15);
