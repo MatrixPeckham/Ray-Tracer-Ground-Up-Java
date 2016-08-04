@@ -40,134 +40,123 @@ import com.matrixpeckham.raytracer.world.World;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure06 implements BuildWorldFunction{
+public class BuildFigure06 implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
         int numSamples = 16;
-	
-	w.vp.setHres(6000); 
-	w.vp.setVres(4000);
-	w.vp.setSamples(numSamples);
+
+        w.vp.setHres(6000);
+        w.vp.setVres(4000);
+        w.vp.setSamples(numSamples);
 //	w.vp.setMaxDepth(0);			// for Figure 24.6(a)
-	w.vp.setMaxDepth(100);			// for Figure 24.6(b)
-	
-	w.tracer = new RayCast(w);	
-	w.backgroundColor = new RGBColor(0.15); 
-	
-	Ambient ambientPtr = new Ambient();
-	ambientPtr.scaleRadiance(0.5);
-	w.setAmbient(ambientPtr);
-	
-			
-	Pinhole pinholePtr = new Pinhole();
-	pinholePtr.setEye(75, 40, 100); 
-	pinholePtr.setLookat(-10, 39, 0);  
-	pinholePtr.setViewDistance(360);
+        w.vp.setMaxDepth(100);			// for Figure 24.6(b)
+
+        w.tracer = new RayCast(w);
+        w.backgroundColor = new RGBColor(0.15);
+
+        Ambient ambientPtr = new Ambient();
+        ambientPtr.scaleRadiance(0.5);
+        w.setAmbient(ambientPtr);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(75, 40, 100);
+        pinholePtr.setLookat(-10, 39, 0);
+        pinholePtr.setViewDistance(360);
         pinholePtr.setZoom(10);
-	pinholePtr.computeUVW();
-	w.setCamera(pinholePtr);
-	
-		
-	PointLight lightPtr = new PointLight();
-	lightPtr.setLocation(150, 150, 0);  
-	lightPtr.scaleRadiance(3.0);
-	lightPtr.setShadows(true);
-	w.addLight(lightPtr);
-	
-	// yellow-green reflective sphere
-	
-	Reflective reflectivePtr1 = new Reflective();			
-	reflectivePtr1.setKa(0.25); 
-	reflectivePtr1.setKd(0.5);
-	reflectivePtr1.setCd(0.75, 0.75, 0);    	// yellow
-	reflectivePtr1.setKs(0.15);
-	reflectivePtr1.setExp(100.0);
-	reflectivePtr1.setKr(0.75);
-	reflectivePtr1.setCr(Utility.WHITE); 			// default color
-	
-	double radius = 23.0;
-	Sphere spherePtr1 = new Sphere(new Point3D(38, radius, -25), radius); 
-	spherePtr1.setMaterial(reflectivePtr1);
-	w.addObject(spherePtr1);
-	
-	
-	// orange non-reflective sphere
-	
-	Matte mattePtr1 = new Matte();			
-	mattePtr1.setKa(0.45); 
-	mattePtr1.setKd(0.75);
-	mattePtr1.setCd(0.75, 0.25, 0);   // orange
-	
-	Sphere spherePtr2 = new Sphere(new Point3D(-7, 10, 42), 20);
-	spherePtr2.setMaterial(mattePtr1);      
-	w.addObject(spherePtr2);
-	
-	
-	// sphere on top of box
+        pinholePtr.computeUVW();
+        w.setCamera(pinholePtr);
 
-	Reflective reflectivePtr2 = new Reflective();			
-	reflectivePtr2.setKa(0.35); 
-	reflectivePtr2.setKd(0.75);
-	reflectivePtr2.setCd(Utility.BLACK); 
-	reflectivePtr2.setKs(0.0);		// default value
-	reflectivePtr2.setExp(1.0);		// default value, but irrelevant in this case
-	reflectivePtr2.setKr(0.75);
-	reflectivePtr2.setCr(Utility.WHITE); 
+        PointLight lightPtr = new PointLight();
+        lightPtr.setLocation(150, 150, 0);
+        lightPtr.scaleRadiance(3.0);
+        lightPtr.setShadows(true);
+        w.addLight(lightPtr);
 
-	Sphere spherePtr3 = new Sphere(new Point3D(-30, 59, 35), 20);
-	spherePtr3.setMaterial(reflectivePtr2);     
-	w.addObject(spherePtr3);
+        // yellow-green reflective sphere
+        Reflective reflectivePtr1 = new Reflective();
+        reflectivePtr1.setKa(0.25);
+        reflectivePtr1.setKd(0.5);
+        reflectivePtr1.setCd(0.75, 0.75, 0);    	// yellow
+        reflectivePtr1.setKs(0.15);
+        reflectivePtr1.setExp(100.0);
+        reflectivePtr1.setKr(0.75);
+        reflectivePtr1.setCr(Utility.WHITE); 			// default color
 
-	
-	// cylinder
-	
-	Reflective reflectivePtr3 = new Reflective();			
-	reflectivePtr3.setKa(0.35); 
-	reflectivePtr3.setKd(0.5);
-	reflectivePtr3.setCd(0.0, 0.5, 0.75);   // cyan
-	reflectivePtr3.setKs(0.2);
-	reflectivePtr3.setExp(100.0);
-	reflectivePtr3.setKr(0.75);
-	reflectivePtr3.setCr(Utility.WHITE);
-	
-	double bottom 			= 0.0;
-	double top 				= 85;   
-	double cylinderRadius	= 22;
-	SolidCylinder cylinderPtr = new SolidCylinder(bottom, top, cylinderRadius);
-	cylinderPtr.setMaterial(reflectivePtr3);
-	w.addObject(cylinderPtr);
-	
-	
-	// box
-	
-	Matte mattePtr2 = new Matte();			
-	mattePtr2.setKa(0.15); 
-	mattePtr2.setKd(0.5);
-	mattePtr2.setCd(0.75, 1.0, 0.75);   // light green
-	
-	Box boxPtr = new Box(new Point3D(-35, 0, -110), new Point3D(-25, 60, 65));
-	boxPtr.setMaterial(mattePtr2);
-	w.addObject(boxPtr);
+        double radius = 23.0;
+        Sphere spherePtr1 = new Sphere(new Point3D(38, radius, -25), radius);
+        spherePtr1.setMaterial(reflectivePtr1);
+        w.addObject(spherePtr1);
 
-	
-	// ground plane
-	
-	PlaneChecker checkerPtr = new PlaneChecker();
-	checkerPtr.setSize(20.0);		
-	checkerPtr.setOutlineWidth(2.0);
-	checkerPtr.setColor1(Utility.WHITE);
-	checkerPtr.setColor2(Utility.WHITE);
-	checkerPtr.setOutlineColor(Utility.BLACK); 
-	
-	SV_Matte svMattePtr = new SV_Matte();		
-	svMattePtr.setKa(0.30);
-	svMattePtr.setKd(0.9);
-	svMattePtr.setCd(checkerPtr); 
-	
-	Plane planePtr = new Plane(new Point3D(0), new Normal(0, 1, 0));
-	planePtr.setMaterial(svMattePtr);
-	w.addObject(planePtr); 
+        // orange non-reflective sphere
+        Matte mattePtr1 = new Matte();
+        mattePtr1.setKa(0.45);
+        mattePtr1.setKd(0.75);
+        mattePtr1.setCd(0.75, 0.25, 0);   // orange
+
+        Sphere spherePtr2 = new Sphere(new Point3D(-7, 10, 42), 20);
+        spherePtr2.setMaterial(mattePtr1);
+        w.addObject(spherePtr2);
+
+        // sphere on top of box
+        Reflective reflectivePtr2 = new Reflective();
+        reflectivePtr2.setKa(0.35);
+        reflectivePtr2.setKd(0.75);
+        reflectivePtr2.setCd(Utility.BLACK);
+        reflectivePtr2.setKs(0.0);		// default value
+        reflectivePtr2.setExp(1.0);		// default value, but irrelevant in this case
+        reflectivePtr2.setKr(0.75);
+        reflectivePtr2.setCr(Utility.WHITE);
+
+        Sphere spherePtr3 = new Sphere(new Point3D(-30, 59, 35), 20);
+        spherePtr3.setMaterial(reflectivePtr2);
+        w.addObject(spherePtr3);
+
+        // cylinder
+        Reflective reflectivePtr3 = new Reflective();
+        reflectivePtr3.setKa(0.35);
+        reflectivePtr3.setKd(0.5);
+        reflectivePtr3.setCd(0.0, 0.5, 0.75);   // cyan
+        reflectivePtr3.setKs(0.2);
+        reflectivePtr3.setExp(100.0);
+        reflectivePtr3.setKr(0.75);
+        reflectivePtr3.setCr(Utility.WHITE);
+
+        double bottom = 0.0;
+        double top = 85;
+        double cylinderRadius = 22;
+        SolidCylinder cylinderPtr = new SolidCylinder(bottom, top,
+                cylinderRadius);
+        cylinderPtr.setMaterial(reflectivePtr3);
+        w.addObject(cylinderPtr);
+
+        // box
+        Matte mattePtr2 = new Matte();
+        mattePtr2.setKa(0.15);
+        mattePtr2.setKd(0.5);
+        mattePtr2.setCd(0.75, 1.0, 0.75);   // light green
+
+        Box boxPtr
+                = new Box(new Point3D(-35, 0, -110), new Point3D(-25, 60, 65));
+        boxPtr.setMaterial(mattePtr2);
+        w.addObject(boxPtr);
+
+        // ground plane
+        PlaneChecker checkerPtr = new PlaneChecker();
+        checkerPtr.setSize(20.0);
+        checkerPtr.setOutlineWidth(2.0);
+        checkerPtr.setColor1(Utility.WHITE);
+        checkerPtr.setColor2(Utility.WHITE);
+        checkerPtr.setOutlineColor(Utility.BLACK);
+
+        SV_Matte svMattePtr = new SV_Matte();
+        svMattePtr.setKa(0.30);
+        svMattePtr.setKd(0.9);
+        svMattePtr.setCd(checkerPtr);
+
+        Plane planePtr = new Plane(new Point3D(0), new Normal(0, 1, 0));
+        planePtr.setMaterial(svMattePtr);
+        w.addObject(planePtr);
     }
-    
+
 }
