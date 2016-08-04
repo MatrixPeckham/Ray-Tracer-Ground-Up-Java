@@ -44,6 +44,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -74,12 +75,12 @@ public class Main extends JFrame implements ActionListener, RenderListener {
      * Start button for starting render.
      */
     JMenuItem startButton;
-    
+
     /**
      * Checkbox for multithreading.
      */
     JCheckBoxMenuItem multiBox;
-    
+
     /**
      * Open button, for opening an image file.
      */
@@ -213,8 +214,8 @@ public class Main extends JFrame implements ActionListener, RenderListener {
         z4Button = new JMenuItem("4x");
         z8Button = new JMenuItem("8x");
         z16Button = new JMenuItem("16x");
-        
-        multiBox = new JCheckBoxMenuItem("Multithread enabled",true);
+
+        multiBox = new JCheckBoxMenuItem("Multithread enabled", true);
 
         //standard action listeners simply call appropriate methods
         startButton.addActionListener((ActionEvent e) -> {
@@ -412,7 +413,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
     public void actionPerformed(ActionEvent e) {
         //if we have new pixels to render, set the proper pixels in the image.
         long s = System.currentTimeMillis();
-        while (!queue.isEmpty() && System.currentTimeMillis()-s < 30) {
+        while (!queue.isEmpty() && System.currentTimeMillis() - s < 30) {
             try {
                 RenderPixel pix = queue.take();
                 image.setRGB(pix.x, pix.y, pix.color);

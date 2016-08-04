@@ -49,28 +49,27 @@ public class ReflectiveWithArea implements BuildWorldFunction {
     @Override
     public void build(World w) {
         int numSamples = 256;
-	
-		w.vp.setHres(480); 
-		w.vp.setVres(320);
-		w.vp.setSamples(numSamples);
-		//w.vp.setMaxDepth(0);			// for Figure 24.6(a)
-		w.vp.setMaxDepth(400);			// for Figure 24.6(b)
-	
-		w.tracer = new RayCast(w);	
-		w.backgroundColor = new RGBColor(0.15);
-        
+
+        w.vp.setHres(4800);
+        w.vp.setVres(3200);
+        w.vp.setSamples(numSamples);
+        //w.vp.setMaxDepth(0);			// for Figure 24.6(a)
+        w.vp.setMaxDepth(100);			// for Figure 24.6(b)
+
+        w.tracer = new RayCast(w);
+        w.backgroundColor = new RGBColor(0.15);
+
         AmbientOccluder ambientPtr = new AmbientOccluder();
         ambientPtr.scaleRadiance(0.5);
         ambientPtr.setMinAmount(0.05);
         ambientPtr.setSampler(new MultiJittered(numSamples));
 
-		w.setAmbient(ambientPtr);
-	
-			
-		Pinhole pinholePtr = new Pinhole();
-		pinholePtr.setEye(75, 40, 100); 
-		pinholePtr.setLookat(-10, 39, 0);  
-		pinholePtr.setViewDistance(36);
+        w.setAmbient(ambientPtr);
+
+        Pinhole pinholePtr = new Pinhole();
+        pinholePtr.setEye(75, 40, 100);
+        pinholePtr.setLookat(-10, 39, 0);
+        pinholePtr.setViewDistance(36);
         pinholePtr.setZoom(8);
         pinholePtr.computeUVW();
         w.setCamera(pinholePtr);
