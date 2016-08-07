@@ -69,7 +69,7 @@ public class ReflectiveWithArea implements BuildWorldFunction {
         pinholePtr.setEye(75, 40, 100);
         pinholePtr.setLookat(-10, 39, 0);
         pinholePtr.setViewDistance(360);
-        pinholePtr.setZoom(8);
+        pinholePtr.setZoom(10);
         pinholePtr.computeUVW();
         w.setCamera(pinholePtr);
 
