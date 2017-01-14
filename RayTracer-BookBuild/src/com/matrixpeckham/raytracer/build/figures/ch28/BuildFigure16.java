@@ -117,14 +117,14 @@ public class BuildFigure16 implements BuildWorldFunction {
 
         String fileName = "Bunny4K.ply";
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Stanford Bunny\\";
+                = "/Models/Stanford Bunny/";
 
         TriangleMesh bunnyPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
 //	bunnyPtr.readFlatTriangles(fileName);
 
-            bunnyPtr.readSmoothTriangles(new File(path + fileName));
+            bunnyPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);

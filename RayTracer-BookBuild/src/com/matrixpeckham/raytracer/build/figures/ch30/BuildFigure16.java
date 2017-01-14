@@ -85,9 +85,9 @@ public class BuildFigure16 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+                = "/Textures/ppm/";
         try {
-            imagePtr.loadPPMFile(new File(path + "BlueMarbleRamp.ppm"));
+            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "BlueMarbleRamp.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(
                     com.matrixpeckham.raytracer.build.figures.ch29.BuildFigure04.class.

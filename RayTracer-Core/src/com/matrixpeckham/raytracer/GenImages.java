@@ -72,7 +72,7 @@ public class GenImages {
         // Add the conf dir to the classpath
         // Chain the current thread classloader
         URLClassLoader urlClassLoader
-                = new URLClassLoader(jars.toArray(new URL[]{}),
+                = new URLClassLoader(jars.toArray(new URL[jars.size()]),
                         currentThreadClassLoader);
 
         // Replace the thread classloader - assumes

@@ -90,15 +90,15 @@ public class BuildFigure32 implements BuildWorldFunction {
 	reflectivePtr.setCd(new RGBColor(0));
 	reflectivePtr.setKr(0.9);
 	reflectivePtr.setCr(0.5, 1.0, 0.5);  // light green
-		String imPath = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
-	String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Stanford Bunny\\";
+		String imPath = "/Textures/ppm/";
+	String path = "/Models/Stanford Bunny/";
 
 	Mesh meshPtr = new Mesh();
 	String fileName = "Bunny69K.ply";   		// Figure 24.31(a) & (b)
 	
 	TriangleMesh gridPtr = new TriangleMesh(meshPtr);
         try {
-            gridPtr.readSmoothTriangles(new File(path+fileName));		// Figure 24.31(b) & (d)
+            gridPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path+fileName));		// Figure 24.31(b) & (d)
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure31.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -132,8 +132,8 @@ public class BuildFigure32 implements BuildWorldFunction {
 	
 	Image imagePtr = new Image();
         try {
-//            imagePtr.loadPPMFile(new File(imPath+"uffizi_probe_small.ppm"));   // for testing
-	imagePtr.loadPPMFile(new File(imPath+"uffizi_probe_large.ppm"));   // for production
+//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imPath+"uffizi_probe_small.ppm"));   // for testing
+	imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imPath+"uffizi_probe_large.ppm"));   // for production
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure29A.class.getName()).
                     log(Level.SEVERE, null, ex);

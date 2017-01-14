@@ -84,10 +84,10 @@ public class BuildFigure22 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String imagePath
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+                = "/Textures/ppm/";
         try {
-//            imagePtr.loadPPMFile(new File(imagePath+"EarthHighRes.ppm"));
-            imagePtr.loadPPMFile(new File(imagePath + "BlueGlass.ppm"));
+//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath+"EarthHighRes.ppm"));
+            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath + "BlueGlass.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure22.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -102,12 +102,12 @@ public class BuildFigure22 implements BuildWorldFunction {
         svMattePtr.setKd(0.75);
         svMattePtr.setCd(texturePtr);
         String meshPath
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\chapters\\Chapter29\\";
+                = "/chapters/Chapter29/";
         String fileName = "TwoUVTriangles.ply";
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
-            //        gridPtr.readFlatUVTriangles(new File(meshPath+fileName));		// for Figure 29.22(a)
-            gridPtr.readSmoothUvTriangles(new File(meshPath + fileName));		// for Figure 29.22(b)
+            //        gridPtr.readFlatUVTriangles(getClass().getClassLoader().getResourceAsStream(meshPath+fileName));		// for Figure 29.22(a)
+            gridPtr.readSmoothUvTriangles(getClass().getClassLoader().getResourceAsStream(meshPath + fileName));		// for Figure 29.22(b)
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -25,6 +25,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -153,16 +154,20 @@ public class Image {
         return s.toString().trim();
     }
 
+    public void loadPPMFile(File f) throws IOException {
+        loadPPMFile(new FileInputStream(f));
+    }
+
     /**
      * Reads a PPM file, this method reads the header and calls helper
      * functions.
      *
-     * @param f
+     * @param is
      * @throws IOException
      */
-    public void loadPPMFile(File f) throws IOException {
+    public void loadPPMFile(InputStream is) throws IOException {
         //open file
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(f));
+        BufferedInputStream in = new BufferedInputStream(is);
         //read a text word on the file, should be P3 or P6
         String magic = readWord(in);
         //if the first word in the file isn't P6 or P3, bail because we can't load it

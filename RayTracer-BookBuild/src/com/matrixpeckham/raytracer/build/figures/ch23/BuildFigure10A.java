@@ -96,9 +96,9 @@ public class BuildFigure10A implements BuildWorldFunction {
             mattePtr1.setKa(ka);
             mattePtr1.setKd(0.75);
             mattePtr1.setCd(bodyColor);
-            String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Penguin\\";
+            String path = "/Models/Penguin/";
             TriangleMesh bodyPtr = new TriangleMesh();
-            bodyPtr.readFlatTriangles(new File(path+"penguin_body.ply"));
+            bodyPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_body.ply"));
             bodyPtr.setMaterial(mattePtr1);
             bodyPtr.setupCells();
             w.addObject(bodyPtr);
@@ -111,12 +111,12 @@ public class BuildFigure10A implements BuildWorldFunction {
             mattePtr2.setCd(wingColor);
             
             TriangleMesh leftWingPtr = new TriangleMesh();
-            leftWingPtr.readFlatTriangles(new File(path+"penguin_left_wing.ply"));
+            leftWingPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_left_wing.ply"));
             leftWingPtr.setMaterial(mattePtr2);
             leftWingPtr.setupCells();
             
             TriangleMesh rightWingPtr = new TriangleMesh();
-            rightWingPtr.readFlatTriangles(new File(path+"penguin_right_wing.ply"));
+            rightWingPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_right_wing.ply"));
             rightWingPtr.setMaterial(mattePtr2);
             rightWingPtr.setupCells();
             
@@ -129,12 +129,12 @@ public class BuildFigure10A implements BuildWorldFunction {
             mattePtr3.setCd(feetColor);
             
             TriangleMesh leftFootPtr = new TriangleMesh();
-            leftFootPtr.readFlatTriangles(new File(path+"penguin_left_foot.ply"));
+            leftFootPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_left_foot.ply"));
             leftFootPtr.setMaterial(mattePtr3);
             leftFootPtr.setupCells();
             
             TriangleMesh rightFootPtr = new TriangleMesh();
-            rightFootPtr.readFlatTriangles(new File(path+"penguin_right_foot.ply"));
+            rightFootPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_right_foot.ply"));
             rightFootPtr.setMaterial(mattePtr3);
             rightFootPtr.setupCells();
             
@@ -147,12 +147,12 @@ public class BuildFigure10A implements BuildWorldFunction {
             mattePtr4.setCd(eyeballColor);
             
             TriangleMesh leftEyeballPtr = new TriangleMesh();
-            leftEyeballPtr.readFlatTriangles(new File(path+"penguin_left_eyeball.ply"));
+            leftEyeballPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_left_eyeball.ply"));
             leftEyeballPtr.setMaterial(mattePtr4);
             leftEyeballPtr.setupCells();
             
             TriangleMesh rightEyeballPtr = new TriangleMesh();
-            rightEyeballPtr.readFlatTriangles(new File(path+"penguin_right_eyeball.ply"));
+            rightEyeballPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_right_eyeball.ply"));
             rightEyeballPtr.setMaterial(mattePtr4);
             rightEyeballPtr.setupCells();
             
@@ -165,23 +165,23 @@ public class BuildFigure10A implements BuildWorldFunction {
             mattePtr5.setCd(eyelidColor);
             
             TriangleMesh leftLowerEyelidPtr = new TriangleMesh();
-            leftLowerEyelidPtr.readFlatTriangles(new File(path+"penguin_left_lower_eyelid.ply"));
+            leftLowerEyelidPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_left_lower_eyelid.ply"));
             leftLowerEyelidPtr.setMaterial(mattePtr5);
             leftLowerEyelidPtr.setupCells();
             
             TriangleMesh rightLowerEyelidPtr = new TriangleMesh();
-            rightLowerEyelidPtr.readFlatTriangles(new File(path+"penguin_right_lower_eyelid.ply"));
+            rightLowerEyelidPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_right_lower_eyelid.ply"));
             rightLowerEyelidPtr.setMaterial(mattePtr5);
             rightLowerEyelidPtr.setupCells();
             
             
             TriangleMesh leftUpperEyelidPtr = new TriangleMesh();
-            leftUpperEyelidPtr.readFlatTriangles(new File(path+"penguin_left_upper_eyelid.ply"));
+            leftUpperEyelidPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_left_upper_eyelid.ply"));
             leftUpperEyelidPtr.setMaterial(mattePtr5);
             leftUpperEyelidPtr.setupCells();
             
             TriangleMesh rightUpperEyelidPtr = new TriangleMesh();
-            rightUpperEyelidPtr.readFlatTriangles(new File(path+"penguin_right_upper_eyelid.ply"));
+            rightUpperEyelidPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+"penguin_right_upper_eyelid.ply"));
             rightUpperEyelidPtr.setMaterial(mattePtr5);
             rightUpperEyelidPtr.setupCells();
             

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TreeMap;
@@ -106,6 +107,10 @@ public class PLYFile {
         readPLYFile(f);
     }
 
+    public PLYFile(InputStream f) throws FileNotFoundException, IOException {
+        readPLYFile(f);
+    }
+
     /**
      * Reads a word from an ascii file, a word is non-whitespace characters
      * surrounded by whitespace characters.
@@ -152,6 +157,10 @@ public class PLYFile {
         }
     }
 
+    private void readPLYFile(File f) throws FileNotFoundException, IOException {
+        readPLYFile(new FileInputStream(f));
+    }
+
     /**
      * Reads a file.
      *
@@ -159,8 +168,9 @@ public class PLYFile {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private void readPLYFile(File f) throws FileNotFoundException, IOException {
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(f));
+    private void readPLYFile(InputStream f) throws FileNotFoundException,
+            IOException {
+        BufferedInputStream in = new BufferedInputStream(f);
         readHeader(in);
         //for all the names of elements
         for (int i = 0; i < names.size(); i++) {

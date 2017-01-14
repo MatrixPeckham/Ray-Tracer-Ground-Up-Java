@@ -195,7 +195,8 @@ public class Main extends JFrame implements ActionListener, RenderListener {
         bar = new JMenuBar();
         JMenu file = new JMenu("File");
         JMenu functions = new JMenu("Build Functions");
-        populateBuildFunctions("com.matrixpeckham.raytracer.build", functions);
+        populateBuildFunctions(new String[]{"com.matrixpeckham.raytracer.build",
+            "com.matrixpeckham.raytracer.geometricobjects"}, functions);
         JMenu render = new JMenu("Render");
         JMenu zoom = new JMenu("Zoom");
         startButton = new JMenuItem("Start");
@@ -463,12 +464,14 @@ public class Main extends JFrame implements ActionListener, RenderListener {
     }
 
     //populates build functions
-    private void populateBuildFunctions(String packName, JMenu menu) throws
+    private void populateBuildFunctions(String[] packNames, JMenu menu) throws
             URISyntaxException, MalformedURLException {
         //use reflections api to get all buildworldfunction implementations
-        File external = new File("./builders/");
+        File external = new File("./plugins/");
         ArrayList<URL> jars = new ArrayList<>();
-        jars.addAll(ClasspathHelper.forPackage(packName));
+        for (String packName : packNames) {
+            jars.addAll(ClasspathHelper.forPackage(packName));
+        }
         jars.add(external.toURL());
         if (!(external.exists() && external.isDirectory())) {
             external.mkdir();
@@ -500,18 +503,36 @@ public class Main extends JFrame implements ActionListener, RenderListener {
         Configuration config = ConfigurationBuilder.build(jars.toArray());
         Reflections refl = new Reflections(config);
 
-        Set<Class<? extends BuildWorldFunction>> clss = refl.getSubTypesOf(
+        Set<Class<? extends BuildWorldFunction>> buildClss = refl.getSubTypesOf(
                 BuildWorldFunction.class);
+        /*Set<Class<? extends GeometricObject>> geoms = refl.getSubTypesOf(
+         GeometricObject.class);
+         geoms.stream().forEach((clzz) -> {
+         try {
+         //even though we just gathered all the classes, we need to
+         //do this again because reflections calls forName with false
+         //for initialize and we need to initialize these for static
+         //initialization to occur
+         Class.forName(clzz.getName());
+         } catch (ClassNotFoundException ex) {
+         //this is unlikely to happen, because the class has already been loaded,
+         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null,
+         ex);
+         }
+         });*/
 
         //we build a tree from the packages of of the classes, we remove the original package name
         TreeMap<String, TreeOrClass> fullList = new TreeMap<>();
-        clss.stream().
+        buildClss.stream().
                 forEach((clazz) -> {
                     String name = clazz.getName().substring(clazz.getName().
                             lastIndexOf(
                                     '.') + 1);
                     String pack = clazz.getName().replace("." + name, "");
-                    String packEnd = pack.replace(packName, "");
+                    String packEnd = pack.replace(packNames[0], "");
+                    for (int i = 1; i < packNames.length; i++) {
+                        packEnd = packEnd.replace(packNames[i], "");
+                    }
                     String[] packages = packEnd.split("\\.");
                     TreeMap<String, TreeOrClass> tempList = fullList;
                     int i = 0;

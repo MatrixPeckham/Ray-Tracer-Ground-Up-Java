@@ -109,7 +109,7 @@ public class BuildFigure30 implements BuildWorldFunction {
         glassPtr.setKr(0.1);
         glassPtr.setKt(0.9);
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Stanford Bunny\\";
+                = "/Models/Stanford Bunny/";
 //	String fileName = "Bunny3K.ply"; 	// 4000 triangles
 //	String fileName = "Bunny10K.ply"; 	// 10000 triangles
 //	String fileName = "Bunny16K.ply"; 	// 16000 triangles
@@ -118,8 +118,8 @@ public class BuildFigure30 implements BuildWorldFunction {
         Mesh meshPtr = new Mesh();
         TriangleMesh bunnyPtr = new TriangleMesh(meshPtr);
         try {
-            //	bunnyPtr.readFlatTriangles(new File(path+fileName));
-            bunnyPtr.readSmoothTriangles(new File(path + fileName));
+            //	bunnyPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+fileName));
+            bunnyPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure30.class.getName()).
                     log(Level.SEVERE, null, ex);

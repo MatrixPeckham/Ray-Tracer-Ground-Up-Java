@@ -93,10 +93,10 @@ public class BuildFigure26 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String imagePath
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+                = "/Textures/ppm/";
         try {
-//            imagePtr.loadPPMFile(new File(imagePath+"EarthHighRes.ppm"));
-            imagePtr.loadPPMFile(new File(imagePath + "label.ppm"));
+//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath+"EarthHighRes.ppm"));
+            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath + "label.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure26.class.getName()).
                     log(Level.SEVERE, null, ex);

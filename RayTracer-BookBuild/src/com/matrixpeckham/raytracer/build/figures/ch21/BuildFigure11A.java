@@ -79,9 +79,9 @@ public class BuildFigure11A implements BuildWorldFunction {
 	// blue marble ramp image
         Image imagePtr1 = new Image();
         String filename
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\BlueMarbleRamp.ppm";
+                = "/Textures/ppm/BlueMarbleRamp.ppm";
         try {
-            imagePtr1.loadPPMFile(new File(filename));
+            imagePtr1.loadPPMFile(getClass().getClassLoader().getResourceAsStream(filename));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11A.class.getName()).
                     log(Level.SEVERE, null, ex);
