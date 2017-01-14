@@ -73,9 +73,9 @@ public class BuildFigure25b implements BuildWorldFunction {
         // image:
         Image clipTexture = new Image();
         String imagePath
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+                = "/Textures/ppm/";
         try {
-            clipTexture.loadPPMFile(new File(imagePath + "EarthMap.ppm"));
+            clipTexture.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath + "EarthMap.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure22.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -83,7 +83,7 @@ public class BuildFigure25b implements BuildWorldFunction {
         }
         Image earthTexture = new Image();
         try {
-            earthTexture.loadPPMFile(new File(imagePath + "EarthHighRes.ppm"));
+            earthTexture.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath + "EarthHighRes.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure25b.class.getName()).
                     log(Level.SEVERE, null, ex);

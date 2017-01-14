@@ -94,14 +94,14 @@ public class BuildFigure13 implements BuildWorldFunction {
 
         String fileName = "Horse97K.ply";
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
+                = "/Models/";
 
         TriangleMesh horsePtr = new TriangleMesh(new Mesh());
         try {
 //	horsePtr.reverseMeshNormals();				// you must use w for the 10K model
 //	horsePtr.readFlatTriangles(fileName);
 
-            horsePtr.readSmoothTriangles(new File(path + fileName));
+            horsePtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure13.class.getName()).
                     log(Level.SEVERE, null, ex);

@@ -63,7 +63,7 @@ public class CubicNoise extends LatticeNoise {
      */
     @Override
     public LatticeNoise cloneNoise() {
-        return new CubicNoise(this);
+        return this;//new CubicNoise(this);
     }
 
     /**

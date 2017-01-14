@@ -74,8 +74,8 @@ public class BuildFigure10B implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         try {
-            imagePtr.loadPPMFile(new File(
-                    "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\Sarah.ppm"));
+            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(
+                    "/Textures/ppm/Sarah.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure10B.class.getName()).
                     log(Level.SEVERE, null, ex);

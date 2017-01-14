@@ -102,9 +102,9 @@ public class BuildFigure41A implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+                = "/Textures/ppm/";
         try {
-            imagePtr.loadPPMFile(new File(path + "sandstone_ramp1.ppm"));
+            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "sandstone_ramp1.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);

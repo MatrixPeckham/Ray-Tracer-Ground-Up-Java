@@ -153,12 +153,12 @@ public class BuildFigure41B implements BuildWorldFunction {
         // we read the fish file once, and instance it       //	String fileName = "goldfish_low_res.ply";		// for scene design
         String fileName = "goldfish_high_res.ply";  // for production
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
+                = "/Models/";
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 
-            gridPtr.readSmoothTriangles(new File(path + fileName));
+            gridPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);

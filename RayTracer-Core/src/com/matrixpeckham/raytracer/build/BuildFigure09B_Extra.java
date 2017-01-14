@@ -116,11 +116,11 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
         reflective1.setCr(new RGBColor(1, 0.6, 0));
 
         String fileName
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Dragon2.ply";
+                = "Models/Dragon2.ply";
         TriangleMesh dragon = new TriangleMesh(new Mesh());
         try {
-//            dragon.readFlatTriangles(new File(fileName));
-            dragon.readSmoothTriangles(new File(fileName));
+//            dragon.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
+            dragon.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure09B_Extra.class.getName()).
                     log(Level.SEVERE, null, ex);
