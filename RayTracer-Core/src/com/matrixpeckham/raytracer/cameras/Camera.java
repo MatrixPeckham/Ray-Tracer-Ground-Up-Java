@@ -28,16 +28,17 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  * @author William Matrix Peckham
  */
 public abstract class Camera {
-    
+
     /**
      * Number of threads to use
      */
-    public static final int POOL_SIZE = 4;
-    
+    public static final int POOL_SIZE = 10;
+
     /**
      * thread pool executor for multithreading.
      */
-    protected static final ScheduledThreadPoolExecutor EXEC = new ScheduledThreadPoolExecutor(POOL_SIZE);
+    protected static final ScheduledThreadPoolExecutor EXEC
+            = new ScheduledThreadPoolExecutor(POOL_SIZE);
 
     /**
      * Eye Point of the camera, center of ortho view, or focal point of
@@ -126,19 +127,19 @@ public abstract class Camera {
             w.setTo(new Vector3D(0, 1, 0));
             u.
                     setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
-                                    rollAngle));
+                            rollAngle));
             v.
                     setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
-                                    rollAngle));
+                            rollAngle));
         }
         if (eye.x == lookat.x && eye.z == lookat.z && eye.y < lookat.y) {
             w.setTo(new Vector3D(0, -1, 0));
             u.
                     setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
-                                    rollAngle));
+                            rollAngle));
             v.
                     setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
-                                    rollAngle));
+                            rollAngle));
         }
     }
 
