@@ -44,6 +44,22 @@ public class OpenCone extends GeometricObject {
      */
     double r = 1;
 
+    public double getH() {
+        return h;
+    }
+
+    public void setH(double h) {
+        this.h = h;
+    }
+
+    public double getR() {
+        return r;
+    }
+
+    public void setR(double r) {
+        this.r = r;
+    }
+
     /**
      * epsilon value
      */

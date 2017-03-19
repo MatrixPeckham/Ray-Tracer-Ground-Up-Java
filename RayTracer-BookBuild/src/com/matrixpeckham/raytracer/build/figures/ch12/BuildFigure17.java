@@ -209,9 +209,9 @@ public class BuildFigure17 implements BuildWorldFunction {
 
         Image imagePtr = new Image();
         String path
-                = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+                = "/Textures/ppm/";
         try {
-            imagePtr.loadPPMFile(new File(path + "CloudsLowRes.ppm"));
+            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "CloudsLowRes.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure17.class.getName()).
                     log(Level.SEVERE, null, ex);

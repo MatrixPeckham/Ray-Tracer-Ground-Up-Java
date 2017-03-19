@@ -31,7 +31,9 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.ply.PLYElement;
 import com.matrixpeckham.raytracer.util.ply.PLYFile;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -63,6 +65,17 @@ public class TriangleMesh extends Grid {
      * @throws IOException
      */
     public void readSmoothUvTriangles(File fileName) throws IOException {
+        readPLYFileUV(new FileInputStream(fileName), TriangleType.SMOOTH);
+        computeMeshNormals();
+    }
+
+    /**
+     * reads a ply file for smooth triangle mesh with uv coordinates
+     *
+     * @param fileName
+     * @throws IOException
+     */
+    public void readSmoothUvTriangles(InputStream fileName) throws IOException {
         readPLYFileUV(fileName, TriangleType.SMOOTH);
         computeMeshNormals();
     }
@@ -144,7 +157,22 @@ public class TriangleMesh extends Grid {
      * @throws IOException
      */
     public void readFlatTriangles(File f) throws IOException {
+        readPLYFile(new FileInputStream(f), TriangleType.FLAT);
+    }
+
+    /**
+     * reads a file for a flat triangle mesh
+     *
+     * @param f
+     * @throws IOException
+     */
+    public void readFlatTriangles(InputStream f) throws IOException {
         readPLYFile(f, TriangleType.FLAT);
+    }
+
+    public void readSmoothTriangles(InputStream f) throws IOException {
+        readPLYFile(f, TriangleType.SMOOTH);
+        computeMeshNormals();
     }
 
     /**
@@ -158,6 +186,10 @@ public class TriangleMesh extends Grid {
         computeMeshNormals();
     }
 
+    private void readPLYFile(File f, TriangleType t) throws IOException {
+        readPLYFile(new FileInputStream(f), t);
+    }
+
     /**
      * reads a PLY file and creates the correct triangle type for the type input
      *
@@ -165,7 +197,7 @@ public class TriangleMesh extends Grid {
      * @param t
      * @throws IOException
      */
-    private void readPLYFile(File f, TriangleType t) throws IOException {
+    private void readPLYFile(InputStream f, TriangleType t) throws IOException {
 
         //create a plyfile object from the file.
         PLYFile ply = new PLYFile(f);
@@ -214,6 +246,10 @@ public class TriangleMesh extends Grid {
         }
     }
 
+    private void readPLYFileUV(File f, TriangleType t) throws IOException {
+        readPLYFileUV(new FileInputStream(f), t);
+    }
+
     /**
      * Reads a ply file with per vertex uv coordinates with the specified
      * triangle type
@@ -222,7 +258,7 @@ public class TriangleMesh extends Grid {
      * @param t
      * @throws IOException
      */
-    private void readPLYFileUV(File f, TriangleType t) throws IOException {
+    private void readPLYFileUV(InputStream f, TriangleType t) throws IOException {
         //method works the same way as the non-uv enabled one the only difference is in the vertex part
         PLYFile ply = new PLYFile(f);
         ArrayList<PLYElement> verts = ply.getElements("vertex");

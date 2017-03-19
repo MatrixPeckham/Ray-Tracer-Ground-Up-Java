@@ -130,11 +130,7 @@ public class Compound extends GeometricObject {
     @Override
     public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
 
-        //temporary storage for keeping lowest distance hit.
-        Normal n = new Normal();
-        Point3D localHitPoint = new Point3D();
         boolean hit = false;
-        double tmin = Utility.HUGE_VALUE;
         int numObjects = objects.size();
 
         for (int j = 0; j < numObjects; j++) {

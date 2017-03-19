@@ -90,11 +90,11 @@ public class BuildFigure09B implements BuildWorldFunction{
 	phong.setKs(0.5);  
 	phong.setExp(20); 
 		
-	String fileName = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\Dragon2.ply";		
+	String fileName = "/Models/Dragon2.ply";		
 	TriangleMesh dragon = new TriangleMesh(new Mesh());
         try {		
-//            dragon.readFlatTriangles(new File(fileName));
-          dragon.readSmoothTriangles(new File(fileName));
+//            dragon.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
+          dragon.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure09B.class.getName()).
                     log(Level.SEVERE, null, ex);

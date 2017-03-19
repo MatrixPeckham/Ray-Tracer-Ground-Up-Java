@@ -70,11 +70,11 @@ public class BuildFigure13 implements BuildWorldFunction {
             phongPtr1.setKs(0.5);
             phongPtr1.setCs(1.0, 1.0, 0.0);
             phongPtr1.setExp(50.0);
-            String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Models\\";
+            String path = "/Models/";
             String fileName = "goldfish_low_res.ply";
 //	String fileName = "goldfishHighRes.ply";
             TriangleMesh gridPtr = new TriangleMesh(new Mesh());
-            gridPtr.readFlatTriangles(new File(path+fileName));
+            gridPtr.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(path+fileName));
 //	gridPtr.readSmoothTriangles(fileName);
             gridPtr.setMaterial(phongPtr1);
             gridPtr.setupCells();

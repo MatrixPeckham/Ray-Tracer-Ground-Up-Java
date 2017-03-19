@@ -62,7 +62,7 @@ public class LinearNoise extends LatticeNoise {
      */
     @Override
     public LatticeNoise cloneNoise() {
-        return new LinearNoise(this);
+        return this;//new LinearNoise(this);
     }
 
     /**

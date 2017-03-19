@@ -206,8 +206,8 @@ public class BuildFigure12 implements BuildWorldFunction {
 
         Image image = new Image();
         try {
-            image.loadPPMFile(new File(
-                    "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\CloudsLowResWithBlack.ppm"));
+            image.loadPPMFile(getClass().getClassLoader().getResourceAsStream(
+                    "/Textures/ppm/CloudsLowResWithBlack.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11.class.getName()).
                     log(Level.SEVERE, null, ex);

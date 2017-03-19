@@ -84,7 +84,7 @@ public class WorleyNoise extends Noise {
 
     @Override
     public Noise cloneNoise() {
-        return new WorleyNoise(this);
+        return this;//new WorleyNoise(this);
     }
 
     //gets the nth distance from the set

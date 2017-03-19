@@ -124,11 +124,11 @@ public class BuildFigure30A implements BuildWorldFunction {
 	// large sphere with Uffizi image
 	
 	Image imagePtr = new Image();
-        String path = "C:\\Users\\Owner\\Documents\\Ground Up raytracer\\Textures\\ppm\\";
+        String path = "/Textures/ppm/";
 
         try {
-//            imagePtr.loadPPMFile(new File(path+"uffizi_probe_small.ppm"));   // for testing
-	imagePtr.loadPPMFile(new File(path+"uffizi_probe_large.ppm"));   // for production
+//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path+"uffizi_probe_small.ppm"));   // for testing
+	imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));   // for production
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure29A.class.getName()).
                     log(Level.SEVERE, null, ex);

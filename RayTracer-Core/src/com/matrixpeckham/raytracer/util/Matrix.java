@@ -87,6 +87,24 @@ public class Matrix {
     }
 
     /**
+     * Basic matrix Addition.
+     *
+     * @param m
+     * @return
+     */
+    public Matrix add(Matrix m) {
+        Matrix ret = new Matrix();
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                ret.m[x][y] = this.m[x][y] + m.m[x][y];
+            }
+        }
+
+        return ret;
+    }
+
+    /**
      * Divide by scalar
      *
      * @param d
