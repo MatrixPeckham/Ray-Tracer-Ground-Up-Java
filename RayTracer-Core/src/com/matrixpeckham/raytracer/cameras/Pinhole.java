@@ -23,6 +23,9 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Pinhole perspective camera.
@@ -39,9 +42,9 @@ public class Pinhole extends Camera {
      * Default constructor.
      */
     public Pinhole() {
-        super();
-        d = 500;
-        zoom = 1.0f;
+	super();
+	d = 500;
+	zoom = 1.0f;
     }
 
     /**
@@ -50,9 +53,9 @@ public class Pinhole extends Camera {
      * @param c
      */
     public Pinhole(Pinhole c) {
-        super(c);
-        d = c.d;
-        zoom = c.zoom;
+	super(c);
+	d = c.d;
+	zoom = c.zoom;
     }
 
     /**
@@ -62,7 +65,7 @@ public class Pinhole extends Camera {
      */
     @Override
     public Camera cloneCamera() {
-        return new Pinhole(this);
+	return new Pinhole(this);
     }
 
     /**
@@ -73,9 +76,9 @@ public class Pinhole extends Camera {
      * @return
      */
     public Vector3D getDirection(Point2D p) {
-        Vector3D dir = (u.mul(p.x)).add(v.mul(p.y)).sub(w.mul(d));
-        dir.normalize();
-        return dir;
+	Vector3D dir = (u.mul(p.x)).add(v.mul(p.y)).sub(w.mul(d));
+	dir.normalize();
+	return dir;
     }
 
     /**
@@ -85,50 +88,50 @@ public class Pinhole extends Camera {
      */
     @Override
     public void renderScene(World w) {
-        //color
-        RGBColor L = new RGBColor();
-        //clone the viewport, we'll manipulate it later
-        ViewPlane vp = new ViewPlane(w.vp);
-        //ray
-        Ray ray = new Ray();
-        //depth
-        int depth = 0;
-        //pixel point
-        Point2D pp = new Point2D();
-        //change the pixel size for the zoom
-        vp.s /= zoom;
-        //the origin of the ray will always be the eye point.
-        ray.o.setTo(eye);
-        int pixRendered = 0;
-        double pixToRender = vp.vRes * vp.hRes;
-        w.startRender(vp.hRes, vp.hRes);
+	//color
+	RGBColor L = new RGBColor();
+	//clone the viewport, we'll manipulate it later
+	ViewPlane vp = new ViewPlane(w.vp);
+	//ray
+	Ray ray = new Ray();
+	//depth
+	int depth = 0;
+	//pixel point
+	Point2D pp = new Point2D();
+	//change the pixel size for the zoom
+	vp.s /= zoom;
+	//the origin of the ray will always be the eye point.
+	ray.o.setTo(eye);
+	int pixRendered = 0;
+	double pixToRender = vp.vRes * vp.hRes;
+	w.startRender(vp.hRes, vp.hRes);
 
-        //loop through all pixels
-        for (int r = 0; r < vp.vRes; r++) {
-            for (int c = 0; c < vp.hRes; c++) {
-                //reset color
-                L.setTo(0, 0, 0);
-                //for all samples
-                for (int p = 0; p < vp.numSamples; p++) {
-                    //get sample point on pixel.
-                    Point2D sp = vp.sampler.sampleUnitSquare();
-                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
-                    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
-                    //compute direction
-                    ray.d.setTo(getDirection(pp));
-                    //add color
-                    L.addLocal(w.tracer.traceRay(ray, depth));
-                }
-                //normalize color and expose
-                L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime);
-                //display
-                w.displayPixel(r, c, L);
-                pixRendered++;
-            }
-            w.updateProgress(pixRendered / pixToRender);
-        }
-        w.finishRender();
+	//loop through all pixels
+	for (int r = 0; r < vp.vRes; r++) {
+	    for (int c = 0; c < vp.hRes; c++) {
+		//reset color
+		L.setTo(0, 0, 0);
+		//for all samples
+		for (int p = 0; p < vp.numSamples; p++) {
+		    //get sample point on pixel.
+		    Point2D sp = vp.sampler.sampleUnitSquare();
+		    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
+		    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+		    //compute direction
+		    ray.d.setTo(getDirection(pp));
+		    //add color
+		    L.addLocal(w.tracer.traceRay(ray, depth));
+		}
+		//normalize color and expose
+		L.divLocal(vp.numSamples);
+		L.mulLocal(exposureTime);
+		//display
+		w.displayPixel(r, c, L);
+		pixRendered++;
+	    }
+	    w.updateProgress(pixRendered / pixToRender);
+	}
+	w.finishRender();
 
     }
 
@@ -138,7 +141,7 @@ public class Pinhole extends Camera {
      * @param d
      */
     public void setViewDistance(double d) {
-        this.d = d;
+	this.d = d;
     }
 
     /**
@@ -147,7 +150,7 @@ public class Pinhole extends Camera {
      * @param zoom
      */
     public void setZoom(double zoom) {
-        this.zoom = zoom;
+	this.zoom = zoom;
     }
 
     /**
@@ -159,102 +162,112 @@ public class Pinhole extends Camera {
      */
     @Override
     public void renderStereo(World w, double x, int i) {
-        //color
-        RGBColor L = new RGBColor();
-        //clone the viewport, we'll manipulate it later
-        ViewPlane vp = new ViewPlane(w.vp);
-        //ray
-        Ray ray = new Ray();
-        //depth
-        int depth = 0;
-        //pixel point
-        Point2D pp = new Point2D();
-        //change the pixel size for the zoom
-        vp.s /= zoom;
-        //the origin of the ray will always be the eye point.
-        ray.o.setTo(eye);
-        int pixRendered = 0;
-        double pixToRender = vp.vRes * vp.hRes;
+	//color
+	RGBColor L = new RGBColor();
+	//clone the viewport, we'll manipulate it later
+	ViewPlane vp = new ViewPlane(w.vp);
+	//ray
+	Ray ray = new Ray();
+	//depth
+	int depth = 0;
+	//pixel point
+	Point2D pp = new Point2D();
+	//change the pixel size for the zoom
+	vp.s /= zoom;
+	//the origin of the ray will always be the eye point.
+	ray.o.setTo(eye);
+	int pixRendered = 0;
+	double pixToRender = vp.vRes * vp.hRes;
 
-        //loop through all pixels
-        for (int r = 0; r < vp.vRes; r++) {
-            for (int c = 0; c < vp.hRes; c++) {
-                //reset color
-                L.setTo(0, 0, 0);
-                //for all samples
-                for (int p = 0; p < vp.numSamples; p++) {
-                    //get sample point on pixel.
-                    Point2D sp = vp.sampler.sampleUnitSquare();
-                    //get point for pixel, offset for stereo
-                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x) + x;
-                    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
-                    //compute direction
-                    ray.d.setTo(getDirection(pp));
-                    //add color
-                    L.addLocal(w.tracer.traceRay(ray, depth));
-                }
-                //normalize color and expose
-                L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime);
-                //display, offset for stereo
-                w.displayPixel(r, c + i, L);
-                pixRendered++;
-            }
-            w.updateProgress(pixRendered / pixToRender);
-        }
+	//loop through all pixels
+	for (int r = 0; r < vp.vRes; r++) {
+	    for (int c = 0; c < vp.hRes; c++) {
+		//reset color
+		L.setTo(0, 0, 0);
+		//for all samples
+		for (int p = 0; p < vp.numSamples; p++) {
+		    //get sample point on pixel.
+		    Point2D sp = vp.sampler.sampleUnitSquare();
+		    //get point for pixel, offset for stereo
+		    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x) + x;
+		    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+		    //compute direction
+		    ray.d.setTo(getDirection(pp));
+		    //add color
+		    L.addLocal(w.tracer.traceRay(ray, depth));
+		}
+		//normalize color and expose
+		L.divLocal(vp.numSamples);
+		L.mulLocal(exposureTime);
+		//display, offset for stereo
+		w.displayPixel(r, c + i, L);
+		pixRendered++;
+	    }
+	    w.updateProgress(pixRendered / pixToRender);
+	}
 
     }
 
     @Override
     public void multiThreadRenderScene(World w) {
-        //clone the viewport, we'll manipulate it later
-        final ViewPlane vp = new ViewPlane(w.vp);
-        //change the pixel size for the zoom
-        vp.s /= zoom;
+	//clone the viewport, we'll manipulate it later
+	final ViewPlane vp = new ViewPlane(w.vp);
+	//change the pixel size for the zoom
+	vp.s /= zoom;
+	w.startRender(vp.vRes, vp.hRes);
+	CountDownLatch cdl = new CountDownLatch(vp.vRes * vp.hRes);
 
-        //loop through all pixels
-        for (int ri = 0; ri < vp.vRes; ri++) {
-            for (int ci = 0; ci < vp.hRes; ci++) {
-                final int r = ri;
-                final int c = ci;
-                Runnable pix = new Runnable() {
-                    public void run() {
-                        //color
-                        RGBColor L = new RGBColor();
-                        //ray
-                        Ray ray = new Ray();
-                        //depth
-                        int depth = 0;
-                        //pixel point
-                        Point2D pp = new Point2D();
-                        //the origin of the ray will always be the eye point.
-                        ray.o.setTo(eye);
-                        if (r == vp.vRes - 258 && c == 315) {
-                            int breakable = c + r;
-                        }
-                        //reset color
-                        L.setTo(0, 0, 0);
-                        //for all samples
-                        for (int p = 0; p < vp.numSamples; p++) {
-                            //get sample point on pixel.
-                            Point2D sp = vp.sampler.sampleUnitSquare();
-                            pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
-                            pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
-                            //compute direction
-                            ray.d.setTo(getDirection(pp));
-                            //add color
-                            L.addLocal(w.tracer.traceRay(ray, depth));
-                        }
-                        //normalize color and expose
-                        L.divLocal(vp.numSamples);
-                        L.mulLocal(exposureTime);
-                        //display
-                        w.displayPixel(r, c, L);
-                    }
-                };
-                EXEC.submit(pix);
-            }
-        }
+	//loop through all pixels
+	for (int ri = 0; ri < vp.vRes; ri++) {
+	    for (int ci = 0; ci < vp.hRes; ci++) {
+		final int r = ri;
+		final int c = ci;
+		Runnable pix = new Runnable() {
+		    public void run() {
+			//color
+			RGBColor L = new RGBColor();
+			//ray
+			Ray ray = new Ray();
+			//depth
+			int depth = 0;
+			//pixel point
+			Point2D pp = new Point2D();
+			//the origin of the ray will always be the eye point.
+			ray.o.setTo(eye);
+			//reset color
+			L.setTo(0, 0, 0);
+			//for all samples
+			for (int p = 0; p < vp.numSamples; p++) {
+			    //get sample point on pixel.
+			    Point2D sp = vp.sampler.sampleUnitSquare();
+			    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
+			    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+			    //compute direction
+			    ray.d.setTo(getDirection(pp));
+			    //add color
+			    L.addLocal(w.tracer.traceRay(ray, depth));
+			}
+			//normalize color and expose
+			L.divLocal(vp.numSamples);
+			L.mulLocal(exposureTime);
+			//display
+			w.displayPixel(r, c, L);
+			w.updateProgress(((double) cdl.getCount())
+				/ ((double) (vp.hRes * vp.vRes)));
+			cdl.countDown();
+		    }
+		};
+		EXEC.submit(pix);
 
+	    }
+	}
+
+	try {
+	    cdl.await();
+	} catch (InterruptedException ex) {
+	    Logger.getLogger(Pinhole.class.getName()).
+		    log(Level.SEVERE, null, ex);
+	}
+	w.finishRender();
     }
 }

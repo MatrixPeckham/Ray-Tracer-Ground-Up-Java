@@ -23,6 +23,9 @@ import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
+import java.util.concurrent.CountDownLatch;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Orthographic camera.
@@ -35,7 +38,7 @@ public class Orthographic extends Camera {
      * Default.
      */
     public Orthographic() {
-        super();
+	super();
     }
 
     /**
@@ -44,7 +47,7 @@ public class Orthographic extends Camera {
      * @param c
      */
     public Orthographic(Orthographic c) {
-        super(c);
+	super(c);
     }
 
     /**
@@ -54,7 +57,7 @@ public class Orthographic extends Camera {
      */
     @Override
     public Camera cloneCamera() {
-        return new Orthographic(this);
+	return new Orthographic(this);
     }
 
     /**
@@ -64,9 +67,9 @@ public class Orthographic extends Camera {
      * @return
      */
     public Vector3D getDirection(Point2D p) {
-        Vector3D dir = (lookat.sub(eye));
-        dir.normalize();
-        return dir;
+	Vector3D dir = (lookat.sub(eye));
+	dir.normalize();
+	return dir;
     }
 
     /**
@@ -76,51 +79,51 @@ public class Orthographic extends Camera {
      */
     @Override
     public void renderScene(World w) {
-        //color
-        RGBColor L = new RGBColor();
-        //copy of view plane.
-        ViewPlane vp = new ViewPlane(w.vp);
-        //ray
-        Ray ray = new Ray();
-        //depth
-        int depth = 0;
-        //pixel point
-        Point2D pp = new Point2D();
-        //normalized sample point
-        Point2D sp = new Point2D();
-        //loop through all pixels
-        int pixRendered = 0;
-        double pixToRender = vp.vRes * vp.hRes;
-        w.startRender(vp.hRes, vp.hRes);
-        for (int r = 0; r < vp.vRes; r++) {
-            for (int c = 0; c < vp.hRes; c++) {
-                //this is a bad idea
-                //initialize color
-                L.setTo(0, 0, 0);
-                //for all samples in point
-                for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
-                    //sample point
-                    sp.setTo(vp.sampler.sampleUnitSquare());
-                    //convert normalized sample point to a point somewhere in the pixel
-                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
-                    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
-                    //get ray direction
-                    ray.d.setTo(getDirection(pp));
-                    //set ray origin, eyepoint + pixel location
-                    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
-                    //sum up samples.
-                    L.addLocal(w.tracer.traceRay(ray, depth));
-                }
-                //normalize and expose pixel
-                L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime);
-                //display
-                w.displayPixel(r, c, L);
-                pixRendered++;
-            }
-            w.updateProgress(pixRendered / pixToRender);
-        }
-        w.finishRender();
+	//color
+	RGBColor L = new RGBColor();
+	//copy of view plane.
+	ViewPlane vp = new ViewPlane(w.vp);
+	//ray
+	Ray ray = new Ray();
+	//depth
+	int depth = 0;
+	//pixel point
+	Point2D pp = new Point2D();
+	//normalized sample point
+	Point2D sp = new Point2D();
+	//loop through all pixels
+	int pixRendered = 0;
+	double pixToRender = vp.vRes * vp.hRes;
+	w.startRender(vp.hRes, vp.hRes);
+	for (int r = 0; r < vp.vRes; r++) {
+	    for (int c = 0; c < vp.hRes; c++) {
+		//this is a bad idea
+		//initialize color
+		L.setTo(0, 0, 0);
+		//for all samples in point
+		for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
+		    //sample point
+		    sp.setTo(vp.sampler.sampleUnitSquare());
+		    //convert normalized sample point to a point somewhere in the pixel
+		    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
+		    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+		    //get ray direction
+		    ray.d.setTo(getDirection(pp));
+		    //set ray origin, eyepoint + pixel location
+		    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
+		    //sum up samples.
+		    L.addLocal(w.tracer.traceRay(ray, depth));
+		}
+		//normalize and expose pixel
+		L.divLocal(vp.numSamples);
+		L.mulLocal(exposureTime);
+		//display
+		w.displayPixel(r, c, L);
+		pixRendered++;
+	    }
+	    w.updateProgress(pixRendered / pixToRender);
+	}
+	w.finishRender();
 
     }
 
@@ -131,51 +134,63 @@ public class Orthographic extends Camera {
      */
     @Override
     public void multiThreadRenderScene(final World w) {
-        //copy of view plane.
-        final ViewPlane vp = new ViewPlane(w.vp);
-        //loop through all pixels
-        for (int ri = 0; ri < vp.vRes; ri++) {
-            for (int ci = 0; ci < vp.hRes; ci++) {
-                final int r = ri;
-                final int c = ci;
-                Runnable pix = new Runnable() {
-                    public void run() {
-                        //color
-                        RGBColor L = new RGBColor();
-                        //ray
-                        Ray ray = new Ray();
-                        //depth
-                        int depth = 0;
-                        //pixel point
-                        Point2D pp = new Point2D();
-                        //normalized sample point
-                        Point2D sp = new Point2D();
-                        //initialize color
-                        L.setTo(0, 0, 0);
-                        //for all samples in point
-                        for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
-                            //sample point
-                            sp.setTo(vp.sampler.sampleUnitSquare());
-                            //convert normalized sample point to a point somewhere in the pixel
-                            pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
-                            pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
-                            //get ray direction
-                            ray.d.setTo(getDirection(pp));
-                            //set ray origin, eyepoint + pixel location
-                            ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
-                            //sum up samples. 
-                            L.addLocal(w.tracer.traceRay(ray, depth));
-                        }
-                        //normalize and expose pixel
-                        L.divLocal(vp.numSamples);
-                        L.mulLocal(exposureTime);
-                        //display
-                        w.displayPixel(r, c, L);
-                    }
-                };
-                EXEC.submit(pix);
-            }
-        }
+	//copy of view plane.
+	final ViewPlane vp = new ViewPlane(w.vp);
+	w.startRender(vp.vRes, vp.hRes);
+	CountDownLatch cdl = new CountDownLatch(vp.vRes * vp.hRes);
+	//loop through all pixels
+	for (int ri = 0; ri < vp.vRes; ri++) {
+	    for (int ci = 0; ci < vp.hRes; ci++) {
+		final int r = ri;
+		final int c = ci;
+		Runnable pix = new Runnable() {
+		    public void run() {
+			//color
+			RGBColor L = new RGBColor();
+			//ray
+			Ray ray = new Ray();
+			//depth
+			int depth = 0;
+			//pixel point
+			Point2D pp = new Point2D();
+			//normalized sample point
+			Point2D sp = new Point2D();
+			//initialize color
+			L.setTo(0, 0, 0);
+			//for all samples in point
+			for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
+			    //sample point
+			    sp.setTo(vp.sampler.sampleUnitSquare());
+			    //convert normalized sample point to a point somewhere in the pixel
+			    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x);
+			    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+			    //get ray direction
+			    ray.d.setTo(getDirection(pp));
+			    //set ray origin, eyepoint + pixel location
+			    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
+			    //sum up samples.
+			    L.addLocal(w.tracer.traceRay(ray, depth));
+			}
+			//normalize and expose pixel
+			L.divLocal(vp.numSamples);
+			L.mulLocal(exposureTime);
+			//display
+			w.displayPixel(r, c, L);
+			w.updateProgress(((double) cdl.getCount())
+				/ ((double) (vp.hRes * vp.vRes)));
+			cdl.countDown();
+		    }
+		};
+		EXEC.submit(pix);
+	    }
+	}
+	try {
+	    cdl.await();
+	} catch (InterruptedException ex) {
+	    Logger.getLogger(Pinhole.class.getName()).
+		    log(Level.SEVERE, null, ex);
+	}
+	w.finishRender();
 
     }
 
@@ -188,48 +203,48 @@ public class Orthographic extends Camera {
      */
     @Override
     public void renderStereo(World w, double x, int i) {
-        //color
-        RGBColor L = new RGBColor();
-        //copy of view plane.
-        ViewPlane vp = new ViewPlane(w.vp);
-        //ray
-        Ray ray = new Ray();
-        //depth
-        int depth = 0;
-        //pixel point
-        Point2D pp = new Point2D();
-        //normalized sample point
-        Point2D sp = new Point2D();
-        int pixRendered = 0;
-        double pixToRender = vp.vRes * vp.hRes;
-        //loop through all pixels
-        for (int r = 0; r < vp.vRes; r++) {
-            for (int c = 0; c < vp.hRes; c++) {
-                //initialize color
-                L.setTo(0, 0, 0);
-                //for all samples in point
-                for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
-                    //sample point
-                    sp.setTo(vp.sampler.sampleUnitSquare());
-                    //convert normalized sample point to a point somewhere in the pixel offset for stereo
-                    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x) + x;
-                    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
-                    //get ray direction
-                    ray.d.setTo(getDirection(pp));
-                    //set ray origin, eyepoint + pixel location
-                    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
-                    //sum up samples.
-                    L.addLocal(w.tracer.traceRay(ray, depth));
-                }
-                //normalize and expose pixel
-                L.divLocal(vp.numSamples);
-                L.mulLocal(exposureTime);
-                //display, offset for stereo
-                w.displayPixel(r, c + i, L);
-                pixRendered++;
-            }
-            w.updateProgress(pixRendered / pixToRender);
-        }
+	//color
+	RGBColor L = new RGBColor();
+	//copy of view plane.
+	ViewPlane vp = new ViewPlane(w.vp);
+	//ray
+	Ray ray = new Ray();
+	//depth
+	int depth = 0;
+	//pixel point
+	Point2D pp = new Point2D();
+	//normalized sample point
+	Point2D sp = new Point2D();
+	int pixRendered = 0;
+	double pixToRender = vp.vRes * vp.hRes;
+	//loop through all pixels
+	for (int r = 0; r < vp.vRes; r++) {
+	    for (int c = 0; c < vp.hRes; c++) {
+		//initialize color
+		L.setTo(0, 0, 0);
+		//for all samples in point
+		for (int p = 0; p < vp.sampler.getNumSamples(); p++) {
+		    //sample point
+		    sp.setTo(vp.sampler.sampleUnitSquare());
+		    //convert normalized sample point to a point somewhere in the pixel offset for stereo
+		    pp.x = vp.s * (c - 0.5f * vp.hRes + sp.x) + x;
+		    pp.y = vp.s * (r - 0.5f * vp.vRes + sp.y);
+		    //get ray direction
+		    ray.d.setTo(getDirection(pp));
+		    //set ray origin, eyepoint + pixel location
+		    ray.o.setTo(eye.add(u.mul(pp.x).add(v.mul(pp.y))));
+		    //sum up samples.
+		    L.addLocal(w.tracer.traceRay(ray, depth));
+		}
+		//normalize and expose pixel
+		L.divLocal(vp.numSamples);
+		L.mulLocal(exposureTime);
+		//display, offset for stereo
+		w.displayPixel(r, c + i, L);
+		pixRendered++;
+	    }
+	    w.updateProgress(pixRendered / pixToRender);
+	}
 
     }
 
