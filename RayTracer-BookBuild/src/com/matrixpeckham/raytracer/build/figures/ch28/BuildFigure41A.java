@@ -140,12 +140,16 @@ public class BuildFigure41A implements BuildWorldFunction {
         //	String fileName = "goldfish_low_res.ply";		// for scene design
         String fileName = "goldfish_high_res.ply";  // for production
         String path
-                = "/Models/";
+
+                = "resources/Models/";
+
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 
-            gridPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
+
+            gridPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + fileName));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);

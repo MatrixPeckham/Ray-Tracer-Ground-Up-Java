@@ -52,7 +52,7 @@ public class Jittered extends Sampler {
      */
     public Jittered(Jittered u) {
         super(u);
-        generateSamples();
+        //generateSamples();
     }
 
     /**
@@ -78,7 +78,7 @@ public class Jittered extends Sampler {
      * @return
      */
     @Override
-    public Sampler cloneSampler() {
+    public Sampler protclone() {
         return new Jittered(this);
     }
 

@@ -46,11 +46,32 @@ public class EnvironmentLight extends Light {
     Material material;
 
     //uvw coordinate system at hit point
-    final Vector3D u = new Vector3D(1, 0, 0);
+    private ThreadLocal<Vector3D> u = new ThreadLocal<Vector3D>() {
 
-    final Vector3D v = new Vector3D(0, 1, 0);
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D(1, 0, 0);
+        }
 
-    final Vector3D w = new Vector3D(0, 0, 1);
+    };
+
+    private ThreadLocal<Vector3D> v = new ThreadLocal<Vector3D>() {
+
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D(0, 1, 0);
+        }
+
+    };
+
+    private ThreadLocal<Vector3D> w = new ThreadLocal<Vector3D>() {
+
+        @Override
+        protected Vector3D initialValue() {
+            return new Vector3D(0, 0, 1);
+        }
+
+    };
 
     //sampled direction to light
     Vector3D wi = new Vector3D();
@@ -69,9 +90,9 @@ public class EnvironmentLight extends Light {
     public EnvironmentLight(EnvironmentLight l) {
         sampler = l.sampler.cloneSampler();
         material = l.material.cloneMaterial();
-        u.setTo(l.u);
-        v.setTo(l.v);
-        w.setTo(l.w);
+        u.get().setTo(l.u.get());
+        v.get().setTo(l.v.get());
+        w.get().setTo(l.w.get());
         wi.setTo(l.wi);
     }
 
@@ -103,12 +124,14 @@ public class EnvironmentLight extends Light {
      */
     @Override
     public Vector3D getDirection(ShadeRec sr) {
-        w.setTo(sr.normal);
-        v.setTo(w.cross(new Vector3D(0.0034, 1, 0.0071)));
-        v.normalize();
-        u.setTo(v.cross(w));
+        w.get().setTo(sr.normal);
+        v.get().setTo(w.get().cross(new Vector3D(0.0034, 1, 0.0071)));
+        v.get().normalize();
+        u.get().setTo(v.get().cross(w.get()));
         Point3D sp = sampler.sampleHemisphere();
-        wi.setTo(u.mul(sp.x).add(v.mul(sp.y)).add(w.mul(sp.z)));
+        wi.
+                setTo(u.get().mul(sp.x).add(v.get().mul(sp.y)).add(w.get().mul(
+                                        sp.z)));
         return wi;
     }
 

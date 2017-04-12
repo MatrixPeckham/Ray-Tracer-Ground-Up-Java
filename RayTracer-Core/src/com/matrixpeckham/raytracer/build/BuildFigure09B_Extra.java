@@ -38,7 +38,6 @@ import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.util.Vector3D;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,96 +50,99 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-        int numSamples = 1;
+	int numSamples = 1;
 
-        w.vp.setHres(600);
-        w.vp.setVres(600);
-        w.vp.setSamples(numSamples);
-        w.vp.setMaxDepth(1);
+	w.vp.setHres(600);
+	w.vp.setVres(600);
+	w.vp.setSamples(numSamples);
+	w.vp.setMaxDepth(1);
 
-        w.tracer = new Whitted(w);
-        w.backgroundColor = Utility.BLACK;
+	w.tracer = new Whitted(w);
+	w.backgroundColor = Utility.BLACK;
 
-        MultiJittered sampler = new MultiJittered(numSamples);
+	MultiJittered sampler = new MultiJittered(numSamples);
 
-        Ambient ambient = new Ambient();
-        ambient.scaleRadiance(1.0);
+	Ambient ambient = new Ambient();
+	ambient.scaleRadiance(1.0);
 //	w.setAmbient(ambient);
 
-        AmbientOccluder occluder = new AmbientOccluder();
-        occluder.setMinAmount(0.1);
-        occluder.setSampler(sampler);
-        w.setAmbient(occluder);
 
-        Pinhole pinhole = new Pinhole();
-        pinhole.setEye(-6, 5, 11);
-        pinhole.setLookat(-0.009, 0.11, 0);
-        pinhole.setRoll(30.0 * Utility.PI_ON_180);
-        pinhole.setViewDistance(37500);
-        pinhole.computeUVW();
-        w.setCamera(pinhole);
+	AmbientOccluder occluder = new AmbientOccluder();
+	occluder.setMinAmount(0.1);
+	occluder.setSampler(sampler);
+	w.setAmbient(occluder);
 
-        Directional light = new Directional();
-        light.setDirection(0.5, 1, 0.75);
-        light.scaleRadiance(1.0);
-        light.setShadows(true);
-        //w.addLight(light);
+	Pinhole pinhole = new Pinhole();
+	pinhole.setEye(-6, 5, 11);
+	pinhole.setLookat(-0.009, 0.11, 0);
+	pinhole.setRoll(30.0 * Utility.PI_ON_180);
+	pinhole.setViewDistance(37500);
+	pinhole.computeUVW();
+	w.setCamera(pinhole);
 
-        Rectangle lightShape = new Rectangle(new Point3D(0.5, 1,
-                0.75), new Vector3D(1, 0, 0), new Vector3D(0, 0, 1));
-        Emissive lightMat = new Emissive();
-        lightMat.scaleRadiance(10);
-        lightMat.setCe(1, 1, 1);
-        lightShape.setMaterial(lightMat);
-        lightShape.setSampler(new MultiJittered(numSamples));
+	Directional light = new Directional();
+	light.setDirection(0.5, 1, 0.75);
+	light.scaleRadiance(1.0);
+	light.setShadows(true);
+	//w.addLight(light);
 
-        AreaLight areaLight = new AreaLight();
-        areaLight.setObject(lightShape);
-        w.addLight(areaLight);
-        w.addObject(lightShape);
+	Rectangle lightShape = new Rectangle(new Point3D(0.5, 1,
+		0.75), new Vector3D(1, 0, 0), new Vector3D(0, 0, 1));
+	Emissive lightMat = new Emissive();
+	lightMat.scaleRadiance(10);
+	lightMat.setCe(1, 1, 1);
+	lightShape.setMaterial(lightMat);
+	lightShape.setSampler(new MultiJittered(numSamples));
 
-        Phong phong = new Phong();
-        phong.setKa(0.2);
-        phong.setKd(0.95);
-        phong.setCd(1, 0.6, 0);   // orange
-        phong.setKs(0.5);
-        phong.setExp(20);
+	AreaLight areaLight = new AreaLight();
+	areaLight.setObject(lightShape);
+	w.addLight(areaLight);
+	w.addObject(lightShape);
 
-        Reflective reflective1 = new Reflective();
-        reflective1.setKa(0.2);
-        reflective1.setKd(0.75);
-        reflective1.setCd(new RGBColor(1, 0.6, 0.0));
-        reflective1.setKs(0.2);
-        reflective1.setExp(20);
-        reflective1.setKr(0.75);
-        reflective1.setCr(new RGBColor(1, 0.6, 0));
+	Phong phong = new Phong();
+	phong.setKa(0.2);
+	phong.setKd(0.95);
+	phong.setCd(1, 0.6, 0);   // orange
+	phong.setKs(0.5);
+	phong.setExp(20);
 
-        String fileName
-                = "Models/Dragon2.ply";
-        TriangleMesh dragon = new TriangleMesh(new Mesh());
-        try {
-//            dragon.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
-            dragon.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
-        } catch (IOException ex) {
-            Logger.getLogger(BuildFigure09B_Extra.class.getName()).
-                    log(Level.SEVERE, null, ex);
-        }
-        dragon.setMaterial(reflective1);
-        dragon.setupCells();
-        w.addObject(dragon);
+	Reflective reflective1 = new Reflective();
+	reflective1.setKa(0.2);
+	reflective1.setKd(0.75);
+	reflective1.setCd(new RGBColor(1, 0.6, 0.0));
+	reflective1.setKs(0.2);
+	reflective1.setExp(20);
+	reflective1.setKr(0.75);
+	reflective1.setCr(new RGBColor(1, 0.6, 0));
 
-        Reflective reflective = new Reflective();
-        reflective.setKa(0.2);
-        reflective.setKd(0.75);
-        reflective.setCd(new RGBColor(0.5));
-        reflective.setKs(0.1);
-        reflective.setExp(20);
-        reflective.setKr(0.5);
-        reflective.setCr(new RGBColor(0.8, 1.0, 0.8));
+	String fileName
+		= "resources/Models/dragon2.ply";
+	TriangleMesh dragon = new TriangleMesh(new Mesh());
+	try {
+//            dragon.readFlatTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));
+	    dragon.readSmoothTriangles(Thread.currentThread().
+		    getContextClassLoader().getResourceAsStream(fileName));
+	} catch (IOException ex) {
+	    Logger.getLogger(BuildFigure09B_Extra.class.getName()).
+		    log(Level.SEVERE, null, ex);
+	}
+	dragon.setMaterial(reflective1);
+	dragon.setupCells();
+	w.addObject(dragon);
 
-        Plane plane = new Plane(new Point3D(0, 0.055, 0), new Normal(0, 1, 0));
-        plane.setMaterial(reflective);
-        w.addObject(plane);
+	Reflective reflective = new Reflective();
+	reflective.setKa(0.2);
+	reflective.setKd(0.75);
+	reflective.setCd(new RGBColor(0.5));
+	reflective.setKs(0.1);
+	reflective.setExp(20);
+	reflective.setKr(0.5);
+	reflective.setCr(new RGBColor(0.8, 1.0, 0.8));
+
+	Plane plane = new Plane(new Point3D(0, 0.055, 0), new Normal(0, 1, 0));
+	plane.setMaterial(reflective);
+	w.addObject(plane);
+
 
     }
 

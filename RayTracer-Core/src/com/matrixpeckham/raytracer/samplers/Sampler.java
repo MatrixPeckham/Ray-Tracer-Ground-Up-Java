@@ -78,12 +78,26 @@ public abstract class Sampler {
      * arrays/ArrayLists, so we check for negative number and reset it to 0 if
      * overflow happens, which it can on LARGE images.
      */
-    protected int count;
+    //protected int count;
+    protected ThreadLocal<Integer> threadCount = new ThreadLocal<Integer>() {
+        @Override
+        protected Integer initialValue() {
+            return 0;
+        }
+
+    };
 
     /**
      * random index jump, used to select random sample set at each new pixel
      */
-    protected int jump;
+    //protected int jump;
+    protected ThreadLocal<Integer> threadJump = new ThreadLocal<Integer>() {
+        @Override
+        protected Integer initialValue() {
+            return 0;
+        }
+
+    };
 
     /**
      * default sampler constructor, one sample.
@@ -110,11 +124,12 @@ public abstract class Sampler {
     public Sampler(int i, int s) {
         numSamples = i;
         numSets = s;
-        count = 0;
-        jump = 0;
+        threadCount.set(0);
+        threadJump.set(0);
+        //count = 0;
+        //jump = 0;
         samples = new ArrayList<>(numSamples * numSets);
-        samples = new ArrayList<>();
-        shuffledIndices = new ArrayList<>();
+        shuffledIndices = new ArrayList<>(numSamples * numSets);
         discSamples = new ArrayList<>();
         hemisphereSamples = new ArrayList<>();
         sphereSamples = new ArrayList<>();
@@ -127,6 +142,7 @@ public abstract class Sampler {
      * @param s
      */
     public Sampler(Sampler s) {
+        //synchronized(s){
         numSamples = s.numSamples;
         numSets = s.numSets;
         samples = new ArrayList<>(s.samples);
@@ -134,8 +150,12 @@ public abstract class Sampler {
         discSamples = new ArrayList<>(s.discSamples);
         hemisphereSamples = new ArrayList<>(s.hemisphereSamples);
         sphereSamples = new ArrayList<>(s.sphereSamples);
-        count = s.count;
-        jump = s.jump;
+        //count = s.count;
+
+        threadCount.set(s.threadCount.get());
+        threadJump.set(s.threadJump.get());
+        //jump = s.jump;
+        //}
     }
 
     /**
@@ -191,7 +211,6 @@ public abstract class Sampler {
      */
     public final void setupShuffledIndices() {
         //make sure we have enough space, more efficient to allocate all at once
-        shuffledIndices.ensureCapacity(numSamples * numSets);
 
         //temporary array for indices 0-(numSamples-1)
         ArrayList<Integer> indices = new ArrayList<>();
@@ -222,7 +241,7 @@ public abstract class Sampler {
         double r;
         double phi;
         Point2D sp = new Point2D();
-        discSamples = new ArrayList<>(size);
+        discSamples.ensureCapacity(numSamples * numSets);
         for (int j = 0; j < size; j++) {
             sp.x = 2.0 * samples.get(j).x - 1.0;
             sp.y = 2.0 * samples.get(j).y - 1.0;
@@ -276,8 +295,7 @@ public abstract class Sampler {
      */
     public void mapSamplesToHemisphere(double exp) {
         int size = samples.size();
-        hemisphereSamples = new ArrayList<>(numSamples * numSets);
-
+        hemisphereSamples.ensureCapacity(numSets * numSamples);
         for (int j = 0; j < size; j++) {
             double cos_phi = Math.cos(2.0 * Utility.PI * samples.get(j).x);
             double sin_phi = Math.sin(2.0 * Utility.PI * samples.get(j).x);
@@ -297,7 +315,7 @@ public abstract class Sampler {
      * to a sampler that has been passed to it
      */
     public void mapSamplesToSphere() {
-        sphereSamples.ensureCapacity(numSamples * numSets);
+        sphereSamples.ensureCapacity(numSets * numSamples);
         for (int j = 0; j < numSamples * numSets; j++) {
             double r1 = samples.get(j).x;
             double r2 = samples.get(j).y;
@@ -318,14 +336,20 @@ public abstract class Sampler {
     public Point2D sampleUnitSquare() {
         //if this is the first sample from this pixel, calculate next set of
         //samples and the jump point
+        int finalIndex;
+        int count = threadCount.get();
+        int jump = threadJump.get();
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
+            threadJump.set(jump);
         }
         if (count < 0) {
             count = 0;//overflow possible on very large images with large sample counts
         }
-        return (samples.get(jump + shuffledIndices.get(jump + count++
-                % numSamples)));
+        finalIndex = jump + shuffledIndices.get(jump + count++
+                % numSamples);
+        threadCount.set(count);
+        return (samples.get(finalIndex));
     }
 
     /**
@@ -334,14 +358,20 @@ public abstract class Sampler {
      * @return
      */
     public Point2D sampleUnitDisc() {
+        int finalIndex;
+        int count = threadCount.get();
+        int jump = threadJump.get();
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
+            threadJump.set(jump);
         }
         if (count < 0) {
             count = 0;//overflow possible on very large images with large sample counts
         }
-        return (discSamples.get(jump + shuffledIndices.get(jump + count++
-                % numSamples)));
+        finalIndex = jump + shuffledIndices.get(jump + count++
+                % numSamples);
+        threadCount.set(count);
+        return (discSamples.get(finalIndex));
     }
 
     /**
@@ -350,14 +380,20 @@ public abstract class Sampler {
      * @return
      */
     public Point3D sampleHemisphere() {
+        int finalIndex;
+        int count = threadCount.get();
+        int jump = threadJump.get();
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
+            threadJump.set(jump);
         }
         if (count < 0) {
             count = 0;//overflow possible on very large images with large sample counts
         }
-        return (hemisphereSamples.get(jump + shuffledIndices.get(jump + count++
-                % numSamples)));
+        finalIndex = jump + shuffledIndices.get(jump + count++
+                % numSamples);
+        threadCount.set(count);
+        return (hemisphereSamples.get(finalIndex));
     }
 
     /**
@@ -366,14 +402,20 @@ public abstract class Sampler {
      * @return
      */
     public Point3D sampleSphere() {
+        int finalIndex;
+        int count = threadCount.get();
+        int jump = threadJump.get();
         if (count % numSamples == 0) {
             jump = (Utility.randInt() % numSets) * numSamples;
+            threadJump.set(jump);
         }
         if (count < 0) {
             count = 0;//overflow possible on very large images with large sample counts
         }
-        return (sphereSamples.get(jump + shuffledIndices.get(jump + count++
-                % numSamples)));
+        finalIndex = jump + shuffledIndices.get(jump + count++
+                % numSamples);
+        threadCount.set(count);
+        return (sphereSamples.get(finalIndex));
     }
 
     /**
@@ -381,7 +423,16 @@ public abstract class Sampler {
      *
      * @return
      */
-    public abstract Sampler cloneSampler();
+    public abstract Sampler protclone();
+
+    /**
+     * clone this sampler
+     *
+     * @return
+     */
+    public final Sampler cloneSampler() {
+        return protclone();
+    }
 
     /**
      * This method should generate numSamples*numSets samples
@@ -395,6 +446,10 @@ public abstract class Sampler {
      * @return
      */
     public Point2D sampleOneSet() {
-        return samples.get(count++ % numSamples);
+        int index;
+        int count = threadCount.get();
+        index = count++ % numSamples;
+        threadCount.set(count);
+        return samples.get(index);
     }
 }

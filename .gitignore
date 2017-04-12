@@ -41,13 +41,11 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-/RayTracer/nbproject/private/
-/RayTracer/build/
-/RayTracer/dist/
-RayTracer/store/
 /RayTracer-Core/nbproject/private/
 /RayTracer-BookBuild/nbproject/private/
 /RayTracer-Core/build/
 /RayTracer-BookBuild/build/
 /RayTracer-Core/dist/
 /RayTracer-BookBuild/dist/
+/RayTracer-Core/builders/
+/RayTracer-Core/plugins/

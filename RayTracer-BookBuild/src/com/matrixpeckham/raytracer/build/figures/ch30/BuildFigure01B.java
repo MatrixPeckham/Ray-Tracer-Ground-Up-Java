@@ -103,9 +103,11 @@ public class BuildFigure01B implements BuildWorldFunction {
         // ramp image
         Image imagePtr = new Image();
         String path
-                = "/Textures/ppm/";
+
+                = "resources/Textures/ppm/";
         try {
-            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "BlueMarbleRamp.ppm"));
+            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "BlueMarbleRamp.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);

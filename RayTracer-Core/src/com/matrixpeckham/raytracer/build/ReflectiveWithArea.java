@@ -63,6 +63,7 @@ public class ReflectiveWithArea implements BuildWorldFunction {
         ambientPtr.scaleRadiance(0.5);
         ambientPtr.setMinAmount(0.05);
         ambientPtr.setSampler(new MultiJittered(numSamples));
+
         w.setAmbient(ambientPtr);
 
         Pinhole pinholePtr = new Pinhole();

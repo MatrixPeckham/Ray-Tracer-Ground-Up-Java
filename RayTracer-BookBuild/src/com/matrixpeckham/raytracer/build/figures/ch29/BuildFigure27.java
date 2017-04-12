@@ -91,10 +91,12 @@ public class BuildFigure27 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String imagePath
-                = "/Textures/ppm/";
+
+                = "resources/Textures/ppm/";
         try {
-            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath + "MorningSky.ppm"));
-//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imagePath + "EveningSky.ppm"));
+            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagePath + "MorningSky.ppm"));
+//            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagePath + "EveningSky.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure27.class.getName()).
                     log(Level.SEVERE, null, ex);

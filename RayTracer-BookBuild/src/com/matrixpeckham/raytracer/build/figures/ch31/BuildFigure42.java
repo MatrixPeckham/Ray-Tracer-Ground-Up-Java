@@ -83,14 +83,18 @@ public class BuildFigure42 implements BuildWorldFunction {
         //	String fileName = "Bunny16K.ply"; 	// 16000 triangles
         String fileName = "Bunny69K.ply"; 	// 69000 triangles
         String meshpath
-                = "/Models/Stanford Bunny/";
+
+                = "resources/Models/Stanford Bunny/";
+
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
 //	bunnyPtr.readFlatTriangles(fileName);
 
-            gridPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(meshpath + fileName));
+
+            gridPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(meshpath + fileName));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -103,9 +107,11 @@ public class BuildFigure42 implements BuildWorldFunction {
         // image:
         Image imagePtr1 = new Image();
         String path
-                = "/Textures/ppm/";
+
+                = "resources/Textures/ppm/";
         try {
-            imagePtr1.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "TurquoiseAndBrownRamp.ppm"));
+            imagePtr1.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "TurquoiseAndBrownRamp.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -140,7 +146,9 @@ public class BuildFigure42 implements BuildWorldFunction {
         // left bunny
         Image imagePtr2 = new Image();
         try {
-            imagePtr2.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "BlueAndBuffRamp.ppm"));
+
+            imagePtr2.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "BlueAndBuffRamp.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -176,7 +184,9 @@ public class BuildFigure42 implements BuildWorldFunction {
         // right bunny:
         Image imagePtr3 = new Image();
         try {
-            imagePtr3.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "BrownRamp.ppm"));
+
+            imagePtr3.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "BrownRamp.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);

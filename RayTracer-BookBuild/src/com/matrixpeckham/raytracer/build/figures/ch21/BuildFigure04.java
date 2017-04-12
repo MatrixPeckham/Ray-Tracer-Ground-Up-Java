@@ -83,11 +83,13 @@ public class BuildFigure04 implements BuildWorldFunction{
 	double	zSpacing			= (z1 - z0) / (numZBunnies - 1); // center spacing in x direction
 	
 	
-	String fileName = "/Models/Stanford Bunny/Bunny16K.ply"; 
+
+	String fileName = "resources/Models/Stanford Bunny/Bunny16K.ply"; 
 	
 	TriangleMesh bunnyPtr1 = new TriangleMesh();
         try {
-            bunnyPtr1.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
+            bunnyPtr1.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);

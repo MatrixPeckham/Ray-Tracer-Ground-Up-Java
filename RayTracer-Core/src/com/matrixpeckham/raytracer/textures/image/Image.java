@@ -63,10 +63,10 @@ public class Image {
      * @param img
      */
     public Image(Image img) {
-        hres = img.hres;
-        vres = img.vres;
-        pixels.clear();
-        pixels.addAll(img.pixels);
+	hres = img.hres;
+	vres = img.vres;
+	pixels.clear();
+	pixels.addAll(img.pixels);
     }
 
     /**
@@ -77,16 +77,16 @@ public class Image {
      * @return
      */
     public RGBColor getColor(int row, int col) {
-        //calculate index
-        int index = col + hres * (vres - row - 1);
-        //total pixels
-        int n = pixels.size();
-        //index in bounds
-        if (index < n && index >= 0) {
-            return pixels.get(index);
-        } else {
-            return Utility.RED;
-        }
+	//calculate index
+	int index = col + hres * (vres - row - 1);
+	//total pixels
+	int n = pixels.size();
+	//index in bounds
+	if (index < n && index >= 0) {
+	    return pixels.get(index);
+	} else {
+	    return Utility.RED;
+	}
     }
 
     /**
@@ -95,7 +95,7 @@ public class Image {
      * @return
      */
     public Image cloneImage() {
-        return new Image(this);
+	return new Image(this);
     }
 
     /**
@@ -106,24 +106,24 @@ public class Image {
      * @param bi
      */
     public void loadFromBufferedImage(BufferedImage bi) {
-        //get size
-        hres = bi.getWidth();
-        vres = bi.getHeight();
+	//get size
+	hres = bi.getWidth();
+	vres = bi.getHeight();
 
-        //loop through all image pixels in left to right, top to bottom order
-        for (int y = 0; y < vres; y++) {
-            for (int x = 0; x < hres; x++) {
-                //uses java Color class to seperate RGB values from BufferedImage
-                //int return value, could be done manually, but this is cleaner.
-                Color col = new Color(bi.getRGB(x, y));
-                //normalize RGB values
-                double r = col.getRed() / 255.0;
-                double g = col.getGreen() / 255.0;
-                double b = col.getBlue() / 255.0;
-                //put into pixel array
-                pixels.add(new RGBColor(r, g, b));
-            }
-        }
+	//loop through all image pixels in left to right, top to bottom order
+	for (int y = 0; y < vres; y++) {
+	    for (int x = 0; x < hres; x++) {
+		//uses java Color class to seperate RGB values from BufferedImage
+		//int return value, could be done manually, but this is cleaner.
+		Color col = new Color(bi.getRGB(x, y));
+		//normalize RGB values
+		double r = col.getRed() / 255.0;
+		double g = col.getGreen() / 255.0;
+		double b = col.getBlue() / 255.0;
+		//put into pixel array
+		pixels.add(new RGBColor(r, g, b));
+	    }
+	}
     }
 
     /**
@@ -134,28 +134,31 @@ public class Image {
      * @throws IOException
      */
     private String readWord(BufferedInputStream in) throws IOException {
-        StringBuilder s = new StringBuilder();
-        char c = (char) in.read();
-        //ignore # comments to end of line
-        while (c == '#') {
-            //read until end of line
-            while ("\r\n".indexOf(c) == -1) {
-                c = (char) in.read();
+	StringBuilder s = new StringBuilder();
+	char c = (char) in.read();
+	//ignore # comments to end of line
+	while (c == '#') {
+	    //read until end of line
+	    while ("\r\n".indexOf(c) == -1) {
+		c = (char) in.read();
 //                s.append(c);
-            }
-            c = (char) in.read();
-        }
-        //read until end of line or word, and add character to string
-        while (" \t\r\n".indexOf(c) == -1) {
-            s.append(c);
-            c = (char) in.read();
-        }
-        //return the string without any whitespace around it
-        return s.toString().trim();
+	    }
+	    c = (char) in.read();
+	}
+	//read until end of line or word, and add character to string
+	while (" \t\r\n".indexOf(c) == -1) {
+	    s.append(c);
+	    c = (char) in.read();
+	}
+	if (s.toString().trim().length() == 0) {
+	    return readWord(in);
+	}
+	//return the string without any whitespace around it
+	return s.toString().trim();
     }
 
     public void loadPPMFile(File f) throws IOException {
-        loadPPMFile(new FileInputStream(f));
+	loadPPMFile(new FileInputStream(f));
     }
 
     /**
@@ -166,38 +169,39 @@ public class Image {
      * @throws IOException
      */
     public void loadPPMFile(InputStream is) throws IOException {
-        //open file
-        BufferedInputStream in = new BufferedInputStream(is);
-        //read a text word on the file, should be P3 or P6
-        String magic = readWord(in);
-        //if the first word in the file isn't P6 or P3, bail because we can't load it
-        if (!(magic.equals("P6") || magic.equals("P3"))) {
-            throw new IOException("File is not PPM or is Corrupted");
-        }
-        //We are reading a binary file if the first word is P6
-        boolean binary = magic.charAt(1) == '6';
 
-        //regardless of binary status the width and height are store as ascii base 10 numbers
-        int width = Integer.parseInt(readWord(in));
-        int height = Integer.parseInt(readWord(in));
-        hres = width;
-        vres = height;
+	//open file
+	BufferedInputStream in = new BufferedInputStream(is);
+	//read a text word on the file, should be P3 or P6
+	String magic = readWord(in);
+	//if the first word in the file isn't P6 or P3, bail because we can't load it
+	if (!(magic.equals("P6") || magic.equals("P3"))) {
+	    throw new IOException("File is not PPM or is Corrupted");
+	}
+	//We are reading a binary file if the first word is P6
+	boolean binary = magic.charAt(1) == '6';
 
-        //the next word should be a base 10 ascii number for the max number size
-        //this is used to determine if we're a 1 byte or two byte binary file
-        //and for normalizing the color to a 0-1 float value
-        int maxColor = Integer.parseInt(readWord(in));
-        //if we have more than a byte size color and we are binary we read 2 byte
-        if (maxColor > 255 && binary) {
-            read2Byte(in, width, height, maxColor);
-            return;
-        }
-        //if we get here it's either one byte per channel binary or ascii
-        if (binary) {
-            readBinary(in, width, height, maxColor);
-        } else {
-            readAscii(in, width, height, maxColor);
-        }
+	//regardless of binary status the width and height are store as ascii base 10 numbers
+	int width = Integer.parseInt(readWord(in));
+	int height = Integer.parseInt(readWord(in));
+	hres = width;
+	vres = height;
+
+	//the next word should be a base 10 ascii number for the max number size
+	//this is used to determine if we're a 1 byte or two byte binary file
+	//and for normalizing the color to a 0-1 float value
+	int maxColor = Integer.parseInt(readWord(in));
+	//if we have more than a byte size color and we are binary we read 2 byte
+	if (maxColor > 255 && binary) {
+	    read2Byte(in, width, height, maxColor);
+	    return;
+	}
+	//if we get here it's either one byte per channel binary or ascii
+	if (binary) {
+	    readBinary(in, width, height, maxColor);
+	} else {
+	    readAscii(in, width, height, maxColor);
+	}
     }
 
     /**
@@ -210,27 +214,27 @@ public class Image {
      * @throws IOException
      */
     private void read2Byte(BufferedInputStream in, int width, int height,
-            int maxColor) throws IOException {
-        //loop through image data
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                //shift first byte by 8 bits and or with second byte for each channel
-                int r = (in.read() << 8);
-                r |= in.read();
-                int g = (in.read() << 8);
-                g |= in.read();
-                int b = (in.read() << 8);
-                b |= in.read();
+	    int maxColor) throws IOException {
+	//loop through image data
+	for (int y = 0; y < height; y++) {
+	    for (int x = 0; x < width; x++) {
+		//shift first byte by 8 bits and or with second byte for each channel
+		int r = (in.read() << 8);
+		r |= in.read();
+		int g = (in.read() << 8);
+		g |= in.read();
+		int b = (in.read() << 8);
+		b |= in.read();
 
-                //normalize color channels to 0-1
-                double rd = (double) r / (double) maxColor;
-                double gd = (double) g / (double) maxColor;
-                double bd = (double) b / (double) maxColor;
+		//normalize color channels to 0-1
+		double rd = (double) r / (double) maxColor;
+		double gd = (double) g / (double) maxColor;
+		double bd = (double) b / (double) maxColor;
 
-                //add pixel
-                pixels.add(new RGBColor(rd, gd, bd));
-            }
-        }
+		//add pixel
+		pixels.add(new RGBColor(rd, gd, bd));
+	    }
+	}
     }
 
     /**
@@ -243,24 +247,24 @@ public class Image {
      * @throws IOException
      */
     private void readBinary(BufferedInputStream in, int width, int height,
-            int maxColor) throws IOException {
-        //loop through all pixels
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                //read each channels byte
-                int r = in.read();
-                int g = in.read();
-                int b = in.read();
+	    int maxColor) throws IOException {
+	//loop through all pixels
+	for (int y = 0; y < height; y++) {
+	    for (int x = 0; x < width; x++) {
+		//read each channels byte
+		int r = in.read();
+		int g = in.read();
+		int b = in.read();
 
-                //normalize the channels
-                double rd = (double) r / (double) maxColor;
-                double gd = (double) g / (double) maxColor;
-                double bd = (double) b / (double) maxColor;
+		//normalize the channels
+		double rd = (double) r / (double) maxColor;
+		double gd = (double) g / (double) maxColor;
+		double bd = (double) b / (double) maxColor;
 
-                //add the pixel
-                pixels.add(new RGBColor(rd, gd, bd));
-            }
-        }
+		//add the pixel
+		pixels.add(new RGBColor(rd, gd, bd));
+	    }
+	}
     }
 
     /**
@@ -273,25 +277,25 @@ public class Image {
      * @throws IOException
      */
     private void readAscii(BufferedInputStream in, int width, int height,
-            int maxColor) throws IOException {
-        //loop through pixels
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+	    int maxColor) throws IOException {
+	//loop through pixels
+	for (int y = 0; y < height; y++) {
+	    for (int x = 0; x < width; x++) {
 
-                //read each channel
-                int r = Integer.parseInt(readWord(in));
-                int g = Integer.parseInt(readWord(in));
-                int b = Integer.parseInt(readWord(in));
+		//read each channel
+		int r = Integer.parseInt(readWord(in));
+		int g = Integer.parseInt(readWord(in));
+		int b = Integer.parseInt(readWord(in));
 
-                //normalize
-                double rd = (double) r / (double) maxColor;
-                double gd = (double) g / (double) maxColor;
-                double bd = (double) b / (double) maxColor;
+		//normalize
+		double rd = (double) r / (double) maxColor;
+		double gd = (double) g / (double) maxColor;
+		double bd = (double) b / (double) maxColor;
 
-                //add pixel
-                pixels.add(new RGBColor(rd, gd, bd));
-            }
-        }
+		//add pixel
+		pixels.add(new RGBColor(rd, gd, bd));
+	    }
+	}
     }
 
     /**
@@ -300,7 +304,7 @@ public class Image {
      * @return
      */
     public int getHres() {
-        return hres;
+	return hres;
     }
 
     /**
@@ -309,7 +313,7 @@ public class Image {
      * @return
      */
     public int getVres() {
-        return vres;
+	return vres;
     }
 
     private static final Logger LOG = Logger.getLogger(Image.class.getName());

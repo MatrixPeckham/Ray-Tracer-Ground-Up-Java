@@ -68,10 +68,12 @@ public class BuildFigure16 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
-                = "/Textures/ppm/";
+
+                = "resources/Textures/ppm/";
         try {
-//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));
-            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path + "uffizi_probe_small.ppm"));
+//            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));
+            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "uffizi_probe_small.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure16.class.getName()).
                     log(Level.SEVERE, null, ex);

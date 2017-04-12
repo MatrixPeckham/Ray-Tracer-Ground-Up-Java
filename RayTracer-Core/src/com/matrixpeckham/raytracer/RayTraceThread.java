@@ -26,23 +26,26 @@ import com.matrixpeckham.raytracer.world.World;
  * @author William Matrix Peckham
  */
 public class RayTraceThread extends Thread {
-
-    //world to render
+    
+//world to render
     World w;
+    
+    //should we parrellelize
+    boolean multithread;
     //store the world
-
-    /**
-     *
-     * @param w
-     */
-    public RayTraceThread(World w) {
-        this.w = w;
+    public RayTraceThread(World w, boolean multiThread){
+        this.w=w;
+        this.multithread=multiThread;
     }
 
     //run
     @Override
     public void run() {
-        w.camera.renderScene(w);
+        if(multithread){
+            w.camera.multiThreadRenderScene(w);
+        } else {
+            w.camera.renderScene(w);
+        }
     }
 
 }
