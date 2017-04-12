@@ -47,3 +47,5 @@ Temporary Items
 /RayTracer-BookBuild/build/
 /RayTracer-Core/dist/
 /RayTracer-BookBuild/dist/
+/RayTracer-Core/builders/
+/RayTracer-Core/plugins/
