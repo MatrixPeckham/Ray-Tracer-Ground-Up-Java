@@ -34,7 +34,6 @@ import com.matrixpeckham.raytracer.util.RGBColor;
 import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,81 +42,78 @@ import java.util.logging.Logger;
  *
  * @author William Matrix Peckham
  */
-public class BuildFigure09B implements BuildWorldFunction{
+public class BuildFigure09B implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
 	int numSamples = 25;
-	
-	w.vp.setHres(600);      
-	w.vp.setVres(600);    
+
+	w.vp.setHres(600);
+	w.vp.setVres(600);
 	w.vp.setSamples(numSamples);
-	w.vp.setMaxDepth(1);	
-	
+	w.vp.setMaxDepth(1);
+
 	w.tracer = new Whitted(w);
 	w.backgroundColor = Utility.BLACK;
-	
+
 	MultiJittered sampler = new MultiJittered(numSamples);
-		
+
 	Ambient ambient = new Ambient();
 	ambient.scaleRadiance(1.0);
 //	w.setAmbient(ambient);
-		
+
 	AmbientOccluder occluder = new AmbientOccluder();
-	occluder.setMinAmount(0.25);		
+	occluder.setMinAmount(0.25);
 	occluder.setSampler(sampler);
 	w.setAmbient(occluder);
 
-	
 	Pinhole pinhole = new Pinhole();
-	pinhole.setEye(-6, 5, 11);    	
-	pinhole.setLookat(-0.009 , 0.11, 0);
-	pinhole.setViewDistance(37500);  
-	pinhole.computeUVW();     
-	w.setCamera(pinhole); 
-	
+	pinhole.setEye(-6, 5, 11);
+	pinhole.setLookat(-0.009, 0.11, 0);
+	pinhole.setViewDistance(37500);
+	pinhole.computeUVW();
+	w.setCamera(pinhole);
+
 	Directional light = new Directional();
 	light.setDirection(0.5, 1, 0.75);
 	light.scaleRadiance(1.0);
 	light.setShadows(true);
 	w.addLight(light);
-	
-	
-	Phong phong = new Phong();			
-	phong.setKa(0.2); 
-	phong.setKd(0.95); 
+
+	Phong phong = new Phong();
+	phong.setKa(0.2);
+	phong.setKd(0.95);
 	phong.setCd(1, 0.6, 0);   // orange
-	phong.setKs(0.5);  
-	phong.setExp(20); 
-		
-	String fileName = "/Models/Dragon2.ply";		
+	phong.setKs(0.5);
+	phong.setExp(20);
+
+	String fileName = "resources/Models/dragon2.ply";
 	TriangleMesh dragon = new TriangleMesh(new Mesh());
-        try {		
-//            dragon.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
-          dragon.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(fileName));
-        } catch (IOException ex) {
-            Logger.getLogger(BuildFigure09B.class.getName()).
-                    log(Level.SEVERE, null, ex);
-        }
-	dragon.setMaterial(phong); 
+	try {
+//            dragon.readFlatTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));
+	    dragon.readSmoothTriangles(Thread.currentThread().
+		    getContextClassLoader().getResourceAsStream(fileName));
+	} catch (IOException ex) {
+	    Logger.getLogger(BuildFigure09B.class.getName()).
+		    log(Level.SEVERE, null, ex);
+	}
+	dragon.setMaterial(phong);
 	dragon.setupCells();
 	w.addObject(dragon);
 
-	
-	Reflective	reflective = new Reflective();			
-	reflective.setKa(0.2); 
+	Reflective reflective = new Reflective();
+	reflective.setKa(0.2);
 	reflective.setKd(0.75);
 	reflective.setCd(new RGBColor(0.5));
 	reflective.setKs(0.0);
 	reflective.setExp(20);
-	reflective.setKr(0.5);  
-	reflective.setCr(new RGBColor(0.8, 1.0, 0.8));    
-	
-	Plane plane = new Plane(new Point3D(0, 0.055, 0),new Normal(0, 1, 0)); 	
-	plane.setMaterial(reflective);
-	w.addObject(plane);	
+	reflective.setKr(0.5);
+	reflective.setCr(new RGBColor(0.8, 1.0, 0.8));
 
+	Plane plane = new Plane(new Point3D(0, 0.055, 0), new Normal(0, 1, 0));
+	plane.setMaterial(reflective);
+	w.addObject(plane);
 
     }
-    
+
 }

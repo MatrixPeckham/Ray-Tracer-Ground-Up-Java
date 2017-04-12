@@ -359,14 +359,14 @@ public class BuildFigure01_Test implements BuildWorldFunction {
         //	String fileName = "Bunny16K.ply"; 	// 16000 triangles
         String fileName = "Bunny69K.ply"; 	// 69000 triangles
         String meshpath
-                = "Models/Stanford Bunny/";
+                = "resources/Models/Stanford Bunny/";
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
 //	bunnyPtr.readFlatTriangles(fileName);
 
-            gridPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(meshpath + fileName));
+            gridPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(meshpath + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure01_Test.class.getName()).
                     log(Level.SEVERE, null, ex);

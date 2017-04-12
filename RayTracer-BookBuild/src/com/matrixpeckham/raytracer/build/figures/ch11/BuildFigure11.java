@@ -204,8 +204,8 @@ public class BuildFigure11 implements BuildWorldFunction {
 
         Image image = new Image();
         try {
-            image.loadPPMFile(getClass().getClassLoader().getResourceAsStream(
-                    "/Textures/ppm/CloudsLowRes.ppm"));
+            image.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                    "resources/Textures/ppm/CloudsLowRes.ppm"));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11.class.getName()).
                     log(Level.SEVERE, null, ex);

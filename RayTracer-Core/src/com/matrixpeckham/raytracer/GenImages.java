@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer;
 
 import com.matrixpeckham.raytracer.build.BuildFigure16_multi_tracer;
+import com.matrixpeckham.raytracer.cameras.Camera;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.image.BufferedImage;
@@ -46,7 +47,7 @@ public class GenImages {
     public static void main(String[] args) throws MalformedURLException,
 	    InstantiationException, IllegalAccessException {
 	//use reflections api to get all buildworldfunction implementations
-	File external = new File("./builders/");
+	File external = new File("plugins/");
 	ArrayList<URL> jars = new ArrayList<>();
 	jars.addAll(ClasspathHelper.forPackage(
 		"com.matrixpeckham.raytracer.build"));
@@ -86,35 +87,42 @@ public class GenImages {
 	System.out.println("Num Classes:" + clss2.size());
 	Class<? extends BuildWorldFunction>[] clss
 		= new Class[]{BuildFigure16_multi_tracer.class};
+	int size = 100;
+	int depth = 5;
 	String prefix
-		= "C:/Users/Owner/Documents/GitHub/RayTracerWiki/Ray-Tracer-Ground-Up-Java.wiki/images/Samples/";
+		= "C:/Users/Owner/Documents/GitHub/RayTracerWiki/Ray-Tracer-Ground-Up-Java.wiki/images/Samples/"
+		+ size + "/" + depth + "/";
 	int numDone = 0;
 	for (Class<? extends BuildWorldFunction> cls : clss2) {
-	    World w = new World();
-	    BuildWorldFunction bwf = cls.newInstance();
-	    bwf.build(w);
-	    String name = bwf.getClass().getName();
-	    name = name.replaceAll("\\.", "/");
-	    String fname = prefix + name + ".png";
-	    int size = 200;
-	    double sized = size;
-	    double pH = sized / w.vp.hRes;
-	    double pV = sized / w.vp.vRes;
-	    double s = 1 / (pH < pV ? pH : pV);
-	    w.vp.hRes = size;
-	    w.vp.vRes = size;
-	    w.vp.s *= s;
-	    w.vp.maxDepth = 5;
-	    w.setRenderListener(new CreateFileRnderListener(fname));
-	    if (w.camera != null) {
-		w.camera.multiThreadRenderScene(w);//renderScene(w);
-	    } else {
-		System.err.println("SKIPPING: " + fname + " has no camera.");
+	    try {
+		World w = new World();
+		BuildWorldFunction bwf = cls.newInstance();
+		bwf.build(w);
+		String name = bwf.getClass().getName();
+		name = name.replaceAll("\\.", "/");
+		String fname = prefix + name + ".png";
+		double sized = size;
+		double pH = sized / w.vp.hRes;
+		double pV = sized / w.vp.vRes;
+		double s = 1 / (pH < pV ? pH : pV);
+		w.vp.hRes = size;
+		w.vp.vRes = size;
+		w.vp.s *= s;
+		w.vp.maxDepth = depth;
+		w.setRenderListener(new CreateFileRnderListener(fname));
+		if (w.camera != null) {
+		    w.camera.multiThreadRenderScene(w);//renderScene(w);
+		} else {
+		    System.err.println("SKIPPING: " + fname + " has no camera.");
+		}
+	    } catch (RuntimeException e) {
+		e.printStackTrace(System.err);
 	    }
 	    numDone++;
 	    System.out.println(numDone + " out of " + clss2.size() + ": "
 		    + ((double) numDone) / clss2.size() * 100 + "%");
 	}
+	Camera.exit();
     }
 
     static class CreateFileRnderListener implements RenderListener {

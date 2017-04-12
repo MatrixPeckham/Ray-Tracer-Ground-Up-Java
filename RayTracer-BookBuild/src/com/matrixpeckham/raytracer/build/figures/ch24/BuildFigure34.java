@@ -182,11 +182,11 @@ public class BuildFigure34 implements BuildWorldFunction {
 	
 	// large sphere with Uffizi image
 	
-        String path = "/Textures/ppm/";
+        String path = "resources/Textures/ppm/";
 	Image imagePtr = new Image();
         try {
-//            imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(imPath+"uffizi_probe_small.ppm"));   // for testing
-	imagePtr.loadPPMFile(getClass().getClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));   // for production
+//            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imPath+"uffizi_probe_small.ppm"));   // for testing
+	imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));   // for production
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure29A.class.getName()).
                     log(Level.SEVERE, null, ex);

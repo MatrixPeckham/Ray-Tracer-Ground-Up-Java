@@ -66,9 +66,9 @@ public class BuildFigure08 implements BuildWorldFunction {
 
         Image image = new Image();
         try {
-            image.loadPPMFile(getClass().getClassLoader().getResourceAsStream(
-                    "/Textures/ppm/uffizi_probe_small.ppm"));   // for development
-//	image.loadPPMFile(getClass().getClassLoader().getResourceAsStream("C:/Users\Owner/Documents/Ground Up raytracer/Textures\ppm/uffizi_probe_large.ppm"));   // for production
+            image.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(
+                    "resources/Textures/ppm/uffizi_probe_small.ppm"));   // for development
+//	image.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream("C:/Users\Owner/Documents/Ground Up raytracer/Textures\ppm/uffizi_probe_large.ppm"));   // for production
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure08.class.getName()).
                     log(Level.SEVERE, null, ex);

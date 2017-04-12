@@ -86,14 +86,14 @@ public class BuildFigure12C implements BuildWorldFunction {
 
         String fileName = "Horse97K.ply"; 	// 69000 triangles
         String path
-                = "/Models/";
+                = "resources/Models/";
 
         TriangleMesh bunnyPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
 //	bunnyPtr.readFlatTriangles(fileName);
 
-            bunnyPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
+            bunnyPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12C.class.getName()).
                     log(Level.SEVERE, null, ex);

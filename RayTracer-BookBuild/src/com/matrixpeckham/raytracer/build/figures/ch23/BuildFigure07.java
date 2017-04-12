@@ -70,11 +70,11 @@ public class BuildFigure07 implements BuildWorldFunction{
 	matte1.setKd(0.75);   
 	matte1.setCd(0.1, 0.5, 1.0);
 	
-	String fileName = "/Models/TwoTriangles.ply";
+	String fileName = "resources/Models/TwoTriangles.ply";
         TriangleMesh grid = new TriangleMesh(new Mesh());
         try {
-//            grid.readFlatTriangles(getClass().getClassLoader().getResourceAsStream(fileName));		// for Figure 23.7(a)
-          grid.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(fileName));		// for Figure 23.7(b)
+//            grid.readFlatTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));		// for Figure 23.7(a)
+          grid.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));		// for Figure 23.7(b)
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure07.class.getName()).
                     log(Level.SEVERE, null, ex);
