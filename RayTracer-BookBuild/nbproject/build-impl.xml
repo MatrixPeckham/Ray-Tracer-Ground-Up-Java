@@ -800,7 +800,9 @@ is divided into following sections:
             <attribute default="${debug.classpath}" name="classpath"/>
             <element name="customize" optional="true"/>
             <sequential>
+
                 <java classname="@{classname}" dir="${work.dir}"                     <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
+
                     <jvmarg line="${debug-args-line}"/>
                     <jvmarg value="-Xrunjdwp:transport=${debug-transport},address=${jpda.address}"/>
                     <jvmarg value="-Dfile.encoding=${runtime.encoding}"/>

@@ -66,6 +66,7 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
 	ambient.scaleRadiance(1.0);
 //	w.setAmbient(ambient);
 
+
 	AmbientOccluder occluder = new AmbientOccluder();
 	occluder.setMinAmount(0.1);
 	occluder.setSampler(sampler);
@@ -141,6 +142,7 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
 	Plane plane = new Plane(new Point3D(0, 0.055, 0), new Normal(0, 1, 0));
 	plane.setMaterial(reflective);
 	w.addObject(plane);
+
 
     }
 

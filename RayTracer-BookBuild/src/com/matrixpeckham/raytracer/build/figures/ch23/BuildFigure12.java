@@ -67,14 +67,18 @@ public class BuildFigure12 implements BuildWorldFunction {
 	phongPtr1.setCd(new RGBColor(1.0));
 	phongPtr1.setKs(0.4);
 	phongPtr1.setExp(20);
+
 	String path="resources/Models/Stanford Bunny/";
+
 //	String fileName = "Bunny4K.ply";			// low res Stanford bunny
 	String fileName = "Bunny16K.ply";			// medium res Stanford bunny
 //	String fileName = "Bunny69K.ply";			// high res Stanford bunny
 
 	TriangleMesh bunnyPtr = new TriangleMesh(new Mesh());
         try {
+
             bunnyPtr.readFlatTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+fileName));		// read PLY file
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12.class.getName()).
                     log(Level.SEVERE, null, ex);

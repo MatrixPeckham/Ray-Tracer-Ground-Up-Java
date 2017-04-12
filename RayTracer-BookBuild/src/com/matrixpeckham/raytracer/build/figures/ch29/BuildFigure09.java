@@ -62,8 +62,10 @@ public class BuildFigure09 implements BuildWorldFunction {
         // image:
         Image image = new Image();
         try {
+
             image.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(
                     "resources/Textures/ppm/SphereGrid.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure09.class.getName()).
                     log(Level.SEVERE, null, ex);

@@ -77,10 +77,12 @@ public class BuildFigure19 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
+
                 = "resources/Textures/ppm/";
         try {
 //            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"EarthHighRes.ppm"));
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "EarthLowRes.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure19.class.getName()).
                     log(Level.SEVERE, null, ex);

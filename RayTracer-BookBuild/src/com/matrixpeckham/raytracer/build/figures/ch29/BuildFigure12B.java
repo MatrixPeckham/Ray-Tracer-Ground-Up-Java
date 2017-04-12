@@ -74,10 +74,12 @@ public class BuildFigure12B implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
+
                 = "resources/Textures/ppm/";
         try {
 //            imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"EarthLowRes.ppm"));
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "EarthHighRes.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12B.class.getName()).
                     log(Level.SEVERE, null, ex);

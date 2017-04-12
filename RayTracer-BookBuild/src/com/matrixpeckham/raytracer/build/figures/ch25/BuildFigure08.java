@@ -114,10 +114,12 @@ public class BuildFigure08 implements BuildWorldFunction {
             cylinderPtr.setMaterial(mattePtr);
             w.addObject(cylinderPtr);
             
+
             String path = "resources/Textures/ppm/";
             Image imagePtr = new Image();
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"uffizi_probe_small.ppm"));  // for testing 
 //	imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));  // for production
+
             
             
             LightProbe lightProbePtr = new LightProbe();

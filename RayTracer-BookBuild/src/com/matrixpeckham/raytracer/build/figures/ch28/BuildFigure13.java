@@ -94,14 +94,18 @@ public class BuildFigure13 implements BuildWorldFunction {
 
         String fileName = "Horse97K.ply";
         String path
+
                 = "resources/Models/";
+
 
         TriangleMesh horsePtr = new TriangleMesh(new Mesh());
         try {
 //	horsePtr.reverseMeshNormals();				// you must use w for the 10K model
 //	horsePtr.readFlatTriangles(fileName);
 
+
             horsePtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + fileName));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure13.class.getName()).
                     log(Level.SEVERE, null, ex);

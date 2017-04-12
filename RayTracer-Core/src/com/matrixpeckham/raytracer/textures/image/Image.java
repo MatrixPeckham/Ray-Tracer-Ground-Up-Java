@@ -169,6 +169,7 @@ public class Image {
      * @throws IOException
      */
     public void loadPPMFile(InputStream is) throws IOException {
+
 	//open file
 	BufferedInputStream in = new BufferedInputStream(is);
 	//read a text word on the file, should be P3 or P6

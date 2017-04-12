@@ -107,9 +107,11 @@ public class BuildFigure41B implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
+
                 = "resources/Textures/ppm/";
         try {
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "sandstone_ramp1.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);

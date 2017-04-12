@@ -197,6 +197,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
     }
 
     private void menuBar() throws URISyntaxException, MalformedURLException {
+
 	//standard swing menu bar generation.
 	bar = new JMenuBar();
 	JMenu file = new JMenu("File");
@@ -263,6 +264,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
 	bar.add(render);
 	bar.add(options);
 	bar.add(zoom);
+
     }
 
     @Override
@@ -479,6 +481,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
 
     //populates build functions
     private void populateBuildFunctions(String[] packNames, JMenu menu) throws
+
 	    URISyntaxException, MalformedURLException {
 	//use reflections api to get all buildworldfunction implementations
 	File external = new File("./plugins/");
@@ -520,6 +523,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
 	Set<Class<? extends BuildWorldFunction>> buildClss = refl.getSubTypesOf(
 		BuildWorldFunction.class);
 	/*Set<Class<? extends GeometricObject>> geoms = refl.getSubTypesOf(
+
          GeometricObject.class);
          geoms.stream().forEach((clzz) -> {
          try {
@@ -534,6 +538,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
          ex);
          }
          });*/
+
 
 	//we build a tree from the packages of of the classes, we remove the original package name
 	TreeMap<String, TreeOrClass> fullList = new TreeMap<>();
@@ -592,6 +597,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
 		});
 	//after filling the tree we call this function to traverse it and make menu items
 	fillMenu(fullList, menu);
+
     }
 
     //fills a jmenu with items recursivly

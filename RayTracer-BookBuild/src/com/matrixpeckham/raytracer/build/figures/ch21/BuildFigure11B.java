@@ -105,9 +105,11 @@ public class BuildFigure11B implements BuildWorldFunction {
         // sandstone ramp image
         Image imagePtr1 = new Image();
         String filename1
+
                 = "resources/Textures/ppm/Sandstone_ramp1.ppm";
         try {
             imagePtr1.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename1));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11A.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -246,9 +248,11 @@ public class BuildFigure11B implements BuildWorldFunction {
         // gray marble ramp image
         Image imagePtr2 = new Image();
         String filename2
+
                 = "resources/Textures/ppm/GrayMarbleRamp.ppm";
         try {
             imagePtr2.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(filename2));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11A.class.getName()).
                     log(Level.SEVERE, null, ex);

@@ -79,9 +79,11 @@ public class BuildFigure04 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
+
                 = "resources/Textures/ppm/";
         try {
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "Lightlace.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure04.class.getName()).
                     log(Level.SEVERE, null, ex);

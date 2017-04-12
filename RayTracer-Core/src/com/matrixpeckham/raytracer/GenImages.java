@@ -45,6 +45,7 @@ import org.reflections.util.ConfigurationBuilder;
 public class GenImages {
 
     public static void main(String[] args) throws MalformedURLException,
+
 	    InstantiationException, IllegalAccessException {
 	//use reflections api to get all buildworldfunction implementations
 	File external = new File("plugins/");
@@ -123,6 +124,7 @@ public class GenImages {
 		    + ((double) numDone) / clss2.size() * 100 + "%");
 	}
 	Camera.exit();
+
     }
 
     static class CreateFileRnderListener implements RenderListener {

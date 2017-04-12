@@ -181,9 +181,11 @@ public class BuildFigure10 implements BuildWorldFunction{
 	
 	Image imagePtr = new Image();
         try {
+
             String path = "resources/Textures/ppm/";
             //	imagePtr.readPpmFile(path+"uffizi_probe_small.ppm");   // for testing
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+"uffizi_probe_large.ppm"));   // for production
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure10.class.getName()).
                     log(Level.SEVERE, null, ex);

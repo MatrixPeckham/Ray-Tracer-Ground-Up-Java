@@ -109,7 +109,9 @@ public class BuildFigure30 implements BuildWorldFunction {
         glassPtr.setKr(0.1);
         glassPtr.setKt(0.9);
         String path
+
                 = "resources/Models/Stanford Bunny/";
+
 //	String fileName = "Bunny3K.ply"; 	// 4000 triangles
 //	String fileName = "Bunny10K.ply"; 	// 10000 triangles
 //	String fileName = "Bunny16K.ply"; 	// 16000 triangles
@@ -118,8 +120,10 @@ public class BuildFigure30 implements BuildWorldFunction {
         Mesh meshPtr = new Mesh();
         TriangleMesh bunnyPtr = new TriangleMesh(meshPtr);
         try {
+
             //	bunnyPtr.readFlatTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+fileName));
             bunnyPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + fileName));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure30.class.getName()).
                     log(Level.SEVERE, null, ex);

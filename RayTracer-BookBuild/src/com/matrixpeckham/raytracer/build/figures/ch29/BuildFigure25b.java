@@ -73,9 +73,11 @@ public class BuildFigure25b implements BuildWorldFunction {
         // image:
         Image clipTexture = new Image();
         String imagePath
+
                 = "resources/Textures/ppm/";
         try {
             clipTexture.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagePath + "EarthMap.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure22.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -83,7 +85,9 @@ public class BuildFigure25b implements BuildWorldFunction {
         }
         Image earthTexture = new Image();
         try {
+
             earthTexture.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagePath + "EarthHighRes.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure25b.class.getName()).
                     log(Level.SEVERE, null, ex);

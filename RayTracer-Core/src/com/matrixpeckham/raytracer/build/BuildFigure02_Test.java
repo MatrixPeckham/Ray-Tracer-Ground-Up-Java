@@ -250,9 +250,11 @@ public class BuildFigure02_Test implements BuildWorldFunction {
         // w is a checker image
         Image imagePtr1 = new Image();
         String imagepath
+
                 = "resources/Textures/ppm/";
         try {
             imagePtr1.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagepath + "GreenAndYellow.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure02_Test.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -311,8 +313,10 @@ public class BuildFigure02_Test implements BuildWorldFunction {
         // Earth image texture
         Image imagePtr2 = new Image();
         try {
+
 //            imagePtr2.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagepath+"EarthLowRes.ppm"));
             imagePtr2.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagepath + "EarthHighRes.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure02_Test.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -356,7 +360,9 @@ public class BuildFigure02_Test implements BuildWorldFunction {
         // the image is applied to a rectangle
         Image imagePtr3 = new Image();
         try {
+
             imagePtr3.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagepath + "BlueGlass.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure02_Test.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -474,7 +480,9 @@ public class BuildFigure02_Test implements BuildWorldFunction {
         // ramp based marble texture
         Image imagePtr4 = new Image();
         try {
+
             imagePtr4.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagepath + "GrayMarbleRamp.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure02_Test.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -503,14 +511,18 @@ public class BuildFigure02_Test implements BuildWorldFunction {
         //	String fileName = "Bunny16K.ply"; 	// 16000 triangles
         //String fileName = "Bunny69K.ply"; 	// 69000 triangles
         String meshpath
+
                 = "resources/Models/Stanford Bunny/";
+
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 //	bunnyPtr.reverseMeshNormals();				// you must use w for the 10K model
 //	bunnyPtr.readFlatTriangles(fileName);
 
+
             gridPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(meshpath + fileName));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure02_Test.class.getName()).
                     log(Level.SEVERE, null, ex);
@@ -554,7 +566,9 @@ public class BuildFigure02_Test implements BuildWorldFunction {
         // sandstone texture
         Image imagePtr5 = new Image();
         try {
+
             imagePtr5.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(imagepath + "sandstone_ramp1.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure02_Test.class.getName()).
                     log(Level.SEVERE, null, ex);

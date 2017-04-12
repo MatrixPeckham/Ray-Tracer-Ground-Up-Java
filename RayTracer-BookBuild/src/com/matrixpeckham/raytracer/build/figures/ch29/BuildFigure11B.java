@@ -94,9 +94,11 @@ public class BuildFigure11B implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
+
                 = "resources/Textures/ppm/";
         try {
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "BilliardBall.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure11B.class.getName()).
                     log(Level.SEVERE, null, ex);

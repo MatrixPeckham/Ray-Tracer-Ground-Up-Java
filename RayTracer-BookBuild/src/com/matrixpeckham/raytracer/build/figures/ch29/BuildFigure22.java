@@ -57,6 +57,7 @@ public class BuildFigure22 implements BuildWorldFunction {
 // Grid::gridPtr.readSmoothUvRiangles(fileName);
 // The version of the Grid class in the Chapter 29 download includes these functions, and the
 // function Grid::readUvPlyFile, which they call.
+
 	int numSamples = 16;
 
 	w.vp.setHres(400);
@@ -126,6 +127,7 @@ public class BuildFigure22 implements BuildWorldFunction {
 		= new Plane(new Point3D(0, -2.0, 0), new Normal(0, 1, 0));
 	planePtr1.setMaterial(mattePtr);
 	w.addObject(planePtr1);
+
 
     }
 

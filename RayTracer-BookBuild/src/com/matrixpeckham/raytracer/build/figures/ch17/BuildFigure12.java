@@ -94,7 +94,9 @@ public class BuildFigure12 implements BuildWorldFunction{
 	mattePtr1.setKa(ka);		
 	mattePtr1.setKd(0.5);
 	mattePtr1.setCd(0.5, 0.75, 1);   // pale blue for bunny
+
 	String path = "resources/Models/Stanford Bunny/";
+
 //	String fileName = "Bunny4K.ply"; 		// 4000 triangles
 	String fileName = "Bunny10K.ply"; 	// 10000 triangles - needs the normals reversed
 //	String fileName = "Bunny16K.ply"; 	// 16000 triangles
@@ -104,7 +106,9 @@ public class BuildFigure12 implements BuildWorldFunction{
 	bunnyPtr.reverseNormal();// only required for the Bunny10K.ply file
         try {
             //	bunnyPtr.readFlatTriangles(fileName);		// read PLY file
+
             bunnyPtr.readSmoothTriangles(Thread.currentThread().getContextClassLoader().getResourceAsStream(path+fileName));	// read PLY file
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12.class.getName()).
                     log(Level.SEVERE, null, ex);

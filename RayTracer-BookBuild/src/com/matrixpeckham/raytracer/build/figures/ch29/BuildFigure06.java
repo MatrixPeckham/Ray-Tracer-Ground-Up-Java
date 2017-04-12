@@ -75,9 +75,11 @@ public class BuildFigure06 implements BuildWorldFunction {
         // image:
         Image imagePtr = new Image();
         String path
+
                 = "resources/Textures/ppm/";
         try {
             imagePtr.loadPPMFile(Thread.currentThread().getContextClassLoader().getResourceAsStream(path + "CountryScene.ppm"));
+
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure06.class.getName()).
                     log(Level.SEVERE, null, ex);

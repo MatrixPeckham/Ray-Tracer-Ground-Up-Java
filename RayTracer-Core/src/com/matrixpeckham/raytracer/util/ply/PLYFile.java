@@ -191,6 +191,7 @@ public class PLYFile {
 		es.add(t.readFrom(in, binary, littleEndian));
 	    }
 	}
+
     }
 
     /**

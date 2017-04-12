@@ -84,6 +84,7 @@ public class BuildFigure09B implements BuildWorldFunction {
 	phong.setKa(0.2);
 	phong.setKd(0.95);
 	phong.setCd(1, 0.6, 0);   // orange
+
 	phong.setKs(0.5);
 	phong.setExp(20);
 
@@ -98,6 +99,7 @@ public class BuildFigure09B implements BuildWorldFunction {
 		    log(Level.SEVERE, null, ex);
 	}
 	dragon.setMaterial(phong);
+
 	dragon.setupCells();
 	w.addObject(dragon);
 
