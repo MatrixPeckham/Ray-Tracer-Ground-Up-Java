@@ -18,16 +18,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.samplers.Sampler;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point2D;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -179,6 +172,7 @@ public class Disk extends GeometricObject {
      * spatially
      *
      * @param p
+     *
      * @return
      */
     @Override
@@ -191,6 +185,7 @@ public class Disk extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -218,10 +213,11 @@ public class Disk extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec sr) {
         //get the intersection of the ray with the plane
         double dot = ray.d.dot(normal);
         if (dot == 0) {
@@ -231,7 +227,7 @@ public class Disk extends GeometricObject {
         //find point on plane and check it for distance from center point
         Point3D p = ray.o.add(ray.d.mul(t));
         if (center.distSquared(p) < radius * radius) {
-            ShadeRec s = new ShadeRec(sr);
+            CSGShadeRec s = new CSGShadeRec(sr);
             s.lastT = t;
             s.normal.setTo(normal);
             s.localHitPosition.setTo(p);
@@ -247,6 +243,7 @@ public class Disk extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override
@@ -336,6 +333,7 @@ public class Disk extends GeometricObject {
      * return the inverse area
      *
      * @param sr
+     *
      * @return
      */
     @Override

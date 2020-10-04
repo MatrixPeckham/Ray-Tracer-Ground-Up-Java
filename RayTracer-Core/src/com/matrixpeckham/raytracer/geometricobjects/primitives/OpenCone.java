@@ -18,12 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -80,6 +76,7 @@ public class OpenCone extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -163,10 +160,11 @@ public class OpenCone extends GeometricObject {
      * @param ray
      * @param hit
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec s) {
 
         //book didn't include this, only the implicit equation, I derived these
         // and it works, but I doubt it's as good as it could be.
@@ -213,7 +211,7 @@ public class OpenCone extends GeometricObject {
             double yhit = y + t * v;
             //check y coordinates
             if (yhit >= 0 && yhit <= h) {
-                ShadeRec sr = new ShadeRec(s);
+                CSGShadeRec sr = new CSGShadeRec(s);
                 sr.lastT = t;
                 sr.normal.setTo(calcNormal(ray.o.add(ray.d.mul(t))));
                 if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
@@ -227,7 +225,8 @@ public class OpenCone extends GeometricObject {
             //check y coordinates
             yhit = y + t * v;
             if (yhit >= 0 && yhit <= h) {
-                ShadeRec sr = new ShadeRec(s);
+                CSGShadeRec sr = new CSGShadeRec(s);
+                sr.entering = false;
                 sr.lastT = t;
                 sr.normal.setTo(calcNormal(ray.o.add(ray.d.mul(t))));
                 if (ray.d.neg().dot(new Vector3D(sr.normal)) < 0.0) {
@@ -246,6 +245,7 @@ public class OpenCone extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override
@@ -302,6 +302,7 @@ public class OpenCone extends GeometricObject {
      * calculates the normal at a point
      *
      * @param p
+     *
      * @return
      */
     private Normal calcNormal(Point3D p) {

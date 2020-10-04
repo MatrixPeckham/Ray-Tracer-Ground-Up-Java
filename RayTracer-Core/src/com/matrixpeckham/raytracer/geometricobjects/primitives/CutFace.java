@@ -18,6 +18,7 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.util.DoubleRef;
 import com.matrixpeckham.raytracer.util.Ray;
 import com.matrixpeckham.raytracer.util.ShadeRec;
@@ -123,6 +124,7 @@ public class CutFace extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -163,10 +165,11 @@ public class CutFace extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec s) {
         //because we're on the xz plane we only need the y intercept as the t param
         if (ray.d.y == 0) {
             return false;
@@ -187,7 +190,7 @@ public class CutFace extends GeometricObject {
                 && zi <= size_on_two) // inside square
                 && d >= radius * radius) // outside circle
         {
-            ShadeRec sr = new ShadeRec(s);
+            CSGShadeRec sr = new CSGShadeRec(s);
             sr.lastT = t;
             sr.normal.setTo(0.0, 1.0, 0.0);
             sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -202,6 +205,7 @@ public class CutFace extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

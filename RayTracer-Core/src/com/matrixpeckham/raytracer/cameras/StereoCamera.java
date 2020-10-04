@@ -37,7 +37,7 @@ public class StereoCamera extends Camera {
      * @param leftCameraPtr
      */
     public final void setLeftCamera(Camera leftCameraPtr) {
-	leftCamera = leftCameraPtr;
+        leftCamera = leftCameraPtr;
     }
 
     /**
@@ -46,21 +46,21 @@ public class StereoCamera extends Camera {
      * @param rightCameraPtr
      */
     public final void setRightCamera(Camera rightCameraPtr) {
-	rightCamera = rightCameraPtr;
+        rightCamera = rightCameraPtr;
     }
 
     /**
      * set viewing type
      */
     public void useTransverseViewing() {
-	viewingType = ViewingType.TRANSVERSE;
+        viewingType = ViewingType.TRANSVERSE;
     }
 
     /**
      * set viewing type
      */
     public void useParallelViewing() {
-	viewingType = ViewingType.PARALLEL;
+        viewingType = ViewingType.PARALLEL;
     }
 
     /**
@@ -69,7 +69,7 @@ public class StereoCamera extends Camera {
      * @param i
      */
     public void setPixelGap(int i) {
-	pixelGap = i;
+        pixelGap = i;
     }
 
     /**
@@ -78,59 +78,67 @@ public class StereoCamera extends Camera {
      * @param d
      */
     public void setStereoAngle(double d) {
-	beta = d;
+        beta = d;
     }
 
     @Override
     public void multiThreadRenderScene(World w) {
-	final ViewPlane vp = new ViewPlane(w.vp);
-	final int hres = vp.hRes;
-	final int vres = vp.vRes;
+        final ViewPlane vp = new ViewPlane(w.vp);
+        final int hres = vp.hRes;
+        final int vres = vp.vRes;
 
-	final double r = eye.distance(lookat);
-	final double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
-	w.startRender(vres, hres);
-	CountDownLatch cdl = new CountDownLatch(2);
-	if (viewingType == ViewingType.PARALLEL) {
-	    Runnable left = new Runnable() {
-		public void run() {
-		    leftCamera.renderStereo(w, x, 0);
-		    cdl.countDown();
-		}
-	    };
-	    Runnable right = new Runnable() {
-		public void run() {
-		    rightCamera.renderStereo(w, -x, hres + pixelGap);
-		    cdl.countDown();
-		}
-	    };
-	    EXEC.submit(left);
-	    EXEC.submit(right);
-	}
-	if (viewingType == ViewingType.TRANSVERSE) {
-	    Runnable left = new Runnable() {
-		public void run() {
-		    rightCamera.renderStereo(w, x, hres + pixelGap);
-		    cdl.countDown();
-		}
-	    };
-	    Runnable right = new Runnable() {
-		public void run() {
-		    leftCamera.renderStereo(w, -x, 0);
-		    cdl.countDown();
-		}
-	    };
-	    EXEC.submit(left);
-	    EXEC.submit(right);
-	    try {
-		cdl.await();
-	    } catch (InterruptedException ex) {
-		Logger.getLogger(Pinhole.class.getName()).
-			log(Level.SEVERE, null, ex);
-	    }
-	    w.finishRender();
+        final double r = eye.distance(lookat);
+        final double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
+        w.startRender(vres, hres);
+        CountDownLatch cdl = new CountDownLatch(2);
+        if (viewingType == ViewingType.PARALLEL) {
+            Runnable left = new Runnable() {
 
-	}
+                public void run() {
+                    leftCamera.renderStereo(w, x, 0);
+                    cdl.countDown();
+                }
+
+            };
+            Runnable right = new Runnable() {
+
+                public void run() {
+                    rightCamera.renderStereo(w, -x, hres + pixelGap);
+                    cdl.countDown();
+                }
+
+            };
+            EXEC.submit(left);
+            EXEC.submit(right);
+        }
+        if (viewingType == ViewingType.TRANSVERSE) {
+            Runnable left = new Runnable() {
+
+                public void run() {
+                    rightCamera.renderStereo(w, x, hres + pixelGap);
+                    cdl.countDown();
+                }
+
+            };
+            Runnable right = new Runnable() {
+
+                public void run() {
+                    leftCamera.renderStereo(w, -x, 0);
+                    cdl.countDown();
+                }
+
+            };
+            EXEC.submit(left);
+            EXEC.submit(right);
+            try {
+                cdl.await();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Pinhole.class.getName()).
+                        log(Level.SEVERE, null, ex);
+            }
+            w.finishRender();
+
+        }
     }
 
     /**
@@ -138,14 +146,14 @@ public class StereoCamera extends Camera {
      */
     public static enum ViewingType {
 
-	/**
-	 *
-	 */
-	PARALLEL,
-	/**
-	 *
-	 */
-	TRANSVERSE
+        /**
+         *
+         */
+        PARALLEL,
+        /**
+         *
+         */
+        TRANSVERSE
 
     }
 
@@ -182,9 +190,9 @@ public class StereoCamera extends Camera {
      * @param right
      */
     public StereoCamera(Camera left, Camera right) {
-	this();
-	setLeftCamera(left);
-	setRightCamera(right);
+        this();
+        setLeftCamera(left);
+        setRightCamera(right);
     }
 
     /**
@@ -193,11 +201,11 @@ public class StereoCamera extends Camera {
      * @param o
      */
     public StereoCamera(StereoCamera o) {
-	viewingType = o.viewingType;
-	pixelGap = o.pixelGap;
-	beta = o.beta;
-	leftCamera = o.leftCamera.cloneCamera();
-	rightCamera = o.rightCamera.cloneCamera();
+        viewingType = o.viewingType;
+        pixelGap = o.pixelGap;
+        beta = o.beta;
+        leftCamera = o.leftCamera.cloneCamera();
+        rightCamera = o.rightCamera.cloneCamera();
     }
 
     /**
@@ -206,16 +214,16 @@ public class StereoCamera extends Camera {
      * @param vp
      */
     public void setupCameras(ViewPlane vp) {
-	vp.imageHeight = vp.vRes;
-	vp.imageWidth = vp.hRes * 2 + pixelGap;
-	double r = eye.distance(lookat);
-	double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
-	leftCamera.setEye(eye.sub(u.mul(x)));
-	leftCamera.setLookat(lookat.sub(u.mul(x)));
-	leftCamera.computeUVW();
-	rightCamera.setEye(eye.add(u.mul(x)));
-	rightCamera.setLookat(lookat.add(u.mul(x)));
-	rightCamera.computeUVW();
+        //vp.imageHeight = vp.vRes;
+        vp.imageWidth = vp.hRes * 2 + pixelGap;
+        double r = eye.distance(lookat);
+        double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
+        leftCamera.setEye(eye.sub(u.mul(x)));
+        leftCamera.setLookat(lookat.sub(u.mul(x)));
+        leftCamera.computeUVW();
+        rightCamera.setEye(eye.add(u.mul(x)));
+        rightCamera.setLookat(lookat.add(u.mul(x)));
+        rightCamera.computeUVW();
 
     }
 
@@ -226,67 +234,68 @@ public class StereoCamera extends Camera {
      */
     @Override
     public void renderScene(World w) {
-	ViewPlane vp = new ViewPlane(w.vp);
-	int hres = vp.hRes;
-	int vres = vp.vRes;
+        ViewPlane vp = new ViewPlane(w.vp);
+        int hres = vp.hRes;
+        int vres = vp.vRes;
 
-	World temp = new World() {
-	    boolean reset = false;
+        World temp = new World() {
 
-	    double progress = 0;
+            boolean reset = false;
 
-	    @Override
-	    public void startRender(int width, int height) {
-	    }
+            double progress = 0;
 
-	    @Override
-	    public void updateProgress(double progress) {
-		if (this.progress > progress) {
-		    reset = true;
-		}
-		if (!reset) {
-		    this.progress = progress;
-		} else {
-		    this.progress += progress;
-		}
-		super.updateProgress(this.progress / 2);
-	    }
+            @Override
+            public void startRender(int width, int height) {
+            }
 
-	    boolean finished = false;
+            @Override
+            public void updateProgress(double progress) {
+                if (this.progress > progress) {
+                    reset = true;
+                }
+                if (!reset) {
+                    this.progress = progress;
+                } else {
+                    this.progress += progress;
+                }
+                super.updateProgress(this.progress / 2);
+            }
 
-	    @Override
-	    public void finishRender() {
-		if (finished) {
-		    super.finishRender();
-		}
-		finished = true;
-	    }
+            boolean finished = false;
 
-	};
+            @Override
+            public void finishRender() {
+                if (finished) {
+                    super.finishRender();
+                }
+                finished = true;
+            }
 
-	temp.vp = w.vp;
-	temp.ambient = w.ambient;
-	temp.backgroundColor = w.backgroundColor;
-	temp.lights = w.lights;
-	temp.objects = w.objects;
-	temp.tracer = w.tracer;
-	temp.sphere = w.sphere;
-	temp.setRenderListener(w.getRenderListener());
+        };
 
-	double r = eye.distance(lookat);
-	double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
+        temp.vp = w.vp;
+        temp.ambient = w.ambient;
+        temp.backgroundColor = w.backgroundColor;
+        temp.lights = w.lights;
+        temp.objects = w.objects;
+        temp.tracer = w.tracer;
+        temp.sphere = w.sphere;
+        temp.setRenderListener(w.getRenderListener());
 
-	w.startRender(hres * 2 + pixelGap, vres * 2 + pixelGap);
+        double r = eye.distance(lookat);
+        double x = r * Math.tan(0.5 * beta * Utility.PI_ON_180);
 
-	if (viewingType == ViewingType.PARALLEL) {
-	    leftCamera.renderStereo(temp, x, 0);
-	    rightCamera.renderStereo(temp, -x, hres + pixelGap);
-	}
-	if (viewingType == ViewingType.TRANSVERSE) {
-	    leftCamera.renderStereo(temp, -x, 0);
-	    rightCamera.renderStereo(temp, x, hres + pixelGap);
-	}
-	//w.finishRender();
+        w.startRender(hres * 2 + pixelGap, vres * 2 + pixelGap);
+
+        if (viewingType == ViewingType.PARALLEL) {
+            leftCamera.renderStereo(temp, x, 0);
+            rightCamera.renderStereo(temp, -x, hres + pixelGap);
+        }
+        if (viewingType == ViewingType.TRANSVERSE) {
+            leftCamera.renderStereo(temp, -x, 0);
+            rightCamera.renderStereo(temp, x, hres + pixelGap);
+        }
+        //w.finishRender();
     }
 
     /**
@@ -299,8 +308,8 @@ public class StereoCamera extends Camera {
      */
     @Override
     public void renderStereo(World w, double x, int i) {
-	throw new RuntimeException(
-		"Stereo Camera should not have renderStereo call.");
+        throw new RuntimeException(
+                "Stereo Camera should not have renderStereo call.");
     }
 
     /**
@@ -310,7 +319,7 @@ public class StereoCamera extends Camera {
      */
     @Override
     public Camera cloneCamera() {
-	return new StereoCamera(this);
+        return new StereoCamera(this);
     }
 
 }

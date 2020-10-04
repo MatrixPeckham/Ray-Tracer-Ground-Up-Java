@@ -17,11 +17,9 @@
  */
 package com.matrixpeckham.raytracer.brdfs;
 
+import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 
 /**
  * Lambertian texture for colors
@@ -39,6 +37,11 @@ public class SV_Lambertian extends BRDF {
      * color texture
      */
     private Texture cd;
+
+    /**
+     * sampler for direction sampling
+     */
+    private Sampler sampler;
 
     /**
      * default constructor
@@ -59,6 +62,20 @@ public class SV_Lambertian extends BRDF {
         if (lamb.cd != null) {
             cd = lamb.cd.cloneTexture();
         }
+        if (lamb.sampler != null) {
+            sampler = lamb.sampler.cloneSampler();
+        }
+    }
+
+    /**
+     * sets the sampler
+     *
+     * @param clone
+     */
+    public void setSampler(Sampler clone) {
+        this.sampler = clone.cloneSampler();
+        this.sampler.mapSamplesToHemisphere(1);
+
     }
 
     /**
@@ -77,6 +94,7 @@ public class SV_Lambertian extends BRDF {
      * @param sr
      * @param wo
      * @param wi
+     *
      * @return
      */
     @Override
@@ -85,10 +103,39 @@ public class SV_Lambertian extends BRDF {
     }
 
     /**
+     * samples the distribution,returns color and stores reflected ray in wi,
+     * and pdf in reference
+     *
+     * @param sr
+     * @param wo
+     * @param wi
+     * @param pdf
+     *
+     * @return
+     */
+    @Override
+    public RGBColor sampleF(ShadeRec sr, Vector3D wo, Vector3D wi, DoubleRef pdf) {
+        Vector3D w = new Vector3D(sr.normal);
+        Vector3D v = new Vector3D(0.0034, 1, 0.0071).cross(w);
+        v.normalize();
+        Vector3D u = v.cross(w);
+
+        Point3D sp = sampler.sampleHemisphere();
+        //wi = sp.x * u + sp.y * v + sp.z * w;
+        wi.setTo(u.mul(sp.x).add(v.mul(sp.y).add(w.mul(sp.z))));
+        wi.normalize();
+
+        pdf.d = sr.normal.dot(wi) * Utility.INV_PI;
+
+        return (cd.getColor(sr).mul(kd).mul(Utility.INV_PI));
+    }
+
+    /**
      * rho
      *
      * @param sr
      * @param wo
+     *
      * @return
      */
     @Override

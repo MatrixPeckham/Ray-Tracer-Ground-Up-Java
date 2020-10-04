@@ -18,11 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.triangles;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.Mesh;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -71,6 +68,7 @@ public class FlatUVMeshTriangle extends FlatMeshTriangle {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -130,10 +128,11 @@ public class FlatUVMeshTriangle extends FlatMeshTriangle {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec shr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec shr) {
         Point3D v0 = new Point3D(mesh.vertices.get(index0));
         Point3D v1 = new Point3D(mesh.vertices.get(index1));
         Point3D v2 = new Point3D(mesh.vertices.get(index2));
@@ -169,7 +168,7 @@ public class FlatUVMeshTriangle extends FlatMeshTriangle {
         double e3 = a * p - b * r + d * s;
         double t = e3 * inv_denom;
 
-        ShadeRec sr = new ShadeRec(shr);
+        CSGShadeRec sr = new CSGShadeRec(shr);
 
         sr.lastT = t;
         sr.normal.setTo(normal);  				// for flat shading

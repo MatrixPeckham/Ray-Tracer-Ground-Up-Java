@@ -18,12 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -96,6 +92,7 @@ public class Plane extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -118,10 +115,11 @@ public class Plane extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr) {
         //intersection point with plane
         double dot = (ray.d.dot(new Vector3D(n)));
         if (dot == 0) {
@@ -129,7 +127,7 @@ public class Plane extends GeometricObject {
         }
         double t = a.sub(ray.o).dot(new Vector3D(n)) / dot;
         //t is greater than eps
-        ShadeRec s = new ShadeRec(sr);
+        CSGShadeRec s = new CSGShadeRec(sr);
         s.lastT = t;
         s.normal.setTo(n);
         s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -142,6 +140,7 @@ public class Plane extends GeometricObject {
      *
      * @param ray
      * @param t
+     *
      * @return
      */
     @Override

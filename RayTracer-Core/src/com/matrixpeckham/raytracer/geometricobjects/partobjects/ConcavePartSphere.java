@@ -18,12 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -112,6 +108,7 @@ public class ConcavePartSphere extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -166,10 +163,11 @@ public class ConcavePartSphere extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr) {
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
@@ -190,7 +188,7 @@ public class ConcavePartSphere extends GeometricObject {
             }
             if (hit.y <= radius * cosThetaMin && hit.y >= radius
                     * cosThetaMax && phi >= phiMin && phi <= phiMax) {
-                ShadeRec s = new ShadeRec(sr);
+                CSGShadeRec s = new CSGShadeRec(sr);
                 s.lastT = t;
                 s.normal.setTo(temp.add(ray.d.mul(t)).div(radius).neg()); //points in
                 s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -205,7 +203,8 @@ public class ConcavePartSphere extends GeometricObject {
             }
             if (hit.y <= radius * cosThetaMin && hit.y >= radius
                     * cosThetaMax && phi >= phiMin && phi <= phiMax) {
-                ShadeRec s = new ShadeRec(sr);
+                CSGShadeRec s = new CSGShadeRec(sr);
+                s.entering = false;
                 s.lastT = t;
                 s.normal.setTo(temp.add(ray.d.mul(t)).div(radius).neg()); //points in
                 s.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -221,6 +220,7 @@ public class ConcavePartSphere extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

@@ -18,14 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -136,6 +130,7 @@ public class Box extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -236,10 +231,11 @@ public class Box extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec s) {
 
         //convienence variables
         double ox = ray.o.x;
@@ -316,12 +312,13 @@ public class Box extends GeometricObject {
 
         //hit test and fills shaderec.
         if (t0 < t1) {  // condition for a hit
-            ShadeRec sr = new ShadeRec(s);
+            CSGShadeRec sr = new CSGShadeRec(s);
             sr.lastT = t0;  			// ray hits outside surface
             sr.normal.setTo(getNormal(face_in));
             sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
             hit.add(sr);
-            sr = new ShadeRec(s);
+            sr = new CSGShadeRec(s);
+            sr.entering = false;
             sr.lastT = t1;				// ray hits inside surface
             sr.normal.setTo(getNormal(face_out));
             sr.localHitPosition.setTo(ray.o.add(Vector3D.mul(sr.lastT, ray.d)));
@@ -336,6 +333,7 @@ public class Box extends GeometricObject {
      * private method for transforming an integer index into the proper normal
      *
      * @param i
+     *
      * @return
      */
     private Normal getNormal(int i) {
@@ -373,6 +371,7 @@ public class Box extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

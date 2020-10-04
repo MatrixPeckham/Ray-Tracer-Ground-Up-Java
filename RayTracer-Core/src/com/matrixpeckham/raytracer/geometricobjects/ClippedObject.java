@@ -17,15 +17,10 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects;
 
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.materials.Material;
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import com.matrixpeckham.raytracer.world.World;
 import java.util.ArrayList;
 
@@ -44,7 +39,7 @@ public class ClippedObject extends GeometricObject {
      * texture for bump mapping (texture colors are interpreted as vector
      * displacements to normals)
      */
-    Texture bumpMap = null;
+    Texture clipMap = null;
 
     /**
      * default constructor
@@ -54,7 +49,7 @@ public class ClippedObject extends GeometricObject {
 
     public ClippedObject(GeometricObject o, Texture t) {
         obj = o;
-        bumpMap = t;
+        clipMap = t;
     }
 
     /**
@@ -65,7 +60,7 @@ public class ClippedObject extends GeometricObject {
     private ClippedObject(ClippedObject aThis) {
         super(aThis);
         obj = aThis.obj.cloneGeometry();
-        bumpMap = aThis.bumpMap.cloneTexture();
+        clipMap = aThis.clipMap.cloneTexture();
     }
 
     /**
@@ -82,8 +77,8 @@ public class ClippedObject extends GeometricObject {
      *
      * @param fBmBumpPtr
      */
-    public void setBumpMap(Texture fBmBumpPtr) {
-        this.bumpMap = fBmBumpPtr.cloneTexture();
+    public void setClipMap(Texture fBmBumpPtr) {
+        this.clipMap = fBmBumpPtr.cloneTexture();
     }
 
     /**
@@ -101,6 +96,7 @@ public class ClippedObject extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -109,7 +105,7 @@ public class ClippedObject extends GeometricObject {
         boolean hit = obj.hit(ray, s);
         //if we have a hit we need to augment the normal
         if (hit) {
-            RGBColor c = bumpMap.getColor(s);
+            RGBColor c = clipMap.getColor(s);
             if (c.average() > 0.5) {
                 return false;
             }
@@ -122,19 +118,20 @@ public class ClippedObject extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr) {
         //differ to sub object
-        boolean hit = obj.hit(ray, hits, sr);
+        ArrayList<CSGShadeRec> nhit = new ArrayList<>();
+        boolean hit = obj.hit(ray, nhit, sr);
         //if we have a hit we need to augment the normal
         if (hit) {
-            for (int i = hits.size() - 1; i >= 0; i--) {
-                ShadeRec s = hits.get(i);
-                RGBColor c = bumpMap.getColor(s);
-                if (c.average() > 0.5) {
-                    hits.remove(i);
+            for (CSGShadeRec s : nhit) {
+                RGBColor c = clipMap.getColor(s);
+                if (!(c.average() > 0.5)) {
+                    hits.add(s);
                 }
             }
         }
@@ -147,6 +144,7 @@ public class ClippedObject extends GeometricObject {
      *
      * @param ray
      * @param t
+     *
      * @return
      */
     @Override
@@ -161,6 +159,7 @@ public class ClippedObject extends GeometricObject {
      * Here we call the sub-object's method then augment the normal.
      *
      * @param p
+     *
      * @return
      */
     @Override

@@ -34,20 +34,20 @@ public class BuildFigure18 implements BuildWorldFunction {
     @Override
     public void build(World w) {
 
-	w.vp.setHres(400);
-	w.vp.setVres(400);
-	w.vp.setPixelSize(0.5);
+        w.vp.setHres(400);
+        w.vp.setVres(400);
+        w.vp.setPixelSize(0.5);
         w.vp.setSamples(1);
-	
-	w.backgroundColor = Utility.BLACK;
-	w.tracer = new SingleSphere(w);  
+
+        w.backgroundColor = Utility.BLACK;
+        w.tracer = new SingleSphere(w);
         Camera cam = new Orthographic();
         cam.setEye(0, 0, 100);
         cam.setLookat(0, 0, 0);
-	w.setCamera(cam);
-        
+        w.setCamera(cam);
+
         w.sphere.setCenter(new Point3D());
         w.sphere.setRadius(85);
     }
-    
+
 }

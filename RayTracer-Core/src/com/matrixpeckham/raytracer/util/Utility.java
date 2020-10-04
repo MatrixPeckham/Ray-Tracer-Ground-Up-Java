@@ -28,6 +28,116 @@ import java.util.logging.Logger;
  */
 public class Utility {
 
+    public static class Greek {
+
+        public static class Capital {
+
+            public static final char ALPHA = '\u0391';
+
+            public static final char BETA = '\u0392';
+
+            public static final char GAMMA = '\u0393';
+
+            public static final char DELTA = '\u0394';
+
+            public static final char EPSILON = '\u0395';
+
+            public static final char ZETA = '\u0396';
+
+            public static final char ETA = '\u0397';
+
+            public static final char THETA = '\u0398';
+
+            public static final char IOTA = '\u0399';
+
+            public static final char KAPPA = '\u039a';
+
+            public static final char LAMBDA = '\u039b';
+
+            public static final char MU = '\u039c';
+
+            public static final char NU = '\u039d';
+
+            public static final char XI = '\u039e';
+
+            public static final char OMICRON = '\u039f';
+
+            public static final char PI = '\u03a0';
+
+            public static final char RHO = '\u03a1';
+
+            public static final char SIGMA = '\u03a3';
+
+            public static final char TAU = '\u03a4';
+
+            public static final char UPSILON = '\u03a5';
+
+            public static final char PHI = '\u03a6';
+
+            public static final char CHI = '\u03a7';
+
+            public static final char PSI = '\u03a8';
+
+            public static final char OMEGA = '\u03a9';
+
+        }
+
+        public static class Small {
+
+            public static final char ALPHA = '\u03b1';
+
+            public static final char BETA = '\u03b2';
+
+            public static final char GAMMA = '\u03b3';
+
+            public static final char DELTA = '\u03b4';
+
+            public static final char EPSILON = '\u03b5';
+
+            public static final char ZETA = '\u03b6';
+
+            public static final char ETA = '\u03b7';
+
+            public static final char THETA = '\u03b8';
+
+            public static final char IOTA = '\u03b9';
+
+            public static final char KAPPA = '\u03ba';
+
+            public static final char LAMBDA = '\u03bb';
+
+            public static final char MU = '\u03bc';
+
+            public static final char NU = '\u03bd';
+
+            public static final char XI = '\u03be';
+
+            public static final char OMICRON = '\u03bf';
+
+            public static final char PI = '\u03c0';
+
+            public static final char RHO = '\u03c1';
+
+            public static final char FINAL_SIGMA = '\u03c2';
+
+            public static final char SIGMA = '\u03c3';
+
+            public static final char TAU = '\u03c4';
+
+            public static final char UPSILON = '\u03c5';
+
+            public static final char PHI = '\u03c6';
+
+            public static final char CHI = '\u03c7';
+
+            public static final char PSI = '\u03c8';
+
+            public static final char OMEGA = '\u03c9';
+
+        }
+
+    }
+
     /**
      * Defined as Math.PI for convenience
      */
@@ -121,6 +231,7 @@ public class Utility {
      *
      * @param l
      * @param h
+     *
      * @return
      */
     public static final double randDouble(double l, double h) {
@@ -133,6 +244,7 @@ public class Utility {
      *
      * @param l
      * @param h
+     *
      * @return
      */
     public static final int randInt(int l, int h) {
@@ -142,9 +254,10 @@ public class Utility {
     /**
      * clamp function.
      *
-     * @param x value to clamp
+     * @param x   value to clamp
      * @param min min value
      * @param max max value
+     *
      * @return min if x&lt;min max if x&gt;max otherwise x
      */
     public static final double clamp(double x, double min, double max) {
@@ -164,6 +277,7 @@ public class Utility {
      * returns true if x could be considered 0
      *
      * @param x
+     *
      * @return
      */
     public static final boolean isZero(double x) {
@@ -175,6 +289,7 @@ public class Utility {
      *
      * @param c
      * @param s
+     *
      * @return
      */
     public static final int solveQuadric(double c[], double s[]) {
@@ -205,6 +320,7 @@ public class Utility {
      *
      * @param c
      * @param s
+     *
      * @return
      */
     public static final int solveCubic(double c[], double s[]) {
@@ -219,8 +335,8 @@ public class Utility {
         B = c[1] / c[3];
         C = c[0] / c[3];
 
-        /*  substitute x = y - A/3 to eliminate quadric term:
-         x^3 +px + q = 0 */
+        /* substitute x = y - A/3 to eliminate quadric term:
+         * x^3 +px + q = 0 */
         sq_A = A * A;
         p = 1.0 / 3 * (-1.0 / 3 * sq_A + B);
         q = 1.0 / 2 * (2.0 / 27 * A * sq_A - 1.0 / 3 * A * B + C);
@@ -230,18 +346,21 @@ public class Utility {
         D = q * q + cb_p;
 
         if (isZero(D)) {
-            if (isZero(q)) { /* one triple solution */
+            if (isZero(q)) {
+                /* one triple solution */
 
                 s[0] = 0;
                 num = 1;
-            } else { /* one single and one double solution */
+            } else {
+                /* one single and one double solution */
 
                 double u = Math.cbrt(-q);
                 s[0] = 2 * u;
                 s[1] = -u;
                 num = 2;
             }
-        } else if (D < 0) { /* Casus irreducibilis: three real solutions */
+        } else if (D < 0) {
+            /* Casus irreducibilis: three real solutions */
 
             double phi = 1.0 / 3 * Math.acos(-q / Math.sqrt(-cb_p));
             double t = 2 * Math.sqrt(-p);
@@ -250,7 +369,8 @@ public class Utility {
             s[1] = -t * Math.cos(phi + PI / 3);
             s[2] = -t * Math.cos(phi - PI / 3);
             num = 3;
-        } else { /* one real solution */
+        } else {
+            /* one real solution */
 
             double sqrt_D = Math.sqrt(D);
             double u = Math.cbrt(sqrt_D - q);
@@ -275,6 +395,7 @@ public class Utility {
      *
      * @param c
      * @param s
+     *
      * @return
      */
     public static final int solveQuartic(double c[], double s[]) {
@@ -290,8 +411,8 @@ public class Utility {
         C = c[1] / c[4];
         D = c[0] / c[4];
 
-        /*  substitute x = y - A/4 to eliminate cubic term:
-         x^4 + px^2 + qx + r = 0 */
+        /* substitute x = y - A/4 to eliminate cubic term:
+         * x^4 + px^2 + qx + r = 0 */
         sq_A = A * A;
         p = -3.0 / 8 * sq_A + B;
         q = 1.0 / 8 * sq_A * A - 1.0 / 2 * A * B + C;
@@ -379,6 +500,7 @@ public class Utility {
      *
      * @param a
      * @param b
+     *
      * @return
      */
     public static double mod(double a, double b) {
@@ -400,6 +522,7 @@ public class Utility {
      * @param e2
      * @param e3
      * @param x
+     *
      * @return
      */
     public static double smoothPulse(double e0, double e1, double e2, double e3,
@@ -416,6 +539,7 @@ public class Utility {
      * @param e3
      * @param period
      * @param x
+     *
      * @return
      */
     public static double smoothPulseTrain(double e0, double e1, double e2,
@@ -430,6 +554,7 @@ public class Utility {
      * @param a
      * @param b
      * @param x
+     *
      * @return
      */
     public static double smoothStep(double a, double b, double x) {
@@ -452,6 +577,7 @@ public class Utility {
      * @param c0
      * @param c1
      * @param f
+     *
      * @return
      */
     public static RGBColor mixColor(RGBColor c0, RGBColor c1, double f) {
@@ -464,6 +590,7 @@ public class Utility {
      * @param a
      * @param b
      * @param f
+     *
      * @return
      */
     public static double mixDouble(double a, double b, double f) {

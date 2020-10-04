@@ -17,11 +17,8 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.triangles;
 
-import com.matrixpeckham.raytracer.util.Mesh;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -63,6 +60,7 @@ public class SmoothUVMeshTriangle extends SmoothMeshTriangle {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -121,10 +119,11 @@ public class SmoothUVMeshTriangle extends SmoothMeshTriangle {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec shr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec shr) {
         Point3D v0 = new Point3D(mesh.vertices.get(index0));
         Point3D v1 = new Point3D(mesh.vertices.get(index1));
         Point3D v2 = new Point3D(mesh.vertices.get(index2));
@@ -160,7 +159,7 @@ public class SmoothUVMeshTriangle extends SmoothMeshTriangle {
         double e3 = a * p - b * r + d * s;
         double t = e3 * inv_denom;
 
-        ShadeRec sr = new ShadeRec(shr);
+        CSGShadeRec sr = new CSGShadeRec(shr);
 
         sr.lastT = t;
         sr.normal.setTo(interpolateNormal(beta, gamma)); // for smooth shading

@@ -18,14 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -156,6 +150,7 @@ public class CutCube extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -260,10 +255,11 @@ public class CutCube extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec shr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec shr) {
 
         //works like box hit function but checks distance to sphere before returning true
         double ox = ray.o.x;
@@ -338,7 +334,7 @@ public class CutCube extends GeometricObject {
         if (t0 < t1) {  // condition for a hit
             if (!(s.distSquared(ray.o.add(Vector3D.mul(t0, ray.d)))
                     < sphereRad * sphereRad)) {
-                ShadeRec sr = new ShadeRec(shr);
+                CSGShadeRec sr = new CSGShadeRec(shr);
                 sr.lastT = t0;  			// ray hits outside surface
                 sr.normal.setTo(getNormal(face_in));
                 sr.localHitPosition.setTo(ray.o.add(Vector3D.
@@ -347,7 +343,7 @@ public class CutCube extends GeometricObject {
             }
             if (!(s.distSquared(ray.o.add(Vector3D.mul(t1, ray.d)))
                     < sphereRad * sphereRad)) {
-                ShadeRec sr = new ShadeRec(shr);
+                CSGShadeRec sr = new CSGShadeRec(shr);
                 sr.lastT = t1;				// ray hits inside surface
                 sr.normal.setTo(getNormal(face_out));
                 sr.localHitPosition.setTo(ray.o.add(Vector3D.
@@ -363,6 +359,7 @@ public class CutCube extends GeometricObject {
      * private method for getting normal from an integer face
      *
      * @param i
+     *
      * @return
      */
     private Normal getNormal(int i) {
@@ -399,6 +396,7 @@ public class CutCube extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

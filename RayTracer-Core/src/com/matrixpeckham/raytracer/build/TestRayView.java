@@ -37,7 +37,7 @@ public class TestRayView implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-        double size = 2;
+        double size = 2.5;
         int res = 600;
 
         int num_samples = 1;
@@ -53,7 +53,7 @@ public class TestRayView implements BuildWorldFunction {
         w.tracer = new RayCast(w);
 
         Orthographic orthographic_ptr = new Orthographic();
-        orthographic_ptr.setEye(2, 3, 3);
+        orthographic_ptr.setEye(0, 3, 0);
         orthographic_ptr.setLookat(new Point3D(0, 0, 0));
         orthographic_ptr.computeUVW();
         w.setCamera(orthographic_ptr);
@@ -65,27 +65,33 @@ public class TestRayView implements BuildWorldFunction {
         w.ambient = occ;
 
         RayPrimitive yAxis = new RayPrimitive(new Vector3D(0, 2, 0),
-                new Vector3D(0, 0, 0), new RGBColor(0, 1, 0));
+                new Vector3D(0, 0, 0), new RGBColor(0, 1, 0), new RGBColor(0, 1,
+                        0));
         w.addObject(yAxis);
 
         RayPrimitive zAxis = new RayPrimitive(new Vector3D(0, 0, 2),
-                new Vector3D(0, 0, 0), new RGBColor(0, 0, 1));
+                new Vector3D(0, 0, 0), new RGBColor(0, 0, 1), new RGBColor(0, 0,
+                        1));
         w.addObject(zAxis);
 
         RayPrimitive xAxis = new RayPrimitive(new Vector3D(2, 0, 0),
-                new Vector3D(0, 0, 0), new RGBColor(1, 0, 0));
+                new Vector3D(0, 0, 0), new RGBColor(1, 0, 0), new RGBColor(1, 0,
+                        0));
         w.addObject(xAxis);
 
         RayPrimitive vec = new RayPrimitive(new Vector3D(2, 2, 2),
-                new Vector3D(0, 0, 0), new RGBColor(1, 0, 1));
+                new Vector3D(0, 0, 0), new RGBColor(1, 0, 1), new RGBColor(1, 0,
+                        1));
         w.addObject(vec);
 
         RayPrimitive vec1 = new RayPrimitive(new Vector3D(-2, 2, 2),
-                new Vector3D(0, 0, 0), new RGBColor(1, 1, 0));
+                new Vector3D(0, 0, 0), new RGBColor(1, 1, 0), new RGBColor(1, 1,
+                        0));
         w.addObject(vec1);
 
         RayPrimitive vec2 = new RayPrimitive(new Vector3D(-2, -2, 1),
-                new Vector3D(1, 1, 1), new RGBColor(1, 0, 1));
+                new Vector3D(1, 1, 1), new RGBColor(1, 0, 1), new RGBColor(1, 0,
+                        1));
         w.addObject(vec2);
 
     }

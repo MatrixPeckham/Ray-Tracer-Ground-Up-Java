@@ -50,12 +50,12 @@ public class BuildFigure09B_Extra implements BuildWorldFunction {
 
     @Override
     public void build(World w) {
-	int numSamples = 1;
+	int numSamples = 256;
 
-	w.vp.setHres(600);
-	w.vp.setVres(600);
+	w.vp.setHres(1000);
+	w.vp.setVres(1000);
 	w.vp.setSamples(numSamples);
-	w.vp.setMaxDepth(1);
+	w.vp.setMaxDepth(10);
 
 	w.tracer = new Whitted(w);
 	w.backgroundColor = Utility.BLACK;

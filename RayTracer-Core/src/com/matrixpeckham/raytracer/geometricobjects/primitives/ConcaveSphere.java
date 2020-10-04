@@ -18,15 +18,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.samplers.Sampler;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -112,6 +106,7 @@ public class ConcaveSphere extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -150,10 +145,11 @@ public class ConcaveSphere extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec s) {
         double t;
         Vector3D temp = ray.o.sub(center);
         double a = ray.d.dot(ray.d);
@@ -166,12 +162,13 @@ public class ConcaveSphere extends GeometricObject {
             double e = Math.sqrt(disc);
             double denom = 2.0 * a;
             t = (-b - e) / denom;
-            ShadeRec sr = new ShadeRec(s);
+            CSGShadeRec sr = new CSGShadeRec(s);
             sr.lastT = t;
             sr.normal.setTo(temp.add(ray.d.mul(t)).div(-radius));
             sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
             hit.add(sr);
-            sr = new ShadeRec(s);
+            sr = new CSGShadeRec(s);
+            sr.entering = false;
             t = (-b + e) / denom;
             sr.lastT = t;
             sr.normal.setTo(temp.add(ray.d.mul(t)).div(-radius));
@@ -203,6 +200,7 @@ public class ConcaveSphere extends GeometricObject {
      * returns the normal, same as Sphere but negates normal
      *
      * @param p
+     *
      * @return
      */
     @Override
@@ -236,6 +234,7 @@ public class ConcaveSphere extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override
@@ -303,6 +302,7 @@ public class ConcaveSphere extends GeometricObject {
      * inverse area
      *
      * @param sr
+     *
      * @return
      */
     @Override

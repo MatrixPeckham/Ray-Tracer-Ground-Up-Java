@@ -17,6 +17,8 @@
  */
 package com.matrixpeckham.raytracer.build.figures.ch28;
 
+import static java.lang.Math.sqrt;
+
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
 import com.matrixpeckham.raytracer.geometricobjects.compound.FishBowl;
@@ -32,16 +34,10 @@ import com.matrixpeckham.raytracer.materials.Phong;
 import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.textures.procedural.PlaneChecker;
 import com.matrixpeckham.raytracer.tracers.Whitted;
-import com.matrixpeckham.raytracer.util.Mesh;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.*;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
-import java.io.File;
 import java.io.IOException;
-import static java.lang.Math.sqrt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -153,12 +149,13 @@ public class BuildFigure41B implements BuildWorldFunction {
         // we read the fish file once, and instance it       //	String fileName = "goldfish_low_res.ply";		// for scene design
         String fileName = "goldfish_high_res.ply";  // for production
         String path
-                = "/Models/";
+                = "resources/Models/";
 
         TriangleMesh gridPtr = new TriangleMesh(new Mesh());
         try {
 
-            gridPtr.readSmoothTriangles(getClass().getClassLoader().getResourceAsStream(path + fileName));
+            gridPtr.readSmoothTriangles(getClass().getClassLoader().
+                    getResourceAsStream(path + fileName));
         } catch (IOException ex) {
             Logger.getLogger(BuildFigure12A.class.getName()).
                     log(Level.SEVERE, null, ex);

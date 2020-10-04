@@ -18,13 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -112,6 +107,7 @@ public class Paraboloid extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -199,7 +195,7 @@ public class Paraboloid extends GeometricObject {
     }
 
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr1) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr1) {
         //intersect ray param
         double t;
 
@@ -240,11 +236,11 @@ public class Paraboloid extends GeometricObject {
             double denom = 2.0 * quadA;
             t = (-quadB - e) / denom;
             Point3D loc = ray.o.add(ray.d.mul(t));
-            ShadeRec sr;
+            CSGShadeRec sr;
             if (!(loc.z < zl)) {
                 if (!(loc.z > zh)) {
 
-                    sr = new ShadeRec(sr1);
+                    sr = new CSGShadeRec(sr1);
                     sr.lastT = t;
                     sr.localHitPosition.setTo(loc);
                     sr.normal.
@@ -261,7 +257,8 @@ public class Paraboloid extends GeometricObject {
             loc = ray.o.add(ray.d.mul(t));
             if (!(loc.z < zl)) {
                 if (!(loc.z > zh)) {
-                    sr = new ShadeRec(sr1);
+                    sr = new CSGShadeRec(sr1);
+                    sr.entering = false;
                     sr.lastT = t;
                     sr.localHitPosition.setTo(loc);
                     sr.normal.
@@ -282,6 +279,7 @@ public class Paraboloid extends GeometricObject {
      * returns the normal at the point
      *
      * @param p
+     *
      * @return
      */
     @Override
@@ -299,6 +297,7 @@ public class Paraboloid extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

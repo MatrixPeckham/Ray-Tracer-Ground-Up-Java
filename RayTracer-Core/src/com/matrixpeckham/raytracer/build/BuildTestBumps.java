@@ -42,8 +42,8 @@ public class BuildTestBumps implements BuildWorldFunction {
 
     @Override
     public void build(World world) {
-        int numSamples = 1;			// development
-//s	int numSamples = 16;			// production
+//        int numSamples = 1;			// development
+        int numSamples = 16;			// production
 
         world.vp.setHres(600);				// production
         world.vp.setVres(600);
@@ -93,7 +93,7 @@ public class BuildTestBumps implements BuildWorldFunction {
         mattePtr10.setKd(bathKd);
         mattePtr10.setCd(0.53, 0.51, 0.45);
 
-	// ************************************************************************************************* bath water
+        // ************************************************************************************************* bath water
         // the bath water
         // w is a bump mapped rectangle with a transparent material
         Box box = new Box(new Point3D(bathXmin, -1, bathZmin), new Point3D(
@@ -106,7 +106,7 @@ public class BuildTestBumps implements BuildWorldFunction {
 
         waterSurfacePtr.setShadows(false);
         waterSurfacePtr.setMaterial(phongPtr);
-	//world.addObject(waterSurfacePtr);						// no bump map - use w for Figure 29.1
+        //world.addObject(waterSurfacePtr);						// no bump map - use w for Figure 29.1
 
         // the bump mapped object
         int numOctaves = 4;

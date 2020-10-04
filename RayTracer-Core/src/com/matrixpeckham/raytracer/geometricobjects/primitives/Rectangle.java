@@ -18,16 +18,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.samplers.Sampler;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point2D;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -168,9 +161,9 @@ public class Rectangle extends GeometricObject {
         return (new BBox(Math.min(p0.x, p0.x + a.x + b.x) - delta, Math.
                 max(p0.x, p0.x + a.x + b.x) + delta,
                 Math.min(p0.y, p0.y + a.y + b.y) - delta, Math.max(p0.y, p0.y
-                        + a.y + b.y) + delta,
+                + a.y + b.y) + delta,
                 Math.min(p0.z, p0.z + a.z + b.z) - delta, Math.max(p0.z, p0.z
-                        + a.z + b.z) + delta));
+                + a.z + b.z) + delta));
     }
 
     /**
@@ -188,13 +181,14 @@ public class Rectangle extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
     public boolean hit(Ray ray, ShadeRec s) {
         //plane intersection parameter
         double t = p0.sub(ray.o).dot(normal) / ray.d.dot(normal);
-        if (t <= Utility.EPSILON) {
+        if (t <= Utility.EPSILON || Double.isInfinite(t)) {
             return false;
         }
 
@@ -219,6 +213,14 @@ public class Rectangle extends GeometricObject {
         }
         //if we're here we hit and set shaderec up
         s.lastT = t;
+//        if (d.length() != 0) {
+        s.v = ddota / ((aLenSquared));
+        s.u = ddotb / ((bLenSquared));
+        //      } else {
+        //        s.v = 0;
+        //      s.u = 0;
+        //}
+//        System.out.println("UV: " + s.u + " " + s.v);
         s.normal.setTo(normal);
         s.localHitPosition.setTo(p);
         return true;
@@ -229,10 +231,11 @@ public class Rectangle extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hit, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hit, ShadeRec sr) {
         //plane intersection parameter
         double dot = ray.d.dot(normal);
         if (dot == 0) {
@@ -260,8 +263,10 @@ public class Rectangle extends GeometricObject {
             return false;
         }
         //if we're here we hit and set shaderec up
-        ShadeRec s = new ShadeRec(sr);
+        CSGShadeRec s = new CSGShadeRec(sr);
         s.lastT = t;
+        s.v = ddota / Math.sqrt(aLenSquared);
+        s.u = ddotb / Math.sqrt(bLenSquared);
         s.normal.setTo(normal);
         s.localHitPosition.setTo(p);
         hit.add(s);
@@ -273,6 +278,7 @@ public class Rectangle extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override
@@ -328,6 +334,7 @@ public class Rectangle extends GeometricObject {
      * returns the normal, rectangle normals don't vary based on position.
      *
      * @param p
+     *
      * @return
      */
     @Override

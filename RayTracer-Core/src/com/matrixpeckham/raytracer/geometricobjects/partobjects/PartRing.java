@@ -18,13 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -171,6 +166,7 @@ public class PartRing extends GeometricObject {
      * space so we return the normal
      *
      * @param p
+     *
      * @return
      */
     @Override
@@ -183,6 +179,7 @@ public class PartRing extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -223,10 +220,11 @@ public class PartRing extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr) {
         //plane hit
         double dot = ray.d.dot(normal);
         if (dot == 0) {
@@ -249,7 +247,7 @@ public class PartRing extends GeometricObject {
         if (phi >= phiMin && phi <= phiMax) {
             if (center.distSquared(p) < outerRadius * outerRadius) {
                 if (center.distSquared(p) > innerRadius * innerRadius) {
-                    ShadeRec s = new ShadeRec(sr);
+                    CSGShadeRec s = new CSGShadeRec(sr);
                     s.lastT = t;
                     s.normal.setTo(normal);
                     s.localHitPosition.setTo(p);
@@ -266,6 +264,7 @@ public class PartRing extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

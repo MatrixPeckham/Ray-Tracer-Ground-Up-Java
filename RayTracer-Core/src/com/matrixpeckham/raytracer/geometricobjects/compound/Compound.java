@@ -1,14 +1,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.materials.Material;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -87,6 +82,7 @@ public class Compound extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -125,10 +121,11 @@ public class Compound extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr) {
 
         boolean hit = false;
         int numObjects = objects.size();
@@ -148,6 +145,7 @@ public class Compound extends GeometricObject {
      *
      * @param ray
      * @param t
+     *
      * @return
      */
     @Override

@@ -17,15 +17,8 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects;
 
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Matrix;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -265,6 +258,7 @@ public class Instance extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -294,26 +288,27 @@ public class Instance extends GeometricObject {
     }
 
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec s) {
         //we transform the ray by the inverse transform matrix, then differ to original object's hit function
         Ray invRay = new Ray(ray);
         invRay.o.setTo(Point3D.mul(invMatrix, invRay.o));
         invRay.d.setTo(Vector3D.mul(invMatrix, invRay.d));
-
-        if (object.hit(invRay, hits, s)) {
-            for (ShadeRec s2 : hits) {
+        ArrayList<CSGShadeRec> nhits = new ArrayList<>();
+        if (object.hit(invRay, nhits, s)) {
+            for (CSGShadeRec s2 : nhits) {
                 //we have to transform the hit normal to world coordinates
                 s2.normal.setTo(Normal.mul(invMatrix, s2.normal));
                 s2.normal.normalize();
                 //use object material
                 if (object.getMaterial() != null) {
-                    material = object.getMaterial();
+                    s2.material = object.getMaterial();
                 }
 
                 //if we don't transform the texture we use world texture coordinates, otherwise use local texture coordinates
                 if (!transformTexture) {
                     s2.localHitPosition.setTo(ray.o.add(ray.d.mul(s.lastT)));
                 }
+                hits.add(s2);
             }
             return true;
         }
@@ -325,6 +320,7 @@ public class Instance extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

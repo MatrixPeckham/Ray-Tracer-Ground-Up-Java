@@ -18,13 +18,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.compound;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.materials.Material;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -188,12 +184,13 @@ public class Grid extends Compound {
 
     /**
      * Hit function
-     *
+     * <p>
      * The following grid traversal code is based on the pseudo-code in Shirley
      * (2000) The first part is the same as the code in BBox::hit
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -376,16 +373,17 @@ public class Grid extends Compound {
 
     /**
      * Hit function
-     *
+     * <p>
      * The following grid traversal code is based on the pseudo-code in Shirley
      * (2000) The first part is the same as the code in BBox::hit
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec si) {
         double ox = ray.o.x;
         double oy = ray.o.y;
         double oz = ray.o.z;
@@ -517,6 +515,7 @@ public class Grid extends Compound {
         boolean ret = false;
         while (true) {
             GeometricObject objectPtr = cells.get(ix + nx * iy + nx * ny * iz);
+            CSGShadeRec s = new CSGShadeRec(si);
             if (txNext < tyNext && txNext < tzNext) {
                 if (objectPtr != null && objectPtr.hit(ray, hits, s)) {
                     material = objectPtr.getMaterial();
@@ -558,6 +557,7 @@ public class Grid extends Compound {
      * pdf, returns 1
      *
      * @param sr
+     *
      * @return
      */
     @Override
@@ -669,29 +669,29 @@ public class Grid extends Compound {
         // this is useful for finding out how many cells have no objects, one object, etc
         // comment this out if you don't want to use it
         /*
-         int numZeroes = 0;
-         int numOnes = 0;
-         int numTwos = 0;
-         int numThrees = 0;
-         int numGreater = 0;
-         for (int j = 0; j < numCells;
-         j++) {
-         if (counts.get(j) == 0) {
-         numZeroes += 1;
-         }
-         if (counts.get(j) == 1) {
-         numOnes += 1;
-         }
-         if (counts.get(j) == 2) {
-         numTwos += 1;
-         }
-         if (counts.get(j) == 3) {
-         numThrees += 1;
-         }
-         if (counts.get(j) > 3) {
-         numGreater += 1;
-         }
-         }
+         * int numZeroes = 0;
+         * int numOnes = 0;
+         * int numTwos = 0;
+         * int numThrees = 0;
+         * int numGreater = 0;
+         * for (int j = 0; j < numCells;
+         * j++) {
+         * if (counts.get(j) == 0) {
+         * numZeroes += 1;
+         * }
+         * if (counts.get(j) == 1) {
+         * numOnes += 1;
+         * }
+         * if (counts.get(j) == 2) {
+         * numTwos += 1;
+         * }
+         * if (counts.get(j) == 3) {
+         * numThrees += 1;
+         * }
+         * if (counts.get(j) > 3) {
+         * numGreater += 1;
+         * }
+         * }
          */
     }
 
@@ -700,6 +700,7 @@ public class Grid extends Compound {
      *
      * @param ray
      * @param t
+     *
      * @return
      */
     @Override
@@ -879,18 +880,18 @@ public class Grid extends Compound {
                 }
             }
         }
-        /*        double tmin = Utility.HUGE_VALUE;
-         int numObjects = objects.size();
-         for (int j = 0; j < numObjects;
-         j++) {
-         if (objects.get(j).shadowHit(ray, t) && t.d < tmin) {
-         hit = true;
-         }
-         }
-         if (hit) {
-         t.d = tmin;
-         }
-         return hit;*/
+        /* double tmin = Utility.HUGE_VALUE;
+         * int numObjects = objects.size();
+         * for (int j = 0; j < numObjects;
+         * j++) {
+         * if (objects.get(j).shadowHit(ray, t) && t.d < tmin) {
+         * hit = true;
+         * }
+         * }
+         * if (hit) {
+         * t.d = tmin;
+         * }
+         * return hit; */
 //        boolean hit = hit(ray,sr);
         //      t.d=sr.lastT;
         //    return hit;

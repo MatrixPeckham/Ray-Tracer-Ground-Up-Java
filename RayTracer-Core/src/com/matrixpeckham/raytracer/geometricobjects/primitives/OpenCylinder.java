@@ -18,13 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -109,6 +104,7 @@ public class OpenCylinder extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -195,10 +191,11 @@ public class OpenCylinder extends GeometricObject {
      * @param ray
      * @param shr
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec s) {
         //ray param
         double t;
 
@@ -226,7 +223,7 @@ public class OpenCylinder extends GeometricObject {
             double denom = 2.0 * a;
             t = (-b - e) / denom;    // smaller root
 
-            ShadeRec sr = new ShadeRec(s);
+            CSGShadeRec sr = new CSGShadeRec(s);
             //test height
             double yhit = oy + t * dy;
 
@@ -249,11 +246,12 @@ public class OpenCylinder extends GeometricObject {
 
             t = (-b + e) / denom;    // larger root
 
-            sr = new ShadeRec(s);
+            sr = new CSGShadeRec(s);
             //test height
             yhit = oy + t * dy;
 
             if (yhit > y0 && yhit < y1) {
+                sr.entering = false;
                 sr.lastT = t;
                 sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
                         (oz + t * dz) * invRadius));
@@ -277,6 +275,7 @@ public class OpenCylinder extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

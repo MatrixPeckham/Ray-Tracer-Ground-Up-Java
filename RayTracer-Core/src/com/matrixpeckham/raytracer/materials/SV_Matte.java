@@ -18,12 +18,9 @@
 package com.matrixpeckham.raytracer.materials;
 
 import com.matrixpeckham.raytracer.brdfs.SV_Lambertian;
+import com.matrixpeckham.raytracer.samplers.Sampler;
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -75,6 +72,7 @@ public class SV_Matte extends Material {
      * shade function, same as Matte.shade except differs to textures
      *
      * @param sr
+     *
      * @return
      */
     @Override
@@ -96,7 +94,7 @@ public class SV_Matte extends Material {
                 if (!inShadow || !shadow) {
                     L.addLocal(diffuseBRDF.f(sr, wo, wi).mul(sr.w.lights.get(j).
                             L(sr)).mul(sr.w.lights.get(j).G(sr) * ndotwi
-                                    / sr.w.lights.get(j).pdf(sr)));
+                            / sr.w.lights.get(j).pdf(sr)));
                 }
             }
         }
@@ -107,6 +105,7 @@ public class SV_Matte extends Material {
      * path shade function same as Matte.pathShade() except differs to textures
      *
      * @param sr
+     *
      * @return
      */
     @Override
@@ -126,6 +125,7 @@ public class SV_Matte extends Material {
      * textures
      *
      * @param sr
+     *
      * @return
      */
     @Override
@@ -171,6 +171,15 @@ public class SV_Matte extends Material {
      */
     public void setKd(double kd) {
         diffuseBRDF.setKd(kd);
+    }
+
+    /**
+     *
+     * @param sampler
+     */
+    public void setSampler(Sampler sampler) {
+        diffuseBRDF.setSampler(sampler);
+
     }
 
     /**

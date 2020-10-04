@@ -39,4 +39,5 @@ public interface BuildWorldFunction {
      * @param w world to build.
      */
     public void build(World w);
+
 }

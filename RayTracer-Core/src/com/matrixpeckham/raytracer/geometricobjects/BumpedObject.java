@@ -17,14 +17,9 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects;
 
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.textures.Texture;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import com.matrixpeckham.raytracer.world.World;
 import java.util.ArrayList;
 
@@ -96,6 +91,7 @@ public class BumpedObject extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
@@ -124,15 +120,17 @@ public class BumpedObject extends GeometricObject {
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr) {
         //differ to sub object
-        boolean hit = obj.hit(ray, hits, sr);
+        ArrayList<CSGShadeRec> nhits = new ArrayList<>();
+        boolean hit = obj.hit(ray, nhits, sr);
         //if we have a hit we need to augment the normal
         if (hit) {
-            for (ShadeRec s : hits) {
+            for (CSGShadeRec s : nhits) {
                 //we get the color from the texture and the default normal
                 Normal n = new Normal(s.normal);
                 RGBColor c = bumpMap.getColor(s);
@@ -144,6 +142,7 @@ public class BumpedObject extends GeometricObject {
                 n.z /= 2;
                 n.normalize();
                 s.normal.setTo(n);
+                hits.add(s);
             }
         }
         return hit;
@@ -155,6 +154,7 @@ public class BumpedObject extends GeometricObject {
      *
      * @param ray
      * @param t
+     *
      * @return
      */
     @Override
@@ -166,6 +166,7 @@ public class BumpedObject extends GeometricObject {
      * Here we call the sub-object's method then augment the normal.
      *
      * @param p
+     *
      * @return
      */
     @Override
@@ -182,10 +183,11 @@ public class BumpedObject extends GeometricObject {
         return n;
     }
 
-    /*    @Override
-     public Material getMaterial() {
-     return obj.getMaterial(); //To change body of generated methods, choose Tools | Templates.
-     }
+    /* @Override
+     * public Material getMaterial() {
+     * return obj.getMaterial(); //To change body of generated methods, choose
+     * Tools | Templates.
+     * }
      */
     @Override
     public BBox getBoundingBox() {

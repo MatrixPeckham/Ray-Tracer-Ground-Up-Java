@@ -18,15 +18,9 @@
 package com.matrixpeckham.raytracer.geometricobjects.primitives;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.samplers.Sampler;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -113,6 +107,7 @@ public class Sphere extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -152,7 +147,7 @@ public class Sphere extends GeometricObject {
     }
 
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr1) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr1) {
         //intersect ray param
         double t;
 
@@ -170,13 +165,14 @@ public class Sphere extends GeometricObject {
             double e = Math.sqrt(disc);
             double denom = 2.0 * a;
             t = (-b - e) / denom;
-            ShadeRec sr = new ShadeRec(sr1);
+            CSGShadeRec sr = new CSGShadeRec(sr1);
             sr.lastT = t;
             sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
             sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
             hits.add(sr);
             t = (-b + e) / denom;
-            sr = new ShadeRec(sr1);
+            sr = new CSGShadeRec(sr1);
+            sr.entering = false;
             sr.lastT = t;
             sr.normal.setTo(temp.add(ray.d.mul(t)).div(radius));
             sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -207,6 +203,7 @@ public class Sphere extends GeometricObject {
      * returns the normal at the point
      *
      * @param p
+     *
      * @return
      */
     @Override
@@ -242,6 +239,7 @@ public class Sphere extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

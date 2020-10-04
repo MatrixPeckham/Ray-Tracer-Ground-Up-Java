@@ -25,12 +25,7 @@ import com.matrixpeckham.raytracer.geometricobjects.primitives.Sphere;
 import com.matrixpeckham.raytracer.lights.Ambient;
 import com.matrixpeckham.raytracer.lights.Light;
 import com.matrixpeckham.raytracer.tracers.Tracer;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -171,8 +166,8 @@ public class World {
     /**
      * Sends a pixel to the GUI through the threading queue.
      *
-     * @param row pixel x component
-     * @param column pixel y component
+     * @param row      pixel x component
+     * @param column   pixel y component
      * @param rawColor color to send, may be changed if out of gamut
      */
     public void displayPixel(int row, int column, RGBColor rawColor) {
@@ -188,7 +183,7 @@ public class World {
         //converts row/column to x,y image coordinates, flip y coordinate because
         //image has top left origin, and row/col is bottom left origin.
         int x = column;
-        int y = vp.vRes - row - 1;
+        int y = (vp.imageHeight != null ? vp.imageHeight : vp.vRes) - row - 1;
 
         //make sure we have a valid queue and send pixel.
         if (paintArea != null) {
@@ -215,6 +210,7 @@ public class World {
      * hit.
      *
      * @param ray ray to trace
+     *
      * @return ShadeRec of the nearest hit.
      */
     public ShadeRec hitObjects(Ray ray) {
@@ -255,6 +251,7 @@ public class World {
      * color.
      *
      * @param ray
+     *
      * @return
      */
     public ShadeRec hitBareBonesObjects(Ray ray) {

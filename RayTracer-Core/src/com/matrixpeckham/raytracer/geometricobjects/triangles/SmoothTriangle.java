@@ -18,13 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.triangles;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
@@ -117,12 +112,13 @@ public class SmoothTriangle extends GeometricObject {
      *
      * @param beta
      * @param gamma
+     *
      * @return
      */
     private Normal interpolateNormal(double beta, double gamma) {
         Normal normal = new Normal(n0.mul(1 - beta - gamma).add(n1.mul(beta)).
                 add(n2.mul(
-                                gamma)));
+                        gamma)));
         normal.normalize();
         return normal;
     }
@@ -141,9 +137,9 @@ public class SmoothTriangle extends GeometricObject {
         return (new BBox(Math.min(Math.min(v0.x, v1.x), v2.x) - delta, Math.max(
                 Math.max(v0.x, v1.x), v2.x) + delta,
                 Math.min(Math.min(v0.y, v1.y), v2.y) - delta, Math.max(Math.max(
-                                v0.y, v1.y), v2.y) + delta,
+                v0.y, v1.y), v2.y) + delta,
                 Math.min(Math.min(v0.z, v1.z), v2.z) - delta, Math.max(Math.max(
-                                v0.z, v1.z), v2.z) + delta));
+                v0.z, v1.z), v2.z) + delta));
     }
 
     /**
@@ -151,6 +147,7 @@ public class SmoothTriangle extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -199,7 +196,7 @@ public class SmoothTriangle extends GeometricObject {
     }
 
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec sr1) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec sr1) {
         //identical to Triangle.hit() except normal is set to interpolateNormal() instead of normal member.
         double a = v0.x - v1.x, b = v0.x - v2.x, c = ray.d.x, d = v0.x - ray.o.x;
         double e = v0.y - v1.y, f = v0.y - v2.y, g = ray.d.y, h = v0.y - ray.o.y;
@@ -232,7 +229,7 @@ public class SmoothTriangle extends GeometricObject {
         double e3 = a * p - b * r + d * s;
         double t = e3 * inv_denom;
 
-        ShadeRec sr = new ShadeRec(sr1);
+        CSGShadeRec sr = new CSGShadeRec(sr1);
         sr.lastT = t;
         sr.normal.setTo(interpolateNormal(beta, gamma));
         sr.localHitPosition.setTo(ray.o.add(ray.d.mul(t)));
@@ -245,6 +242,7 @@ public class SmoothTriangle extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

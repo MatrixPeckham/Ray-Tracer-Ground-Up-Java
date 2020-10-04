@@ -18,12 +18,8 @@
 package com.matrixpeckham.raytracer.geometricobjects.partobjects;
 
 import com.matrixpeckham.raytracer.geometricobjects.GeometricObject;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -131,6 +127,7 @@ public class ConcavePartCylinder extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
@@ -209,10 +206,11 @@ public class ConcavePartCylinder extends GeometricObject {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override
-    public boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s) {
+    public boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec s) {
         double t;
         double ox = ray.o.x;
         double oy = ray.o.y;
@@ -242,7 +240,7 @@ public class ConcavePartCylinder extends GeometricObject {
                 }
 
                 if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
-                    ShadeRec sr = new ShadeRec(s);
+                    CSGShadeRec sr = new CSGShadeRec(s);
                     sr.lastT = t;
                     sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
                             (oz + t * dz) * invRadius).neg());
@@ -266,7 +264,8 @@ public class ConcavePartCylinder extends GeometricObject {
                 }
 
                 if (yhit > y0 && yhit < y1 && phi >= phiMin && phi <= phiMax) {
-                    ShadeRec sr = new ShadeRec(s);
+                    CSGShadeRec sr = new CSGShadeRec(s);
+                    sr.entering = false;
                     sr.lastT = t;
                     sr.normal.setTo(new Normal((ox + t * dx) * invRadius, 0.0,
                             (oz
@@ -289,6 +288,7 @@ public class ConcavePartCylinder extends GeometricObject {
      *
      * @param ray
      * @param tr
+     *
      * @return
      */
     @Override

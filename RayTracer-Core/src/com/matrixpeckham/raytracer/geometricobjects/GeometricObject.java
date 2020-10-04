@@ -17,14 +17,9 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects;
 
+import com.matrixpeckham.raytracer.geometricobjects.csg.CSGShadeRec;
 import com.matrixpeckham.raytracer.materials.Material;
-import com.matrixpeckham.raytracer.util.BBox;
-import com.matrixpeckham.raytracer.util.DoubleRef;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.ArrayList;
 
 /**
@@ -81,15 +76,16 @@ public abstract class GeometricObject {
      * Hit function. All objects must override this. Implementing methods need
      * to check the ray for a hit, compute the ray parameter at the
      * intersection. find the normal at the intersection point.
-     *
+     * <p>
      * implementing functions store the hit ray parameter in ShadeRec.lastT
-     *
+     * <p>
      * they should store the normal in ShadeRec.normal
-     *
+     * <p>
      * they should store the hit point in ShadeRec.localHitPosition
      *
      * @param ray
      * @param s
+     *
      * @return
      */
     public abstract boolean hit(Ray ray, ShadeRec s);
@@ -100,21 +96,22 @@ public abstract class GeometricObject {
      * intersection. find the normal at the intersection point for every ray
      * intersection with the object. it should store one shaderec per hit sorted
      * by shaderec.lastT
-     *
+     * <p>
      * each shaderec should be copied from the s parameter
-     *
+     * <p>
      * implementing functions store the hit ray parameter in ShadeRec.lastT
-     *
+     * <p>
      * they should store the normal in ShadeRec.normal
-     *
+     * <p>
      * they should store the hit point in ShadeRec.localHitPosition
      *
      * @param ray
      * @param hits
      * @param s
+     *
      * @return
      */
-    public abstract boolean hit(Ray ray, ArrayList<ShadeRec> hits, ShadeRec s);
+    public abstract boolean hit(Ray ray, ArrayList<CSGShadeRec> hits, ShadeRec s);
 
     /**
      * sets the color of the object, only used for chapter five.
@@ -168,6 +165,7 @@ public abstract class GeometricObject {
      * overridden for objects that will be used as area lights
      *
      * @param p
+     *
      * @return
      */
     public Normal getNormal(Point3D p) {
@@ -179,6 +177,7 @@ public abstract class GeometricObject {
      * that will be area lights
      *
      * @param sr
+     *
      * @return
      */
     public double pdf(ShadeRec sr) {
@@ -211,16 +210,17 @@ public abstract class GeometricObject {
      * one doesn't need to compute hit point, or normal, so can sometimes be
      * implemented more efficiently than hit. this method is called more often
      * than hit so it is best if we can make it as fast as possible.
-     *
+     * <p>
      * It does still need to compute a ray parameter for the hit, and store it
      * in the DoubleRef.d in the DoubleRef passed to it.
-     *
+     * <p>
      * All implementations of this function should have if(!shadows) return
      * false; as the first statement. it's an early out for if we do not cast
      * shadows.
      *
      * @param ray
      * @param t
+     *
      * @return
      */
     public abstract boolean shadowHit(Ray ray, DoubleRef t);
