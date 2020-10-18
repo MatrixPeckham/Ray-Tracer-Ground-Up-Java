@@ -82,7 +82,8 @@ public class StereoCamera extends Camera {
     }
 
     @Override
-    public void multiThreadRenderScene(World w) {
+    public void multiThreadRenderScene(World w, int frameNumber,
+            double elapsedTime, double deltaTime) {
         final ViewPlane vp = new ViewPlane(w.vp);
         final int hres = vp.hRes;
         final int vres = vp.vRes;
@@ -233,7 +234,8 @@ public class StereoCamera extends Camera {
      * @param w
      */
     @Override
-    public void renderScene(World w) {
+    public void renderScene(World w, int frameNumber, double elapsedTime,
+            double deltaTime) {
         ViewPlane vp = new ViewPlane(w.vp);
         int hres = vp.hRes;
         int vres = vp.vRes;
@@ -307,7 +309,8 @@ public class StereoCamera extends Camera {
      * @param i
      */
     @Override
-    public void renderStereo(World w, double x, int i) {
+    public void renderStereo(World w, double x, int i, int frameNumber,
+            double elapsedTime, double deltaTime) {
         throw new RuntimeException(
                 "Stereo Camera should not have renderStereo call.");
     }

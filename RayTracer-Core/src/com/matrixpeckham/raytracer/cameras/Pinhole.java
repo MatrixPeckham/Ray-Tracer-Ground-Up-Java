@@ -19,10 +19,7 @@ package com.matrixpeckham.raytracer.cameras;
 
 import static java.util.logging.Level.SEVERE;
 
-import com.matrixpeckham.raytracer.util.Point2D;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import com.matrixpeckham.raytracer.world.ViewPlane;
 import com.matrixpeckham.raytracer.world.World;
 import java.util.concurrent.CountDownLatch;
@@ -90,7 +87,8 @@ public class Pinhole extends Camera {
      * @param w
      */
     @Override
-    public void renderScene(World w) {
+    public void renderScene(World w, int frameNumber, double elapsedTime,
+            double deltaTime) {
         //color
         RGBColor L = new RGBColor();
         //clone the viewport, we'll manipulate it later
@@ -164,7 +162,8 @@ public class Pinhole extends Camera {
      * @param i
      */
     @Override
-    public void renderStereo(World w, double x, int i) {
+    public void renderStereo(World w, double x, int i, int frameNumber,
+            double elapsedTime, double deltaTime) {
         //color
         RGBColor L = new RGBColor();
         //clone the viewport, we'll manipulate it later
@@ -212,7 +211,8 @@ public class Pinhole extends Camera {
     }
 
     @Override
-    public void multiThreadRenderScene(World w) {
+    public void multiThreadRenderScene(World w, int frameNumber,
+            double elapsedTime, double deltaTime) {
         //clone the viewport, we'll manipulate it later
         final ViewPlane vp = new ViewPlane(w.vp);
         //change the pixel size for the zoom

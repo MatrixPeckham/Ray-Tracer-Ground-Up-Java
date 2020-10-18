@@ -17,9 +17,7 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.parametric;
 
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 
 /**
  * Torus class. Is a parametric object.
@@ -117,12 +115,12 @@ public class BezierPatch extends ParametricObject {
         //steps are arbitrarily 0.1
         @Override
         public double getUStep() {
-            return 0.05;
+            return 1.0 / 20.0;
         }
 
         @Override
         public double getVStep() {
-            return 0.05;
+            return 1.0 / 20.0;
         }
 
         //most important two methods here do the actual work
@@ -169,43 +167,80 @@ public class BezierPatch extends ParametricObject {
             double b2 = (3 * (1 - u) * (1 - u) - 6 * u * (1 - u));
             double b3 = (6 * u * (1 - u) - 3 * u * u);
             double b4 = 3 * u * u;
+            if (vCurve[0].equals(vCurve[1]) && vCurve[2].equals(vCurve[1])
+                    && vCurve[2].equals(vCurve[3])) {
+                for (int i = 0; i < 4; i++) {
+                    //noting
+                }
+            }
             Point3D p1 = vCurve[0].mul(b1);
             Point3D p2 = vCurve[1].mul(b2);
             Point3D p3 = vCurve[2].mul(b3);
             Point3D p4 = vCurve[3].mul(b4);
-            return new Vector3D(p1.add(new Vector3D(p2)).add(new Vector3D(p3)).
+            Vector3D du = new Vector3D(p1.add(new Vector3D(p2)).add(
+                    new Vector3D(p3)).
                     add(
                             new Vector3D(p4)));
+            if (du.lenSquared() == 0.0) {
+                //du.y = 1;
+                //du.x = -1;
+                //du.z = 1;
+            }
+            return du;
         }
+//dP(t) / dt =  -3(1-t)^2 * P0 + 3(1-t)^2 * P1 - 6t(1-t) * P1 - 3t^2 * P2 + 6t(1-t) * P2 + 3t^2 * P3
 
         Vector3D dVBezier(Point3D[] controlPoints, double u, double v) {
             Point3D[] uCurve = new Point3D[4];
             Point3D[] P = new Point3D[4];
             for (int i = 0; i < 4; ++i) {
-                P[0] = controlPoints[i];
-                P[1] = controlPoints[1 + i];
-                P[2] = controlPoints[2 + i];
-                P[3] = controlPoints[3 + i];
+                P[0] = controlPoints[i * 4];
+                P[1] = controlPoints[4 * i + 1];
+                P[2] = controlPoints[4 * i + 2];
+                P[3] = controlPoints[4 * i + 3];
                 uCurve[i] = evalBezierCurve(P, u);
             }
             double b1 = -3 * (1 - v) * (1 - v);
             double b2 = (3 * (1 - v) * (1 - v) - 6 * v * (1 - v));
             double b3 = (6 * v * (1 - v) - 3 * v * v);
             double b4 = 3 * v * v;
+            if (uCurve[0].equals(uCurve[1]) && uCurve[2].equals(uCurve[1])
+                    && uCurve[2].equals(uCurve[3])) {
+                //noting
+            }
             Point3D p1 = uCurve[0].mul(b1);
             Point3D p2 = uCurve[1].mul(b2);
             Point3D p3 = uCurve[2].mul(b3);
             Point3D p4 = uCurve[3].mul(b4);
-            return new Vector3D(p1.add(new Vector3D(p2)).add(new Vector3D(p3)).
+            Vector3D dv = new Vector3D(p1.add(new Vector3D(p2)).add(
+                    new Vector3D(p3)).
                     add(
                             new Vector3D(p4)));
+            if (dv.lenSquared() == 0.0) {
+                //dv.y = -1;
+                //dv.x = 1;
+                //dv.z = -1;
+            }
+            return dv;
         }
 
         @Override
         public Normal getNormalAt(double u, double v) {
             Vector3D dv = dVBezier(points, u, v);
             Vector3D du = dUBezier(points, u, v);
-            Normal n = new Normal(du.cross(dv)).neg();
+            Normal n = new Normal(du.cross(dv));
+            if (Double.isNaN(n.x)) {
+                n.x = 0;
+            }
+            if (Double.isNaN(n.y)) {
+                n.y = 0;
+            }
+            if (Double.isNaN(n.z)) {
+                n.z = 0;
+            }
+            if (n.x == 0 && n.y == 0 && n.z == 0) {
+                n.z = 1;
+            }
             n.normalize();
             return n;
         }

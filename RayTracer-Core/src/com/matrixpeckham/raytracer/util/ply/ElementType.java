@@ -17,9 +17,7 @@
  */
 package com.matrixpeckham.raytracer.util.ply;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.logging.Logger;
@@ -74,10 +72,12 @@ class ElementType {
     /**
      * This reads a single element of this element type from a stream.
      *
-     * @param in stream to read from
-     * @param binary true if the file is binary, false if ascii
+     * @param in           stream to read from
+     * @param binary       true if the file is binary, false if ascii
      * @param littleEndian flag for endianness if binary, igored otherwise
+     *
      * @return element
+     *
      * @throws IOException required for reading from stream
      */
     PLYElement readFrom(BufferedInputStream inl, boolean binary,
@@ -173,10 +173,12 @@ class ElementType {
          * Reads an integer from the file and returns it. only works for integer
          * types.
          *
-         * @param in stream to read from
-         * @param binary if the file is binary
+         * @param in           stream to read from
+         * @param binary       if the file is binary
          * @param littleEndian endian-ness of binary file, ignored if not binary
+         *
          * @return integer that was in the file
+         *
          * @throws IOException when called on float type, or other reasons
          */
         private int getAsInt(BufferedInputStream in, boolean binary,
@@ -189,7 +191,7 @@ class ElementType {
                 case SHORT:
                     if (binary) {
                         byte[] ba = new byte[bytes];
-                        int ct = in.read(ba);
+                        int ct = in.read(ba, 0, bytes);
                         if (ct != bytes) {
                             throw new IOException("End of file wile parsing");
                         }
@@ -213,7 +215,7 @@ class ElementType {
                 case CHAR:
                     if (binary) {
                         byte[] ba = new byte[bytes];
-                        int ct = in.read(ba);
+                        int ct = in.read(ba, 0, bytes);
                         if (ct != bytes) {
                             throw new IOException("End of file wile parsing");
                         }
@@ -237,7 +239,7 @@ class ElementType {
                 default:
                     if (binary) {
                         byte[] ba = new byte[bytes];
-                        int ct = in.read(ba);
+                        int ct = in.read(ba, 0, bytes);
                         if (ct != bytes) {
                             throw new IOException("End of file wile parsing");
                         }
@@ -265,10 +267,12 @@ class ElementType {
          * Reads an double from the file and returns it. will convert ints to
          * double
          *
-         * @param in stream to read from
-         * @param binary if the file is binary
+         * @param in           stream to read from
+         * @param binary       if the file is binary
          * @param littleEndian endian-ness of binary file, ignored if not binary
+         *
          * @return integer that was in the file
+         *
          * @throws IOException errors while reading
          */
         private double getAsDouble(BufferedInputStream in, boolean binary,
@@ -280,7 +284,7 @@ class ElementType {
                 case FLOAT: {
                     int ret = 0;
                     byte[] ba = new byte[4];
-                    int n = in.read(ba);
+                    int n = in.read(ba, 0, 4);
                     if (n != 4) {
                         throw new IOException("End of file while reading");
                     }
@@ -300,7 +304,7 @@ class ElementType {
                 case DOUBLE:
                     long ret = 0;
                     byte[] ba = new byte[8];
-                    int n = in.read(ba);
+                    int n = in.read(ba, 0, 8);
                     if (n != 8) {
                         throw new IOException("End of file while reading");
                     }

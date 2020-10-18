@@ -82,7 +82,8 @@ public class QuadOrthographic extends Camera {
      * @param w
      */
     @Override
-    public void renderScene(World w) {
+    public void renderScene(World w, int frameNumber, double elapsedTime,
+            double deltaTime) {
         //color
         RGBColor L = new RGBColor();
         //copy of view plane.
@@ -194,7 +195,8 @@ public class QuadOrthographic extends Camera {
      * @param w
      */
     @Override
-    public void multiThreadRenderScene(final World w) {
+    public void multiThreadRenderScene(final World w, int frameNumber,
+            double elapsedTime, double deltaTime) {
         //copy of view plane.
         final ViewPlane vp = new ViewPlane(w.vp);
         w.startRender(vp.vRes, vp.hRes);
@@ -311,7 +313,8 @@ public class QuadOrthographic extends Camera {
      * @param i
      */
     @Override
-    public void renderStereo(World w, double x, int i) {
+    public void renderStereo(World w, double x, int i, int frameNumber,
+            double elapsedTime, double deltaTime) {
         //color
         RGBColor L = new RGBColor();
         //copy of view plane.

@@ -29,7 +29,8 @@ import java.util.logging.Logger;
  */
 public class Teapot extends Grid {
 
-    static int[][] indices = new int[][]{
+// <editor-fold defaultstate="collapsed" desc=" indices ">
+    static int[][] indices = new int[][]{//
         {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16},
         {4, 17, 18, 19, 8, 20, 21, 22, 12, 23, 24, 25, 16, 26, 27, 28},
         {19, 29, 30, 31, 22, 32, 33, 34, 25, 35, 36, 37, 28, 38, 39, 40},
@@ -85,6 +86,7 @@ public class Teapot extends Grid {
             302, 271}
     };
 
+// </editor-fold>
     static {
         for (int i = 0; i < indices.length; i++) {
             for (int j = 0; j < indices[i].length; j++) {
@@ -93,6 +95,7 @@ public class Teapot extends Grid {
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc=" verts ">
     static Point3D[] verts = new Point3D[]{
         new Point3D(1.4, 0.0, 2.4
         ),
@@ -708,6 +711,7 @@ public class Teapot extends Grid {
         )
     };
 
+// </editor-fold>
     /**
      * default constructor
      */
@@ -753,8 +757,8 @@ public class Teapot extends Grid {
      * in a grid this is the regular version, for Figure 21.11
      */
     final void constructTeapot() {
-
-        for (int i = 0; i < 4; i++) {
+        //31
+        for (int i = 0; i < 31; i++) {
             BezierPatch p1 = new BezierPatch(new Point3D[]{
                 verts[indices[i][0]],
                 verts[indices[i][1]],

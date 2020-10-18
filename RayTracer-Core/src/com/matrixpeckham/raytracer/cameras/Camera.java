@@ -38,10 +38,10 @@ public abstract class Camera {
      * thread pool executor for multithreading.
      */
     protected static final ScheduledThreadPoolExecutor EXEC
-	    = new ScheduledThreadPoolExecutor(POOL_SIZE);
+            = new ScheduledThreadPoolExecutor(POOL_SIZE);
 
     public static void exit() {
-	EXEC.shutdown();
+        EXEC.shutdown();
     }
 
     /**
@@ -89,14 +89,14 @@ public abstract class Camera {
      * Sets defaults.
      */
     public Camera() {
-	eye = new Point3D(0, 0, 500);
-	lookat = new Point3D(0);
-	rollAngle = 0;
-	up = new Vector3D(0, 1, 0);
-	u = new Vector3D(1, 0, 0);
-	v = new Vector3D(0, 1, 0);
-	w = new Vector3D(0, 0, 1);
-	exposureTime = 1;
+        eye = new Point3D(0, 0, 500);
+        lookat = new Point3D(0);
+        rollAngle = 0;
+        up = new Vector3D(0, 1, 0);
+        u = new Vector3D(1, 0, 0);
+        v = new Vector3D(0, 1, 0);
+        w = new Vector3D(0, 0, 1);
+        exposureTime = 1;
     }
 
     /**
@@ -105,46 +105,46 @@ public abstract class Camera {
      * @param c
      */
     public Camera(Camera c) {
-	eye = new Point3D(c.eye);
-	lookat = new Point3D(c.lookat);
-	rollAngle = c.rollAngle;
-	up = new Vector3D(c.up);
-	u = new Vector3D(c.u);
-	v = new Vector3D(c.v);
-	w = new Vector3D(c.w);
-	exposureTime = c.exposureTime;
+        eye = new Point3D(c.eye);
+        lookat = new Point3D(c.lookat);
+        rollAngle = c.rollAngle;
+        up = new Vector3D(c.up);
+        u = new Vector3D(c.u);
+        v = new Vector3D(c.v);
+        w = new Vector3D(c.w);
+        exposureTime = c.exposureTime;
     }
 
     /**
      * Computes basis vectors from look at and up.
      */
     public void computeUVW() {
-	w.setTo(eye.sub(lookat));
-	w.normalize();
-	up.setTo(Vector3D.rotateAAroundB(up, w, rollAngle));
-	u.setTo(up.cross(w));
-	u.normalize();
-	v.setTo(w.cross(u));
+        w.setTo(eye.sub(lookat));
+        w.normalize();
+        up.setTo(Vector3D.rotateAAroundB(up, w, rollAngle));
+        u.setTo(up.cross(w));
+        u.normalize();
+        v.setTo(w.cross(u));
 
-	//special cases for strait up and down view.
-	if (eye.x == lookat.x && eye.z == lookat.z && eye.y > lookat.y) {
-	    w.setTo(new Vector3D(0, 1, 0));
-	    u.
-		    setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
-			    rollAngle));
-	    v.
-		    setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
-			    rollAngle));
-	}
-	if (eye.x == lookat.x && eye.z == lookat.z && eye.y < lookat.y) {
-	    w.setTo(new Vector3D(0, -1, 0));
-	    u.
-		    setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
-			    rollAngle));
-	    v.
-		    setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
-			    rollAngle));
-	}
+        //special cases for strait up and down view.
+        if (eye.x == lookat.x && eye.z == lookat.z && eye.y > lookat.y) {
+            w.setTo(new Vector3D(0, 1, 0));
+            u.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
+                            rollAngle));
+            v.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
+                            rollAngle));
+        }
+        if (eye.x == lookat.x && eye.z == lookat.z && eye.y < lookat.y) {
+            w.setTo(new Vector3D(0, -1, 0));
+            u.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(0, 0, 1), w,
+                            rollAngle));
+            v.
+                    setTo(Vector3D.rotateAAroundB(new Vector3D(1, 0, 0), w,
+                            rollAngle));
+        }
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class Camera {
      * @param p
      */
     public void setEye(Point3D p) {
-	eye.setTo(p);
+        eye.setTo(p);
     }
 
     /**
@@ -164,9 +164,9 @@ public abstract class Camera {
      * @param z
      */
     public void setEye(double x, double y, double z) {
-	eye.x = x;
-	eye.y = y;
-	eye.z = z;
+        eye.x = x;
+        eye.y = y;
+        eye.z = z;
     }
 
     /**
@@ -175,7 +175,7 @@ public abstract class Camera {
      * @param p
      */
     public void setLookat(Point3D p) {
-	lookat.setTo(p);
+        lookat.setTo(p);
     }
 
     /**
@@ -186,9 +186,9 @@ public abstract class Camera {
      * @param z
      */
     public void setLookat(double x, double y, double z) {
-	lookat.x = x;
-	lookat.y = y;
-	lookat.z = z;
+        lookat.x = x;
+        lookat.y = y;
+        lookat.z = z;
     }
 
     /**
@@ -197,7 +197,7 @@ public abstract class Camera {
      * @param vd view direction
      */
     public void setViewDirection(Vector3D vd) {
-	lookat.setTo(eye.add(vd));
+        lookat.setTo(eye.add(vd));
     }
 
     /**
@@ -209,7 +209,7 @@ public abstract class Camera {
      * @param z
      */
     public void setViewDirection(double x, double y, double z) {
-	lookat.setTo(eye.add(new Vector3D(x, y, z)));
+        lookat.setTo(eye.add(new Vector3D(x, y, z)));
     }
 
     /**
@@ -218,7 +218,7 @@ public abstract class Camera {
      * @param p
      */
     public void setUp(Vector3D p) {
-	up.setTo(p);
+        up.setTo(p);
     }
 
     /**
@@ -229,9 +229,9 @@ public abstract class Camera {
      * @param z
      */
     public void setUp(double x, double y, double z) {
-	up.x = x;
-	up.y = y;
-	up.z = z;
+        up.x = x;
+        up.y = y;
+        up.z = z;
     }
 
     /**
@@ -240,7 +240,7 @@ public abstract class Camera {
      * @param r
      */
     public void setRoll(double r) {
-	rollAngle = r;
+        rollAngle = r;
     }
 
     /**
@@ -249,7 +249,7 @@ public abstract class Camera {
      * @param exp
      */
     public void setExposureTime(double exp) {
-	exposureTime = exp;
+        exposureTime = exp;
     }
 
     /**
@@ -257,14 +257,24 @@ public abstract class Camera {
      *
      * @param w
      */
-    public abstract void renderScene(World w);
+    public void renderScene(World w) {
+        renderScene(w, 0, 0, 0);
+    }
+
+    public abstract void renderScene(World w, int frameNumber,
+            double timeElapsed, double deltaTime);
 
     /**
      * renders a scene.
      *
      * @param w
      */
-    public abstract void multiThreadRenderScene(World w);
+    public abstract void multiThreadRenderScene(World w, int frameNumber,
+            double timeElapsed, double deltaTime);
+
+    public void multiThreadRenderScene(World w) {
+        multiThreadRenderScene(w, 0, 0, 0);
+    }
 
     /**
      * clone method.
@@ -280,7 +290,12 @@ public abstract class Camera {
      * @param x
      * @param i
      */
-    public abstract void renderStereo(World w, double x, int i);
+    public abstract void renderStereo(World w, double x, int i, int frameNumber,
+            double elapsedTime, double deltaTime);
+
+    public void renderStereo(World w, double x, int i) {
+        renderStereo(w, x, i, 0, 0, 0);
+    }
 
     /**
      * sets the up vector
@@ -290,7 +305,7 @@ public abstract class Camera {
      * @param i1
      */
     public void setUpVector(int i, int i0, int i1) {
-	up.setTo(i, i0, i1);
+        up.setTo(i, i0, i1);
     }
 
 }

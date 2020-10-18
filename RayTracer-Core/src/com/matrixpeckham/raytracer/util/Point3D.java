@@ -17,6 +17,8 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import static java.lang.Math.abs;
+
 import java.util.logging.Logger;
 
 /**
@@ -103,10 +105,47 @@ public class Point3D {
         setTo(p);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 43 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.
+                doubleToLongBits(this.x) >>> 32));
+        hash = 43 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.
+                doubleToLongBits(this.y) >>> 32));
+        hash = 43 * hash + (int) (Double.doubleToLongBits(this.z) ^ (Double.
+                doubleToLongBits(this.z) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Point3D other = (Point3D) obj;
+        if (abs(this.x - other.x) > Utility.EPSILON) {
+            return false;
+        }
+        if (abs(this.y - other.y) > Utility.EPSILON) {
+            return false;
+        }
+        if (abs(this.z - other.z) > Utility.EPSILON) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Java version of equals operator.
      *
      * @param p
+     *
      * @return
      */
     public final Point3D setTo(Point3D p) {
@@ -129,6 +168,7 @@ public class Point3D {
      * Vector from other point to this point.
      *
      * @param p
+     *
      * @return new vector
      */
     public Vector3D sub(Point3D p) {
@@ -139,6 +179,7 @@ public class Point3D {
      * Adds two vectors and returns the new point.
      *
      * @param v
+     *
      * @return
      */
     public Point3D add(Vector3D v) {
@@ -149,6 +190,7 @@ public class Point3D {
      * subtracts the vector and returns the new point
      *
      * @param v
+     *
      * @return
      */
     public Point3D sub(Vector3D v) {
@@ -159,6 +201,7 @@ public class Point3D {
      * scale by scalar and return new point
      *
      * @param a
+     *
      * @return
      */
     public Point3D mul(double a) {
@@ -169,6 +212,7 @@ public class Point3D {
      * returns the squared distance from this point to another
      *
      * @param p
+     *
      * @return
      */
     public double distSquared(Point3D p) {
@@ -180,6 +224,7 @@ public class Point3D {
      * get the distance between this and the other point.
      *
      * @param p
+     *
      * @return
      */
     public double distance(Point3D p) {
@@ -191,6 +236,7 @@ public class Point3D {
      *
      * @param a
      * @param p
+     *
      * @return
      */
     public static Point3D mul(double a, Point3D p) {
@@ -202,6 +248,7 @@ public class Point3D {
      *
      * @param mat
      * @param p
+     *
      * @return
      */
     public static Point3D mul(Matrix mat, Point3D p) {

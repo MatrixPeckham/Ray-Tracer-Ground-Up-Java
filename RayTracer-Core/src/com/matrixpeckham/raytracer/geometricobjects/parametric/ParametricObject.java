@@ -19,11 +19,7 @@ package com.matrixpeckham.raytracer.geometricobjects.parametric;
 
 import com.matrixpeckham.raytracer.geometricobjects.compound.TriangleMesh;
 import com.matrixpeckham.raytracer.geometricobjects.triangles.SmoothMeshTriangle;
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Ray;
-import com.matrixpeckham.raytracer.util.ShadeRec;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -114,6 +110,7 @@ public class ParametricObject extends TriangleMesh {
          *
          * @param u
          * @param v
+         *
          * @return
          */
         public Point3D getPointAt(double u, double v);
@@ -125,6 +122,7 @@ public class ParametricObject extends TriangleMesh {
          *
          * @param u
          * @param v
+         *
          * @return
          */
         public Normal getNormalAt(double u, double v);
@@ -151,6 +149,7 @@ public class ParametricObject extends TriangleMesh {
          * @return
          */
         public NormalType getNormalType();
+
     }
 
     /**
@@ -189,8 +188,14 @@ public class ParametricObject extends TriangleMesh {
             numV = 0;
             double v;
             for (v = vMin; v <= vMax; v += vStep) {
-                mesh.vertices.add(p.getPointAt(u, v));
-                mesh.normals.add(p.getNormalAt(u, v));
+                Point3D vert = p.getPointAt(u, v);
+                Normal normal = p.getNormalAt(u, v);
+                if (Double.isNaN(normal.x) || Double.isNaN(normal.y) || Double.
+                        isNaN(normal.z)) {
+                    int breakable = 1 + 1;
+                }
+                mesh.vertices.add(vert);
+                mesh.normals.add(normal);
                 numV++;
             }
             //this is after the loop, if the loop variable didn't stop
@@ -269,6 +274,7 @@ public class ParametricObject extends TriangleMesh {
      *
      * @param ray
      * @param sr
+     *
      * @return
      */
     @Override

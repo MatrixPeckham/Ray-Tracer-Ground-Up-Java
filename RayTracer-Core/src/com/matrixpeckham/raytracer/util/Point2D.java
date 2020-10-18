@@ -17,6 +17,8 @@
  */
 package com.matrixpeckham.raytracer.util;
 
+import static java.lang.Math.abs;
+
 import java.util.logging.Logger;
 
 /**
@@ -53,6 +55,37 @@ public class Point2D {
         this(0);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.
+                doubleToLongBits(this.x) >>> 32));
+        hash = 23 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.
+                doubleToLongBits(this.y) >>> 32));
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Point2D other = (Point2D) obj;
+        if (abs(this.x - other.x) > Utility.EPSILON) {
+            return false;
+        }
+        if (abs(this.y - other.y) > Utility.EPSILON) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * (a,a)
      *
@@ -87,6 +120,7 @@ public class Point2D {
      * replacement for equals operation
      *
      * @param p
+     *
      * @return this for chaining
      */
     public Point2D setTo(Point2D p) {
@@ -100,6 +134,7 @@ public class Point2D {
      *
      * @param x
      * @param y
+     *
      * @return this for chaining
      */
     public Point2D setTo(double x, double y) {
@@ -112,6 +147,7 @@ public class Point2D {
      * multiplies by a double
      *
      * @param a
+     *
      * @return
      */
     public Point2D mul(double a) {
