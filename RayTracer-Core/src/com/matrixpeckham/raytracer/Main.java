@@ -17,34 +17,25 @@
  */
 package com.matrixpeckham.raytracer;
 
+import com.matrixpeckham.raytracer.util.Utility;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import org.reflections.Configuration;
+import javax.swing.Timer;
 import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 /**
  * Main class for the ray tracer program, contains the swing code for the GUI.
@@ -190,8 +181,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
         JMenu file = new JMenu("File");
         JMenu options = new JMenu("Options");
         JMenu functions = new JMenu("Build Functions");
-        populateBuildFunctions(new String[]{"com.matrixpeckham.raytracer.build",
-            "com.matrixpeckham.raytracer.geometricobjects"}, functions);
+        populateBuildFunctions(Utility.PACKAGE_NAMES, functions);
         JMenu render = new JMenu("Render");
         JMenu zoom = new JMenu("Zoom");
         startButton = new JMenuItem("Start");
@@ -470,43 +460,8 @@ public class Main extends JFrame implements ActionListener, RenderListener {
     //populates build functions
     private void populateBuildFunctions(String[] packNames, JMenu menu) throws
             URISyntaxException, MalformedURLException {
-        //use reflections api to get all buildworldfunction implementations
-        File external = new File("./plugins/");
-        ArrayList<URL> jars = new ArrayList<>();
-        for (String packName : packNames) {
-            jars.addAll(ClasspathHelper.forPackage(packName));
-        }
-        jars.add(external.toURL());
-        if (!(external.exists() && external.isDirectory())) {
-            external.mkdir();
-        } else {
-            File[] files = external.listFiles((File f) -> {
-                return f.getName().endsWith(".jar");
-            });
-            Arrays.stream(files).forEach((File f) -> {
-                try {
-                    jars.add(f.toURL());
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(Main.class.getName()).
-                            log(Level.SEVERE, null, ex);
-                }
-            });
-        }
-        ClassLoader currentThreadClassLoader
-                = Thread.currentThread().getContextClassLoader();
-
-        // Add the conf dir to the classpath
-        // Chain the current thread classloader
-        URLClassLoader urlClassLoader
-                = new URLClassLoader(jars.toArray(new URL[]{}),
-                        currentThreadClassLoader);
-
-        // Replace the thread classloader - assumes
-        // you have permissions to do so
-        Thread.currentThread().setContextClassLoader(urlClassLoader);
-        Configuration config = ConfigurationBuilder.build(jars.toArray());
-        Reflections refl = new Reflections(config);
-
+        Reflections refl = Utility.getReflections();
+        System.out.println("Getting subtypes");
         Set<Class<? extends BuildWorldFunction>> buildClss = refl.getSubTypesOf(
                 BuildWorldFunction.class);
         /* Set<Class<? extends GeometricObject>> geoms = refl.getSubTypesOf(
@@ -529,6 +484,7 @@ public class Main extends JFrame implements ActionListener, RenderListener {
 
         //we build a tree from the packages of of the classes, we remove the original package name
         TreeMap<String, TreeOrClass> fullList = new TreeMap<>();
+        System.out.println("accessing each class:");
         buildClss.stream().
                 forEach((clazz) -> {
                     String name = clazz.getName().substring(clazz.getName().

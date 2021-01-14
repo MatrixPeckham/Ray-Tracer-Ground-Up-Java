@@ -30,6 +30,10 @@ import com.matrixpeckham.raytracer.world.World;
  */
 public class BuildBBCoverPic implements BuildWorldFunction {
 
+    static {
+        System.out.println("Static block in book build project running");
+    }
+
     @Override
     public void build(World w) {
         w.vp.hRes = 400;

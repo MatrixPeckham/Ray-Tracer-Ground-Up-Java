@@ -49,3 +49,6 @@ Temporary Items
 /RayTracer-BookBuild/dist/
 /RayTracer-Core/builders/
 /RayTracer-Core/plugins/
+RayTracer-Core/src/resources/Models/lucy.ply
+RayTracer-Core/src/resources/Models/xyzrgb_dragon.ply
+RayTracer-Core/src/resources/Models/xyzrgb_statuette.ply

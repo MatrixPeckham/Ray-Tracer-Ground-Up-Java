@@ -17,9 +17,16 @@
  */
 package com.matrixpeckham.raytracer.util;
 
-import java.util.Random;
+import com.matrixpeckham.raytracer.Main;
+import java.io.File;
+import java.net.*;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.reflections.Configuration;
+import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 /**
  * Class that contains many utility functions and variables.
@@ -595,6 +602,72 @@ public class Utility {
      */
     public static double mixDouble(double a, double b, double f) {
         return ((1.0 - f) * a + f * b);
+    }
+
+    /**
+     * singleton Reflections object for searching classes.
+     */
+    private static Reflections reflections = null;
+
+    public static final String[] PACKAGE_NAMES = new String[]{
+        "com.matrixpeckham.raytracer.brdfs",
+        "com.matrixpeckham.raytracer.btdf",
+        "com.matrixpeckham.raytracer.build",
+        "com.matrixpeckham.raytracer.cameras",
+        "com.matrixpeckham.raytracer.geometricobjects",
+        "com.matrixpeckham.raytracer.lights",
+        "com.matrixpeckham.raytracer.materials",
+        "com.matrixpeckham.raytracer.samplers",
+        "com.matrixpeckham.raytracer.textures"
+    };
+
+    public static Reflections getReflections() {
+        if (reflections == null) {
+            //use reflections api to get all buildworldfunction implementations
+            File external = new File("./plugins/");
+            ArrayList<URL> jars = new ArrayList<>();
+            for (String packName : PACKAGE_NAMES) {
+                jars.addAll(ClasspathHelper.forPackage(packName));
+            }
+            try {
+                jars.add(external.toURL());
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(Utility.class.getName()).
+                        log(Level.SEVERE, null, ex);
+            }
+            if (!(external.exists() && external.isDirectory())) {
+                external.mkdir();
+            } else {
+                File[] files = external.listFiles((File f) -> {
+                    return f.getName().endsWith(".jar");
+                });
+                Arrays.stream(files).forEach((File f) -> {
+                    try {
+                        jars.add(f.toURL());
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(Main.class.getName()).
+                                log(Level.SEVERE, null, ex);
+                    }
+                });
+            }
+            ClassLoader currentThreadClassLoader
+                    = Thread.currentThread().getContextClassLoader();
+
+            // Add the conf dir to the classpath
+            // Chain the current thread classloader
+            URLClassLoader urlClassLoader
+                    = new URLClassLoader(jars.toArray(new URL[]{}),
+                            currentThreadClassLoader);
+
+            // Replace the thread classloader - assumes
+            // you have permissions to do so
+            Thread.currentThread().setContextClassLoader(urlClassLoader);
+            Configuration config = ConfigurationBuilder.build(jars.toArray());
+            System.out.println("Starting reflections");
+            reflections = new Reflections(config);
+
+        }
+        return reflections;
     }
 
     private static final Logger LOG = Logger.getLogger(Utility.class.getName());
