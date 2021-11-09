@@ -17,13 +17,9 @@
  */
 package com.matrixpeckham.raytracer.build;
 
-import com.matrixpeckham.raytracer.cameras.Orthographic;
-import com.matrixpeckham.raytracer.cameras.Pinhole;
-import com.matrixpeckham.raytracer.cameras.ThinLens;
+import com.matrixpeckham.raytracer.cameras.*;
 import com.matrixpeckham.raytracer.geometricobjects.parametric.BezierPatch;
-import com.matrixpeckham.raytracer.lights.Ambient;
-import com.matrixpeckham.raytracer.lights.AmbientOccluder;
-import com.matrixpeckham.raytracer.lights.Directional;
+import com.matrixpeckham.raytracer.lights.*;
 import com.matrixpeckham.raytracer.materials.Matte;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.samplers.Sampler;
@@ -61,9 +57,9 @@ public class TestBezier implements BuildWorldFunction {
         //w.setCamera(orthographic_ptr);
 
         Pinhole pinhole = new Pinhole();
-        pinhole.setEye(0, 10, 100);
+        pinhole.setEye(0, 10, 0);
         pinhole.setLookat(0, 0, 0);
-        pinhole.setViewDistance(6000);
+        pinhole.setViewDistance(1000);
         pinhole.computeUVW();
         w.setCamera(pinhole);
 
@@ -80,7 +76,7 @@ public class TestBezier implements BuildWorldFunction {
 
         AmbientOccluder occ = new AmbientOccluder();
         occ.setSampler(new MultiJittered(num_samples));
-        occ.setMinAmount(0);
+        occ.setMinAmount(0.1);
         occ.setLs(2);
 
         w.ambient = new Ambient();
@@ -88,8 +84,8 @@ public class TestBezier implements BuildWorldFunction {
 
         Directional light_ptr = new Directional();
         //light_ptr.setLocation(100, 100, 200);
-        light_ptr.setDirection(1, 0.5, 0);
-        light_ptr.scaleRadiance(2.0);
+        light_ptr.setDirection(1, 0.5, 1);
+        light_ptr.scaleRadiance(20.0);
         //light_ptr.setExp(2);
         w.addLight(light_ptr);
 

@@ -17,9 +17,7 @@
  */
 package com.matrixpeckham.raytracer.geometricobjects.parametric;
 
-import com.matrixpeckham.raytracer.util.Normal;
-import com.matrixpeckham.raytracer.util.Point3D;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 
 /**
  * Torus class. Is a parametric object.
@@ -33,22 +31,22 @@ public class BezierPatch extends ParametricObject {
      */
     public BezierPatch() {
         this(new Point3D[]{
-            new Point3D(0, 0, 0),
-            new Point3D(0, 0, 0.33),
-            new Point3D(0, 0, 0.66),
-            new Point3D(0, 0, 1),
-            new Point3D(0.33, 0, 0),
-            new Point3D(0.33, 0, 0.33),
-            new Point3D(0.33, 0, 0.66),
-            new Point3D(0.33, 0, 1),
-            new Point3D(0.66, 0, 0),
-            new Point3D(0.66, 0, 0.33),
-            new Point3D(0.66, 0, 0.66),
-            new Point3D(0.66, 0, 1),
-            new Point3D(1, 0, 0),
-            new Point3D(1, 0, 0.33),
-            new Point3D(1, 0, 0.66),
-            new Point3D(1, 0, 1)
+            new Point3D(-0.5, 0, 0 - 0.5),
+            new Point3D(-0.5, 0, 0.33 - 0.5),
+            new Point3D(-0.5, 0, 0.66 - 0.5),
+            new Point3D(-0.5, 0, 1 - 0.5),
+            new Point3D(0.33 - 0.5, 0, 0 - 0.5),
+            new Point3D(0.33 - 0.5, 0, 0.33 - 0.5),
+            new Point3D(0.33 - 0.5, 0, 0.66 - 0.5),
+            new Point3D(0.33 - 0.5, 0, 1 - 0.5),
+            new Point3D(0.66 - 0.5, 0, 0 - 0.5),
+            new Point3D(0.66 - 0.5, 0, 0.33 - 0.5),
+            new Point3D(0.66 - 0.5, 0, 0.66 - 0.5),
+            new Point3D(0.66 - 0.5, 0, 1 - 0.5),
+            new Point3D(1 - 0.5, 0, 0 - 0.5),
+            new Point3D(1 - 0.5, 0, 0.33 - 0.5),
+            new Point3D(1 - 0.5, 0, 0.66 - 0.5),
+            new Point3D(1 - 0.5, 0, 1 - 0.5)
         });
     }
 
@@ -117,12 +115,12 @@ public class BezierPatch extends ParametricObject {
         //steps are arbitrarily 0.1
         @Override
         public double getUStep() {
-            return 0.05;
+            return 0.01;
         }
 
         @Override
         public double getVStep() {
-            return 0.05;
+            return 0.01;
         }
 
         //most important two methods here do the actual work
@@ -182,10 +180,10 @@ public class BezierPatch extends ParametricObject {
             Point3D[] uCurve = new Point3D[4];
             Point3D[] P = new Point3D[4];
             for (int i = 0; i < 4; ++i) {
-                P[0] = controlPoints[i];
-                P[1] = controlPoints[1 + i];
-                P[2] = controlPoints[2 + i];
-                P[3] = controlPoints[3 + i];
+                P[0] = controlPoints[i * 4];
+                P[1] = controlPoints[1 + i * 4];
+                P[2] = controlPoints[2 + i * 4];
+                P[3] = controlPoints[3 + i * 4];
                 uCurve[i] = evalBezierCurve(P, u);
             }
             double b1 = -3 * (1 - v) * (1 - v);
@@ -224,7 +222,7 @@ public class BezierPatch extends ParametricObject {
         //outward normals
         @Override
         public ParametricEquation.NormalType getNormalType() {
-            return ParametricEquation.NormalType.REGULAR;
+            return ParametricEquation.NormalType.TWO_SIDE;
         }
 
     }

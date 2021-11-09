@@ -20,7 +20,7 @@ package com.matrixpeckham.raytracer.build;
 import com.matrixpeckham.raytracer.cameras.QuadOrthographic;
 import com.matrixpeckham.raytracer.geometricobjects.ClippedObject;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.TextQuad;
+import com.matrixpeckham.raytracer.geometricobjects.text.TextQuad;
 import com.matrixpeckham.raytracer.geometricobjects.math.RayPrimitive;
 import com.matrixpeckham.raytracer.geometricobjects.primitives.Plane;
 import com.matrixpeckham.raytracer.lights.Ambient;

@@ -114,6 +114,7 @@ public class BBox {
      * Checks ray/box intersection
      *
      * @param ray
+     *
      * @return
      */
     public boolean hit(Ray ray) {
@@ -185,6 +186,7 @@ public class BBox {
      * point in box check
      *
      * @param p
+     *
      * @return
      */
     public boolean inside(Point3D p) {
@@ -230,6 +232,12 @@ public class BBox {
         if (bb.z1 > z1) {
             z1 = bb.z1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x0 + ", " + y0 + "," + z0 + "), (" + x1 + ", " + y1 + ","
+                + z1 + ")";
     }
 
     private static final Logger LOG = Logger.getLogger(BBox.class.getName());

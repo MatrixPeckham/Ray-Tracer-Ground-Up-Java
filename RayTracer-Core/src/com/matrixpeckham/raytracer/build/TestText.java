@@ -21,7 +21,7 @@ import com.matrixpeckham.raytracer.cameras.Orthographic;
 import com.matrixpeckham.raytracer.cameras.Pinhole;
 import com.matrixpeckham.raytracer.cameras.ThinLens;
 import com.matrixpeckham.raytracer.geometricobjects.Instance;
-import com.matrixpeckham.raytracer.geometricobjects.TextQuad;
+import com.matrixpeckham.raytracer.geometricobjects.text.TextQuad;
 import com.matrixpeckham.raytracer.geometricobjects.math.RayPrimitive;
 import com.matrixpeckham.raytracer.geometricobjects.parametric.Torus;
 import com.matrixpeckham.raytracer.geometricobjects.partobjects.PartCylinder;

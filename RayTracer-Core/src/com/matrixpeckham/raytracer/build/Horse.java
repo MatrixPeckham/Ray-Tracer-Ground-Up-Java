@@ -26,14 +26,9 @@ import com.matrixpeckham.raytracer.materials.SV_Matte;
 import com.matrixpeckham.raytracer.samplers.MultiJittered;
 import com.matrixpeckham.raytracer.textures.TInstance;
 import com.matrixpeckham.raytracer.textures.image.Image;
-import com.matrixpeckham.raytracer.textures.procedural.CubicNoise;
-import com.matrixpeckham.raytracer.textures.procedural.FBMTwoColors;
-import com.matrixpeckham.raytracer.textures.procedural.RampFBmTexture;
+import com.matrixpeckham.raytracer.textures.procedural.*;
 import com.matrixpeckham.raytracer.tracers.Whitted;
-import com.matrixpeckham.raytracer.util.Mesh;
-import com.matrixpeckham.raytracer.util.RGBColor;
-import com.matrixpeckham.raytracer.util.Utility;
-import com.matrixpeckham.raytracer.util.Vector3D;
+import com.matrixpeckham.raytracer.util.*;
 import com.matrixpeckham.raytracer.world.BuildWorldFunction;
 import com.matrixpeckham.raytracer.world.World;
 import java.io.IOException;
@@ -157,6 +152,7 @@ public class Horse implements BuildWorldFunction {
         //bunnyPtr.setMaterial(dielectricPtr);
         bunnyPtr.setMaterial(svMattePtr);
         bunnyPtr.setupCells();
+        System.out.println("Bounding Box: " + bunnyPtr.getBoundingBox());
 
         Instance bigBunnyPtr = new Instance(bunnyPtr);
         bigBunnyPtr.scale(20.0);

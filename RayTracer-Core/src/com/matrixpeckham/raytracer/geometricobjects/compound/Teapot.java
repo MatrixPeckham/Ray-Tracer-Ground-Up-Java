@@ -754,7 +754,7 @@ public class Teapot extends Grid {
      */
     final void constructTeapot() {
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < indices.length; i++) {
             BezierPatch p1 = new BezierPatch(new Point3D[]{
                 verts[indices[i][0]],
                 verts[indices[i][1]],

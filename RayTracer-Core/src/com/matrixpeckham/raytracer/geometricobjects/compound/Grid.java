@@ -524,7 +524,7 @@ public class Grid extends Compound {
                 txNext += dtx;
                 ix += ixStep;
                 if (ix == ixStop) {
-                    return false;
+                    return ret;
                 }
             } else {
                 if (tyNext < tzNext) {

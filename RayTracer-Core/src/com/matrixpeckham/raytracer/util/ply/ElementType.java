@@ -17,9 +17,7 @@
  */
 package com.matrixpeckham.raytracer.util.ply;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.logging.Logger;
@@ -74,16 +72,18 @@ class ElementType {
     /**
      * This reads a single element of this element type from a stream.
      *
-     * @param in stream to read from
-     * @param binary true if the file is binary, false if ascii
+     * @param in           stream to read from
+     * @param binary       true if the file is binary, false if ascii
      * @param littleEndian flag for endianness if binary, igored otherwise
+     *
      * @return element
+     *
      * @throws IOException required for reading from stream
      */
     PLYElement readFrom(BufferedInputStream inl, boolean binary,
             boolean littleEndian) throws IOException {
         PLYElement element = new PLYElement(this);
-        String line = PLYFile.readLine(inl);
+        String line = binary ? "" : PLYFile.readLine(inl);
         BufferedInputStream in = new BufferedInputStream(
                 new ByteArrayInputStream(line.getBytes("UTF-8")));
         //for every property
@@ -91,17 +91,22 @@ class ElementType {
             //if it's a list, read list count
             if (isList.get(i)) {
                 int num = listCountType.get(i).
-                        getAsInt(in, binary, littleEndian);
+                        getAsInt(binary ? inl : in, binary, littleEndian);
+                if (num > 3) {
+                    System.out.println("list of" + num);
+                }
                 double[] lst = new double[num];
                 //then populate list type item
                 for (int j = 0; j < num; j++) {
-                    lst[j] = propType.get(i).getAsDouble(in, binary,
+                    lst[j] = propType.get(i).getAsDouble(binary ? inl : in,
+                            binary,
                             littleEndian);
                 }
                 element.setDoubleList(i, lst);
             } else {
                 //not a list just populate the element with a double
-                element.setDouble(i, propType.get(i).getAsDouble(in, binary,
+                element.setDouble(i, propType.get(i).getAsDouble(
+                        binary ? inl : in, binary,
                         littleEndian));
             }
         }
@@ -173,10 +178,12 @@ class ElementType {
          * Reads an integer from the file and returns it. only works for integer
          * types.
          *
-         * @param in stream to read from
-         * @param binary if the file is binary
+         * @param in           stream to read from
+         * @param binary       if the file is binary
          * @param littleEndian endian-ness of binary file, ignored if not binary
+         *
          * @return integer that was in the file
+         *
          * @throws IOException when called on float type, or other reasons
          */
         private int getAsInt(BufferedInputStream in, boolean binary,
@@ -265,10 +272,12 @@ class ElementType {
          * Reads an double from the file and returns it. will convert ints to
          * double
          *
-         * @param in stream to read from
-         * @param binary if the file is binary
+         * @param in           stream to read from
+         * @param binary       if the file is binary
          * @param littleEndian endian-ness of binary file, ignored if not binary
+         *
          * @return integer that was in the file
+         *
          * @throws IOException errors while reading
          */
         private double getAsDouble(BufferedInputStream in, boolean binary,
